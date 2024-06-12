@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(uuid())
+  name      String
+  email     String    @unique
+  password  String
+  role      Role      @default(ADMIN)
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @map("updated_at")
+  companies Company[]
+
+  @@map("users")
+}
+
+model Company {
+  id             String      @id @default(uuid())
+  documentNumber String      @unique @map("document_number")
+  type           CompanyType
+  size           String
+  createdAt      DateTime    @default(now()) @map("created_at")
+  updatedAt      DateTime    @map("updated_at")
+
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@map("companies")
+}
+
+enum Role {
+  ADMIN
+  FINANCIAL
+  OPERATIONAL
+  MEMBER
+}
+
+enum CompanyType {
+  HEADQUARTERS
+  BRANCH
+  AGENCY
+}
