@@ -31,7 +31,261 @@ model Company {
   userId String @map("user_id")
   user   User   @relation(fields: [userId], references: [id])
 
+  colaborators         Colaborator[]
+  companyServiceAreas  CompanyServiceArea[]
+  companyServiceCities CompanyServiceCity[]
+  companyAddress       CompanyAddress[]
+  drivers              Driver[]
+
   @@map("companies")
+}
+
+model CompanyServiceArea {
+  id String @id @default(uuid())
+
+  companyId String  @map("company_id")
+  company   Company @relation(fields: [companyId], references: [id])
+
+  areaId String @map("area_id")
+  area   Area   @relation(fields: [areaId], references: [id])
+
+  @@map("company_service_areas")
+}
+
+model CompanyServiceCity {
+  id String @id @default(uuid())
+
+  companyId String  @map("company_id")
+  company   Company @relation(fields: [companyId], references: [id])
+
+  cityId String @map("city_id")
+  city   City   @relation(fields: [cityId], references: [id])
+
+  @@map("company_service_cities")
+}
+
+model Colaborator {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(MEMBER)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @map("updated_at")
+
+  companyId String  @map("company_id")
+  company   Company @relation(fields: [companyId], references: [id])
+
+  @@map("colaborators")
+}
+
+model Driver {
+  id             String   @id @default(uuid())
+  name           String
+  documentNumber String   @unique @map("document_number")
+  phone          String   @unique
+  backupPhone    String?  @map("backup_phone")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @map("updated_at")
+
+  companyId String  @map("company_id")
+  company   Company @relation(fields: [companyId], references: [id])
+
+  driverAddress DriverAddress[]
+  vehicle       Vehicle[]
+  freights      Freight[]
+  bankData      BankData[]
+
+  @@map("drivers")
+}
+
+model BankData {
+  id                   String                   @id @default(uuid())
+  financialInstitution String                   @map("financial_institution")
+  accountType          AccountTypeOfBankDetails @map("account_type")
+  agency               Int
+  accountNumber        Int                      @map("account_number")
+  pixKey               String?                  @map("pix_key")
+  createdAt            DateTime                 @default(now()) @map("created_at")
+  updatedAt            DateTime                 @map("updated_at")
+
+  driverId String @map("driver_id")
+  driver   Driver @relation(fields: [driverId], references: [id])
+
+  @@map("bank_data")
+}
+
+model Vehicle {
+  id               String          @id @default(uuid())
+  plate            String          @unique
+  category         VehicleCategory
+  type             VehicleType
+  body             VehicleBody
+  fullLoadCapacity String          @map("full_load_capacity")
+  createdAt        DateTime        @default(now()) @map("created_at")
+  updatedAt        DateTime        @map("updated_at")
+
+  driverId String @map("driver_id")
+  driver   Driver @relation(fields: [driverId], references: [id])
+
+  @@unique([driverId, plate])
+  @@map("vehicles")
+}
+
+model Freight {
+  id                      String      @id @default(uuid())
+  type                    FreightType
+  date                    DateTime
+  pickupsQuantity         Int         @map("pickups_quantity")
+  deliveriesQuantity      Int         @map("deliveries_quantity")
+  totalWeightOfPickups    Float?      @map("total_weight_of_pickups")
+  totalWeightOfDeliveries Float       @map("total_weight_of_deliveries")
+  freightAmountInCents    BigInt      @map("freight_amount_in_cents")
+  observation             String?
+  createdAt               DateTime    @default(now()) @map("created_at")
+  updatedAt               DateTime    @map("updated_at")
+
+  driverId           String               @map("driver_id")
+  driver             Driver               @relation(fields: [driverId], references: [id])
+  freightInformation FreightInformation[]
+  dayOfFreight       DayOfFreight[]
+
+  @@map("freights")
+}
+
+model FreightInformation {
+  id                String   @id @default(uuid())
+  departureTime     DateTime @map("departure_time")
+  arrivalTime       DateTime @map("arrival_time")
+  pickupsNotMade    Int?     @map("pickups_not_made")
+  deliveriesNotMade Int?     @map("deliveries_not_made")
+  viewed            Boolean
+  viewedAt          DateTime @map("viewed_at")
+  updatedAt         DateTime @map("updated_at")
+
+  freightId String  @map("freight_id")
+  freight   Freight @relation(fields: [freightId], references: [id])
+
+  @@map("freight_information")
+}
+
+model DayOfFreight {
+  id   String   @id @default(uuid())
+  date DateTime
+
+  freightId String  @map("freight_id")
+  freight   Freight @relation(fields: [freightId], references: [id])
+
+  cityId String @map("city_id")
+  city   City   @relation(fields: [cityId], references: [id])
+
+  @@map("day_of_freight")
+}
+
+model State {
+  id      String @id @default(uuid())
+  name    String
+  acronym String
+
+  areasByState AreasByState[]
+  cities       City[]
+
+  @@map("states")
+}
+
+model Area {
+  id   String @id @default(uuid())
+  name String
+  code String
+
+  areasByState        AreasByState[]
+  citiesByArea        CitiesByArea[]
+  companyServiceAreas CompanyServiceArea[]
+
+  @@map("areas")
+}
+
+model AreasByState {
+  id String @id @default(uuid())
+
+  stateId String @map("state_id")
+  state   State  @relation(fields: [stateId], references: [id])
+
+  areaId String @map("area_id")
+  area   Area   @relation(fields: [areaId], references: [id])
+
+  @@map("areas_by_state")
+}
+
+model City {
+  id   String @id @default(uuid())
+  name String
+
+  stateId String @map("state_id")
+  state   State  @relation(fields: [stateId], references: [id])
+
+  citiesByArea         CitiesByArea[]
+  companyServiceCities CompanyServiceCity[]
+  addresses            Address[]
+  dayOfFreight         DayOfFreight[]
+
+  @@unique([stateId, name])
+  @@map("cities")
+}
+
+model CitiesByArea {
+  id String @id @default(uuid())
+
+  cityId String @map("city_id")
+  city   City   @relation(fields: [cityId], references: [id])
+
+  areaId String @map("area_id")
+  area   Area   @relation(fields: [areaId], references: [id])
+
+  @@map("cities_by_area")
+}
+
+model Address {
+  id           String   @id @default(uuid())
+  zipCode      String   @map("zip_code")
+  street       String
+  neighborhood String
+  number       Int
+  complement   String?
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  cityId         String           @map("city_id")
+  city           City             @relation(fields: [cityId], references: [id])
+  companyAddress CompanyAddress[]
+  driverAddress  DriverAddress[]
+
+  @@map("addresses")
+}
+
+model CompanyAddress {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+
+  companyId String  @map("company_id")
+  company   Company @relation(fields: [companyId], references: [id])
+
+  addressId String  @map("address_id")
+  address   Address @relation(fields: [addressId], references: [id])
+
+  @@map("company_address")
+}
+
+model DriverAddress {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+
+  driverId String @map("driver_id")
+  driver   Driver @relation(fields: [driverId], references: [id])
+
+  addressId String  @map("address_id")
+  address   Address @relation(fields: [addressId], references: [id])
+
+  @@map("driver_address")
 }
 
 enum Role {
@@ -45,4 +299,41 @@ enum CompanyType {
   HEADQUARTERS
   BRANCH
   AGENCY
+}
+
+enum VehicleCategory {
+  UTILITY
+  VAN
+  LIGHT_TRUCKS
+  STRAIGHT_TRUCKS
+  TRUCKS
+  QUAD_AXLE_TRUCKS
+  SEMI_TRAILER
+  TANDEM_AXLE_TRUCK
+}
+
+enum VehicleBody {
+  CLOSED
+  OPEN
+  SIDER
+  REFRIGERATED
+  BUCKET
+}
+
+enum VehicleType {
+  OWN
+  OUTSOURCED
+  RENTED
+}
+
+enum FreightType {
+  FRACTIONAL
+  DIRECT
+  DEDICATED
+}
+
+enum AccountTypeOfBankDetails {
+  CURRENT_ACCOUNT
+  SALARY_ACCOUNT
+  SAVINGS_ACCOUNT
 }
