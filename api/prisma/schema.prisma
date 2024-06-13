@@ -14,7 +14,7 @@ model User {
   password  String
   role      Role      @default(ADMIN)
   createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @map("updated_at")
+  updatedAt DateTime? @map("updated_at")
   companies Company[]
 
   @@map("users")
@@ -26,7 +26,7 @@ model Company {
   type           CompanyType
   size           String
   createdAt      DateTime    @default(now()) @map("created_at")
-  updatedAt      DateTime    @map("updated_at")
+  updatedAt      DateTime?   @map("updated_at")
 
   userId String @map("user_id")
   user   User   @relation(fields: [userId], references: [id])
@@ -65,13 +65,13 @@ model CompanyServiceCity {
 }
 
 model Colaborator {
-  id        String   @id @default(uuid())
+  id        String    @id @default(uuid())
   name      String
-  email     String   @unique
+  email     String    @unique
   password  String
-  role      Role     @default(MEMBER)
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @map("updated_at")
+  role      Role      @default(MEMBER)
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @map("updated_at")
 
   companyId String  @map("company_id")
   company   Company @relation(fields: [companyId], references: [id])
@@ -80,13 +80,13 @@ model Colaborator {
 }
 
 model Driver {
-  id             String   @id @default(uuid())
+  id             String    @id @default(uuid())
   name           String
-  documentNumber String   @unique @map("document_number")
-  phone          String   @unique
-  backupPhone    String?  @map("backup_phone")
-  createdAt      DateTime @default(now()) @map("created_at")
-  updatedAt      DateTime @map("updated_at")
+  documentNumber String    @unique @map("document_number")
+  phone          String    @unique
+  backupPhone    String?   @map("backup_phone")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime? @map("updated_at")
 
   companyId String  @map("company_id")
   company   Company @relation(fields: [companyId], references: [id])
@@ -107,7 +107,7 @@ model BankData {
   accountNumber        Int                      @map("account_number")
   pixKey               String?                  @map("pix_key")
   createdAt            DateTime                 @default(now()) @map("created_at")
-  updatedAt            DateTime                 @map("updated_at")
+  updatedAt            DateTime?                @map("updated_at")
 
   driverId String @map("driver_id")
   driver   Driver @relation(fields: [driverId], references: [id])
@@ -123,7 +123,7 @@ model Vehicle {
   body             VehicleBody
   fullLoadCapacity String          @map("full_load_capacity")
   createdAt        DateTime        @default(now()) @map("created_at")
-  updatedAt        DateTime        @map("updated_at")
+  updatedAt        DateTime?       @map("updated_at")
 
   driverId String @map("driver_id")
   driver   Driver @relation(fields: [driverId], references: [id])
@@ -143,7 +143,7 @@ model Freight {
   freightAmountInCents    BigInt      @map("freight_amount_in_cents")
   observation             String?
   createdAt               DateTime    @default(now()) @map("created_at")
-  updatedAt               DateTime    @map("updated_at")
+  updatedAt               DateTime?   @map("updated_at")
 
   driverId           String               @map("driver_id")
   driver             Driver               @relation(fields: [driverId], references: [id])
@@ -154,14 +154,14 @@ model Freight {
 }
 
 model FreightInformation {
-  id                String   @id @default(uuid())
-  departureTime     DateTime @map("departure_time")
-  arrivalTime       DateTime @map("arrival_time")
-  pickupsNotMade    Int?     @map("pickups_not_made")
-  deliveriesNotMade Int?     @map("deliveries_not_made")
+  id                String    @id @default(uuid())
+  departureTime     DateTime  @map("departure_time")
+  arrivalTime       DateTime  @map("arrival_time")
+  pickupsNotMade    Int?      @map("pickups_not_made")
+  deliveriesNotMade Int?      @map("deliveries_not_made")
   viewed            Boolean
-  viewedAt          DateTime @map("viewed_at")
-  updatedAt         DateTime @map("updated_at")
+  viewedAt          DateTime  @map("viewed_at")
+  updatedAt         DateTime? @map("updated_at")
 
   freightId String  @map("freight_id")
   freight   Freight @relation(fields: [freightId], references: [id])
