@@ -41,7 +41,6 @@ model Company {
   freights_by_company    FreightByCompany[]
   company_member         CompanyMember[]
 
-  @@unique([ownerId, documentNumber])
   @@map("companies")
 }
 
