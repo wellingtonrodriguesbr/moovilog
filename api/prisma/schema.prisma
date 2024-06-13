@@ -15,7 +15,10 @@ model User {
   role      Role      @default(ADMIN)
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @map("updated_at")
-  companies Company[]
+
+  owns_companies Company[]
+  owns_freights  Freight[]
+  company_member CompanyMember[]
 
   @@map("users")
 }
@@ -28,15 +31,17 @@ model Company {
   createdAt      DateTime    @default(now()) @map("created_at")
   updatedAt      DateTime?   @map("updated_at")
 
-  userId String @map("user_id")
-  user   User   @relation(fields: [userId], references: [id])
+  ownerId String @map("user_id")
+  owner   User   @relation(fields: [ownerId], references: [id])
 
-  colaborators         Colaborator[]
-  companyServiceAreas  CompanyServiceArea[]
-  companyServiceCities CompanyServiceCity[]
-  companyAddress       CompanyAddress[]
-  drivers              Driver[]
+  company_service_areas  CompanyServiceArea[]
+  company_service_cities CompanyServiceCity[]
+  company_address        CompanyAddress[]
+  drivers                Driver[]
+  freights_by_company    FreightByCompany[]
+  company_member         CompanyMember[]
 
+  @@unique([ownerId, documentNumber])
   @@map("companies")
 }
 
@@ -64,19 +69,18 @@ model CompanyServiceCity {
   @@map("company_service_cities")
 }
 
-model Colaborator {
-  id        String    @id @default(uuid())
-  name      String
-  email     String    @unique
-  password  String
-  role      Role      @default(MEMBER)
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime? @map("updated_at")
+model CompanyMember {
+  id   String @id @default(uuid())
+  role Role   @default(MEMBER)
+
+  memberId String @map("member_id")
+  member   User   @relation(fields: [memberId], references: [id])
 
   companyId String  @map("company_id")
   company   Company @relation(fields: [companyId], references: [id])
 
-  @@map("colaborators")
+  @@unique([companyId, memberId])
+  @@map("company_members")
 }
 
 model Driver {
@@ -91,10 +95,10 @@ model Driver {
   companyId String  @map("company_id")
   company   Company @relation(fields: [companyId], references: [id])
 
-  driverAddress DriverAddress[]
-  vehicle       Vehicle[]
-  freights      Freight[]
-  bankData      BankData[]
+  driver_address DriverAddress[]
+  vehicle        Vehicle[]
+  freights       Freight[]
+  bank_data      BankData[]
 
   @@map("drivers")
 }
@@ -145,12 +149,31 @@ model Freight {
   createdAt               DateTime    @default(now()) @map("created_at")
   updatedAt               DateTime?   @map("updated_at")
 
-  driverId           String               @map("driver_id")
-  driver             Driver               @relation(fields: [driverId], references: [id])
-  freightInformation FreightInformation[]
-  dayOfFreight       DayOfFreight[]
+  ownerId String @map("owner_id")
+  owner   User   @relation(fields: [ownerId], references: [id])
+
+  driverId String @map("driver_id")
+  driver   Driver @relation(fields: [driverId], references: [id])
+
+  freight_information FreightInformation[]
+  day_of_freight      DayOfFreight[]
+  freights_by_company FreightByCompany[]
 
   @@map("freights")
+}
+
+model FreightByCompany {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @map("updated_at")
+
+  freightId String  @map("freight_id")
+  freight   Freight @relation(fields: [freightId], references: [id])
+
+  companyId String  @map("company_id")
+  company   Company @relation(fields: [companyId], references: [id])
+
+  @@map("freights_by_company")
 }
 
 model FreightInformation {
@@ -187,8 +210,8 @@ model State {
   name    String
   acronym String
 
-  areasByState AreasByState[]
-  cities       City[]
+  areas_by_state AreasByState[]
+  cities         City[]
 
   @@map("states")
 }
@@ -198,9 +221,9 @@ model Area {
   name String
   code String
 
-  areasByState        AreasByState[]
-  citiesByArea        CitiesByArea[]
-  companyServiceAreas CompanyServiceArea[]
+  areas_by_state        AreasByState[]
+  cities_by_area        CitiesByArea[]
+  company_service_areas CompanyServiceArea[]
 
   @@map("areas")
 }
@@ -224,10 +247,10 @@ model City {
   stateId String @map("state_id")
   state   State  @relation(fields: [stateId], references: [id])
 
-  citiesByArea         CitiesByArea[]
-  companyServiceCities CompanyServiceCity[]
-  addresses            Address[]
-  dayOfFreight         DayOfFreight[]
+  cities_by_area         CitiesByArea[]
+  company_service_cities CompanyServiceCity[]
+  addresses              Address[]
+  day_of_freight         DayOfFreight[]
 
   @@unique([stateId, name])
   @@map("cities")
@@ -254,10 +277,10 @@ model Address {
   complement   String?
   createdAt    DateTime @default(now()) @map("created_at")
 
-  cityId         String           @map("city_id")
-  city           City             @relation(fields: [cityId], references: [id])
-  companyAddress CompanyAddress[]
-  driverAddress  DriverAddress[]
+  cityId          String           @map("city_id")
+  city            City             @relation(fields: [cityId], references: [id])
+  company_address CompanyAddress[]
+  driver_address  DriverAddress[]
 
   @@map("addresses")
 }

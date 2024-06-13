@@ -64,17 +64,13 @@ CREATE TABLE "company_service_cities" (
 );
 
 -- CreateTable
-CREATE TABLE "colaborators" (
+CREATE TABLE "company_members" (
     "id" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
-    "email" TEXT NOT NULL,
-    "password" TEXT NOT NULL,
     "role" "Role" NOT NULL DEFAULT 'MEMBER',
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3),
+    "member_id" TEXT NOT NULL,
     "company_id" TEXT NOT NULL,
 
-    CONSTRAINT "colaborators_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "company_members_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -134,9 +130,21 @@ CREATE TABLE "freights" (
     "observation" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3),
+    "owner_id" TEXT NOT NULL,
     "driver_id" TEXT NOT NULL,
 
     CONSTRAINT "freights_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "freights_by_company" (
+    "id" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3),
+    "freight_id" TEXT NOT NULL,
+    "company_id" TEXT NOT NULL,
+
+    CONSTRAINT "freights_by_company_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -250,7 +258,10 @@ CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 CREATE UNIQUE INDEX "companies_document_number_key" ON "companies"("document_number");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "colaborators_email_key" ON "colaborators"("email");
+CREATE UNIQUE INDEX "companies_user_id_document_number_key" ON "companies"("user_id", "document_number");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "company_members_company_id_member_id_key" ON "company_members"("company_id", "member_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "drivers_document_number_key" ON "drivers"("document_number");
@@ -283,7 +294,10 @@ ALTER TABLE "company_service_cities" ADD CONSTRAINT "company_service_cities_comp
 ALTER TABLE "company_service_cities" ADD CONSTRAINT "company_service_cities_city_id_fkey" FOREIGN KEY ("city_id") REFERENCES "cities"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "colaborators" ADD CONSTRAINT "colaborators_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "company_members" ADD CONSTRAINT "company_members_member_id_fkey" FOREIGN KEY ("member_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "company_members" ADD CONSTRAINT "company_members_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "drivers" ADD CONSTRAINT "drivers_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -295,7 +309,16 @@ ALTER TABLE "bank_data" ADD CONSTRAINT "bank_data_driver_id_fkey" FOREIGN KEY ("
 ALTER TABLE "vehicles" ADD CONSTRAINT "vehicles_driver_id_fkey" FOREIGN KEY ("driver_id") REFERENCES "drivers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "freights" ADD CONSTRAINT "freights_owner_id_fkey" FOREIGN KEY ("owner_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "freights" ADD CONSTRAINT "freights_driver_id_fkey" FOREIGN KEY ("driver_id") REFERENCES "drivers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "freights_by_company" ADD CONSTRAINT "freights_by_company_freight_id_fkey" FOREIGN KEY ("freight_id") REFERENCES "freights"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "freights_by_company" ADD CONSTRAINT "freights_by_company_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "freight_information" ADD CONSTRAINT "freight_information_freight_id_fkey" FOREIGN KEY ("freight_id") REFERENCES "freights"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -1,6 +1,28 @@
 import fastify from "fastify";
-import { usersRoutes } from "./routes/users";
+import fastifyJwt from "@fastify/jwt";
+import fastifyCookie from "@fastify/cookie";
 
-export const app = fastify();
+import { usersRoutes } from "./routes/users";
+import { env } from "@/env";
+
+export const app = fastify({
+  logger: true,
+});
+
+app.register(fastifyJwt, {
+  secret: env.JWT_SECRET,
+  cookie: {
+    cookieName: "refreshToken",
+    signed: false,
+  },
+  sign: {
+    expiresIn: "7d",
+  },
+});
+
+app.register(fastifyCookie, {
+  secret: env.COOKIE_SECRET_KEY,
+  hook: "onRequest",
+});
 
 app.register(usersRoutes);
