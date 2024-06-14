@@ -6,6 +6,7 @@ import { usersRoutes } from "./routes/users";
 import { env } from "@/env";
 import { companiesRoutes } from "./routes/companies";
 import { driversRoutes } from "./routes/drivers";
+import { vehiclesRoutes } from "./routes/vehicles";
 
 export const app = fastify({
   logger: true,
@@ -30,3 +31,4 @@ app.register(fastifyCookie, {
 app.register(usersRoutes);
 app.register(companiesRoutes);
 app.register(driversRoutes);
+app.register(vehiclesRoutes);

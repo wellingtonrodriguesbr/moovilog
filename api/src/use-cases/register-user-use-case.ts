@@ -1,12 +1,13 @@
 import { prisma } from "../lib/prisma";
 import { hash } from "bcryptjs";
 import { UserAlreadyExistsError } from "./errors/user-already-exists-error";
+import { Role } from "@prisma/client";
 
 interface RegisterUserUseCaseRequest {
   name: string;
   email: string;
   password: string;
-  role: "ADMIN" | "FINANCIAL" | "OPERATIONAL" | "MEMBER" | undefined;
+  role: Role | undefined;
 }
 
 interface RegisterUserUseCaseResponse {

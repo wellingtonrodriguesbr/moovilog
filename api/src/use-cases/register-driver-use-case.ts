@@ -26,23 +26,24 @@ export async function registerDriverUseCase({
   creatorId,
   companyId,
 }: RegisterDriverUseCaseRequest): Promise<RegisterDriverUseCaseResponse> {
-  const user = await prisma.user.findUnique({
-    where: {
-      id: creatorId,
-    },
-  });
+  const [user, driverAlreadyExists] = await Promise.all([
+    await prisma.user.findUnique({
+      where: {
+        id: creatorId,
+      },
+    }),
+    await prisma.driver.findUnique({
+      where: {
+        documentNumber,
+      },
+    }),
+  ]);
 
   if (user?.role !== ("ADMIN" || "OPERATIONAL")) {
     throw new UnauthorizedError(
       "You do not have permission to perform this action, please ask your administrator for access"
     );
   }
-
-  const driverAlreadyExists = await prisma.driver.findUnique({
-    where: {
-      documentNumber,
-    },
-  });
 
   if (driverAlreadyExists) {
     throw new DriverAlreadyExistsError();

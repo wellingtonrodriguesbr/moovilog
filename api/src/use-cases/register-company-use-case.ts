@@ -22,22 +22,22 @@ export async function registerCompanyUseCase({
   type,
   size,
 }: RegisterCompanyUseCaseRequest): Promise<RegisterCompanyUseCaseResponse> {
-  const user = await prisma.user.findUnique({
-    where: {
-      id: userId,
-    },
-  });
-
-  if (user?.role !== "ADMIN") {
-    throw new UnauthorizedError();
-  }
-
-  const companyAlreadyRegisteredWithThisDocument =
+  const [user, companyAlreadyRegisteredWithThisDocument] = await Promise.all([
+    await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    }),
     await prisma.company.findUnique({
       where: {
         documentNumber,
       },
-    });
+    }),
+  ]);
+
+  if (user?.role !== "ADMIN") {
+    throw new UnauthorizedError();
+  }
 
   if (companyAlreadyRegisteredWithThisDocument) {
     throw new CompanyAlreadyExistsError();

@@ -1,5 +1,6 @@
 import { prisma } from "../lib/prisma";
 import { CompanyMemberAlreadyExistsError } from "./errors/company-member-already-exists-error";
+import { ResourceNotFoundError } from "./errors/resource-not-found-error";
 
 interface RegisterCompanyMemberUseCaseRequest {
   memberId: string;
@@ -20,12 +21,16 @@ export async function registerCompanyMemberUseCase({
     },
   });
 
+  if (!user) {
+    throw new ResourceNotFoundError("User not found");
+  }
+
   const userAlreadyRegisteredWithThisCompany =
     await prisma.companyMember.findUnique({
       where: {
         companyId_memberId: {
           companyId,
-          memberId: user!.id,
+          memberId: user.id,
         },
       },
     });
