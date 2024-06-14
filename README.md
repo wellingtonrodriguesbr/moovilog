@@ -19,6 +19,7 @@
 - [x] Não deve ser possível cadastrar usuário com e-mail duplicado;s
 - [x] Não deve ser possível cadastrar uma empresa com um CNPJ duplicado;
 - [ ] Não deve ser possível cadastrar membros com e-mail duplicado;
+- [x] Não deve ser possível cadastrar empresas com roles diferentes de ADMIN;
 
 # RNFs (Requisitos não-funcionais)
 

@@ -35,6 +35,7 @@ CREATE TABLE "users" (
 -- CreateTable
 CREATE TABLE "companies" (
     "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
     "document_number" TEXT NOT NULL,
     "type" "CompanyType" NOT NULL,
     "size" TEXT NOT NULL,
@@ -256,9 +257,6 @@ CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "companies_document_number_key" ON "companies"("document_number");
-
--- CreateIndex
-CREATE UNIQUE INDEX "companies_user_id_document_number_key" ON "companies"("user_id", "document_number");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "company_members_company_id_member_id_key" ON "company_members"("company_id", "member_id");

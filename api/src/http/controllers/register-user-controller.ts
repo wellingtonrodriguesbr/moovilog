@@ -12,12 +12,22 @@ export async function registerUserController(
     name: z.string(),
     email: z.string().email(),
     password: z.string().min(8),
+    role: z
+      .enum(["ADMIN", "FINANCIAL", "OPERATIONAL", "MEMBER"])
+      .or(z.undefined()),
   });
 
-  const { name, email, password } = registerUserBodySchema.parse(req.body);
+  const { name, email, password, role } = registerUserBodySchema.parse(
+    req.body
+  );
 
   try {
-    const { userId } = await registerUserUseCase({ name, email, password });
+    const { userId } = await registerUserUseCase({
+      name,
+      email,
+      password,
+      role,
+    });
 
     reply.status(201).send({ userId });
   } catch (error) {

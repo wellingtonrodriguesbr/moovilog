@@ -6,6 +6,7 @@ interface RegisterUserUseCaseRequest {
   name: string;
   email: string;
   password: string;
+  role: "ADMIN" | "FINANCIAL" | "OPERATIONAL" | "MEMBER" | undefined;
 }
 
 interface RegisterUserUseCaseResponse {
@@ -16,6 +17,7 @@ export async function registerUserUseCase({
   name,
   email,
   password,
+  role,
 }: RegisterUserUseCaseRequest): Promise<RegisterUserUseCaseResponse> {
   const userAlreadyExists = await prisma.user.findUnique({
     where: {
@@ -34,6 +36,7 @@ export async function registerUserUseCase({
       name,
       password: passwordHash,
       email,
+      role,
     },
   });
 
