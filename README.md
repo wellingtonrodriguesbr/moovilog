@@ -5,7 +5,7 @@
 - [x] Deve ser possível se cadastrar;
 - [x] Deve ser possível se autenticar;
 - [x] Deve ser possível cadastrar uma empresa;
-- [ ] Deve ser possível cadastrar membros para uma empresa;
+- [x] Deve ser possível cadastrar membros para uma empresa;
 - [ ] Deve ser possível cadastrar motoristas para uma empresa;
 - [ ] Deve ser possível cadastrar dados bancários de um motorista;
 - [ ] Deve ser possível cadastrar veículos;
@@ -16,10 +16,10 @@
 
 # RNs (Regras de negócio)
 
-- [x] Não deve ser possível cadastrar usuário com e-mail duplicado;s
+- [x] Não deve ser possível cadastrar usuário com e-mail duplicado;
 - [x] Não deve ser possível cadastrar uma empresa com um CNPJ duplicado;
-- [ ] Não deve ser possível cadastrar membros com e-mail duplicado;
-- [x] Não deve ser possível cadastrar empresas com roles diferentes de ADMIN;
+- [x] Não deve ser possível cadastrar membros com e-mail duplicado;
+- [x] Não deve ser possível cadastrar empresas com roles diferente de ADMIN;
 
 # RNFs (Requisitos não-funcionais)
 
