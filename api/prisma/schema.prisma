@@ -8,17 +8,18 @@ datasource db {
 }
 
 model User {
-  id        String    @id @default(uuid())
+  id        String   @id @default(uuid())
   name      String
-  email     String    @unique
+  email     String   @unique
   password  String
-  role      Role      @default(ADMIN)
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime? @map("updated_at")
+  role      Role     @default(ADMIN)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   owns_companies Company[]
   owns_freights  Freight[]
   company_member CompanyMember[]
+  drivers        Driver[]
 
   @@map("users")
 }
@@ -30,7 +31,7 @@ model Company {
   type           CompanyType
   size           String
   createdAt      DateTime    @default(now()) @map("created_at")
-  updatedAt      DateTime?   @map("updated_at")
+  updatedAt      DateTime    @updatedAt @map("updated_at")
 
   ownerId String @map("user_id")
   owner   User   @relation(fields: [ownerId], references: [id])
@@ -41,6 +42,7 @@ model Company {
   drivers                Driver[]
   freights_by_company    FreightByCompany[]
   company_members        CompanyMember[]
+  company_drivers        CompanyDriver[]
 
   @@map("companies")
 }
@@ -70,8 +72,10 @@ model CompanyServiceCity {
 }
 
 model CompanyMember {
-  id   String @id @default(uuid())
-  role Role   @default(MEMBER)
+  id        String   @id @default(uuid())
+  role      Role     @default(MEMBER)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   memberId String @map("member_id")
   member   User   @relation(fields: [memberId], references: [id])
@@ -83,22 +87,42 @@ model CompanyMember {
   @@map("company_members")
 }
 
-model Driver {
-  id             String    @id @default(uuid())
-  name           String
-  documentNumber String    @unique @map("document_number")
-  phone          String    @unique
-  backupPhone    String?   @map("backup_phone")
-  createdAt      DateTime  @default(now()) @map("created_at")
-  updatedAt      DateTime? @map("updated_at")
+model CompanyDriver {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  driverId String @map("driver_id")
+  driver   Driver @relation(fields: [driverId], references: [id])
 
   companyId String  @map("company_id")
   company   Company @relation(fields: [companyId], references: [id])
 
-  driver_address DriverAddress[]
-  vehicle        Vehicle[]
-  freights       Freight[]
-  bank_data      BankData[]
+  @@unique([companyId, driverId])
+  @@map("company_drivers")
+}
+
+model Driver {
+  id             String   @id @default(uuid())
+  name           String
+  password       String
+  documentNumber String   @unique @map("document_number")
+  phone          String   @unique
+  backupPhone    String?  @map("backup_phone")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  companyId String  @map("company_id")
+  company   Company @relation(fields: [companyId], references: [id])
+
+  creatorId String @map("creator_id")
+  creator   User   @relation(fields: [creatorId], references: [id])
+
+  driver_address  DriverAddress[]
+  vehicle         Vehicle[]
+  freights        Freight[]
+  bank_data       BankData[]
+  company_drivers CompanyDriver[]
 
   @@map("drivers")
 }
@@ -111,7 +135,7 @@ model BankData {
   accountNumber        Int                      @map("account_number")
   pixKey               String?                  @map("pix_key")
   createdAt            DateTime                 @default(now()) @map("created_at")
-  updatedAt            DateTime?                @map("updated_at")
+  updatedAt            DateTime                 @updatedAt @map("updated_at")
 
   driverId String @map("driver_id")
   driver   Driver @relation(fields: [driverId], references: [id])
@@ -127,7 +151,7 @@ model Vehicle {
   body             VehicleBody
   fullLoadCapacity String          @map("full_load_capacity")
   createdAt        DateTime        @default(now()) @map("created_at")
-  updatedAt        DateTime?       @map("updated_at")
+  updatedAt        DateTime        @updatedAt @map("updated_at")
 
   driverId String @map("driver_id")
   driver   Driver @relation(fields: [driverId], references: [id])
@@ -147,7 +171,7 @@ model Freight {
   freightAmountInCents    BigInt      @map("freight_amount_in_cents")
   observation             String?
   createdAt               DateTime    @default(now()) @map("created_at")
-  updatedAt               DateTime?   @map("updated_at")
+  updatedAt               DateTime    @updatedAt @map("updated_at")
 
   ownerId String @map("owner_id")
   owner   User   @relation(fields: [ownerId], references: [id])
@@ -163,9 +187,9 @@ model Freight {
 }
 
 model FreightByCompany {
-  id        String    @id @default(uuid())
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime? @map("updated_at")
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   freightId String  @map("freight_id")
   freight   Freight @relation(fields: [freightId], references: [id])
@@ -177,14 +201,14 @@ model FreightByCompany {
 }
 
 model FreightInformation {
-  id                String    @id @default(uuid())
-  departureTime     DateTime  @map("departure_time")
-  arrivalTime       DateTime  @map("arrival_time")
-  pickupsNotMade    Int?      @map("pickups_not_made")
-  deliveriesNotMade Int?      @map("deliveries_not_made")
+  id                String   @id @default(uuid())
+  departureTime     DateTime @map("departure_time")
+  arrivalTime       DateTime @map("arrival_time")
+  pickupsNotMade    Int?     @map("pickups_not_made")
+  deliveriesNotMade Int?     @map("deliveries_not_made")
   viewed            Boolean
-  viewedAt          DateTime  @map("viewed_at")
-  updatedAt         DateTime? @map("updated_at")
+  viewedAt          DateTime @map("viewed_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
 
   freightId String  @map("freight_id")
   freight   Freight @relation(fields: [freightId], references: [id])

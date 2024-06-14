@@ -11,7 +11,7 @@ export async function registerCompanyController(
 ) {
   const registerCompanyBodySchema = z.object({
     name: z.string(),
-    documentNumber: z.string().min(14),
+    documentNumber: z.string().min(14).max(14),
     type: z.enum(["HEADQUARTERS", "BRANCH", "AGENCY"]),
     size: z.string().min(8),
   });

@@ -27,7 +27,7 @@ CREATE TABLE "users" (
     "password" TEXT NOT NULL,
     "role" "Role" NOT NULL DEFAULT 'ADMIN',
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3),
+    "updated_at" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
@@ -40,7 +40,7 @@ CREATE TABLE "companies" (
     "type" "CompanyType" NOT NULL,
     "size" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3),
+    "updated_at" TIMESTAMP(3) NOT NULL,
     "user_id" TEXT NOT NULL,
 
     CONSTRAINT "companies_pkey" PRIMARY KEY ("id")
@@ -68,6 +68,8 @@ CREATE TABLE "company_service_cities" (
 CREATE TABLE "company_members" (
     "id" TEXT NOT NULL,
     "role" "Role" NOT NULL DEFAULT 'MEMBER',
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
     "member_id" TEXT NOT NULL,
     "company_id" TEXT NOT NULL,
 
@@ -75,15 +77,28 @@ CREATE TABLE "company_members" (
 );
 
 -- CreateTable
+CREATE TABLE "company_drivers" (
+    "id" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "driver_id" TEXT NOT NULL,
+    "company_id" TEXT NOT NULL,
+
+    CONSTRAINT "company_drivers_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "drivers" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
     "document_number" TEXT NOT NULL,
     "phone" TEXT NOT NULL,
     "backup_phone" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3),
+    "updated_at" TIMESTAMP(3) NOT NULL,
     "company_id" TEXT NOT NULL,
+    "creator_id" TEXT NOT NULL,
 
     CONSTRAINT "drivers_pkey" PRIMARY KEY ("id")
 );
@@ -97,7 +112,7 @@ CREATE TABLE "bank_data" (
     "account_number" INTEGER NOT NULL,
     "pix_key" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3),
+    "updated_at" TIMESTAMP(3) NOT NULL,
     "driver_id" TEXT NOT NULL,
 
     CONSTRAINT "bank_data_pkey" PRIMARY KEY ("id")
@@ -112,7 +127,7 @@ CREATE TABLE "vehicles" (
     "body" "VehicleBody" NOT NULL,
     "full_load_capacity" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3),
+    "updated_at" TIMESTAMP(3) NOT NULL,
     "driver_id" TEXT NOT NULL,
 
     CONSTRAINT "vehicles_pkey" PRIMARY KEY ("id")
@@ -130,7 +145,7 @@ CREATE TABLE "freights" (
     "freight_amount_in_cents" BIGINT NOT NULL,
     "observation" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3),
+    "updated_at" TIMESTAMP(3) NOT NULL,
     "owner_id" TEXT NOT NULL,
     "driver_id" TEXT NOT NULL,
 
@@ -141,7 +156,7 @@ CREATE TABLE "freights" (
 CREATE TABLE "freights_by_company" (
     "id" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3),
+    "updated_at" TIMESTAMP(3) NOT NULL,
     "freight_id" TEXT NOT NULL,
     "company_id" TEXT NOT NULL,
 
@@ -157,7 +172,7 @@ CREATE TABLE "freight_information" (
     "deliveries_not_made" INTEGER,
     "viewed" BOOLEAN NOT NULL,
     "viewed_at" TIMESTAMP(3) NOT NULL,
-    "updated_at" TIMESTAMP(3),
+    "updated_at" TIMESTAMP(3) NOT NULL,
     "freight_id" TEXT NOT NULL,
 
     CONSTRAINT "freight_information_pkey" PRIMARY KEY ("id")
@@ -262,6 +277,9 @@ CREATE UNIQUE INDEX "companies_document_number_key" ON "companies"("document_num
 CREATE UNIQUE INDEX "company_members_company_id_member_id_key" ON "company_members"("company_id", "member_id");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "company_drivers_company_id_driver_id_key" ON "company_drivers"("company_id", "driver_id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "drivers_document_number_key" ON "drivers"("document_number");
 
 -- CreateIndex
@@ -298,7 +316,16 @@ ALTER TABLE "company_members" ADD CONSTRAINT "company_members_member_id_fkey" FO
 ALTER TABLE "company_members" ADD CONSTRAINT "company_members_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "company_drivers" ADD CONSTRAINT "company_drivers_driver_id_fkey" FOREIGN KEY ("driver_id") REFERENCES "drivers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "company_drivers" ADD CONSTRAINT "company_drivers_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "drivers" ADD CONSTRAINT "drivers_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "drivers" ADD CONSTRAINT "drivers_creator_id_fkey" FOREIGN KEY ("creator_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "bank_data" ADD CONSTRAINT "bank_data_driver_id_fkey" FOREIGN KEY ("driver_id") REFERENCES "drivers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
