@@ -16,10 +16,10 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  owns_companies Company[]
-  owns_freights  Freight[]
-  company_member CompanyMember[]
-  drivers        Driver[]
+  ownsCompanies Company[]
+  ownsFreights  Freight[]
+  companyMember CompanyMember[]
+  drivers       Driver[]
 
   @@map("users")
 }
@@ -36,13 +36,13 @@ model Company {
   ownerId String @map("user_id")
   owner   User   @relation(fields: [ownerId], references: [id])
 
-  company_service_areas  CompanyServiceArea[]
-  company_service_cities CompanyServiceCity[]
-  company_address        CompanyAddress[]
-  drivers                Driver[]
-  freights_by_company    FreightByCompany[]
-  company_members        CompanyMember[]
-  company_drivers        CompanyDriver[]
+  companyServiceAreas  CompanyServiceArea[]
+  companyServiceCities CompanyServiceCity[]
+  companyAddress       CompanyAddress[]
+  drivers              Driver[]
+  freightsByCompany    FreightByCompany[]
+  companyMembers       CompanyMember[]
+  companyDrivers       CompanyDriver[]
 
   @@map("companies")
 }
@@ -118,21 +118,21 @@ model Driver {
   creatorId String @map("creator_id")
   creator   User   @relation(fields: [creatorId], references: [id])
 
-  driver_address  DriverAddress[]
-  vehicle         Vehicle[]
-  freights        Freight[]
-  bank_data       BankData[]
-  company_drivers CompanyDriver[]
+  driverAddress  DriverAddress[]
+  vehicle        Vehicle[]
+  freights       Freight[]
+  bankDetails    BankDetails[]
+  companyDrivers CompanyDriver[]
 
   @@map("drivers")
 }
 
-model BankData {
+model BankDetails {
   id                   String                   @id @default(uuid())
   financialInstitution String                   @map("financial_institution")
   accountType          AccountTypeOfBankDetails @map("account_type")
   agency               Int
-  accountNumber        Int                      @map("account_number")
+  accountNumber        BigInt                   @map("account_number")
   pixKey               String?                  @map("pix_key")
   createdAt            DateTime                 @default(now()) @map("created_at")
   updatedAt            DateTime                 @updatedAt @map("updated_at")
@@ -140,7 +140,7 @@ model BankData {
   driverId String @map("driver_id")
   driver   Driver @relation(fields: [driverId], references: [id])
 
-  @@map("bank_data")
+  @@map("bank_details")
 }
 
 model Vehicle {
@@ -173,15 +173,15 @@ model Freight {
   createdAt               DateTime    @default(now()) @map("created_at")
   updatedAt               DateTime    @updatedAt @map("updated_at")
 
-  ownerId String @map("owner_id")
-  owner   User   @relation(fields: [ownerId], references: [id])
+  creatorId String @map("owner_id")
+  creator   User   @relation(fields: [creatorId], references: [id])
 
   driverId String @map("driver_id")
   driver   Driver @relation(fields: [driverId], references: [id])
 
-  freight_information FreightInformation[]
-  day_of_freight      DayOfFreight[]
-  freights_by_company FreightByCompany[]
+  freightInformation FreightInformation[]
+  citiesByFreight    CityByFreight[]
+  freightsByCompany  FreightByCompany[]
 
   @@map("freights")
 }
@@ -216,9 +216,8 @@ model FreightInformation {
   @@map("freight_information")
 }
 
-model DayOfFreight {
-  id   String   @id @default(uuid())
-  date DateTime
+model CityByFreight {
+  id String @id @default(uuid())
 
   freightId String  @map("freight_id")
   freight   Freight @relation(fields: [freightId], references: [id])
@@ -226,7 +225,7 @@ model DayOfFreight {
   cityId String @map("city_id")
   city   City   @relation(fields: [cityId], references: [id])
 
-  @@map("day_of_freight")
+  @@map("cities_by_freight")
 }
 
 model State {
@@ -245,9 +244,9 @@ model Area {
   name String
   code String
 
-  areas_by_state        AreasByState[]
-  cities_by_area        CitiesByArea[]
-  company_service_areas CompanyServiceArea[]
+  areasByState        AreasByState[]
+  citiesByArea        CitiesByArea[]
+  companyServiceAreas CompanyServiceArea[]
 
   @@map("areas")
 }
@@ -271,10 +270,10 @@ model City {
   stateId String @map("state_id")
   state   State  @relation(fields: [stateId], references: [id])
 
-  cities_by_area         CitiesByArea[]
-  company_service_cities CompanyServiceCity[]
-  addresses              Address[]
-  day_of_freight         DayOfFreight[]
+  citiesByArea         CitiesByArea[]
+  companyServiceCities CompanyServiceCity[]
+  addresses            Address[]
+  citiesByFreight      CityByFreight[]
 
   @@unique([stateId, name])
   @@map("cities")
@@ -301,10 +300,10 @@ model Address {
   complement   String?
   createdAt    DateTime @default(now()) @map("created_at")
 
-  cityId          String           @map("city_id")
-  city            City             @relation(fields: [cityId], references: [id])
-  company_address CompanyAddress[]
-  driver_address  DriverAddress[]
+  cityId         String           @map("city_id")
+  city           City             @relation(fields: [cityId], references: [id])
+  companyAddress CompanyAddress[]
+  driverAddress  DriverAddress[]
 
   @@map("addresses")
 }

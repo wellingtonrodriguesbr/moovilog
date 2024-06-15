@@ -60,7 +60,7 @@ export async function registerDriverUseCase({
       backupPhone: backupPhone ?? null,
       companyId,
       creatorId: user.id,
-      company_drivers: {
+      companyDrivers: {
         create: {
           companyId,
         },

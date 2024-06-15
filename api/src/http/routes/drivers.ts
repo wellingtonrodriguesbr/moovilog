@@ -4,4 +4,9 @@ import { verifyJWT } from "../middlewares/verify-jwt";
 
 export async function driversRoutes(app: FastifyInstance) {
   app.post("/drivers", { onRequest: [verifyJWT] }, registerDriverController);
+  app.post(
+    "/drivers/bank-details",
+    { onRequest: [verifyJWT] },
+    registerDriverController
+  );
 }
