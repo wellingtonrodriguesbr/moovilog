@@ -3,6 +3,7 @@ import { registerDriverBankDetailsUseCase } from "@/use-cases/register-driver-ba
 
 import z from "zod";
 import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
+import { UnauthorizedError } from "@/use-cases/errors/unauthorized-error";
 
 export async function registerDriverBankDetailsController(
   req: FastifyRequest,
@@ -21,6 +22,8 @@ export async function registerDriverBankDetailsController(
     driverId: z.string(),
   });
 
+  const userId = req.user.sub;
+
   const {
     financialInstitution,
     accountType,
@@ -38,12 +41,16 @@ export async function registerDriverBankDetailsController(
       agency,
       pixKey,
       driverId,
+      userId,
     });
 
     reply.status(201).send({ bankDetailsId });
   } catch (error) {
     if (error instanceof ResourceNotFoundError) {
       reply.status(400).send({ message: error.message });
+    }
+    if (error instanceof UnauthorizedError) {
+      reply.status(401).send({ message: error.message });
     }
 
     throw error;

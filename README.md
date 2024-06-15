@@ -7,8 +7,8 @@
 - [x] Deve ser possível cadastrar uma empresa;
 - [x] Deve ser possível cadastrar membros para uma empresa;
 - [x] Deve ser possível cadastrar motoristas;
-- [ ] Deve ser possível cadastrar dados bancários de um motorista;
-- [ ] Deve ser possível adicionar motoristas a uma empresa;
+- [x] Deve ser possível cadastrar dados bancários de um motorista;
+- [x] Deve ser possível adicionar motoristas a uma empresa;
 - [x] Deve ser possível cadastrar veículos;
 - [ ] Deve ser possível cadastrar região de atendimento de uma empresa;
 - [ ] Deve ser possível cadastrar as cidades atendidas de uma empresa;
@@ -22,6 +22,7 @@
 - [x] Não deve ser possível cadastrar membros com e-mail duplicado;
 - [x] Não deve ser possível cadastrar empresas com roles diferente de ADMIN;
 - [x] Não deve ser possível cadastrar motoristas e veículos com roles diferente de ADMIN ou OPERATIONAL;
+- [x] Não deve ser possível cadastrar dados bancários de um motorista com roles diferente de ADMIN ou FINANCIAL;
 - [x] Não deve ser possível cadastrar veículos com a mesma placa;
 
 # RNFs (Requisitos não-funcionais)
