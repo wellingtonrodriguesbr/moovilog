@@ -7,6 +7,8 @@
 - [x] Deve ser possível cadastrar uma empresa;
 - [x] Deve ser possível cadastrar membros para uma empresa;
 - [x] Deve ser possível cadastrar motoristas;
+- [x] Deve ser possível se autenticar como motorista;
+- [ ] Deve ser possível obter informações de um frete como motorista;
 - [x] Deve ser possível cadastrar dados bancários de um motorista;
 - [x] Deve ser possível adicionar motoristas a uma empresa;
 - [x] Deve ser possível cadastrar veículos;
@@ -14,7 +16,7 @@
 - [ ] Deve ser possível cadastrar as cidades atendidas de uma empresa;
 - [x] Deve ser possível cadastrar um frete;
 - [ ] Deve ser possível obter informações de um frete específico;
-- [ ] Deve ser possível obter todos os fretes de uma empresa;
+- [x] Deve ser possível obter todos os fretes de uma empresa;
 
 # RNs (Regras de negócio)
 
