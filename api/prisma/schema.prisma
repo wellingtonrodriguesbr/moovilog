@@ -173,7 +173,7 @@ model Freight {
   createdAt               DateTime    @default(now()) @map("created_at")
   updatedAt               DateTime    @updatedAt @map("updated_at")
 
-  creatorId String @map("owner_id")
+  creatorId String @map("creator_id")
   creator   User   @relation(fields: [creatorId], references: [id], onDelete: Cascade)
 
   driverId String @map("driver_id")

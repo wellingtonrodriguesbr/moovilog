@@ -51,8 +51,6 @@ export async function registerFreightUseCase({
     }),
   ]);
 
-  console.log(user);
-
   if (user?.role !== ("ADMIN" || "OPERATIONAL")) {
     throw new UnauthorizedError(
       "You do not have permission to perform this action, please ask your administrator for access"
