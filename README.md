@@ -14,7 +14,7 @@
 - [ ] Deve ser possível cadastrar as cidades atendidas de uma empresa;
 - [x] Deve ser possível cadastrar um frete;
 - [ ] Deve ser possível obter informações de um frete específico;
-- [ ] Deve ser possível obter os todos os fretes de uma empresa;
+- [ ] Deve ser possível obter todos os fretes de uma empresa;
 
 # RNs (Regras de negócio)
 
