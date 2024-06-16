@@ -1,10 +1,10 @@
+import { promise } from "zod";
 import { prisma } from "../lib/prisma";
 import { CompanyMemberAlreadyExistsError } from "./errors/company-member-already-exists-error";
 import { ResourceNotFoundError } from "./errors/resource-not-found-error";
 
 interface RegisterCompanyMemberUseCaseRequest {
-  memberId: string;
-  companyId: string;
+  userEmail: string;
 }
 
 interface RegisterCompanyMemberUseCaseResponse {
@@ -12,16 +12,28 @@ interface RegisterCompanyMemberUseCaseResponse {
 }
 
 export async function registerCompanyMemberUseCase({
-  memberId,
-  companyId,
+  userEmail,
 }: RegisterCompanyMemberUseCaseRequest): Promise<RegisterCompanyMemberUseCaseResponse> {
-  const user = await prisma.user.findUnique({
-    where: {
-      id: memberId,
-    },
-  });
+  const [user, company] = await Promise.all([
+    await prisma.user.findUnique({
+      where: {
+        email: userEmail,
+      },
+    }),
+    await prisma.company.findFirst({
+      where: {
+        companyMembers: {
+          some: {
+            member: {
+              email: userEmail,
+            },
+          },
+        },
+      },
+    }),
+  ]);
 
-  if (!user) {
+  if (!user || !company) {
     throw new ResourceNotFoundError("User not found");
   }
 
@@ -29,7 +41,7 @@ export async function registerCompanyMemberUseCase({
     await prisma.companyMember.findUnique({
       where: {
         companyId_memberId: {
-          companyId,
+          companyId: company.id,
           memberId: user.id,
         },
       },
@@ -41,7 +53,7 @@ export async function registerCompanyMemberUseCase({
 
   const companyMember = await prisma.companyMember.create({
     data: {
-      companyId,
+      companyId: company.id,
       memberId: user!.id,
     },
   });

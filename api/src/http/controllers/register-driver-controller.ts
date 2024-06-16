@@ -1,10 +1,10 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { registerDriverUseCase } from "@/use-cases/register-driver-use-case";
 import { DriverAlreadyExistsError } from "@/use-cases/errors/driver-already-exists-error";
-
-import z from "zod";
 import { UnauthorizedError } from "@/use-cases/errors/unauthorized-error";
 import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
+
+import z from "zod";
 
 export async function registerDriverController(
   req: FastifyRequest,
@@ -16,10 +16,9 @@ export async function registerDriverController(
     documentNumber: z.string().min(11).max(11),
     phone: z.string().min(11).max(11),
     backupPhone: z.string().min(11).max(11).optional().nullable(),
-    companyId: z.string(),
   });
 
-  const { name, password, documentNumber, phone, backupPhone, companyId } =
+  const { name, password, documentNumber, phone, backupPhone } =
     registerDriverBodySchema.parse(req.body);
 
   const creatorId = req.user.sub;
@@ -32,7 +31,6 @@ export async function registerDriverController(
       phone,
       backupPhone,
       creatorId,
-      companyId,
     });
 
     reply.status(201).send({ driverId });

@@ -9,20 +9,14 @@ export async function registerCompanyMemberController(
   reply: FastifyReply
 ) {
   const registerCompanyMemberBodySchema = z.object({
-    companyId: z.string(),
+    userEmail: z.string(),
   });
 
-  const registerCompanyMemberParamsSchema = z.object({
-    memberId: z.string(),
-  });
-
-  const { companyId } = registerCompanyMemberBodySchema.parse(req.body);
-  const { memberId } = registerCompanyMemberParamsSchema.parse(req.params);
+  const { userEmail } = registerCompanyMemberBodySchema.parse(req.body);
 
   try {
     const { companyMemberId } = await registerCompanyMemberUseCase({
-      memberId,
-      companyId,
+      userEmail,
     });
 
     reply.status(201).send({ companyMemberId });

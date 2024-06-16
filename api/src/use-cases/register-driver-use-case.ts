@@ -11,7 +11,6 @@ interface RegisterDriverUseCaseRequest {
   phone: string;
   backupPhone?: string | null;
   creatorId: string;
-  companyId: string;
 }
 
 interface RegisterDriverUseCaseResponse {
@@ -25,7 +24,6 @@ export async function registerDriverUseCase({
   phone,
   backupPhone,
   creatorId,
-  companyId,
 }: RegisterDriverUseCaseRequest): Promise<RegisterDriverUseCaseResponse> {
   const [user, driverAlreadyExists, company] = await Promise.all([
     await prisma.user.findUnique({
@@ -38,9 +36,13 @@ export async function registerDriverUseCase({
         documentNumber,
       },
     }),
-    await prisma.company.findUnique({
+    await prisma.company.findFirst({
       where: {
-        id: companyId,
+        companyMembers: {
+          some: {
+            memberId: creatorId,
+          },
+        },
       },
     }),
   ]);
@@ -72,7 +74,7 @@ export async function registerDriverUseCase({
       creatorId: user.id,
       companyDrivers: {
         create: {
-          companyId,
+          companyId: company.id,
         },
       },
     },
