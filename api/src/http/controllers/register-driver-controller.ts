@@ -4,6 +4,7 @@ import { DriverAlreadyExistsError } from "@/use-cases/errors/driver-already-exis
 
 import z from "zod";
 import { UnauthorizedError } from "@/use-cases/errors/unauthorized-error";
+import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
 
 export async function registerDriverController(
   req: FastifyRequest,
@@ -41,6 +42,9 @@ export async function registerDriverController(
     }
     if (error instanceof UnauthorizedError) {
       reply.status(401).send({ message: error.message });
+    }
+    if (error instanceof ResourceNotFoundError) {
+      reply.status(400).send({ message: error.message });
     }
 
     throw error;

@@ -12,8 +12,9 @@
 - [x] Deve ser possível cadastrar veículos;
 - [ ] Deve ser possível cadastrar região de atendimento de uma empresa;
 - [ ] Deve ser possível cadastrar as cidades atendidas de uma empresa;
-- [ ] Deve ser possível cadastrar um frete;
+- [x] Deve ser possível cadastrar um frete;
 - [ ] Deve ser possível obter informações de um frete específico;
+- [ ] Deve ser possível obter os todos os fretes de uma empresa;
 
 # RNs (Regras de negócio)
 
@@ -24,6 +25,7 @@
 - [x] Não deve ser possível cadastrar motoristas e veículos com roles diferente de ADMIN ou OPERATIONAL;
 - [x] Não deve ser possível cadastrar dados bancários de um motorista com roles diferente de ADMIN ou FINANCIAL;
 - [x] Não deve ser possível cadastrar veículos com a mesma placa;
+- [x] Não deve ser possível cadastrar fretes com roles diferente de ADMIN ou OPERACIONAL;
 
 # RNFs (Requisitos não-funcionais)
 

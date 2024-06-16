@@ -50,6 +50,12 @@ export async function registerCompanyUseCase({
       documentNumber,
       type,
       size,
+      companyMembers: {
+        create: {
+          memberId: user.id,
+          role: "ADMIN",
+        },
+      },
     },
   });
 
