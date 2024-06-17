@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Button } from "../ui/button";
 import { ArrowRight, User } from "lucide-react";
 import { MenuMobile } from "./menu-mobile";
+import Link from "next/link";
 
 export function Header() {
   return (
@@ -16,9 +17,11 @@ export function Header() {
       />
       <MenuMobile />
       <div className="hidden md:flex items-center gap-4">
-        <Button variant="link" className="text-white font-bold gap-2">
-          <User className="size-4" />
-          Entrar
+        <Button variant="link" className="text-white font-bold gap-2" asChild>
+          <Link href="/entrar">
+            <User className="size-4" />
+            Entrar
+          </Link>
         </Button>
         <Button className="bg-white hover:bg-app-cyan-100 text-app-blue-900 font-bold gap-2">
           Criar minha conta

@@ -15,7 +15,7 @@ export function Hero() {
             <NotepadText className="size-4 text-app-cyan-500" />
             Esqueça as planilhas de excel
           </span>
-          <h1 className="font-bold text-4xl md:text-5xl xl:text-6xl text-white leading-tight md:leading-tight">
+          <h1 className="font-bold text-4xl md:text-5xl xl:text-6xl text-white leading-tight md:leading-tight xl:leading-tight">
             Gerencie sua operação logística com tecnologia de ponta.
           </h1>
           <p className="text-sm md:text-base mt-6 text-app-cyan-200 max-w-[700px]">
@@ -35,7 +35,7 @@ export function Hero() {
             </Button>
           </div>
         </div>
-        <div className="relative md:absolute md:right-12 xl:right-0 -bottom-16 z-10">
+        <div className="relative md:absolute md:right-12 xl:right-0 -bottom-10 md:-bottom-16 z-10">
           <Image
             src="/hero.png"
             alt=""
