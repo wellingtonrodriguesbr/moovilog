@@ -3,6 +3,8 @@ import { registerDriverController } from "../controllers/register-driver-control
 import { verifyJWT } from "../middlewares/verify-jwt";
 import { driverAuthenticateController } from "../controllers/driver-authenticate-controller";
 import { driverRefreshController } from "../controllers/driver-refresh-token";
+import { fetchFreightFromDriverController } from "../controllers/fetch-freight-from-driver-controller";
+import { getFreightFromDriverController } from "../controllers/get-freight-from-driver-controller";
 
 export async function driversRoutes(app: FastifyInstance) {
   app.post("/drivers", { onRequest: [verifyJWT] }, registerDriverController);
@@ -16,5 +18,16 @@ export async function driversRoutes(app: FastifyInstance) {
     "/drivers/bank-details",
     { onRequest: [verifyJWT] },
     registerDriverController
+  );
+
+  app.get(
+    "/drivers/freights",
+    { onRequest: [verifyJWT] },
+    fetchFreightFromDriverController
+  );
+  app.get(
+    "/drivers/:freightId/freight-information",
+    { onRequest: [verifyJWT] },
+    getFreightFromDriverController
   );
 }

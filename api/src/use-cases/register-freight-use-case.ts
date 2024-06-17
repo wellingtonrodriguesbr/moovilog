@@ -73,6 +73,9 @@ export async function registerFreightUseCase({
       observation,
       driverId,
       creatorId,
+      freightInformation: {
+        create: {},
+      },
       freightsByCompany: {
         create: {
           companyId: company.id,
