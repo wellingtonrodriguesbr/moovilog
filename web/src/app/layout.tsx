@@ -19,6 +19,7 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <body
+        cz-shortcut-listen="true"
         className={cn(
           "min-h-screen bg-white text-app-blue-900 font-sans antialiased",
           sans.variable
