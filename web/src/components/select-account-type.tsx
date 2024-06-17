@@ -12,7 +12,7 @@ export function SelectAccountType() {
           <Building2 className="size-6 stroke-[1.4] text-app-blue-500" />
         </span>
         Entrar como empresa
-        <ArrowRight className="size-4 group-hover:translate-x-0.5 transition-transform" />
+        <ArrowRight className="size-4 group-hover:translate-x-0.5 transition-transform absolute right-4" />
       </Button>
       <Button
         variant="secondary"
@@ -22,7 +22,7 @@ export function SelectAccountType() {
           <Truck className="size-6 stroke-[1.4] text-app-blue-500" />
         </span>
         Entrar como motorista
-        <ArrowRight className="size-4 group-hover:translate-x-0.5 transition-transform" />
+        <ArrowRight className="size-4 group-hover:translate-x-0.5 transition-transform absolute right-4" />
       </Button>
     </div>
   );
