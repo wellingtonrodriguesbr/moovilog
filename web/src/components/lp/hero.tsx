@@ -25,14 +25,11 @@ export function Hero() {
             aliquam.
           </p>
           <div className="flex flex-col xl:flex-row items-center md:items-start xl:items-center gap-4 mt-8">
-            <Button className="w-full md:w-fit bg-app-cyan-100 text-app-blue-900 gap-2">
+            <Button className="w-full md:w-fit bg-app-cyan-100 hover:bg-app-cyan-300 text-app-blue-900 gap-2">
               <WhatsappIcon className="size-4 fill-app-blue-900" />
               Solicite uma demonstração gratuita
             </Button>
-            <Button
-              variant="ghost"
-              className="w-full md:w-fit text-app-cyan-500 gap-2"
-            >
+            <Button className="w-full md:w-fit text-app-cyan-500 gap-2 bg-transparent hover:bg-app-cyan-100/10">
               Ver mais detalhes{" "}
               <ChevronDown className="size-4 animate-bounce" />
             </Button>
