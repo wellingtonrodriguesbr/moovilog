@@ -12,8 +12,7 @@ export function Hero() {
       <div className="relative w-full h-full max-w-screen-2xl mx-auto px-4 mt-12 md:mt-16 xl:mt-36 grid grid-cols-1 xl:grid-cols-2">
         <div>
           <span className="flex items-center gap-1 text-white text-xs mb-2">
-            <NotepadText className="size-4 text-app-cyan-500" />
-            Esqueça as planilhas de excel
+            Esqueça as planilhas de excel <span className="text-xl">💨</span>
           </span>
           <h1 className="font-bold text-4xl md:text-5xl xl:text-6xl text-white leading-tight md:leading-tight xl:leading-tight">
             Gerencie sua operação logística com tecnologia de ponta.

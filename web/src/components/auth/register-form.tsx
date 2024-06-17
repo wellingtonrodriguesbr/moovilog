@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -10,6 +9,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -21,7 +21,7 @@ const formSchema = z.object({
   }),
 });
 
-export function LoginForm() {
+export function RegisterForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -39,6 +39,19 @@ export function LoginForm() {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col gap-4 w-full"
       >
+        <FormField
+          control={form.control}
+          name="username"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Nome completo</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="username"
@@ -65,8 +78,9 @@ export function LoginForm() {
             </FormItem>
           )}
         />
+
         <Button type="submit" className="w-full">
-          Entrar
+          Avançar
         </Button>
       </form>
     </Form>
