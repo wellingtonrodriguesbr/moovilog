@@ -16,9 +16,9 @@ export function Login() {
         Acesse sua conta
       </h1>
       <CompanyLoginForm />
-      <Link href="/cadastro" className="text-center font-medium mt-8">
+      <Link href="/cadastro" className="text-center mt-8">
         Ainda não possui uma conta?{" "}
-        <span className="underline">Registre-se</span>
+        <span className="underline font-medium">Registre-se</span>
       </Link>
     </div>
   );

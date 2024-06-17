@@ -17,11 +17,9 @@ export function Register() {
       </h1>
       <RegisterForm />
 
-      <Link
-        href="/entrar/selecionar-conta"
-        className="text-center font-medium mt-8"
-      >
-        Já possui uma conta? <span className="underline">Faça login</span>
+      <Link href="/entrar/selecionar-conta" className="text-center mt-8">
+        Já possui uma conta?{" "}
+        <span className="underline font-medium">Faça login</span>
       </Link>
     </div>
   );
