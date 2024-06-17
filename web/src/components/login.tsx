@@ -1,24 +1,16 @@
 import Image from "next/image";
+import Link from "next/link";
 
-import { Button } from "./ui/button";
-import { ArrowRight } from "lucide-react";
+import { SelectAccountType } from "./select-account-type";
+import { ArrowLeft } from "lucide-react";
+import { FooterSocialMedia } from "./footer-social-media";
 
 export function Login() {
   return (
-    <div className="w-full h-full grid grid-cols-1 xl:grid-cols-3">
-      <div className="hidden xl:block relative bg-app-blue-500 col-span-2">
-        <header className="absolute top-12 left-4 xl:left-24 mb-2">
-          <Image
-            src="/logo.svg"
-            alt="moovilog"
-            className="w-[200px]"
-            width={250}
-            height={193}
-          />
-        </header>
-      </div>
+    <div className="w-full h-full grid grid-cols-1 xl:grid-cols-3 p-2">
+      <div className="hidden xl:block relative bg-app-blue-500 rounded-md col-span-2 overflow-hidden"></div>
       <div className="relative flex flex-col justify-center items-center gap-4 px-4 xl:px-24">
-        <header className="block xl:hidden absolute top-12 left-1/2 -translate-x-1/2 mb-2">
+        <header className="absolute top-16 left-1/2 -translate-x-1/2 mb-2">
           <Image
             src="/logo-blue.svg"
             alt="moovilog"
@@ -27,17 +19,17 @@ export function Login() {
             height={193}
           />
         </header>
-        <h1 className="font-semibold text-2xl md:text-3xl mb-8">
+        <Link href="/" className="flex items-center gap-2">
+          <ArrowLeft className="size-4" /> Voltar
+        </Link>
+        <h1 className="font-semibold text-2xl md:text-3xl my-8">
           Escolha o tipo de conta
         </h1>
-        <Button variant="secondary" className="w-full py-12 gap-2">
-          Entrar como empresa
-          <ArrowRight className="size-4" />
-        </Button>
-        <Button variant="secondary" className="w-full py-12 gap-2">
-          Entrar como motorista
-          <ArrowRight className="size-4" />
-        </Button>
+        <SelectAccountType />
+        <footer className="w-full flex items-center justify-between absolute bottom-12 px-4 md:px-24">
+          <FooterSocialMedia />
+          <p className="text-sm text-zinc-500">© Moovilog 2024</p>
+        </footer>
       </div>
     </div>
   );

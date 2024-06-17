@@ -39,7 +39,7 @@ export function MenuMobile() {
             <Link href="/">Criar minha conta</Link>
           </li>
           <li className="py-4 border-b">
-            <Link href="/">Entrar</Link>
+            <Link href="/entrar">Entrar</Link>
           </li>
         </ul>
       </SheetContent>
