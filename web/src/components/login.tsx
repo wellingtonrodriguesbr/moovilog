@@ -12,7 +12,7 @@ export function Login() {
 
       <div className="flex flex-col px-4 xl:px-24 pb-12">
         <div className="relative w-full flex flex-col gap-4 justify-start md:justify-center flex-1">
-          <header className="relative md:absolute md:top-16 md:left-1/2 md:-translate-x-1/2 mb-12 mt-8 md:mt-0">
+          <header className="relative md:absolute md:top-16 md:left-1/2 md:-translate-x-1/2 mb-12 pt-6 md:pt-0">
             <Image
               src="/logo-blue.svg"
               alt="moovilog"
