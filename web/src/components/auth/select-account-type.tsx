@@ -29,12 +29,15 @@ export function SelectAccountType() {
       <Button
         variant="secondary"
         className="relative w-full py-8 gap-2 group border border-transparent hover:border-black/5"
+        asChild
       >
-        <span className="flex justify-center items-center absolute left-4 size-12 rounded-md bg-white">
-          <Truck className="size-6 stroke-[1.4] text-app-blue-500" />
-        </span>
-        Entrar como motorista
-        <ArrowRight className="size-4 group-hover:translate-x-0.5 transition-transform absolute right-4" />
+        <Link href="/entrar/motorista">
+          <span className="flex justify-center items-center absolute left-4 size-12 rounded-md bg-white">
+            <Truck className="size-6 stroke-[1.4] text-app-blue-500" />
+          </span>
+          Entrar como motorista
+          <ArrowRight className="size-4 group-hover:translate-x-0.5 transition-transform absolute right-4" />
+        </Link>
       </Button>
     </div>
   );
