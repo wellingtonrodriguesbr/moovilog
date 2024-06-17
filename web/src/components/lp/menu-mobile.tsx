@@ -13,10 +13,8 @@ import { Menu } from "lucide-react";
 export function MenuMobile() {
   return (
     <Sheet>
-      <SheetTrigger asChild className="block md:hidden">
-        <Button variant="ghost">
-          <Menu className="size-6 text-white" />
-        </Button>
+      <SheetTrigger className="block md:hidden">
+        <Menu className="size-6 text-white" />
       </SheetTrigger>
       <SheetContent>
         <SheetHeader className="text-left">
@@ -24,7 +22,7 @@ export function MenuMobile() {
             <Image
               src="/logo-blue.svg"
               alt="moovilog"
-              className="w-[150px]"
+              className="w-[180px]"
               width={250}
               height={193}
             />
