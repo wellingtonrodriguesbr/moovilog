@@ -7,7 +7,7 @@ import { MenuMobile } from "./menu-mobile";
 
 export function Header() {
   return (
-    <header className="w-full max-w-screen-2xl mx-auto flex sticky-0 z-50 items-center justify-between px-4 pt-8 md:pt-12">
+    <header className="w-full max-w-screen-2xl mx-auto flex sticky-0 z-50 items-center justify-between px-4 pt-12">
       <Image
         src="/logo.svg"
         alt="moovilog"
@@ -24,7 +24,8 @@ export function Header() {
           </Link>
         </Button>
         <Button
-          className="bg-white hover:bg-app-cyan-100 text-app-blue-900 font-bold gap-2"
+          variant="outline"
+          className="text-white border-white font-bold gap-2"
           asChild
         >
           <Link href="/cadastro">
