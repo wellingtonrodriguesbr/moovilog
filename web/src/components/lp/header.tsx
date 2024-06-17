@@ -1,11 +1,12 @@
 import Image from "next/image";
+
 import { Button } from "../ui/button";
 import { ArrowRight, User } from "lucide-react";
 import { MenuMobile } from "./menu-mobile";
 
 export function Header() {
   return (
-    <header className="w-full flex sticky-0 z-50 items-center justify-between px-4 md:px-8 pt-8 md:pt-12">
+    <header className="w-full max-w-screen-2xl mx-auto flex sticky-0 z-50 items-center justify-between px-4 pt-8 md:pt-12">
       <Image
         src="/logo.svg"
         alt="moovilog"
@@ -19,7 +20,7 @@ export function Header() {
           <User className="size-4" />
           Entrar
         </Button>
-        <Button className="bg-white text-app-blue-900 font-bold gap-2">
+        <Button className="bg-white hover:bg-app-cyan-100 text-app-blue-900 font-bold gap-2">
           Criar minha conta
           <ArrowRight className="size-4" />
         </Button>
