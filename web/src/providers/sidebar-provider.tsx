@@ -28,8 +28,12 @@ export default function SidebarProvider({ children }: { children: ReactNode }) {
   }
 
   useEffect(() => {
-    setIsOpen(false);
-  }, [path]);
+    if (width >= 720) {
+      setIsOpen(true);
+    } else {
+      setIsOpen(false);
+    }
+  }, [path, width]);
 
   useEffect(() => {
     if (width >= 720) {
