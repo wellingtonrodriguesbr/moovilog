@@ -20,7 +20,7 @@ export function SidebarItem({ item }: SidebarItemProps) {
       <Link
         data-active={path.includes(item.url)}
         href={item.url}
-        className="text-sm font-medium w-full flex items-center gap-2 border-b py-6 data-[active=true]:text-app-blue-500 hover:text-app-blue-500 transition-colors"
+        className="text-sm font-medium w-full flex items-center gap-2 border-b py-6 data-[active=true]:text-app-blue-500 hover:text-app-blue-500 transition-colors text-nowrap"
       >
         {item.icon}
         {item.name}

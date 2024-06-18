@@ -11,7 +11,7 @@ import { SidebarItem } from "./sidebar-item";
 
 export function SidebarContent() {
   return (
-    <ul className="mt-12 w-full flex flex-col">
+    <ul className="mt-6 w-full flex flex-col">
       {items.map((item) => (
         <SidebarItem key={item.name} item={item} />
       ))}

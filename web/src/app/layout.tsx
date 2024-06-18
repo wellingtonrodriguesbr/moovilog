@@ -1,9 +1,15 @@
+import dynamic from "next/dynamic";
+
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { cn } from "@/lib/utils";
+import { ReactQueryProvider } from "@/providers/react-query-provider";
+
+const SidebarProvider = dynamic(() => import("@/providers/sidebar-provider"), {
+  ssr: false,
+});
 
 import "./globals.css";
-import { ReactQueryProvider } from "@/providers/react-query-provider";
 
 const sans = Plus_Jakarta_Sans({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -26,7 +32,9 @@ export default function RootLayout({
           sans.variable
         )}
       >
-        <ReactQueryProvider>{children}</ReactQueryProvider>
+        <SidebarProvider>
+          <ReactQueryProvider>{children}</ReactQueryProvider>
+        </SidebarProvider>
       </body>
     </html>
   );
