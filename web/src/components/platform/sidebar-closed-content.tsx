@@ -12,7 +12,7 @@ import { Button } from "../ui/button";
 
 export function SidebarClosedContent() {
   return (
-    <ul className="mt-6 w-full flex flex-col gap-4 px-4">
+    <ul className="mt-6 w-full hidden xl:flex flex-col gap-4 px-4">
       {items.map((item) => (
         <li key={item.name} className="">
           <Button
