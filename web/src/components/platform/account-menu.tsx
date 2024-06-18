@@ -29,7 +29,7 @@ export function AccountMenu() {
           </Avatar>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent align="end" className="w-56">
+        <DropdownMenuContent align="end" className="w-56 z-[999999]">
           <DropdownMenuLabel className="flex flex-col">
             <span>Wellington Rodrigues</span>
             <span className="text-xs font-normal text-muted-foreground">
