@@ -11,7 +11,7 @@ export function Header() {
       <Image
         src="/logo.svg"
         alt="moovilog"
-        className="w-[200px]"
+        className="w-[150px] md:w-[200px]"
         width={250}
         height={193}
       />
