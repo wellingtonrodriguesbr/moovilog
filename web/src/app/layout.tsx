@@ -14,7 +14,8 @@ import "./globals.css";
 const sans = Plus_Jakarta_Sans({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
-  title: "Moovilog | Gerencie sua operação logística com tecnologia de ponta",
+  title:
+    "Moovilog | Gerencie toda sua operação logística em uma única plataforma",
   description: "",
 };
 

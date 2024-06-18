@@ -3,7 +3,7 @@ import Image from "next/image";
 import { WhatsappIcon } from "../icons/whatsapp-icons";
 import { Button } from "../ui/button";
 import { Header } from "./header";
-import { ChevronDown, NotepadText } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 
 export function Hero() {
   return (
@@ -15,7 +15,7 @@ export function Hero() {
             Esqueça as planilhas de excel <span className="text-xl">💨</span>
           </span>
           <h1 className="font-bold text-4xl md:text-5xl xl:text-6xl text-white leading-tight md:leading-tight xl:leading-tight">
-            Gerencie sua operação logística com tecnologia de ponta.
+            Gerencie toda sua operação logística em uma única plataforma.
           </h1>
           <p className="text-sm md:text-base mt-6 text-app-cyan-200 max-w-[700px]">
             Lorem ipsum dolor, sit amet consectetur adipisicing elit. Corrupti
