@@ -20,11 +20,11 @@ export function SidebarItem({ item }: SidebarItemProps) {
       <Link
         data-active={path.includes(item.url)}
         href={item.url}
-        className="text-sm font-medium w-full flex items-center gap-2 border-b py-6 data-[active=true]:text-app-blue-500 hover:text-app-blue-500 transition-colors text-nowrap"
+        className="text-sm font-medium w-full flex items-center gap-2 border-b py-6 data-[active=true]:text-app-blue-500 hover:text-app-blue-500 transition-colors group"
       >
         {item.icon}
         {item.name}
-        <ChevronRight className="size-4 text-zinc-500 ml-auto" />
+        <ChevronRight className="size-4 text-zinc-500 ml-auto group-data-[active=true]:text-app-blue-500" />
       </Link>
     </li>
   );
