@@ -1,8 +1,12 @@
 import Link from "next/link";
+import dynamic from "next/dynamic";
 
 import { ArrowLeft } from "lucide-react";
 import { RegisterForm } from "./register-form";
-import { RegisterAlert } from "./register-alert";
+
+const RegisterAlert = dynamic(() => import("./register-alert"), {
+  ssr: false,
+});
 
 export function Register() {
   return (
