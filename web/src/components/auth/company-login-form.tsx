@@ -14,6 +14,9 @@ import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useLogin } from "@/hooks/use-login";
+import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Digite um endereço de e-mail válido" }),
@@ -23,6 +26,8 @@ const formSchema = z.object({
 });
 
 export function CompanyLoginForm() {
+  const router = useRouter();
+  const { login, isPendingLogin } = useLogin();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -31,8 +36,13 @@ export function CompanyLoginForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  async function onSubmit({ email, password }: z.infer<typeof formSchema>) {
+    try {
+      await login({ email, password });
+      router.push("/inicio");
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
@@ -61,14 +71,18 @@ export function CompanyLoginForm() {
             <FormItem>
               <FormLabel>Senha</FormLabel>
               <FormControl>
-                <Input placeholder="*********" {...field} />
+                <Input type="password" placeholder="*********" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full">
-          Entrar
+        <Button disabled={isPendingLogin} type="submit" className="w-full">
+          {isPendingLogin ? (
+            <Loader2 className="size-4 animate-spin" />
+          ) : (
+            "Entrar"
+          )}
         </Button>
       </form>
     </Form>

@@ -10,6 +10,7 @@ const SidebarProvider = dynamic(() => import("@/providers/sidebar-provider"), {
 });
 
 import "./globals.css";
+import { Toaster } from "@/components/ui/sonner";
 
 const sans = Plus_Jakarta_Sans({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -35,6 +36,7 @@ export default function RootLayout({
       >
         <SidebarProvider>
           <ReactQueryProvider>{children}</ReactQueryProvider>
+          <Toaster position="bottom-center" richColors />
         </SidebarProvider>
       </body>
     </html>

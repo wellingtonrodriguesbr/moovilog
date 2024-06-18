@@ -1,6 +1,7 @@
 import fastify from "fastify";
 import fastifyJwt from "@fastify/jwt";
 import fastifyCookie from "@fastify/cookie";
+import fastifyCors from "@fastify/cors";
 
 import { usersRoutes } from "./routes/users";
 import { env } from "@/env";
@@ -27,6 +28,11 @@ app.register(fastifyJwt, {
 app.register(fastifyCookie, {
   secret: env.COOKIE_SECRET_KEY,
   hook: "onRequest",
+});
+
+app.register(fastifyCors, {
+  origin: process.env.CORS_ORIGIN_URL,
+  credentials: true,
 });
 
 app.register(usersRoutes);

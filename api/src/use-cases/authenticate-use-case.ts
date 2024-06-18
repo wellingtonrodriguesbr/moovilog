@@ -3,6 +3,7 @@ import { User } from "@prisma/client";
 
 import { compareSync } from "bcryptjs";
 import { InvalidCredentialsError } from "./errors/invalid-credentials-error";
+import { ResourceNotFoundError } from "./errors/resource-not-found-error";
 
 interface AuthenticateUseCaseRequest {
   email: string;
@@ -24,6 +25,10 @@ export async function authenticateUseCase({
   });
 
   if (!user) {
+    throw new ResourceNotFoundError("User not found");
+  }
+
+  if (user.email !== email) {
     throw new InvalidCredentialsError("Incorrect email or password");
   }
 
