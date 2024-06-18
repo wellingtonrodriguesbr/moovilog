@@ -17,7 +17,7 @@ export function SidebarClosedContent() {
         <li key={item.name} className="">
           <Button
             variant="secondary"
-            className=" hover:bg-app-blue-500 hover:text-white cursor-pointer"
+            className=" hover:bg-zinc-100 hover:text-app-blue-500 cursor-pointer"
           >
             {item.icon}
           </Button>
