@@ -93,7 +93,7 @@ export function RegisterForm() {
               <FormControl>
                 <FormLabel
                   htmlFor={field.name}
-                  className="flex items-center gap-2 text-sm font-medium opacity-80"
+                  className="flex items-center gap-2 text-sm font-medium"
                 >
                   <Checkbox
                     id={field.name}
