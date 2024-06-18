@@ -7,7 +7,7 @@ import { ChevronDown, NotepadText } from "lucide-react";
 
 export function Hero() {
   return (
-    <section className="w-full overflow-hidden min-h-screen md:h-[1000px] md:min-h-[1000px] xl:h-[800px] xl:min-h-[800px] xl:max-h-[800px] flex flex-col bg-app-blue-500">
+    <section className="relative w-full overflow-hidden min-h-screen md:h-[1000px] md:min-h-[1000px] xl:h-[800px] xl:min-h-[800px] xl:max-h-[800px] flex flex-col bg-app-blue-500">
       <Header />
       <div className="relative w-full h-full max-w-screen-2xl mx-auto px-4 mt-12 md:mt-16 xl:mt-36 grid grid-cols-1 xl:grid-cols-2">
         <div>
@@ -34,17 +34,33 @@ export function Hero() {
             </Button>
           </div>
         </div>
-        <div className="relative md:absolute md:right-12 xl:right-0 -bottom-10 md:-bottom-16 z-10">
+        <div className="relative md:absolute md:right-12 xl:right-0 -bottom-10 md:-bottom-16 z-50">
           <Image
             src="/hero.png"
             alt=""
-            className="w-[520px] xl:w-[580px]"
+            className="z-50 w-[520px] xl:w-[580px]"
             width={580}
             height={749}
             quality={100}
           />
         </div>
       </div>
+      <Image
+        src="/bg-hero.svg"
+        alt=""
+        className="absolute right-0 bottom-0 md:-bottom-10 w-[520px] xl:w-[580px] z-10"
+        width={580}
+        height={749}
+        quality={100}
+      />
+      <Image
+        src="/bg-hero.svg"
+        alt=""
+        className="hidden md:block absolute right-80 bottom-20 w-[520px] xl:w-[580px] z-10"
+        width={580}
+        height={749}
+        quality={100}
+      />
     </section>
   );
 }
