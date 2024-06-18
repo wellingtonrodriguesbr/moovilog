@@ -16,16 +16,18 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
+  email: z.string().email({ message: "Digite um endereço de e-mail válido" }),
+  password: z
+    .string()
+    .min(8, { message: "A senha precisa ter no mínimo 8 caracteres" }),
 });
 
 export function CompanyLoginForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
+      email: "",
+      password: "",
     },
   });
 
@@ -41,7 +43,7 @@ export function CompanyLoginForm() {
       >
         <FormField
           control={form.control}
-          name="username"
+          name="email"
           render={({ field }) => (
             <FormItem>
               <FormLabel>E-mail</FormLabel>
@@ -54,7 +56,7 @@ export function CompanyLoginForm() {
         />
         <FormField
           control={form.control}
-          name="username"
+          name="password"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Senha</FormLabel>

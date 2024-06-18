@@ -14,18 +14,25 @@ import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { Checkbox } from "../ui/checkbox";
 
 const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
+  fullName: z.string().min(3, { message: "Digite seu nome completo" }),
+  email: z.string().email({ message: "Digite um endereço de e-mail válido" }),
+  password: z
+    .string()
+    .min(8, { message: "A senha precisa ter no mínimo 8 caracteres" }),
+  acceptTerms: z.boolean({ message: "Aceite os termos para prosseguir" }),
 });
 
 export function RegisterForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
+      fullName: "",
+      email: "",
+      password: "",
+      acceptTerms: false,
     },
   });
 
@@ -41,7 +48,7 @@ export function RegisterForm() {
       >
         <FormField
           control={form.control}
-          name="username"
+          name="fullName"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Nome completo</FormLabel>
@@ -54,7 +61,7 @@ export function RegisterForm() {
         />
         <FormField
           control={form.control}
-          name="username"
+          name="email"
           render={({ field }) => (
             <FormItem>
               <FormLabel>E-mail</FormLabel>
@@ -67,7 +74,7 @@ export function RegisterForm() {
         />
         <FormField
           control={form.control}
-          name="username"
+          name="password"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Senha</FormLabel>
@@ -78,8 +85,35 @@ export function RegisterForm() {
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name="acceptTerms"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <FormLabel
+                  htmlFor={field.name}
+                  className="flex items-center gap-2 text-sm font-medium opacity-80"
+                >
+                  <Checkbox
+                    id={field.name}
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                  Ao se cadastrar, você concorda com os termos e a política de
+                  privacidade da plataforma.
+                </FormLabel>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-        <Button type="submit" className="w-full">
+        <Button
+          disabled={!form.watch("acceptTerms")}
+          type="submit"
+          className="w-full mt-6"
+        >
           Avançar
         </Button>
       </form>

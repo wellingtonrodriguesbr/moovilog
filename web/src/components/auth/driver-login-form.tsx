@@ -3,6 +3,7 @@
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -16,16 +17,18 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
+  documentNumber: z.string().min(11, { message: "Digite um CPF válido" }),
+  password: z
+    .string()
+    .min(8, { message: "A senha precisa ter no mínimo 8 caracteres" }),
 });
 
 export function DriverLoginForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
+      documentNumber: "",
+      password: "",
     },
   });
 
@@ -41,20 +44,23 @@ export function DriverLoginForm() {
       >
         <FormField
           control={form.control}
-          name="username"
+          name="documentNumber"
           render={({ field }) => (
             <FormItem>
               <FormLabel>CPF</FormLabel>
               <FormControl>
                 <Input placeholder="000.000.000-00" {...field} />
               </FormControl>
+              <FormDescription>
+                Digite apenas os números, sem traços ou pontos
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
         <FormField
           control={form.control}
-          name="username"
+          name="password"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Senha</FormLabel>
