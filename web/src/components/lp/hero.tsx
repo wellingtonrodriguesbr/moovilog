@@ -56,7 +56,7 @@ export function Hero() {
       <Image
         src="/bg-hero.svg"
         alt=""
-        className="hidden md:block absolute right-80 bottom-20 w-[520px] xl:w-[580px] z-10"
+        className="hidden xl:block absolute right-80 bottom-20 w-[520px] xl:w-[580px] z-10"
         width={580}
         height={749}
         quality={100}
