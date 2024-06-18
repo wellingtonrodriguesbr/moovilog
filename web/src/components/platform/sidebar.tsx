@@ -11,7 +11,7 @@ export function Sidebar() {
 
   return (
     <Collapsible
-      className="bg-white fixed top-20 bottom-0 w-[20rem] data-[state=closed]:w-0 md:data-[state=closed]:w-20 md:data-[state=open]:min-w-[20rem] z-50 group border-r h-screen min-h-screen transition-all"
+      className="bg-white fixed top-20 bottom-0 w-[16rem] md:w-[20rem] data-[state=closed]:w-0 md:data-[state=closed]:w-20 md:data-[state=open]:min-w-[20rem] z-50 group border-r h-screen min-h-screen transition-all"
       open={isOpen}
     >
       <div className="hidden group-data-[state=closed]:block">
