@@ -1,6 +1,6 @@
 "use client";
 
-import { UnfoldHorizontal } from "lucide-react";
+import { Menu } from "lucide-react";
 import { Button } from "../ui/button";
 import { useOpenCloseSidebar } from "@/providers/sidebar-provider";
 
@@ -12,7 +12,7 @@ export function ButtonOpenCloseSidebar() {
       onClick={handleOpenAndCloseSidebar}
       className="bg-zinc-100 hover:bg-zinc-200 text-app-blue-900"
     >
-      <UnfoldHorizontal className="size-4" />
+      <Menu className="size-4" />
     </Button>
   );
 }
