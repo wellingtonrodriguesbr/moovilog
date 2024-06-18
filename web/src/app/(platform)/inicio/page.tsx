@@ -1,5 +1,7 @@
-import { HeaderPlatform } from "@/components/platform/header";
-
 export default function HomePagePlatform() {
-  return <main></main>;
+  return (
+    <main className="w-full min-h-screen p-12">
+      <h1>Hello World!</h1>
+    </main>
+  );
 }

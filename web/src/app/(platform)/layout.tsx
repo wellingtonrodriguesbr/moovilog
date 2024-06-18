@@ -7,10 +7,11 @@ export default function PlattformLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className="w-full min-h-screen">
+    <main className="w-full grid grid-cols-[auto_1fr] grid-rows-[auto_1fr] h-screen">
       <HeaderPlatform />
-      <div className="flex">
-        <Sidebar />
+
+      <Sidebar />
+      <div className="w-full col-span-full md:col-span-1 overflow-y-auto h-[calc(100vh-72px)] lg:h-[calc(100vh-80px)]">
         {children}
       </div>
     </main>

@@ -11,15 +11,15 @@ export function Sidebar() {
 
   return (
     <Collapsible
-      className="bg-white fixed top-20 bottom-0 w-[16rem] md:w-[20rem] data-[state=closed]:w-0 md:data-[state=closed]:w-20 md:data-[state=open]:min-w-[20rem] z-50 group border-r h-screen min-h-screen transition-all"
+      className="bg-white h-screen md:h-full fixed top-[72px] md:top-0 md:relative flex flex-col p-4 border-r transition-all ease-in-out duration-300 data-[state=closed]:p-0 data-[state=closed]:w-0 md:data-[state=closed]:w-20 md:data-[state=closed]:py-4 w-[20rem] overflow-hidden group"
       open={isOpen}
     >
       <div className="hidden group-data-[state=closed]:block">
         <SidebarClosedContent />
       </div>
 
-      <CollapsibleContent className="z-40 w-full h-screen min-h-screen overflow-hidden left-0 max-w-[20rem] px-4">
-        <ScrollArea className="h-full pb-12">
+      <CollapsibleContent>
+        <ScrollArea className="bg-white h-full pb-12">
           <SidebarContent />
         </ScrollArea>
       </CollapsibleContent>

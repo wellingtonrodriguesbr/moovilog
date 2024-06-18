@@ -6,7 +6,7 @@ import { Separator } from "../ui/separator";
 
 export function HeaderPlatform() {
   return (
-    <header className="flex justify-between items-center sticky top-0 left-0 bg-zinc-50 w-full h-20 border-b px-4 z-[9999]">
+    <header className="col-span-full h-[72px] lg:h-[80px] px-4 border-b flex justify-between items-center bg-zinc-50">
       <div className="flex items-center gap-4">
         <ButtonOpenCloseSidebar />
         <Separator className="w-px h-8 bg-zinc-200" />
