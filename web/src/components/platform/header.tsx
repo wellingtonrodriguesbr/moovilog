@@ -11,11 +11,18 @@ export function HeaderPlatform() {
         <Image
           src="/logo-blue.svg"
           alt="moovilog"
-          className="w-[150px]"
+          className="hidden md:block w-[150px]"
           width={250}
           height={193}
         />
       </div>
+      <Image
+        src="/logo-blue.svg"
+        alt="moovilog"
+        className="block md:hidden w-[120px]"
+        width={250}
+        height={193}
+      />
       <AccountMenu />
     </header>
   );
