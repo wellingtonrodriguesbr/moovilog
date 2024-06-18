@@ -7,7 +7,7 @@ import { MenuMobile } from "./menu-mobile";
 
 export function Header() {
   return (
-    <header className="w-full max-w-screen-2xl mx-auto flex sticky-0 z-50 items-center justify-between px-4 pt-12">
+    <header className="w-full max-w-screen-2xl mx-auto flex sticky-0 z-50 items-end md:items-center justify-between px-4 pt-12">
       <Image
         src="/logo.svg"
         alt="moovilog"
