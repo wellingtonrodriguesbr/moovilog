@@ -13,7 +13,7 @@ export async function registerCompanyController(
     name: z.string(),
     documentNumber: z.string().min(14).max(14),
     type: z.enum(["HEADQUARTERS", "BRANCH", "AGENCY"]),
-    size: z.string().min(8),
+    size: z.enum(["MICRO", "SMALL", "MEDIUM", "BIG"]),
   });
 
   const { name, documentNumber, type, size } = registerCompanyBodySchema.parse(

@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Checkbox } from "../ui/checkbox";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useRegisterNewUser } from "@/hooks/use-register-new-user";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
