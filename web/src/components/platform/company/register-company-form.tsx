@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import {
@@ -26,8 +25,6 @@ import { z } from "zod";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useRouter } from "next/navigation";
 import { ArrowRight, Check, Loader2, X } from "lucide-react";
-import { useDebounce } from "react-use";
-import { useEffect } from "react";
 import { useValidateCompanyDocumentNumber } from "@/hooks/use-validate-company-document-number";
 import { formatCNPJ } from "@/utils/format-cnpj";
 
@@ -40,9 +37,6 @@ const formSchema = z.object({
 });
 
 export function RegisterCompanyForm() {
-  const router = useRouter();
-  const { isValid, isLoading, handleValidDocumentNumber } =
-    useValidateCompanyDocumentNumber();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -53,31 +47,21 @@ export function RegisterCompanyForm() {
       acceptTerms: false,
     },
   });
+  const router = useRouter();
+  const documentNumber = form.watch("documentNumber");
 
-  const [isReady] = useDebounce(
-    () => {
-      form.setValue("documentNumber", form.watch("documentNumber"));
-    },
-    2000,
-    [form.watch("documentNumber")]
-  );
+  const { isReady, isValid, isPendingValidate } =
+    useValidateCompanyDocumentNumber({
+      documentNumber,
+    });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      console.log(values);
       // router.push("/entrar/empresa");
     } catch (error) {
       console.log(error);
     }
   }
-
-  useEffect(() => {
-    if (isReady()) {
-      handleValidDocumentNumber({
-        documentNumber: form.watch("documentNumber"),
-      });
-    }
-  }, [isReady()]);
 
   return (
     <Form {...form}>
@@ -98,16 +82,19 @@ export function RegisterCompanyForm() {
                     placeholder="00.000.000/0000-00"
                     autoComplete="off"
                     {...field}
+                    onChange={({ currentTarget }) =>
+                      form.setValue("documentNumber", currentTarget.value)
+                    }
                     value={formatCNPJ(field.value)}
                   />
-                  {isReady() && isLoading ? (
+                  {isReady && isPendingValidate ? (
                     <Loader2 className="size-4 text-app-blue-500 animate-spin" />
                   ) : null}
-                  {isReady() && !isLoading && !isValid ? (
+                  {isReady && !isPendingValidate && !isValid ? (
                     <X className="size-4 text-red-500" />
                   ) : null}
-                  {isReady() && !isLoading && isValid ? (
-                    <Check className="size-4 text-app-blue-500" />
+                  {isReady && !isPendingValidate && isValid ? (
+                    <Check className="size-4 text-emerald-500" />
                   ) : null}
                 </div>
               </FormControl>
@@ -212,7 +199,7 @@ export function RegisterCompanyForm() {
         />
 
         <Button
-          disabled={!form.watch("acceptTerms")}
+          disabled={!form.watch("acceptTerms") || !isValid}
           type="submit"
           className="w-full mt-6 gap-2"
         >
