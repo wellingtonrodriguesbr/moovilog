@@ -32,8 +32,7 @@ api.interceptors.response.use(
     }
 
     const { data } = await api.patch("/token/refresh");
-
-    localStorage.setItem("accessToken", `"${data.token}"`);
+    localStorage.setItem("accessToken", `${data.token}`);
 
     return api(originalRequest);
   }

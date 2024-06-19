@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { Home } from "@/components/platform/home";
 
 export const metadata: Metadata = {
   title: "Início | Moovilog",
@@ -7,8 +8,8 @@ export const metadata: Metadata = {
 
 export default function HomePagePlatform() {
   return (
-    <main className="w-full p-4">
-      <h1>Hello World!</h1>
+    <main className="w-full p-4 md:p-12">
+      <Home />
     </main>
   );
 }

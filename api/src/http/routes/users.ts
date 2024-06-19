@@ -2,9 +2,12 @@ import { FastifyInstance } from "fastify";
 import { registerUserController } from "../controllers/register-user-controller";
 import { authenticateController } from "../controllers/authenticate-controller";
 import { refreshController } from "../controllers/refresh-token";
+import { meController } from "../controllers/me-controller";
+import { verifyJWT } from "../middlewares/verify-jwt";
 
 export async function usersRoutes(app: FastifyInstance) {
   app.post("/users", registerUserController);
   app.post("/sessions", authenticateController);
-  app.post("/token/refresh", refreshController);
+  app.patch("/token/refresh", refreshController);
+  app.get("/me", { onRequest: [verifyJWT] }, meController);
 }

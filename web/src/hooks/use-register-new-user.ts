@@ -10,17 +10,18 @@ interface RegisterNewUserData {
 }
 
 export function useRegisterNewUser() {
-  const { mutateAsync: registerNewUser, isPending } = useMutation({
-    mutationFn: handleRegisterNewUser,
-    onSuccess: () => {
-      toast.success("Conta cadastrada com sucesso");
-    },
-    onError: (error: AxiosError) => {
-      if (error.response?.status === 409) {
-        toast.error("Já existe uma conta com este e-mail");
-      }
-    },
-  });
+  const { mutateAsync: registerNewUser, isPending: isPendingRegisterNewUser } =
+    useMutation({
+      mutationFn: handleRegisterNewUser,
+      onSuccess: () => {
+        toast.success("Conta cadastrada com sucesso");
+      },
+      onError: (error: AxiosError) => {
+        if (error.response?.status === 409) {
+          toast.error("Já existe uma conta com este e-mail");
+        }
+      },
+    });
 
   async function handleRegisterNewUser({
     name,
@@ -36,5 +37,5 @@ export function useRegisterNewUser() {
     return data.userId;
   }
 
-  return { registerNewUser, isPendingRegisterNewUser: isPending };
+  return { registerNewUser, isPendingRegisterNewUser };
 }

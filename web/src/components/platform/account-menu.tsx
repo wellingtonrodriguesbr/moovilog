@@ -11,29 +11,30 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useGetProfile } from "@/hooks/use-get-profile";
 
 export function AccountMenu() {
+  const { profile } = useGetProfile();
+  const [firstName, lastName] = profile?.name.split(" ") ?? [];
+
   return (
     <Dialog>
       <DropdownMenu>
-        <DropdownMenuTrigger
-          className="border-2 border-zinc-300 cursor-pointer"
-          asChild
-        >
+        <DropdownMenuTrigger className="border cursor-pointer" asChild>
           <Avatar>
-            <AvatarImage
-              src="https://github.com/wellingtonrodriguesbr.png"
-              alt="@shadcn"
-            />
-            <AvatarFallback>WR</AvatarFallback>
+            <AvatarImage src="" alt="" />
+            <AvatarFallback className="text-xs font-semibold">
+              {firstName?.at(0)}
+              {lastName?.at(0)}
+            </AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
 
         <DropdownMenuContent align="end" className="w-56 z-[999999]">
           <DropdownMenuLabel className="flex flex-col">
-            <span>Wellington Rodrigues</span>
+            <span>{profile?.name}</span>
             <span className="text-xs font-normal text-muted-foreground">
-              wellington@moovilog.com
+              {profile?.email}
             </span>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />

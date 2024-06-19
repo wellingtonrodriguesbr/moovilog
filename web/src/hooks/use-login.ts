@@ -11,7 +11,7 @@ interface LoginData {
 
 export function useLogin() {
   const [_, setAccessToken] = useLocalStorage("accessToken");
-  const { mutateAsync: login, isPending } = useMutation({
+  const { mutateAsync: login, isPending: isPendingLogin } = useMutation({
     mutationFn: handleLogin,
     onSuccess: () => {
       toast.success("Login realizado com sucesso");
@@ -38,5 +38,5 @@ export function useLogin() {
     return data;
   }
 
-  return { login, isPendingLogin: isPending };
+  return { login, isPendingLogin };
 }
