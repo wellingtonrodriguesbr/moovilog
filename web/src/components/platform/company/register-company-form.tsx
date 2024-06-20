@@ -29,7 +29,10 @@ import { useValidateCompanyDocumentNumber } from "@/hooks/use-validate-company-d
 import { formatCNPJ } from "@/utils/format-cnpj";
 
 const formSchema = z.object({
-  documentNumber: z.string().min(14, { message: "Digite um CNPJ válido" }),
+  documentNumber: z
+    .string()
+    .min(14, { message: "Digite um CNPJ válido" })
+    .max(14, { message: "Digite um CNPJ válido" }),
   name: z.string().min(3, { message: "Digite seu nome completo" }),
   type: z.string().min(5, { message: "Selecione uma opção" }),
   size: z.string().min(5, { message: "Selecione uma opção" }),

@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useOpenCloseSidebar } from "@/providers/sidebar-provider";
 
 interface SidebarItemProps {
+  isOpen: boolean;
   item: {
     name: string;
     url: string;
@@ -13,9 +14,8 @@ interface SidebarItemProps {
   };
 }
 
-export function SidebarItem({ item }: SidebarItemProps) {
+export function SidebarItem({ item, isOpen }: SidebarItemProps) {
   const path = usePathname();
-  const { isOpen } = useOpenCloseSidebar();
 
   return (
     <li className="w-full">
