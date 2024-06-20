@@ -7,10 +7,12 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
-import { Menu } from "lucide-react";
+import { ArrowRight, Menu } from "lucide-react";
+import { useUserAuthenticate } from "@/hooks/use-user-authenticate";
 
 export function MenuMobile() {
+  const { isAuthenticate } = useUserAuthenticate();
+
   return (
     <Sheet>
       <SheetTrigger className="block md:hidden">
@@ -28,20 +30,30 @@ export function MenuMobile() {
             />
           </SheetTitle>
         </SheetHeader>
-        <ul className="mt-12 flex flex-col">
-          <li className="py-4 border-b">
-            <Link href="/">Demonstração gratuita</Link>
-          </li>
-          <li className="py-4 border-b">
-            <Link href="/">Saiba mais</Link>
-          </li>
-          <li className="py-4 border-b">
-            <Link href="/cadastro">Criar minha conta</Link>
-          </li>
-          <li className="py-4 border-b">
-            <Link href="/entrar/selecionar-conta">Entrar</Link>
-          </li>
-        </ul>
+        {isAuthenticate ? (
+          <Link
+            className="flex items-center justify-between w-full mt-12 py-4 border-b"
+            href="/inicio"
+          >
+            Acessar plataforma
+            <ArrowRight className="size-4" />
+          </Link>
+        ) : (
+          <ul className="mt-12 flex flex-col">
+            <li className="py-4 border-b">
+              <Link href="/">Demonstração gratuita</Link>
+            </li>
+            <li className="py-4 border-b">
+              <Link href="/">Saiba mais</Link>
+            </li>
+            <li className="py-4 border-b">
+              <Link href="/cadastro">Criar minha conta</Link>
+            </li>
+            <li className="py-4 border-b">
+              <Link href="/entrar/selecionar-conta">Entrar</Link>
+            </li>
+          </ul>
+        )}
       </SheetContent>
     </Sheet>
   );

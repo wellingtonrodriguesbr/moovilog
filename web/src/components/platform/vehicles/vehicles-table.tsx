@@ -55,17 +55,21 @@ const data = [
 export function VehiclesTable() {
   return (
     <Table>
-      <TableHeader className="bg-app-blue-500 hover:bg-app-blue-500">
-        <TableRow className="hover:bg-app-blue-500">
-          <TableHead className="text-white font-medium rounded-tl-lg text-nowrap">
+      <TableHeader className="bg-zinc-100 hover:bg-zinc-100">
+        <TableRow className="hover:bg-zinc-100">
+          <TableHead className="text-app-blue-900 font-medium rounded-tl-lg text-nowrap">
             ID do colaborador
           </TableHead>
-          <TableHead className="text-white font-medium">Nome</TableHead>
-          <TableHead className="text-white font-medium">E-mail</TableHead>
-          <TableHead className="text-white font-medium">Setor</TableHead>
-          <TableHead className="text-white font-medium">Autorização</TableHead>
-          <TableHead className="text-white font-medium">Desde</TableHead>
-          <TableHead className="text-white font-medium rounded-tr-lg"></TableHead>
+          <TableHead className="text-app-blue-900 font-medium">Nome</TableHead>
+          <TableHead className="text-app-blue-900 font-medium">
+            E-mail
+          </TableHead>
+          <TableHead className="text-app-blue-900 font-medium">Setor</TableHead>
+          <TableHead className="text-app-blue-900 font-medium">
+            Autorização
+          </TableHead>
+          <TableHead className="text-app-blue-900 font-medium">Desde</TableHead>
+          <TableHead className="text-app-blue-900 font-medium rounded-tr-lg"></TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
