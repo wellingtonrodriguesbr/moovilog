@@ -56,8 +56,8 @@ const config = {
         },
       },
       animation: {
-        "accordion-down": "accordion-down 0.5s linear",
-        "accordion-up": "accordion-up 0.5s linear",
+        "accordion-down": "accordion-down 0.2s linear",
+        "accordion-up": "accordion-up 0.2s linear",
       },
     },
   },
