@@ -1,3 +1,4 @@
+import { Vehicles } from "@/components/platform/vehicles";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -6,5 +7,9 @@ export const metadata: Metadata = {
 };
 
 export default function VehiclesPagePlatform() {
-  return <main></main>;
+  return (
+    <main>
+      <Vehicles />
+    </main>
+  );
 }

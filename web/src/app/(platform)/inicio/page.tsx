@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function HomePagePlatform() {
   return (
-    <main className="w-full p-4 md:p-12">
+    <main className="w-full">
       <Home />
     </main>
   );
