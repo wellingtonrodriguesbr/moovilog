@@ -1,3 +1,4 @@
+import { Drivers } from "@/components/platform/drivers";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -6,5 +7,9 @@ export const metadata: Metadata = {
 };
 
 export default function DriversPagePlatform() {
-  return <main></main>;
+  return (
+    <main>
+      <Drivers />
+    </main>
+  );
 }

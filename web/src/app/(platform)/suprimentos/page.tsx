@@ -1,10 +1,10 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Minha empresa | Moovilog",
+  title: "Suprimentos | Moovilog",
   description: "",
 };
 
-export default function MyCompanyPagePlatform() {
+export default function SuppliesPlatform() {
   return <main></main>;
 }
