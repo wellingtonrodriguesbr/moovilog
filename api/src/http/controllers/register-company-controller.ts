@@ -4,6 +4,7 @@ import { registerCompanyUseCase } from "@/use-cases/register-company-use-case";
 
 import z from "zod";
 import { UnauthorizedError } from "@/use-cases/errors/unauthorized-error";
+import { Prisma } from "@prisma/client";
 
 export async function registerCompanyController(
   req: FastifyRequest,
@@ -32,6 +33,14 @@ export async function registerCompanyController(
 
     reply.status(201).send({ company });
   } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === "P2002") {
+        reply.status(409).send({
+          message:
+            "User already owns a company. Conflict with existing resource.",
+        });
+      }
+    }
     if (error instanceof CompanyAlreadyExistsError) {
       reply.status(409).send({ message: error.message });
     }

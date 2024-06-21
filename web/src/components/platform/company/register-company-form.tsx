@@ -27,6 +27,7 @@ import { useRouter } from "next/navigation";
 import { ArrowRight, Check, Loader2, X } from "lucide-react";
 import { useValidateCompanyDocumentNumber } from "@/hooks/use-validate-company-document-number";
 import { formatCNPJ } from "@/utils/format-cnpj";
+import { useRegisterCompany } from "@/hooks/use-register-company";
 
 const formSchema = z.object({
   documentNumber: z
@@ -34,23 +35,25 @@ const formSchema = z.object({
     .min(14, { message: "Digite um CNPJ válido" })
     .max(14, { message: "Digite um CNPJ válido" }),
   name: z.string().min(3, { message: "Digite seu nome completo" }),
-  type: z.string().min(5, { message: "Selecione uma opção" }),
-  size: z.string().min(5, { message: "Selecione uma opção" }),
+  type: z.enum(["HEADQUARTERS", "BRANCH", "AGENCY"]),
+  size: z.enum(["MICRO", "SMALL", "MEDIUM", "BIG"]),
   acceptTerms: z.boolean({ message: "Aceite os termos para prosseguir" }),
 });
 
 export function RegisterCompanyForm() {
+  const router = useRouter();
+  const { registerCompany, isPendingRegisterCompany } = useRegisterCompany();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       documentNumber: "",
       name: "",
-      type: "",
-      size: "",
+      type: undefined,
+      size: undefined,
       acceptTerms: false,
     },
   });
-  const router = useRouter();
   const documentNumber = form.watch("documentNumber");
 
   const { isReady, isValid, isPendingValidate } =
@@ -58,9 +61,15 @@ export function RegisterCompanyForm() {
       documentNumber,
     });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit({
+    name,
+    documentNumber,
+    type,
+    size,
+  }: z.infer<typeof formSchema>) {
     try {
-      // router.push("/entrar/empresa");
+      await registerCompany({ name, documentNumber, type, size });
+      router.push("/cadastro/empresa/endereco");
     } catch (error) {
       console.log(error);
     }
@@ -202,11 +211,13 @@ export function RegisterCompanyForm() {
         />
 
         <Button
-          disabled={!form.watch("acceptTerms") || !isValid}
+          disabled={
+            !form.watch("acceptTerms") || !isValid || isPendingRegisterCompany
+          }
           type="submit"
           className="w-full mt-6 gap-2"
         >
-          {false ? (
+          {isPendingRegisterCompany ? (
             <Loader2 className="size-4 animate-spin" />
           ) : (
             <>
