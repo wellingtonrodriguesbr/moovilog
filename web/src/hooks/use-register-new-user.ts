@@ -7,7 +7,7 @@ interface RegisterNewUserData {
   name: string;
   email: string;
   password: string;
-  role: "ADMIN" | "FINANCIAL" | "OPERATIONAL" | "MEMBER" | undefined;
+  role?: "ADMIN" | "FINANCIAL" | "OPERATIONAL" | "MEMBER" | undefined;
 }
 
 export function useRegisterNewUser() {
