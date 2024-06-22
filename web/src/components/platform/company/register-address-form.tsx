@@ -16,11 +16,13 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { ArrowRight, Check, Loader2, X } from "lucide-react";
-import { useValidateCompanyZipCode } from "@/hooks/use-validate-company-zip-code";
 import { formatCEP } from "@/utils/format-cep";
+import { useEffect } from "react";
+import { useRegisterCompanyAddress } from "@/hooks/use-register-company-address";
+import { useGetCompanyAddressByZipCode } from "@/hooks/use-get-company-address-by-zip-code";
 
 const formSchema = z.object({
-  zipCode: z
+  zipCode: z.coerce
     .string()
     .min(8, { message: "Digite um CEP válido" })
     .max(8, { message: "Digite um CEP válido" }),
@@ -33,6 +35,10 @@ const formSchema = z.object({
 });
 
 export function RegisterCompanyAddressForm() {
+  const router = useRouter();
+
+  const { registerCompanyAddress, isPendingRegisterCompanyAddress } =
+    useRegisterCompanyAddress();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -46,20 +52,48 @@ export function RegisterCompanyAddressForm() {
     },
   });
 
-  const router = useRouter();
   const zipCode = form.watch("zipCode");
 
-  const { isReady, isValid, isPendingValidate } = useValidateCompanyZipCode({
-    zipCode,
-  });
+  const { data, isPendingGetCompanyAddress, status } =
+    useGetCompanyAddressByZipCode({
+      zipCode,
+    });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit({
+    city,
+    street,
+    number,
+    neighborhood,
+    zipCode,
+    acronym,
+    complement,
+  }: z.infer<typeof formSchema>) {
     try {
-      // router.push("/entrar/empresa");
+      await registerCompanyAddress({
+        cityName: city,
+        street,
+        number,
+        neighborhood,
+        zipCode,
+        acronym,
+        complement,
+      });
+      router.push("/cadastro/empresa/membro");
     } catch (error) {
       console.log(error);
     }
   }
+
+  useEffect(() => {
+    form.setValue("street", data?.street ?? "");
+    form.setValue("neighborhood", data?.neighborhood ?? "");
+    form.setValue("city", data?.city ?? "");
+    form.setValue("acronym", data?.state ?? "");
+
+    if (status === "error") {
+      form.reset();
+    }
+  }, [data, form, status]);
 
   return (
     <Form {...form}>
@@ -85,13 +119,13 @@ export function RegisterCompanyAddressForm() {
                     }
                     value={formatCEP(field.value)}
                   />
-                  {isReady && isPendingValidate ? (
+                  {zipCode.length === 8 && isPendingGetCompanyAddress ? (
                     <Loader2 className="size-4 text-app-blue-500 animate-spin" />
                   ) : null}
-                  {isReady && !isPendingValidate && !isValid ? (
+                  {!isPendingGetCompanyAddress && status === "error" ? (
                     <X className="size-4 text-red-500" />
                   ) : null}
-                  {isReady && !isPendingValidate && isValid ? (
+                  {!isPendingGetCompanyAddress && status === "success" ? (
                     <Check className="size-4 text-emerald-500" />
                   ) : null}
                 </div>
@@ -111,7 +145,13 @@ export function RegisterCompanyAddressForm() {
               <FormItem className="col-span-3">
                 <FormLabel>Rua</FormLabel>
                 <FormControl>
-                  <Input placeholder="" {...field} />
+                  <Input
+                    placeholder=""
+                    disabled={
+                      isPendingGetCompanyAddress || status === "pending"
+                    }
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -124,7 +164,13 @@ export function RegisterCompanyAddressForm() {
               <FormItem>
                 <FormLabel>Número</FormLabel>
                 <FormControl>
-                  <Input placeholder="" {...field} />
+                  <Input
+                    placeholder=""
+                    disabled={
+                      isPendingGetCompanyAddress || status === "pending"
+                    }
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -139,7 +185,13 @@ export function RegisterCompanyAddressForm() {
               <FormItem>
                 <FormLabel>Bairro</FormLabel>
                 <FormControl>
-                  <Input placeholder="" {...field} />
+                  <Input
+                    placeholder=""
+                    disabled={
+                      isPendingGetCompanyAddress || status === "pending"
+                    }
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -152,7 +204,14 @@ export function RegisterCompanyAddressForm() {
               <FormItem>
                 <FormLabel>Complemento</FormLabel>
                 <FormControl>
-                  <Input placeholder="" {...field} value={field.value ?? ""} />
+                  <Input
+                    placeholder=""
+                    disabled={
+                      isPendingGetCompanyAddress || status === "pending"
+                    }
+                    {...field}
+                    value={field.value ?? ""}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -167,7 +226,13 @@ export function RegisterCompanyAddressForm() {
               <FormItem className="col-span-3">
                 <FormLabel>Cidade</FormLabel>
                 <FormControl>
-                  <Input placeholder="" {...field} />
+                  <Input
+                    placeholder=""
+                    disabled={
+                      isPendingGetCompanyAddress || status === "pending"
+                    }
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -180,7 +245,14 @@ export function RegisterCompanyAddressForm() {
               <FormItem>
                 <FormLabel>UF</FormLabel>
                 <FormControl>
-                  <Input placeholder="" {...field} value={field.value ?? ""} />
+                  <Input
+                    placeholder=""
+                    disabled={
+                      isPendingGetCompanyAddress || status === "pending"
+                    }
+                    {...field}
+                    value={field.value ?? ""}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -189,11 +261,13 @@ export function RegisterCompanyAddressForm() {
         </fieldset>
 
         <Button
-          // disabled={!form.watch("acceptTerms") || !isValid}
+          disabled={
+            isPendingRegisterCompanyAddress || isPendingGetCompanyAddress
+          }
           type="submit"
           className="w-full mt-6 gap-2"
         >
-          {false ? (
+          {isPendingRegisterCompanyAddress ? (
             <Loader2 className="size-4 animate-spin" />
           ) : (
             <>
