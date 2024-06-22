@@ -18,6 +18,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useRegisterNewUser } from "@/hooks/use-register-new-user";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
+import { useLogin } from "@/hooks/use-login";
 
 const formSchema = z.object({
   name: z.string().min(3, { message: "Digite seu nome completo" }),
@@ -31,6 +32,8 @@ const formSchema = z.object({
 export function RegisterForm() {
   const router = useRouter();
   const { registerNewUser, isPendingRegisterNewUser } = useRegisterNewUser();
+  const { login, isPendingLogin } = useLogin();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -53,7 +56,9 @@ export function RegisterForm() {
         password,
       });
 
-      router.push("/entrar/empresa");
+      await login({ email, password });
+
+      router.push("/cadastro/empresa");
     } catch (error) {
       console.log(error);
     }
@@ -129,11 +134,15 @@ export function RegisterForm() {
         />
 
         <Button
-          disabled={!form.watch("acceptTerms") || isPendingRegisterNewUser}
+          disabled={
+            !form.watch("acceptTerms") ||
+            isPendingRegisterNewUser ||
+            isPendingLogin
+          }
           type="submit"
           className="w-full mt-6"
         >
-          {isPendingRegisterNewUser ? (
+          {isPendingRegisterNewUser || isPendingLogin ? (
             <Loader2 className="size-4 animate-spin" />
           ) : (
             "Avançar"

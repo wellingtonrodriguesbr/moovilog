@@ -25,10 +25,6 @@ export async function authenticateUseCase({
   });
 
   if (!user) {
-    throw new ResourceNotFoundError("User not found");
-  }
-
-  if (user.email !== email) {
     throw new InvalidCredentialsError("Incorrect email or password");
   }
 

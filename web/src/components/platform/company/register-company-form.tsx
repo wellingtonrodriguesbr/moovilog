@@ -56,7 +56,7 @@ export function RegisterCompanyForm() {
   });
   const documentNumber = form.watch("documentNumber");
 
-  const { isReady, isValid, isPendingValidate } =
+  const { isValidateCompanyDocumentNumberPending, status } =
     useValidateCompanyDocumentNumber({
       documentNumber,
     });
@@ -99,13 +99,16 @@ export function RegisterCompanyForm() {
                     }
                     value={formatCNPJ(field.value)}
                   />
-                  {isReady && isPendingValidate ? (
+                  {documentNumber.length === 14 &&
+                  isValidateCompanyDocumentNumberPending ? (
                     <Loader2 className="size-4 text-app-blue-500 animate-spin" />
                   ) : null}
-                  {isReady && !isPendingValidate && !isValid ? (
+                  {!isValidateCompanyDocumentNumberPending &&
+                  status === "error" ? (
                     <X className="size-4 text-red-500" />
                   ) : null}
-                  {isReady && !isPendingValidate && isValid ? (
+                  {!isValidateCompanyDocumentNumberPending &&
+                  status === "success" ? (
                     <Check className="size-4 text-emerald-500" />
                   ) : null}
                 </div>
@@ -212,7 +215,9 @@ export function RegisterCompanyForm() {
 
         <Button
           disabled={
-            !form.watch("acceptTerms") || !isValid || isPendingRegisterCompany
+            !form.watch("acceptTerms") ||
+            isValidateCompanyDocumentNumberPending ||
+            isPendingRegisterCompany
           }
           type="submit"
           className="w-full mt-6 gap-2"

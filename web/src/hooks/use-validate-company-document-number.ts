@@ -1,8 +1,7 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-
 import axios from "axios";
 
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { useDebounce } from "react-use";
 import { toast } from "sonner";
 
@@ -21,8 +20,12 @@ export function useValidateCompanyDocumentNumber({
     [documentNumber]
   );
   const [debouncedValue, setDebouncedValue] = useState("");
-  const [isPendingValidate, setIsPendingValidate] = useState(false);
-  const [isValid, setIsValid] = useState(false);
+
+  const { isPending, status } = useQuery({
+    queryKey: ["validate-company-document-number"],
+    queryFn: () => handleValidDocumentNumber({ documentNumber }),
+    enabled: !!isReady() && !!debouncedValue.length,
+  });
 
   async function handleValidDocumentNumber({
     documentNumber,
@@ -30,36 +33,20 @@ export function useValidateCompanyDocumentNumber({
     documentNumber: string;
   }) {
     try {
-      setIsPendingValidate(true);
       const { data } = await axios.get(
         `https://brasilapi.com.br/api/cnpj/v1/${documentNumber}`
       );
 
-      setIsValid(true);
       toast.success("CNPJ encontrado com sucesso");
       return data;
     } catch (error) {
-      setIsValid(false);
-
       toast.error("CNPJ inválido");
       console.log(error);
-    } finally {
-      setIsPendingValidate(false);
     }
   }
 
-  useEffect(() => {
-    if (isReady() && debouncedValue.length) {
-      handleValidDocumentNumber({
-        documentNumber: debouncedValue,
-      });
-    }
-  }, [isReady(), debouncedValue]);
-
   return {
-    isValid,
-    isPendingValidate,
-    isReady: isReady(),
-    handleValidDocumentNumber,
+    isValidateCompanyDocumentNumberPending: isPending,
+    status,
   };
 }
