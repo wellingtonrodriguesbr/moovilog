@@ -7,6 +7,7 @@ interface RegisterNewUserData {
   name: string;
   email: string;
   password: string;
+  role: "ADMIN" | "FINANCIAL" | "OPERATIONAL" | "MEMBER" | undefined;
 }
 
 export function useRegisterNewUser() {
@@ -27,14 +28,16 @@ export function useRegisterNewUser() {
     name,
     email,
     password,
+    role,
   }: RegisterNewUserData) {
     const { data } = await api.post<{ userId: string }>("/users", {
       name,
       email,
       password,
-      role: "ADMIN",
+      role: role ?? "ADMIN",
     });
-    return data.userId;
+
+    return data;
   }
 
   return { registerNewUser, isPendingRegisterNewUser };
