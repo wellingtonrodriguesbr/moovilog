@@ -1,3 +1,4 @@
+import { Supplies } from "@/components/platform/supplies";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -6,5 +7,9 @@ export const metadata: Metadata = {
 };
 
 export default function SuppliesPlatform() {
-  return <main></main>;
+  return (
+    <main>
+      <Supplies />
+    </main>
+  );
 }

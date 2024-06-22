@@ -11,6 +11,7 @@ const SidebarProvider = dynamic(() => import("@/providers/sidebar-provider"), {
 
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const sans = Plus_Jakarta_Sans({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -35,8 +36,10 @@ export default function RootLayout({
         )}
       >
         <SidebarProvider>
-          <ReactQueryProvider>{children}</ReactQueryProvider>
-          <Toaster position="bottom-center" theme="light" richColors />
+          <TooltipProvider>
+            <ReactQueryProvider>{children}</ReactQueryProvider>
+            <Toaster position="bottom-center" theme="light" richColors />
+          </TooltipProvider>
         </SidebarProvider>
       </body>
     </html>
