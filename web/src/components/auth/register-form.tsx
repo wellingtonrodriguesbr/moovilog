@@ -54,6 +54,7 @@ export function RegisterForm() {
         name,
         email,
         password,
+        role: "ADMIN",
       });
 
       await login({ email, password });

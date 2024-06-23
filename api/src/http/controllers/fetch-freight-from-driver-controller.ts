@@ -16,7 +16,7 @@ export async function fetchFreightFromDriverController(
     reply.status(200).send({ freights });
   } catch (error) {
     if (error instanceof ResourceNotFoundError) {
-      reply.status(400).send({ message: error.message });
+      reply.status(404).send({ message: error.message });
     }
     throw error;
   }

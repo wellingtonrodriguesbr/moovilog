@@ -1,28 +1,21 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { getFreightFromDriverUseCase } from "@/use-cases/get-freight-information-from-driver";
 import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
 import { UnauthorizedError } from "@/use-cases/errors/unauthorized-error";
 
-import z from "zod";
+import { getCompanyInformationUseCase } from "@/use-cases/get-company-information";
 
-export async function getFreightFromDriverController(
+export async function getCompanyInformationController(
   req: FastifyRequest,
   reply: FastifyReply
 ) {
-  const getFreightFromDriverParamsSchema = z.object({
-    freightId: z.string(),
-  });
-
-  const driverId = req.user.sub;
-  const { freightId } = getFreightFromDriverParamsSchema.parse(req.params);
+  const userId = req.user.sub;
 
   try {
-    const { freightInformation } = await getFreightFromDriverUseCase({
-      driverId,
-      freightId,
+    const { company, companyAddress } = await getCompanyInformationUseCase({
+      userId,
     });
 
-    reply.status(200).send({ freightInformation });
+    reply.status(200).send({ company, companyAddress });
   } catch (error) {
     if (error instanceof ResourceNotFoundError) {
       reply.status(404).send({ message: error.message });

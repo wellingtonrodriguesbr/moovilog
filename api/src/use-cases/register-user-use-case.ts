@@ -7,7 +7,7 @@ interface RegisterUserUseCaseRequest {
   name: string;
   email: string;
   password: string;
-  role: Role | undefined;
+  role: Role;
 }
 
 interface RegisterUserUseCaseResponse {

@@ -12,9 +12,7 @@ export async function registerUserController(
     name: z.string(),
     email: z.string().email(),
     password: z.string().min(8),
-    role: z
-      .enum(["ADMIN", "FINANCIAL", "OPERATIONAL", "MEMBER"])
-      .or(z.undefined()),
+    role: z.enum(["ADMIN", "FINANCIAL", "OPERATIONAL", "MEMBER"]),
   });
 
   const { name, email, password, role } = registerUserBodySchema.parse(
