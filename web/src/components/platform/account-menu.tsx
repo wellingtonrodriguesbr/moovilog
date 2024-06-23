@@ -12,6 +12,7 @@ import {
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useGetProfile } from "@/hooks/use-get-profile";
+import Link from "next/link";
 
 export function AccountMenu() {
   const { profile } = useGetProfile();
@@ -39,9 +40,14 @@ export function AccountMenu() {
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DialogTrigger asChild>
-            <DropdownMenuItem>
-              <User className="mr-2 w-4 h-4" />
-              <span>Meu perfil</span>
+            <DropdownMenuItem asChild>
+              <Link
+                className="flex items-center gap-2 cursor-pointer"
+                href="/meus-dados"
+              >
+                <User className="size-4" />
+                Meus dados
+              </Link>
             </DropdownMenuItem>
           </DialogTrigger>
           <DropdownMenuItem

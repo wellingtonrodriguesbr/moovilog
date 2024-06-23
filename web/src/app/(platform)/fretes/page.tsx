@@ -1,10 +1,10 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Operacional | Moovilog",
+  title: "Fretes | Moovilog",
   description: "",
 };
 
-export default function OperationalPagePlatform() {
+export default function FreightsPagePlatform() {
   return <main></main>;
 }

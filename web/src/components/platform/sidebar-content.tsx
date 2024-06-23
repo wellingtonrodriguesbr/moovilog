@@ -14,9 +14,9 @@ import {
   Headset,
   Home,
   Landmark,
+  LayoutGrid,
   Settings,
   Truck,
-  UserRoundCog,
   Users,
 } from "lucide-react";
 import { SidebarItem } from "./sidebar-item";
@@ -89,9 +89,9 @@ const items = [
     icon: <Landmark className="size-4" />,
   },
   {
-    name: "Operacional",
-    url: "/operacional",
-    icon: <UserRoundCog className="size-4" />,
+    name: "Fretes",
+    url: "/fretes",
+    icon: <LayoutGrid className="size-4" />,
   },
   {
     name: "Suprimentos",
