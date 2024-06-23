@@ -1,13 +1,16 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
 import { UnauthorizedError } from "@/use-cases/errors/unauthorized-error";
-import { meUseCase } from "@/use-cases/me-use-case";
+import { getProfileUseCase } from "@/use-cases/get-profile-use-case";
 
-export async function meController(req: FastifyRequest, reply: FastifyReply) {
+export async function getProfileController(
+  req: FastifyRequest,
+  reply: FastifyReply
+) {
   const userId = req.user.sub;
 
   try {
-    const { user } = await meUseCase({
+    const { user } = await getProfileUseCase({
       userId,
     });
 

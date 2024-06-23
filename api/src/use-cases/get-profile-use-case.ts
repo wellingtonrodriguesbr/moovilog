@@ -1,11 +1,11 @@
 import { prisma } from "@/lib/prisma";
 import { ResourceNotFoundError } from "./errors/resource-not-found-error";
 
-interface MeUseCaseRequest {
+interface GetProfileUseCaseRequest {
   userId: string;
 }
 
-interface MeUseCaseResponse {
+interface GetProfileUseCaseResponse {
   user: {
     id: string;
     name: string;
@@ -14,9 +14,9 @@ interface MeUseCaseResponse {
   };
 }
 
-export async function meUseCase({
+export async function getProfileUseCase({
   userId,
-}: MeUseCaseRequest): Promise<MeUseCaseResponse> {
+}: GetProfileUseCaseRequest): Promise<GetProfileUseCaseResponse> {
   const foundUser = await prisma.user.findUnique({
     where: {
       id: userId,
