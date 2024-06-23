@@ -36,14 +36,14 @@ export function useRegisterCompany() {
         }
         if (
           error.response?.status === 409 &&
-          error.response?.data?.message ===
+          error.response?.data ===
             "A company already exists with this document number"
         ) {
           toast.error("Já existe uma empresa com este CNPJ");
         }
         if (
           error.response?.status === 409 &&
-          error.response?.data?.message ===
+          error.response?.data ===
             "User already owns a company. Conflict with existing resource."
         ) {
           toast.error("Você já tem uma empresa cadastrada nesta conta");
