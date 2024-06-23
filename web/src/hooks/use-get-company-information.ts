@@ -60,7 +60,8 @@ export function useGetCompanyInformation() {
   }
 
   return {
-    company,
+    ...company,
+    companyAddress: company?.companyAddress,
     isGetCompanyInformationPending,
   };
 }
