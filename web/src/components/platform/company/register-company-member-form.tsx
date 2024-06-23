@@ -37,7 +37,7 @@ const formSchema = z.object({
     .min(8, { message: "A senha precisa ter no mínimo 8 caracteres" }),
   role: z
     .enum(["ADMIN", "FINANCIAL", "OPERATIONAL", "MEMBER"])
-    .or(z.undefined()),
+    .default("MEMBER"),
 });
 
 export function RegisterCompanyMemberForm() {
@@ -52,7 +52,7 @@ export function RegisterCompanyMemberForm() {
       name: "",
       email: "",
       password: "",
-      role: undefined,
+      role: "MEMBER",
     },
   });
 

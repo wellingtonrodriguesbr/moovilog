@@ -5,7 +5,7 @@ import { toast } from "sonner";
 
 interface RegisterCompanyMemberData {
   userId: string;
-  role: "ADMIN" | "FINANCIAL" | "OPERATIONAL" | "MEMBER" | undefined;
+  role: "ADMIN" | "FINANCIAL" | "OPERATIONAL" | "MEMBER";
 }
 
 export function useRegisterCompanyMember() {
