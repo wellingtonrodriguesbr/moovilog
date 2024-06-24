@@ -58,17 +58,18 @@ export function DriversTable() {
       <TableHeader className="bg-zinc-100 hover:bg-zinc-100">
         <TableRow className="hover:bg-zinc-100">
           <TableHead className="text-app-blue-900 font-medium rounded-tl-lg text-nowrap">
-            ID do colaborador
+            Nome
           </TableHead>
-          <TableHead className="text-app-blue-900 font-medium">Nome</TableHead>
+          <TableHead className="text-app-blue-900 font-medium">CPF</TableHead>
           <TableHead className="text-app-blue-900 font-medium">
-            E-mail
+            Contato
           </TableHead>
-          <TableHead className="text-app-blue-900 font-medium">Setor</TableHead>
           <TableHead className="text-app-blue-900 font-medium">
-            Autorização
+            Contato reserva
           </TableHead>
-          <TableHead className="text-app-blue-900 font-medium">Desde</TableHead>
+          <TableHead className="text-app-blue-900 font-medium">
+            Cadastrado em
+          </TableHead>
           <TableHead className="text-app-blue-900 font-medium rounded-tr-lg"></TableHead>
         </TableRow>
       </TableHeader>
