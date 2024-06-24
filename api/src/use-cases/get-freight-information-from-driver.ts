@@ -1,7 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { FreightInformation } from "@prisma/client";
 import { ResourceNotFoundError } from "./errors/resource-not-found-error";
-import { UnauthorizedError } from "./errors/unauthorized-error";
 
 interface GetFreightFromDriverUseCaseRequest {
   driverId: string;
@@ -36,10 +35,6 @@ export async function getFreightFromDriverUseCase({
 
   if (!freightInformation) {
     throw new ResourceNotFoundError("Freight information not found");
-  }
-
-  if (freightInformation.freightId !== freight.id) {
-    throw new UnauthorizedError("Unauthorized");
   }
 
   return { freightInformation };

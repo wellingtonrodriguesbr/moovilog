@@ -12,7 +12,7 @@ model User {
   name      String
   email     String   @unique
   password  String
-  role      Role     @default(ADMIN)
+  role      Role
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -29,7 +29,7 @@ model Company {
   name           String
   documentNumber String      @unique @map("document_number")
   type           CompanyType
-  size           String
+  size           CompanySize
   createdAt      DateTime    @default(now()) @map("created_at")
   updatedAt      DateTime    @updatedAt @map("updated_at")
 
@@ -73,7 +73,8 @@ model CompanyServiceCity {
 
 model CompanyMember {
   id        String   @id @default(uuid())
-  role      Role     @default(MEMBER)
+  sector    String?
+  role      Role
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -83,7 +84,6 @@ model CompanyMember {
   companyId String  @map("company_id")
   company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
-  @@unique([companyId, memberId])
   @@map("company_members")
 }
 
@@ -98,7 +98,6 @@ model CompanyDriver {
   companyId String  @map("company_id")
   company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
-  @@unique([companyId, driverId])
   @@map("company_drivers")
 }
 
@@ -146,6 +145,7 @@ model BankDetails {
 model Vehicle {
   id               String          @id @default(uuid())
   plate            String          @unique
+  year             Int
   category         VehicleCategory
   type             VehicleType
   body             VehicleBody
@@ -206,6 +206,8 @@ model FreightInformation {
   arrivalTime       DateTime? @map("arrival_time")
   pickupsNotMade    Int?      @map("pickups_not_made")
   deliveriesNotMade Int?      @map("deliveries_not_made")
+  initialKM         Float     @map("initial_km")
+  finalKM           Float     @map("final_km")
   viewed            Boolean?  @default(false)
   viewedAt          DateTime? @map("viewed_at")
   updatedAt         DateTime  @updatedAt @map("updated_at")
@@ -345,6 +347,13 @@ enum CompanyType {
   HEADQUARTERS
   BRANCH
   AGENCY
+}
+
+enum CompanySize {
+  MICRO
+  SMALL
+  MEDIUM
+  BIG
 }
 
 enum VehicleCategory {

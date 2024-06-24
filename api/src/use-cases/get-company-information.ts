@@ -63,7 +63,7 @@ export async function getCompanyInformationUseCase({
     throw new ResourceNotFoundError("Company not found");
   }
 
-  const companyAddress = await prisma.companyAddress.findUnique({
+  const companyAddress = await prisma.companyAddress.findFirst({
     where: {
       companyId: company.companyId,
     },

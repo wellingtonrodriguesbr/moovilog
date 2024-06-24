@@ -37,7 +37,8 @@ export function SidebarContent() {
           <AccordionTrigger
             onClick={!isOpen ? handleOpenAndCloseSidebar : () => {}}
             data-sidebar={isOpen ? "open" : "closed"}
-            className="pl-1 [&[data-sidebar=closed]>svg]:hidden py-6 hover:text-app-blue-500"
+            data-disabled={false}
+            className="pl-1 [&[data-sidebar=closed]>svg]:hidden py-6 hover:text-app-blue-500 data-[disabled=true]:opacity-50 data-[disabled=true]:pointer-events-none"
           >
             <div className="flex items-center gap-2">
               <Building className="size-4" />

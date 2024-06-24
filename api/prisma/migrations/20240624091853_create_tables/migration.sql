@@ -5,6 +5,9 @@ CREATE TYPE "Role" AS ENUM ('ADMIN', 'FINANCIAL', 'OPERATIONAL', 'MEMBER');
 CREATE TYPE "CompanyType" AS ENUM ('HEADQUARTERS', 'BRANCH', 'AGENCY');
 
 -- CreateEnum
+CREATE TYPE "CompanySize" AS ENUM ('MICRO', 'SMALL', 'MEDIUM', 'BIG');
+
+-- CreateEnum
 CREATE TYPE "VehicleCategory" AS ENUM ('UTILITY', 'VAN', 'LIGHT_TRUCKS', 'STRAIGHT_TRUCKS', 'TRUCKS', 'QUAD_AXLE_TRUCKS', 'SEMI_TRAILER', 'TANDEM_AXLE_TRUCK');
 
 -- CreateEnum
@@ -25,7 +28,7 @@ CREATE TABLE "users" (
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "role" "Role" NOT NULL DEFAULT 'ADMIN',
+    "role" "Role" NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -38,7 +41,7 @@ CREATE TABLE "companies" (
     "name" TEXT NOT NULL,
     "document_number" TEXT NOT NULL,
     "type" "CompanyType" NOT NULL,
-    "size" TEXT NOT NULL,
+    "size" "CompanySize" NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "owner_id" TEXT NOT NULL,
@@ -67,7 +70,8 @@ CREATE TABLE "company_service_cities" (
 -- CreateTable
 CREATE TABLE "company_members" (
     "id" TEXT NOT NULL,
-    "role" "Role" NOT NULL DEFAULT 'MEMBER',
+    "sector" TEXT NOT NULL,
+    "role" "Role" NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "member_id" TEXT NOT NULL,
@@ -122,6 +126,7 @@ CREATE TABLE "bank_details" (
 CREATE TABLE "vehicles" (
     "id" TEXT NOT NULL,
     "plate" TEXT NOT NULL,
+    "year" INTEGER NOT NULL,
     "category" "VehicleCategory" NOT NULL,
     "type" "VehicleType" NOT NULL,
     "body" "VehicleBody" NOT NULL,
@@ -166,12 +171,14 @@ CREATE TABLE "freights_by_company" (
 -- CreateTable
 CREATE TABLE "freight_information" (
     "id" TEXT NOT NULL,
-    "departure_time" TIMESTAMP(3) NOT NULL,
-    "arrival_time" TIMESTAMP(3) NOT NULL,
+    "departure_time" TIMESTAMP(3),
+    "arrival_time" TIMESTAMP(3),
     "pickups_not_made" INTEGER,
     "deliveries_not_made" INTEGER,
-    "viewed" BOOLEAN NOT NULL,
-    "viewed_at" TIMESTAMP(3) NOT NULL,
+    "initial_km" DOUBLE PRECISION NOT NULL,
+    "final_km" DOUBLE PRECISION NOT NULL,
+    "viewed" BOOLEAN DEFAULT false,
+    "viewed_at" TIMESTAMP(3),
     "updated_at" TIMESTAMP(3) NOT NULL,
     "freight_id" TEXT NOT NULL,
 
@@ -273,10 +280,7 @@ CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 CREATE UNIQUE INDEX "companies_document_number_key" ON "companies"("document_number");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "company_members_company_id_member_id_key" ON "company_members"("company_id", "member_id");
-
--- CreateIndex
-CREATE UNIQUE INDEX "company_drivers_company_id_driver_id_key" ON "company_drivers"("company_id", "driver_id");
+CREATE UNIQUE INDEX "companies_owner_id_key" ON "companies"("owner_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "drivers_document_number_key" ON "drivers"("document_number");

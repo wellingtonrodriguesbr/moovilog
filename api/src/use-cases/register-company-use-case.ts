@@ -8,7 +8,7 @@ interface RegisterCompanyUseCaseRequest {
   name: string;
   documentNumber: string;
   type: "HEADQUARTERS" | "BRANCH" | "AGENCY";
-  size: string;
+  size: "MICRO" | "SMALL" | "MEDIUM" | "BIG";
 }
 
 interface RegisterCompanyUseCaseResponse {
