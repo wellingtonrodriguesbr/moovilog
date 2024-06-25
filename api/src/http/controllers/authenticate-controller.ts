@@ -1,7 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { authenticateUseCase } from "@/use-cases/authenticate-use-case";
+import { makeAuthenticateUseCase } from "@/use-cases/factories/make-authenticate-use-case";
 import { InvalidCredentialsError } from "@/use-cases/errors/invalid-credentials-error";
-import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
 
 import dayjs from "dayjs";
 import z from "zod";
@@ -18,7 +17,8 @@ export async function authenticateController(
   const { email, password } = authenticateBodySchema.parse(req.body);
 
   try {
-    const { user } = await authenticateUseCase({ email, password });
+    const authenticateUseCase = makeAuthenticateUseCase();
+    const { user } = await authenticateUseCase.execute({ email, password });
 
     const token = await reply.jwtSign(
       {
@@ -55,10 +55,6 @@ export async function authenticateController(
       .status(200)
       .send({ token });
   } catch (error) {
-    if (error instanceof ResourceNotFoundError) {
-      reply.status(404).send({ message: error.message });
-    }
-
     if (error instanceof InvalidCredentialsError) {
       reply.status(401).send({ message: error.message });
     }

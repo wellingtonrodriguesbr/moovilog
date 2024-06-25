@@ -1,38 +1,45 @@
-import { prisma } from "@/lib/prisma";
-import { User } from "@prisma/client";
-
 import { compareSync } from "bcryptjs";
 import { InvalidCredentialsError } from "./errors/invalid-credentials-error";
-import { ResourceNotFoundError } from "./errors/resource-not-found-error";
+import { UsersRepository } from "@/repositories/users-repository";
 
 interface AuthenticateUseCaseRequest {
   email: string;
   password: string;
 }
 
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  password: string;
+  role: "ADMIN" | "FINANCIAL" | "OPERATIONAL" | "MEMBER";
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 interface AuthenticateUseCaseResponse {
   user: User;
 }
 
-export async function authenticateUseCase({
-  email,
-  password,
-}: AuthenticateUseCaseRequest): Promise<AuthenticateUseCaseResponse> {
-  const user = await prisma.user.findUnique({
-    where: {
-      email,
-    },
-  });
+export class AuthenticateUseCase {
+  constructor(private usersRepository: UsersRepository) {}
 
-  if (!user) {
-    throw new InvalidCredentialsError("Incorrect email or password");
+  async execute({
+    email,
+    password,
+  }: AuthenticateUseCaseRequest): Promise<AuthenticateUseCaseResponse> {
+    const user = await this.usersRepository.findByEmail(email);
+
+    if (!user) {
+      throw new InvalidCredentialsError("Incorrect email or password");
+    }
+
+    const doesPasswordsMatch = compareSync(password, user.password);
+
+    if (!doesPasswordsMatch) {
+      throw new InvalidCredentialsError("Incorrect email or password");
+    }
+
+    return { user };
   }
-
-  const doesPasswordsMatch = compareSync(password, user.password);
-
-  if (!doesPasswordsMatch) {
-    throw new InvalidCredentialsError("Incorrect email or password");
-  }
-
-  return { user };
 }
