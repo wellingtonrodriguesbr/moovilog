@@ -6,7 +6,7 @@ import { ResourceNotFoundError } from "./errors/resource-not-found-error";
 interface RegisterCompanyMemberUseCaseRequest {
   userId: string;
   creatorId: string;
-  role: Role | undefined;
+  role: Role;
 }
 
 interface RegisterCompanyMemberUseCaseResponse {

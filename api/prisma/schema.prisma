@@ -84,6 +84,7 @@ model CompanyMember {
   companyId String  @map("company_id")
   company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
+  @@unique([companyId, memberId])
   @@map("company_members")
 }
 

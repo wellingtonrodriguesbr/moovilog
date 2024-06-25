@@ -1,10 +1,10 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { CompanyAlreadyExistsError } from "@/use-cases/errors/company-already-exists-error";
-import { registerCompanyUseCase } from "@/use-cases/register-company-use-case";
+import { UnauthorizedError } from "@/use-cases/errors/unauthorized-error";
+import { makeRegisterCompanyUseCase } from "@/use-cases/factories/make-register-company-use-case";
+import { Prisma } from "@prisma/client";
 
 import z from "zod";
-import { UnauthorizedError } from "@/use-cases/errors/unauthorized-error";
-import { Prisma } from "@prisma/client";
 
 export async function registerCompanyController(
   req: FastifyRequest,
@@ -23,7 +23,8 @@ export async function registerCompanyController(
   const userId = req.user.sub;
 
   try {
-    const { company } = await registerCompanyUseCase({
+    const registerCompanyUseCase = makeRegisterCompanyUseCase();
+    const { company } = await registerCompanyUseCase.execute({
       userId,
       name,
       documentNumber,

@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { UserAlreadyExistsError } from "@/use-cases/errors/user-already-exists-error";
-import { makeRegisterUseCase } from "@/use-cases/factories/make-register-user-use-case";
+import { makeRegisterUserUseCase } from "@/use-cases/factories/make-register-user-use-case";
 
 import z from "zod";
 
@@ -20,7 +20,7 @@ export async function registerUserController(
   );
 
   try {
-    const registerUserUseCase = makeRegisterUseCase();
+    const registerUserUseCase = makeRegisterUserUseCase();
     const { user } = await registerUserUseCase.execute({
       name,
       email,

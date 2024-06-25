@@ -1,7 +1,9 @@
-import { prisma } from "@/lib/prisma";
 import { Company } from "@prisma/client";
 import { CompanyAlreadyExistsError } from "./errors/company-already-exists-error";
 import { UnauthorizedError } from "./errors/unauthorized-error";
+import { CompaniesRepository } from "@/repositories/companies-repository";
+import { UsersRepository } from "@/repositories/users-repository";
+import { ResourceNotFoundError } from "./errors/resource-not-found-error";
 
 interface RegisterCompanyUseCaseRequest {
   userId: string;
@@ -15,49 +17,44 @@ interface RegisterCompanyUseCaseResponse {
   company: Company;
 }
 
-export async function registerCompanyUseCase({
-  userId,
-  name,
-  documentNumber,
-  type,
-  size,
-}: RegisterCompanyUseCaseRequest): Promise<RegisterCompanyUseCaseResponse> {
-  const [user, companyAlreadyRegisteredWithThisDocument] = await Promise.all([
-    await prisma.user.findUnique({
-      where: {
-        id: userId,
-      },
-    }),
-    await prisma.company.findUnique({
-      where: {
-        documentNumber,
-      },
-    }),
-  ]);
+export class RegisterCompanyUseCase {
+  constructor(
+    private companiesRepository: CompaniesRepository,
+    private usersRepository: UsersRepository
+  ) {}
 
-  if (user?.role !== "ADMIN") {
-    throw new UnauthorizedError();
-  }
+  async execute({
+    userId,
+    name,
+    documentNumber,
+    type,
+    size,
+  }: RegisterCompanyUseCaseRequest): Promise<RegisterCompanyUseCaseResponse> {
+    const user = await this.usersRepository.findById(userId);
 
-  if (companyAlreadyRegisteredWithThisDocument) {
-    throw new CompanyAlreadyExistsError();
-  }
+    if (!user) {
+      throw new ResourceNotFoundError("User not found");
+    }
 
-  const company = await prisma.company.create({
-    data: {
-      ownerId: userId,
+    if (user.role !== "ADMIN") {
+      throw new UnauthorizedError();
+    }
+
+    const companyAlreadyRegisteredWithThisDocument =
+      await this.companiesRepository.findByDocumentNumber(documentNumber);
+
+    if (companyAlreadyRegisteredWithThisDocument) {
+      throw new CompanyAlreadyExistsError();
+    }
+
+    const company = await this.companiesRepository.create({
+      ownerId: user.id,
       name,
       documentNumber,
-      type,
       size,
-      companyMembers: {
-        create: {
-          memberId: user.id,
-          role: "ADMIN",
-        },
-      },
-    },
-  });
+      type,
+    });
 
-  return { company };
+    return { company };
+  }
 }
