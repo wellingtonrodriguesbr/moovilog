@@ -1,4 +1,3 @@
-import { Company } from "@prisma/client";
 import { CompanyAlreadyExistsError } from "./errors/company-already-exists-error";
 import { UnauthorizedError } from "./errors/unauthorized-error";
 import { CompaniesRepository } from "@/repositories/companies-repository";
@@ -11,6 +10,17 @@ interface RegisterCompanyUseCaseRequest {
   documentNumber: string;
   type: "HEADQUARTERS" | "BRANCH" | "AGENCY";
   size: "MICRO" | "SMALL" | "MEDIUM" | "BIG";
+}
+
+interface Company {
+  id: string;
+  name: string;
+  documentNumber: string;
+  type: "HEADQUARTERS" | "BRANCH" | "AGENCY";
+  size: "MICRO" | "SMALL" | "MEDIUM" | "BIG";
+  createdAt: Date;
+  updatedAt: Date;
+  ownerId: string;
 }
 
 interface RegisterCompanyUseCaseResponse {
