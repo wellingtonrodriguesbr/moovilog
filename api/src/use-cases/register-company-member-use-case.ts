@@ -1,65 +1,60 @@
-import { Role } from "@prisma/client";
-import { prisma } from "../lib/prisma";
+import { CompanyMembersRepository } from "@/repositories/company-members-repository";
 import { CompanyMemberAlreadyExistsError } from "./errors/company-member-already-exists-error";
 import { ResourceNotFoundError } from "./errors/resource-not-found-error";
+import { CompaniesRepository } from "@/repositories/companies-repository";
+import { UsersRepository } from "@/repositories/users-repository";
 
 interface RegisterCompanyMemberUseCaseRequest {
   userId: string;
   creatorId: string;
-  role: Role;
+  role: "ADMIN" | "FINANCIAL" | "OPERATIONAL" | "MEMBER";
 }
 
 interface RegisterCompanyMemberUseCaseResponse {
   companyMemberId: string;
 }
 
-export async function registerCompanyMemberUseCase({
-  userId,
-  creatorId,
-  role,
-}: RegisterCompanyMemberUseCaseRequest): Promise<RegisterCompanyMemberUseCaseResponse> {
-  const [user, company] = await Promise.all([
-    await prisma.user.findUnique({
-      where: {
-        id: userId,
-      },
-    }),
-    await prisma.company.findFirst({
-      where: {
-        ownerId: creatorId,
-      },
-    }),
-  ]);
+export class RegisterCompanyMemberUseCase {
+  constructor(
+    private companiesRepository: CompaniesRepository,
+    private companyMembersRepository: CompanyMembersRepository,
+    private usersRepository: UsersRepository
+  ) {}
 
-  if (!user) {
-    throw new ResourceNotFoundError("User not found");
-  }
+  async execute({
+    userId,
+    creatorId,
+    role,
+  }: RegisterCompanyMemberUseCaseRequest): Promise<RegisterCompanyMemberUseCaseResponse> {
+    const [member, company] = await Promise.all([
+      this.usersRepository.findById(userId),
+      this.companiesRepository.findByOwnerId(creatorId),
+    ]);
 
-  if (!company) {
-    throw new ResourceNotFoundError("Company not found");
-  }
+    if (!member) {
+      throw new ResourceNotFoundError("User not found");
+    }
 
-  const userAlreadyRegisteredWithThisCompany =
-    await prisma.companyMember.findUnique({
-      where: {
-        companyId_memberId: {
-          companyId: company.id,
-          memberId: user.id,
-        },
-      },
+    if (!company) {
+      throw new ResourceNotFoundError("Company not found");
+    }
+
+    const memberAlreadyExists =
+      await this.companyMembersRepository.findMemberByCompanyId(
+        member.id,
+        company.id
+      );
+
+    if (memberAlreadyExists) {
+      throw new CompanyMemberAlreadyExistsError();
+    }
+
+    const companyMember = await this.companyMembersRepository.create({
+      companyId: company.id,
+      memberId: member.id,
+      role,
     });
 
-  if (userAlreadyRegisteredWithThisCompany) {
-    throw new CompanyMemberAlreadyExistsError();
+    return { companyMemberId: companyMember.id };
   }
-
-  const companyMember = await prisma.companyMember.create({
-    data: {
-      companyId: company.id,
-      memberId: user.id,
-      role,
-    },
-  });
-
-  return { companyMemberId: companyMember.id };
 }

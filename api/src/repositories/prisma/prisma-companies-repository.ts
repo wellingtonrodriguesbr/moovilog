@@ -36,4 +36,18 @@ export class PrismaCompaniesRepository implements CompaniesRepository {
 
     return company;
   }
+
+  async findByOwnerId(ownerId: string) {
+    const company = await prisma.company.findUnique({
+      where: {
+        ownerId,
+      },
+    });
+
+    if (!company) {
+      return null;
+    }
+
+    return company;
+  }
 }

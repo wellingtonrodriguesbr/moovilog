@@ -1,9 +1,9 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { registerCompanyMemberUseCase } from "@/use-cases/register-company-member-use-case";
 import { CompanyMemberAlreadyExistsError } from "@/use-cases/errors/company-member-already-exists-error";
+import { makeRegisterCompanyMemberUseCase } from "@/use-cases/factories/make-register-company-member-use-case";
 import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
 
-import z, { string } from "zod";
+import z from "zod";
 
 export async function registerCompanyMemberController(
   req: FastifyRequest,
@@ -11,16 +11,15 @@ export async function registerCompanyMemberController(
 ) {
   const registerCompanyMemberBodySchema = z.object({
     userId: z.string(),
-    role: z
-      .enum(["ADMIN", "FINANCIAL", "OPERATIONAL", "MEMBER"])
-      .or(z.undefined()),
+    role: z.enum(["ADMIN", "FINANCIAL", "OPERATIONAL", "MEMBER"]),
   });
 
   const { userId, role } = registerCompanyMemberBodySchema.parse(req.body);
   const creatorId = req.user.sub;
 
   try {
-    const { companyMemberId } = await registerCompanyMemberUseCase({
+    const registerCompanyMemberUseCase = makeRegisterCompanyMemberUseCase();
+    const { companyMemberId } = await registerCompanyMemberUseCase.execute({
       userId,
       creatorId,
       role,
