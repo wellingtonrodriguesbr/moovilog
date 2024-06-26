@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { CompanyAlreadyExistsError } from "@/use-cases/errors/company-already-exists-error";
-import { registerCompanyAddressUseCase } from "@/use-cases/register-company-address-use-case";
 import { UnauthorizedError } from "@/use-cases/errors/unauthorized-error";
+import { makeRegisterCompanyAddressUseCase } from "@/use-cases/factories/make-register-company-address-use-case";
 
 import z from "zod";
 
@@ -13,7 +13,7 @@ export async function registerCompanyAddressController(
     cityName: z.string(),
     street: z.string(),
     neighborhood: z.string(),
-    number: z.string(),
+    number: z.number(),
     complement: z.string().optional().nullable(),
     zipCode: z.string(),
   });
@@ -24,7 +24,8 @@ export async function registerCompanyAddressController(
   const userId = req.user.sub;
 
   try {
-    const { address } = await registerCompanyAddressUseCase({
+    const registerCompanyAddressUseCase = makeRegisterCompanyAddressUseCase();
+    const { address } = await registerCompanyAddressUseCase.execute({
       cityName,
       street,
       neighborhood,
