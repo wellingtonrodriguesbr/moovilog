@@ -11,7 +11,7 @@ let companyMemberRepository: InMemoryCompanyMembersRepository;
 let sut: RegisterCompanyMemberUseCase;
 
 describe("Register company member use case", () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     usersRepository = new InMemoryUsersRepository();
     companiesRepository = new InMemoryCompaniesRepository();
     companyMemberRepository = new InMemoryCompanyMembersRepository();
@@ -20,10 +20,9 @@ describe("Register company member use case", () => {
       companyMemberRepository,
       usersRepository
     );
-  });
 
-  it("should be able to register company member", async () => {
-    const user = await usersRepository.create({
+    await usersRepository.create({
+      id: "john-doe-01",
       name: "John Doe",
       email: "johndoe@example.com",
       password: "12345678",
@@ -35,12 +34,14 @@ describe("Register company member use case", () => {
       documentNumber: "12312312389899",
       size: "MEDIUM",
       type: "HEADQUARTERS",
-      ownerId: user.id,
+      ownerId: "john-doe-01",
     });
+  });
 
+  it("should be able to register company member", async () => {
     const { companyMemberId } = await sut.execute({
-      userId: user.id,
-      creatorId: user.id,
+      userId: "john-doe-01",
+      creatorId: "john-doe-01",
       role: "OPERATIONAL",
     });
 
@@ -48,31 +49,16 @@ describe("Register company member use case", () => {
   });
 
   it("should not be possible to register company member if member already exists", async () => {
-    const user = await usersRepository.create({
-      name: "John Doe",
-      email: "johndoe@example.com",
-      password: "12345678",
-      role: "ADMIN",
-    });
-
-    await companiesRepository.create({
-      name: "Company name",
-      documentNumber: "12312312389899",
-      size: "MEDIUM",
-      type: "HEADQUARTERS",
-      ownerId: user.id,
-    });
-
     await sut.execute({
-      userId: user.id,
-      creatorId: user.id,
+      userId: "john-doe-01",
+      creatorId: "john-doe-01",
       role: "OPERATIONAL",
     });
 
     await expect(() =>
       sut.execute({
-        userId: user.id,
-        creatorId: user.id,
+        userId: "john-doe-01",
+        creatorId: "john-doe-01",
         role: "OPERATIONAL",
       })
     ).rejects.toBeInstanceOf(CompanyMemberAlreadyExistsError);
