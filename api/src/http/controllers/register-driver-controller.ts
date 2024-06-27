@@ -2,9 +2,9 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { DriverAlreadyExistsError } from "@/use-cases/errors/driver-already-exists-error";
 import { UnauthorizedError } from "@/use-cases/errors/unauthorized-error";
 import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
+import { makeRegisterDriverUseCase } from "@/use-cases/factories/make-register-driver-use-case";
 
 import z from "zod";
-import { makeRegisterDriverUseCase } from "@/use-cases/factories/make-register-driver-use-case";
 
 export async function registerDriverController(
   req: FastifyRequest,
