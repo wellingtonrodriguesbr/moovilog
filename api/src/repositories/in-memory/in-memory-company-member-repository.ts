@@ -32,4 +32,12 @@ export class InMemoryCompanyMembersRepository
 
     return member;
   }
+
+  async findCompanyIdByMemberId(memberId: string) {
+    const member = this.items.find((item) => item.memberId === memberId);
+
+    if (!member) return null;
+
+    return member.companyId;
+  }
 }

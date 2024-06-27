@@ -1,10 +1,10 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { registerDriverUseCase } from "@/use-cases/register-driver-use-case";
 import { DriverAlreadyExistsError } from "@/use-cases/errors/driver-already-exists-error";
 import { UnauthorizedError } from "@/use-cases/errors/unauthorized-error";
 import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
 
 import z from "zod";
+import { makeRegisterDriverUseCase } from "@/use-cases/factories/make-register-driver-use-case";
 
 export async function registerDriverController(
   req: FastifyRequest,
@@ -24,7 +24,8 @@ export async function registerDriverController(
   const creatorId = req.user.sub;
 
   try {
-    const { driverId } = await registerDriverUseCase({
+    const registerDriverUseCase = makeRegisterDriverUseCase();
+    const { driverId } = await registerDriverUseCase.execute({
       name,
       password,
       documentNumber,

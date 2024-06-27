@@ -1,8 +1,10 @@
 import { hash } from "bcryptjs";
-import { prisma } from "../lib/prisma";
 import { DriverAlreadyExistsError } from "./errors/driver-already-exists-error";
 import { UnauthorizedError } from "./errors/unauthorized-error";
 import { ResourceNotFoundError } from "./errors/resource-not-found-error";
+import { UsersRepository } from "@/repositories/users-repository";
+import { DriversRepository } from "@/repositories/drivers-repository";
+import { CompanyMembersRepository } from "@/repositories/company-members-repository";
 
 interface RegisterDriverUseCaseRequest {
   name: string;
@@ -17,70 +19,55 @@ interface RegisterDriverUseCaseResponse {
   driverId: string;
 }
 
-export async function registerDriverUseCase({
-  name,
-  password,
-  documentNumber,
-  phone,
-  backupPhone,
-  creatorId,
-}: RegisterDriverUseCaseRequest): Promise<RegisterDriverUseCaseResponse> {
-  const [user, driverAlreadyExists, company] = await Promise.all([
-    await prisma.user.findUnique({
-      where: {
-        id: creatorId,
-      },
-    }),
-    await prisma.driver.findUnique({
-      where: {
-        documentNumber,
-      },
-    }),
-    await prisma.company.findFirst({
-      where: {
-        companyMembers: {
-          some: {
-            memberId: creatorId,
-          },
-        },
-      },
-    }),
-  ]);
+export class RegisterDriverUseCase {
+  constructor(
+    private usersRepository: UsersRepository,
+    private companyMembersRepository: CompanyMembersRepository,
+    private driversRepository: DriversRepository
+  ) {}
 
-  if (user?.role !== ("ADMIN" || "OPERATIONAL")) {
-    throw new UnauthorizedError(
-      "You do not have permission to perform this action, please ask your administrator for access"
-    );
-  }
+  async execute({
+    name,
+    password,
+    documentNumber,
+    phone,
+    backupPhone,
+    creatorId,
+  }: RegisterDriverUseCaseRequest): Promise<RegisterDriverUseCaseResponse> {
+    const [user, driverAlreadyExists, companyId] = await Promise.all([
+      await this.usersRepository.findById(creatorId),
+      await this.driversRepository.findByDocumentNumber(documentNumber),
+      await this.companyMembersRepository.findCompanyIdByMemberId(creatorId),
+    ]);
 
-  if (driverAlreadyExists) {
-    throw new DriverAlreadyExistsError();
-  }
+    if (user?.role !== ("ADMIN" || "OPERATIONAL")) {
+      throw new UnauthorizedError(
+        "You do not have permission to perform this action, please ask your administrator for access"
+      );
+    }
 
-  if (!company) {
-    throw new ResourceNotFoundError("Company not found");
-  }
+    if (driverAlreadyExists) {
+      throw new DriverAlreadyExistsError();
+    }
 
-  const passwordHash = await hash(password, 6);
+    if (!companyId) {
+      throw new ResourceNotFoundError("Company not found");
+    }
 
-  const driver = await prisma.driver.create({
-    data: {
+    const passwordHash = await hash(password, 6);
+
+    const driver = await this.driversRepository.create({
       name,
       password: passwordHash,
       documentNumber,
       phone,
-      backupPhone: backupPhone ?? null,
-      companyId: company.id,
+      backupPhone,
+      companyId,
       creatorId: user.id,
-      companyDrivers: {
-        create: {
-          companyId: company.id,
-        },
-      },
-    },
-  });
+    });
 
-  return {
-    driverId: driver.id,
-  };
+    return {
+      driverId: driver.id,
+    };
+  }
 }

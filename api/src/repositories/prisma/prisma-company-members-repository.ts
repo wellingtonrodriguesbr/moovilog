@@ -28,4 +28,18 @@ export class PrismaCompanyMembersRepository
 
     return companyMember;
   }
+
+  async findCompanyIdByMemberId(memberId: string) {
+    const member = await prisma.companyMember.findUnique({
+      where: {
+        id: memberId,
+      },
+    });
+
+    if (!member) {
+      return null;
+    }
+
+    return member.companyId;
+  }
 }

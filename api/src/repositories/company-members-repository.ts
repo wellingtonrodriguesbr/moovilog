@@ -8,4 +8,5 @@ export interface CompanyMembersRepository {
     memberId: string,
     companyId: string
   ): Promise<CompanyMember | null>;
+  findCompanyIdByMemberId(memberId: string): Promise<string | null>;
 }
