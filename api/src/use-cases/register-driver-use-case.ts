@@ -15,8 +15,21 @@ interface RegisterDriverUseCaseRequest {
   creatorId: string;
 }
 
+interface Driver {
+  id: string;
+  name: string;
+  password: string;
+  documentNumber: string;
+  phone: string;
+  backupPhone: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  companyId: string;
+  creatorId: string;
+}
+
 interface RegisterDriverUseCaseResponse {
-  driverId: string;
+  driver: Driver;
 }
 
 export class RegisterDriverUseCase {
@@ -40,7 +53,7 @@ export class RegisterDriverUseCase {
       await this.companyMembersRepository.findCompanyIdByMemberId(creatorId),
     ]);
 
-    if (user?.role !== ("ADMIN" || "OPERATIONAL")) {
+    if (user?.role !== "ADMIN" && user?.role !== "OPERATIONAL") {
       throw new UnauthorizedError(
         "You do not have permission to perform this action, please ask your administrator for access"
       );
@@ -51,7 +64,7 @@ export class RegisterDriverUseCase {
     }
 
     if (!companyId) {
-      throw new ResourceNotFoundError("Company not found");
+      throw new ResourceNotFoundError("Company id not found");
     }
 
     const passwordHash = await hash(password, 6);
@@ -67,7 +80,7 @@ export class RegisterDriverUseCase {
     });
 
     return {
-      driverId: driver.id,
+      driver,
     };
   }
 }

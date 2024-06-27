@@ -25,7 +25,7 @@ export async function registerDriverController(
 
   try {
     const registerDriverUseCase = makeRegisterDriverUseCase();
-    const { driverId } = await registerDriverUseCase.execute({
+    const { driver } = await registerDriverUseCase.execute({
       name,
       password,
       documentNumber,
@@ -34,7 +34,7 @@ export async function registerDriverController(
       creatorId,
     });
 
-    reply.status(201).send({ driverId });
+    reply.status(201).send({ driverId: driver.id });
   } catch (error) {
     if (error instanceof DriverAlreadyExistsError) {
       reply.status(409).send({ message: error.message });

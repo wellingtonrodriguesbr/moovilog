@@ -7,7 +7,7 @@ export class InMemoryCompaniesRepository implements CompaniesRepository {
 
   async create(data: Prisma.CompanyUncheckedCreateInput) {
     const company = {
-      id: randomUUID(),
+      id: data.id ?? randomUUID(),
       ownerId: data.ownerId,
       name: data.name,
       documentNumber: data.documentNumber,
