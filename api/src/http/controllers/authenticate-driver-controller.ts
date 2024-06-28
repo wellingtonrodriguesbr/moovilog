@@ -1,25 +1,26 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { driverAuthenticateUseCase } from "@/use-cases/driver-authenticate-use-case";
 import { InvalidCredentialsError } from "@/use-cases/errors/invalid-credentials-error";
+import { makeAuthenticateDriverUseCase } from "@/use-cases/factories/make-authenticate-driver-use-case";
 
 import dayjs from "dayjs";
 import z from "zod";
 
-export async function driverAuthenticateController(
+export async function authenticateDriverController(
   req: FastifyRequest,
   reply: FastifyReply
 ) {
-  const driverauthenticateBodySchema = z.object({
+  const authenticateDriverBodySchema = z.object({
     documentNumber: z.string(),
     password: z.string().min(8),
   });
 
-  const { documentNumber, password } = driverauthenticateBodySchema.parse(
+  const { documentNumber, password } = authenticateDriverBodySchema.parse(
     req.body
   );
 
   try {
-    const { driver } = await driverAuthenticateUseCase({
+    const authenticateDriverUseCase = makeAuthenticateDriverUseCase();
+    const { driver } = await authenticateDriverUseCase.execute({
       documentNumber,
       password,
     });
