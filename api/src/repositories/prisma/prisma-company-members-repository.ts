@@ -26,6 +26,10 @@ export class PrismaCompanyMembersRepository
       },
     });
 
+    if (!companyMember) {
+      return null;
+    }
+
     return companyMember;
   }
 

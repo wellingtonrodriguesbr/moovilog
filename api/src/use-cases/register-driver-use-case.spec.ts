@@ -44,15 +44,20 @@ describe("Register driver use case", () => {
       type: "AGENCY",
       ownerId: "john-doe-id-01",
     });
+
+    await companyMembersRepository.create({
+      companyId: "company-id-01",
+      memberId: "john-doe-id-01",
+      role: "ADMIN",
+    });
   });
 
   it("should be able to register driver", async () => {
-    const driver = await driversRepository.create({
+    const { driver } = await sut.execute({
       name: "John Doe Driver",
       password: "123123123",
       documentNumber: "12312312312",
       phone: "11999999999",
-      companyId: "company-id-01",
       creatorId: "john-doe-id-01",
     });
 
@@ -60,12 +65,11 @@ describe("Register driver use case", () => {
   });
 
   it("should not be able to register driver with an existing same document number", async () => {
-    await driversRepository.create({
+    await sut.execute({
       name: "John Doe Driver",
       password: "123123123",
       documentNumber: "12312312312",
       phone: "11999999999",
-      companyId: "company-id-01",
       creatorId: "john-doe-id-01",
     });
 
@@ -99,7 +103,7 @@ describe("Register driver use case", () => {
     ).rejects.toBeInstanceOf(UnauthorizedError);
   });
 
-  it.skip("should be able possible to generate a hash of the driver password in the registry", async () => {
+  it("should be able possible to generate a hash of the driver password in the registry", async () => {
     const { driver } = await sut.execute({
       name: "John Doe Driver",
       password: "123123123",
