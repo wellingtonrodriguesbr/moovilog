@@ -1,4 +1,4 @@
-import { compareSync } from "bcryptjs";
+import { compare } from "bcryptjs";
 import { InvalidCredentialsError } from "./errors/invalid-credentials-error";
 import { UsersRepository } from "@/repositories/users-repository";
 
@@ -34,7 +34,7 @@ export class AuthenticateUseCase {
       throw new InvalidCredentialsError("Incorrect email or password");
     }
 
-    const doesPasswordsMatch = compareSync(password, user.password);
+    const doesPasswordsMatch = await compare(password, user.password);
 
     if (!doesPasswordsMatch) {
       throw new InvalidCredentialsError("Incorrect email or password");
