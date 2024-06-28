@@ -1,10 +1,10 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { registerVehicleUseCase } from "@/use-cases/register-vehicle-use-case";
 import { VehicleAlreadyExistsError } from "@/use-cases/errors/vehicle-already-exists-error";
-
-import z from "zod";
 import { UnauthorizedError } from "@/use-cases/errors/unauthorized-error";
 import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
+import { makeRegisterVehicleUseCase } from "@/use-cases/factories/make-register-vehicle-use-case";
+
+import z from "zod";
 
 export async function registerVehicleController(
   req: FastifyRequest,
@@ -12,6 +12,7 @@ export async function registerVehicleController(
 ) {
   const registerVehicleBodySchema = z.object({
     plate: z.string(),
+    year: z.number(),
     category: z.enum([
       "UTILITY",
       "VAN",
@@ -28,14 +29,16 @@ export async function registerVehicleController(
     driverId: z.string(),
   });
 
-  const { plate, category, type, body, fullLoadCapacity, driverId } =
+  const { plate, year, category, type, body, fullLoadCapacity, driverId } =
     registerVehicleBodySchema.parse(req.body);
 
   const creatorId = req.user.sub;
 
   try {
-    const { vehicle } = await registerVehicleUseCase({
+    const registerVehicleUseCase = makeRegisterVehicleUseCase();
+    const { vehicle } = await registerVehicleUseCase.execute({
       plate,
+      year,
       category,
       type,
       body,
@@ -55,7 +58,7 @@ export async function registerVehicleController(
     }
 
     if (error instanceof ResourceNotFoundError) {
-      reply.status(400).send({ message: error.message });
+      reply.status(404).send({ message: error.message });
     }
 
     throw error;
