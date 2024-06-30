@@ -9,7 +9,7 @@ export class InMemoryDriversRepository implements DriversRepository {
     const driver = {
       companyId: data.companyId,
       creatorId: data.creatorId,
-      id: randomUUID(),
+      id: data.id ?? randomUUID(),
       name: data.name,
       password: data.password,
       documentNumber: data.documentNumber,
