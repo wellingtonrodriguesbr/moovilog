@@ -3,28 +3,18 @@ import { UnauthorizedError } from "./errors/unauthorized-error";
 import { CompaniesRepository } from "@/repositories/companies-repository";
 import { UsersRepository } from "@/repositories/users-repository";
 import { ResourceNotFoundError } from "./errors/resource-not-found-error";
+import { ICompany, ICompanySizes, ICompanyTypes } from "@/interfaces/company";
 
 interface RegisterCompanyUseCaseRequest {
   userId: string;
   name: string;
   documentNumber: string;
-  type: "HEADQUARTERS" | "BRANCH" | "AGENCY";
-  size: "MICRO" | "SMALL" | "MEDIUM" | "BIG";
-}
-
-interface Company {
-  id: string;
-  name: string;
-  documentNumber: string;
-  type: "HEADQUARTERS" | "BRANCH" | "AGENCY";
-  size: "MICRO" | "SMALL" | "MEDIUM" | "BIG";
-  createdAt: Date;
-  updatedAt: Date;
-  ownerId: string;
+  type: ICompanyTypes;
+  size: ICompanySizes;
 }
 
 interface RegisterCompanyUseCaseResponse {
-  company: Company;
+  company: ICompany;
 }
 
 export class RegisterCompanyUseCase {

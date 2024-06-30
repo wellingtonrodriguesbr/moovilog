@@ -2,6 +2,7 @@ import { ResourceNotFoundError } from "./errors/resource-not-found-error";
 import { CompaniesRepository } from "@/repositories/companies-repository";
 import { CitiesRepository } from "@/repositories/cities-repository";
 import { CompanyAddressesRepository } from "@/repositories/company-addresses-repository";
+import { IAddress } from "@/interfaces/address";
 
 interface RegisterCompanyAddressUseCaseRequest {
   cityName: string;
@@ -13,19 +14,8 @@ interface RegisterCompanyAddressUseCaseRequest {
   userId: string;
 }
 
-interface Address {
-  id: string;
-  zipCode: string;
-  street: string;
-  neighborhood: string;
-  number: number;
-  complement: string | null;
-  createdAt: Date;
-  cityId: string;
-}
-
 interface RegisterCompanyAddressUseCaseResponse {
-  address: Address;
+  address: IAddress;
 }
 
 export class RegisterCompanyAddressUseCase {

@@ -3,11 +3,12 @@ import { CompanyMemberAlreadyExistsError } from "./errors/company-member-already
 import { ResourceNotFoundError } from "./errors/resource-not-found-error";
 import { CompaniesRepository } from "@/repositories/companies-repository";
 import { UsersRepository } from "@/repositories/users-repository";
+import { IUserRoles } from "@/interfaces/user";
 
 interface RegisterCompanyMemberUseCaseRequest {
   userId: string;
   creatorId: string;
-  role: "ADMIN" | "FINANCIAL" | "OPERATIONAL" | "MEMBER";
+  role: IUserRoles;
 }
 
 interface RegisterCompanyMemberUseCaseResponse {

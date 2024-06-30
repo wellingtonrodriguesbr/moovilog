@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { CompanyMember } from "@prisma/client";
 import { ResourceNotFoundError } from "./errors/resource-not-found-error";
+import { CompaniesRepository } from "@/repositories/companies-repository";
+import { CompanyMembersRepository } from "@/repositories/company-members-repository";
 
 interface FetchCompanyMembersUseCaseRequest {
   userId: string;
@@ -8,6 +10,13 @@ interface FetchCompanyMembersUseCaseRequest {
 
 interface FetchCompanyMembersUseCaseResponse {
   companyMembers: CompanyMember[];
+}
+
+export class FetchCompanyMembersUseCase {
+  constructor(
+    private companiesRepository: CompaniesRepository,
+    private companyMembers: CompanyMembersRepository
+  ) {}
 }
 
 export async function fetchCompanyMembersUseCase({

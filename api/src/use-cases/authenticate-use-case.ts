@@ -1,24 +1,15 @@
 import { compare } from "bcryptjs";
 import { InvalidCredentialsError } from "./errors/invalid-credentials-error";
 import { UsersRepository } from "@/repositories/users-repository";
+import { IUser } from "@/interfaces/user";
 
 interface AuthenticateUseCaseRequest {
   email: string;
   password: string;
 }
 
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  password: string;
-  role: "ADMIN" | "FINANCIAL" | "OPERATIONAL" | "MEMBER";
-  createdAt: Date;
-  updatedAt: Date;
-}
-
 interface AuthenticateUseCaseResponse {
-  user: User;
+  user: IUser;
 }
 
 export class AuthenticateUseCase {

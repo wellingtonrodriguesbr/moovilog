@@ -1,26 +1,16 @@
 import { UsersRepository } from "@/repositories/users-repository";
 import { UserAlreadyExistsError } from "./errors/user-already-exists-error";
+import { IUser, IUserRoles } from "@/interfaces/user";
 import { hash } from "bcryptjs";
 
 interface RegisterUserUseCaseRequest {
   name: string;
   email: string;
   password: string;
-  role: "ADMIN" | "FINANCIAL" | "OPERATIONAL" | "MEMBER";
+  role: IUserRoles;
 }
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  password: string;
-  role: "ADMIN" | "FINANCIAL" | "OPERATIONAL" | "MEMBER";
-  createdAt: Date;
-  updatedAt: Date;
-}
-
 interface RegisterUserUseCaseResponse {
-  user: User;
+  user: IUser;
 }
 
 export class RegisterUserUseCase {

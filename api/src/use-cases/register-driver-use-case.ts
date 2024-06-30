@@ -5,6 +5,7 @@ import { ResourceNotFoundError } from "./errors/resource-not-found-error";
 import { UsersRepository } from "@/repositories/users-repository";
 import { DriversRepository } from "@/repositories/drivers-repository";
 import { CompanyMembersRepository } from "@/repositories/company-members-repository";
+import { IDriver } from "@/interfaces/driver";
 
 interface RegisterDriverUseCaseRequest {
   name: string;
@@ -15,21 +16,8 @@ interface RegisterDriverUseCaseRequest {
   creatorId: string;
 }
 
-interface Driver {
-  id: string;
-  name: string;
-  password: string;
-  documentNumber: string;
-  phone: string;
-  backupPhone: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-  companyId: string;
-  creatorId: string;
-}
-
 interface RegisterDriverUseCaseResponse {
-  driver: Driver;
+  driver: IDriver;
 }
 
 export class RegisterDriverUseCase {

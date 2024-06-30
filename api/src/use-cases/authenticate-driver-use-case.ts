@@ -1,27 +1,15 @@
 import { compare } from "bcryptjs";
 import { InvalidCredentialsError } from "./errors/invalid-credentials-error";
 import { DriversRepository } from "@/repositories/drivers-repository";
+import { IDriver } from "@/interfaces/driver";
 
 interface AuthenticateDriverUseCaseRequest {
   documentNumber: string;
   password: string;
 }
 
-interface Driver {
-  id: string;
-  name: string;
-  password: string;
-  documentNumber: string;
-  phone: string;
-  backupPhone: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-  companyId: string;
-  creatorId: string;
-}
-
 interface AuthenticateDriverUseCaseResponse {
-  driver: Driver;
+  driver: IDriver;
 }
 
 export class AuthenticateDriverUseCase {

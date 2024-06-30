@@ -4,48 +4,26 @@ import { ResourceNotFoundError } from "./errors/resource-not-found-error";
 import { UsersRepository } from "@/repositories/users-repository";
 import { DriversRepository } from "@/repositories/drivers-repository";
 import { VehiclesRepository } from "@/repositories/vehicles-repository";
+import {
+  IVehicle,
+  IVehicleBody,
+  IVehicleCategory,
+  IVehicleType,
+} from "@/interfaces/vehicle";
 
 interface RegisterVehicleUseCaseRequest {
   plate: string;
   year: number;
-  category:
-    | "UTILITY"
-    | "VAN"
-    | "LIGHT_TRUCKS"
-    | "STRAIGHT_TRUCKS"
-    | "TRUCKS"
-    | "QUAD_AXLE_TRUCKS"
-    | "SEMI_TRAILER"
-    | "TANDEM_AXLE_TRUCK";
-  type: "OWN" | "OUTSOURCED" | "RENTED";
-  body: "CLOSED" | "OPEN" | "SIDER" | "REFRIGERATED" | "BUCKET";
+  category: IVehicleCategory;
+  type: IVehicleType;
+  body: IVehicleBody;
   fullLoadCapacity: string;
   driverId: string;
   creatorId: string;
 }
 
-interface Vehicle {
-  id: string;
-  plate: string;
-  year: number;
-  category:
-    | "UTILITY"
-    | "VAN"
-    | "LIGHT_TRUCKS"
-    | "STRAIGHT_TRUCKS"
-    | "TRUCKS"
-    | "QUAD_AXLE_TRUCKS"
-    | "SEMI_TRAILER"
-    | "TANDEM_AXLE_TRUCK";
-  type: "OWN" | "OUTSOURCED" | "RENTED";
-  body: "CLOSED" | "OPEN" | "SIDER" | "REFRIGERATED" | "BUCKET";
-  fullLoadCapacity: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
 interface RegisterVehicleUseCaseResponse {
-  vehicle: Vehicle;
+  vehicle: IVehicle;
 }
 
 export class RegisterVehicleUseCase {
