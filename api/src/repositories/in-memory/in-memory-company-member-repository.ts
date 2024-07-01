@@ -40,4 +40,10 @@ export class InMemoryCompanyMembersRepository
 
     return member.companyId;
   }
+
+  async findManyMembersByCompany(companyId: string) {
+    const members = this.items.filter((item) => item.companyId === companyId);
+
+    return members;
+  }
 }

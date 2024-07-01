@@ -9,4 +9,5 @@ export interface CompanyMembersRepository {
     companyId: string
   ): Promise<CompanyMember | null>;
   findCompanyIdByMemberId(memberId: string): Promise<string | null>;
+  findManyMembersByCompany(companyId: string): Promise<CompanyMember[]>;
 }

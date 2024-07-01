@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { $Enums, Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { CompanyMembersRepository } from "../company-members-repository";
 
@@ -45,5 +45,25 @@ export class PrismaCompanyMembersRepository
     }
 
     return member.companyId;
+  }
+
+  async findManyMembersByCompany(companyId: string) {
+    const companyMembers = await prisma.companyMember.findMany({
+      where: {
+        companyId,
+      },
+      include: {
+        member: {
+          select: {
+            name: true,
+            email: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+        },
+      },
+    });
+
+    return companyMembers;
   }
 }
