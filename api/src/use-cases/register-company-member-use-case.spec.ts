@@ -7,17 +7,17 @@ import { CompanyMemberAlreadyExistsError } from "./errors/company-member-already
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
-let companyMemberRepository: InMemoryCompanyMembersRepository;
+let companyMembersRepository: InMemoryCompanyMembersRepository;
 let sut: RegisterCompanyMemberUseCase;
 
 describe("Register company member use case", () => {
   beforeEach(async () => {
     usersRepository = new InMemoryUsersRepository();
     companiesRepository = new InMemoryCompaniesRepository();
-    companyMemberRepository = new InMemoryCompanyMembersRepository();
+    companyMembersRepository = new InMemoryCompanyMembersRepository();
     sut = new RegisterCompanyMemberUseCase(
       companiesRepository,
-      companyMemberRepository,
+      companyMembersRepository,
       usersRepository
     );
 
