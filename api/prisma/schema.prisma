@@ -132,7 +132,7 @@ model BankDetails {
   financialInstitution String                   @map("financial_institution")
   accountType          AccountTypeOfBankDetails @map("account_type")
   agency               Int
-  accountNumber        BigInt                   @map("account_number")
+  accountNumber        String                   @map("account_number") @db.VarChar(20)
   pixKey               String?                  @map("pix_key")
   createdAt            DateTime                 @default(now()) @map("created_at")
   updatedAt            DateTime                 @updatedAt @map("updated_at")

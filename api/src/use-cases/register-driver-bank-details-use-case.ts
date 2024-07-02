@@ -1,13 +1,15 @@
-import { prisma } from "../lib/prisma";
 import { ResourceNotFoundError } from "./errors/resource-not-found-error";
-import { AccountTypeOfBankDetails } from "@prisma/client";
 import { UnauthorizedError } from "./errors/unauthorized-error";
+import { UsersRepository } from "@/repositories/users-repository";
+import { DriversRepository } from "@/repositories/drivers-repository";
+import { BankDetailsRepository } from "@/repositories/bank-details-repository";
+import { IAccountTypeOfBankDetails } from "@/interfaces/bank-details";
 
 interface RegisterDriverBankDetailsUseCaseRequest {
   financialInstitution: string;
-  accountType: AccountTypeOfBankDetails;
+  accountType: IAccountTypeOfBankDetails;
   agency: number;
-  accountNumber: number;
+  accountNumber: string;
   pixKey?: string | null;
   driverId: string;
   userId: string;
@@ -17,48 +19,46 @@ interface RegisterDriverBankDetailsUseCaseResponse {
   bankDetailsId: string;
 }
 
-export async function registerDriverBankDetailsUseCase({
-  financialInstitution,
-  accountType,
-  accountNumber,
-  agency,
-  pixKey,
-  driverId,
-  userId,
-}: RegisterDriverBankDetailsUseCaseRequest): Promise<RegisterDriverBankDetailsUseCaseResponse> {
-  const [user, driver] = await Promise.all([
-    await prisma.user.findUnique({
-      where: {
-        id: userId,
-      },
-    }),
-    await prisma.driver.findUnique({
-      where: {
-        id: driverId,
-      },
-    }),
-  ]);
+export class RegisterDriverBankDetailsUseCase {
+  constructor(
+    private usersRepository: UsersRepository,
+    private driversRepository: DriversRepository,
+    private bankDetailsRepository: BankDetailsRepository
+  ) {}
 
-  if (!driver) {
-    throw new ResourceNotFoundError("Driver not found");
-  }
+  async execute({
+    financialInstitution,
+    accountType,
+    accountNumber,
+    agency,
+    pixKey,
+    driverId,
+    userId,
+  }: RegisterDriverBankDetailsUseCaseRequest): Promise<RegisterDriverBankDetailsUseCaseResponse> {
+    const [user, driver] = await Promise.all([
+      await this.usersRepository.findById(userId),
+      await this.driversRepository.findById(driverId),
+    ]);
 
-  if (user?.role !== ("ADMIN" || "FINANCIAL")) {
-    throw new UnauthorizedError(
-      "You do not have permission to perform this action, please ask your administrator for access"
-    );
-  }
+    if (!driver) {
+      throw new ResourceNotFoundError("Driver not found");
+    }
 
-  const bankDetails = await prisma.bankDetails.create({
-    data: {
+    if (user?.role !== "ADMIN" && user?.role !== "FINANCIAL") {
+      throw new UnauthorizedError(
+        "You do not have permission to perform this action, please ask your administrator for access"
+      );
+    }
+
+    const bankDetails = await this.bankDetailsRepository.create({
       financialInstitution,
-      accountNumber,
       accountType,
+      accountNumber,
       agency,
-      driverId: driver.id,
       pixKey,
-    },
-  });
+      driverId: driver.id,
+    });
 
-  return { bankDetailsId: bankDetails.id };
+    return { bankDetailsId: bankDetails.id };
+  }
 }
