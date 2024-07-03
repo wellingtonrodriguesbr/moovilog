@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { fetchFreightFromDriverUseCase } from "@/use-cases/fetch-freight-from-driver";
 import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
+import { makeFetchFreightsFromDriverUseCase } from "@/use-cases/factories/make-fetch-freights-from-driver-use-case";
 
 export async function fetchFreightFromDriverController(
   req: FastifyRequest,
@@ -9,7 +9,8 @@ export async function fetchFreightFromDriverController(
   const driverId = req.user.sub;
 
   try {
-    const { freights } = await fetchFreightFromDriverUseCase({
+    const fetchFreightFromDriverUseCase = makeFetchFreightsFromDriverUseCase();
+    const { freights } = await fetchFreightFromDriverUseCase.execute({
       driverId,
     });
 
@@ -18,6 +19,7 @@ export async function fetchFreightFromDriverController(
     if (error instanceof ResourceNotFoundError) {
       reply.status(404).send({ message: error.message });
     }
+
     throw error;
   }
 }
