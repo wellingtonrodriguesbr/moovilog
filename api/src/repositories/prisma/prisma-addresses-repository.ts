@@ -11,12 +11,7 @@ export class PrismaCompanyAddressesRepository
   ) {
     const address = await prisma.address.create({
       data: {
-        street: data.street,
-        number: data.number,
-        neighborhood: data.neighborhood,
-        zipCode: data.zipCode,
-        complement: data.complement,
-        cityId: data.cityId,
+        ...data,
         companyAddress: {
           create: {
             companyId,

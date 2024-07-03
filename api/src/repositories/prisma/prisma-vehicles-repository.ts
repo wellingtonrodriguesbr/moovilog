@@ -5,15 +5,7 @@ import { VehiclesRepository } from "../vehicles-repository";
 export class PrismaVehiclesRepository implements VehiclesRepository {
   async create(data: Prisma.VehicleUncheckedCreateInput) {
     const vehicle = await prisma.vehicle.create({
-      data: {
-        plate: data.plate,
-        year: data.year,
-        category: data.category,
-        type: data.type,
-        body: data.body,
-        fullLoadCapacity: data.fullLoadCapacity,
-        driverId: data.driverId,
-      },
+      data,
     });
 
     return vehicle;

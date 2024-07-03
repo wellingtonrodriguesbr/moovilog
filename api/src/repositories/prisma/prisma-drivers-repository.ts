@@ -6,13 +6,7 @@ export class PrismaDriversRepository implements DriversRepository {
   async create(data: Prisma.DriverUncheckedCreateInput) {
     const driver = await prisma.driver.create({
       data: {
-        name: data.name,
-        password: data.password,
-        documentNumber: data.documentNumber,
-        phone: data.phone,
-        backupPhone: data.backupPhone,
-        companyId: data.companyId,
-        creatorId: data.creatorId,
+        ...data,
         companyDrivers: {
           create: {
             companyId: data.companyId,

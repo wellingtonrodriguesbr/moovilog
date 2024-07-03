@@ -6,11 +6,7 @@ export class PrismaCompaniesRepository implements CompaniesRepository {
   async create(data: Prisma.CompanyUncheckedCreateInput) {
     const company = await prisma.company.create({
       data: {
-        ownerId: data.ownerId,
-        name: data.name,
-        documentNumber: data.documentNumber,
-        type: data.type,
-        size: data.size,
+        ...data,
         companyMembers: {
           create: {
             memberId: data.ownerId,

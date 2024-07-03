@@ -7,11 +7,7 @@ export class PrismaCompanyMembersRepository
 {
   async create(data: Prisma.CompanyMemberUncheckedCreateInput) {
     const companyMember = await prisma.companyMember.create({
-      data: {
-        companyId: data.companyId,
-        memberId: data.memberId,
-        role: data.role,
-      },
+      data,
     });
 
     return companyMember;
