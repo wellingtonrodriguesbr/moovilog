@@ -24,7 +24,7 @@ export class FetchCompanyMembersUseCase {
     }
 
     const companyMembers =
-      await this.companyMembersRepository.findManyMembersByCompany(companyId);
+      await this.companyMembersRepository.findManyByCompanyId(companyId);
 
     return { companyMembers };
   }
