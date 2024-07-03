@@ -47,7 +47,7 @@ export class PrismaCompanyMembersRepository
     return member.companyId;
   }
 
-  async findManyMembersByCompany(companyId: string) {
+  async findManyByCompanyId(companyId: string) {
     const companyMembers = await prisma.companyMember.findMany({
       where: {
         companyId,
