@@ -3,14 +3,12 @@ import { RegisterVehicleUseCase } from "./register-vehicle-use-case";
 import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
 import { InMemoryDriversRepository } from "@/repositories/in-memory/in-memory-drivers-repository";
 import { InMemoryVehiclesRepository } from "@/repositories/in-memory/in-memory-vehicles-repository";
-import { InMemoryCompaniesRepository } from "@/repositories/in-memory/in-memory-companies-repository";
 import { VehicleAlreadyExistsError } from "./errors/vehicle-already-exists-error";
 import { UnauthorizedError } from "./errors/unauthorized-error";
 
 let usersRepository: InMemoryUsersRepository;
 let driversRepository: InMemoryDriversRepository;
 let vehiclesRepository: InMemoryVehiclesRepository;
-let companiesRepository: InMemoryCompaniesRepository;
 let sut: RegisterVehicleUseCase;
 
 describe("Register vehicle use case", () => {
@@ -18,7 +16,6 @@ describe("Register vehicle use case", () => {
     usersRepository = new InMemoryUsersRepository();
     driversRepository = new InMemoryDriversRepository();
     vehiclesRepository = new InMemoryVehiclesRepository();
-    companiesRepository = new InMemoryCompaniesRepository();
 
     sut = new RegisterVehicleUseCase(
       usersRepository,
@@ -32,15 +29,6 @@ describe("Register vehicle use case", () => {
       email: "johndoe@email.com",
       password: "12345678",
       role: "ADMIN",
-    });
-
-    companiesRepository.create({
-      id: "company-id",
-      name: "Company name",
-      documentNumber: "11111111111111",
-      size: "MEDIUM",
-      type: "BRANCH",
-      ownerId: "john-doe-id",
     });
 
     driversRepository.create({

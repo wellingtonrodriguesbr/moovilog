@@ -3,14 +3,12 @@ import { RegisterDriverUseCase } from "./register-driver-use-case";
 import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
 import { InMemoryDriversRepository } from "@/repositories/in-memory/in-memory-drivers-repository";
 import { InMemoryCompanyMembersRepository } from "@/repositories/in-memory/in-memory-company-member-repository";
-import { InMemoryCompaniesRepository } from "@/repositories/in-memory/in-memory-companies-repository";
 import { DriverAlreadyExistsError } from "./errors/driver-already-exists-error";
 import { UnauthorizedError } from "./errors/unauthorized-error";
 import { compare } from "bcryptjs";
 
 let usersRepository: InMemoryUsersRepository;
 let companyMembersRepository: InMemoryCompanyMembersRepository;
-let companiesRepository: InMemoryCompaniesRepository;
 let driversRepository: InMemoryDriversRepository;
 let sut: RegisterDriverUseCase;
 
@@ -26,23 +24,12 @@ describe("Register driver use case", () => {
       driversRepository
     );
 
-    companiesRepository = new InMemoryCompaniesRepository();
-
     await usersRepository.create({
       id: "john-doe-id-01",
       name: "John Doe",
       email: "johndoe@example.com",
       password: "12345678",
       role: "ADMIN",
-    });
-
-    await companiesRepository.create({
-      id: "company-id-01",
-      name: "Company Name",
-      documentNumber: "12312312312312",
-      size: "BIG",
-      type: "AGENCY",
-      ownerId: "john-doe-id-01",
     });
 
     await companyMembersRepository.create({

@@ -12,7 +12,7 @@ let companyAddressRepository: InMemoryCompanyAddressesRepository;
 let sut: RegisterCompanyAddressUseCase;
 
 describe("Register company address use case", () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     usersRepository = new InMemoryUsersRepository();
     companiesRepository = new InMemoryCompaniesRepository();
     citiesRepository = new InMemoryCitiesRepository();
@@ -22,22 +22,23 @@ describe("Register company address use case", () => {
       citiesRepository,
       companiesRepository
     );
-  });
 
-  it("should be able to register company address", async () => {
-    const user = await usersRepository.create({
+    await usersRepository.create({
+      id: "fake-user-id",
       name: "John Doe",
       email: "johndoe@example.com",
       password: "12345678",
       role: "ADMIN",
     });
+  });
 
+  it("should be able to register company address", async () => {
     await companiesRepository.create({
       name: "Company name",
       documentNumber: "12312312389899",
       size: "MEDIUM",
       type: "HEADQUARTERS",
-      ownerId: user.id,
+      ownerId: "fake-user-id",
     });
 
     const city = await citiesRepository.create({
@@ -46,7 +47,7 @@ describe("Register company address use case", () => {
     });
 
     const { address } = await sut.execute({
-      userId: user.id,
+      userId: "fake-user-id",
       cityName: city.name,
       street: "fake street name",
       neighborhood: "fake neighborhood",
