@@ -38,4 +38,12 @@ export class InMemoryCompaniesRepository implements CompaniesRepository {
 
     return company;
   }
+
+  // async findByCompanyMemberId(memberId: string){
+  //   const company = this.items.find((item) => item. === ownerId);
+
+  //   if (!company) return null;
+
+  //   return company;
+  // }
 }

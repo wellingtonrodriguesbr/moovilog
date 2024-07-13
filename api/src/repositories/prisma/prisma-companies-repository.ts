@@ -46,4 +46,22 @@ export class PrismaCompaniesRepository implements CompaniesRepository {
 
     return company;
   }
+
+  async findByCompanyMemberId(memberId: string) {
+    const company = await prisma.company.findFirst({
+      where: {
+        companyMembers: {
+          some: {
+            id: memberId,
+          },
+        },
+      },
+    });
+
+    if (!company) {
+      return null;
+    }
+
+    return company;
+  }
 }
