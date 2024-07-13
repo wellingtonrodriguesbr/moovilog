@@ -1,9 +1,9 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { registerFreightUseCase } from "@/use-cases/register-freight-use-case";
 import { UnauthorizedError } from "@/use-cases/errors/unauthorized-error";
+import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
+import { makeRegisterfreightUseCase } from "@/use-cases/factories/make-register-freight-use-case";
 
 import z from "zod";
-import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
 
 export async function registerFreightController(
   req: FastifyRequest,
@@ -38,7 +38,8 @@ export async function registerFreightController(
   const creatorId = req.user.sub;
 
   try {
-    const { freight } = await registerFreightUseCase({
+    const registerFreightUseCase = makeRegisterfreightUseCase();
+    const { freight } = await registerFreightUseCase.execute({
       type,
       date,
       observation,
@@ -57,6 +58,7 @@ export async function registerFreightController(
     if (error instanceof UnauthorizedError) {
       reply.status(401).send({ message: error.message });
     }
+
     if (error instanceof ResourceNotFoundError) {
       reply.status(400).send({ message: error.message });
     }

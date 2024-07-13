@@ -1,10 +1,16 @@
-import { prisma } from "../lib/prisma";
+import { IFreight, IFreightTypes } from "@/interfaces/freight";
 import { ResourceNotFoundError } from "./errors/resource-not-found-error";
 import { UnauthorizedError } from "./errors/unauthorized-error";
-import { Freight, FreightType } from "@prisma/client";
+import { UsersRepository } from "@/repositories/users-repository";
+import { CompaniesRepository } from "@/repositories/companies-repository";
+import { FreightsRepository } from "@/repositories/freights-repository";
+import { FreightInformationRepository } from "@/repositories/freight-information-repository";
+import { DriversRepository } from "@/repositories/drivers-repository";
+import { FreightsByCompanyRepository } from "@/repositories/freights-by-company-repository";
+import { CitiesByFreightRepository } from "@/repositories/cities-by-freight-repository";
 
 interface RegisterFreightUseCaseRequest {
-  type: FreightType;
+  type: IFreightTypes;
   date: Date;
   observation?: string | null;
   pickupsQuantity: number;
@@ -18,51 +24,58 @@ interface RegisterFreightUseCaseRequest {
 }
 
 interface RegisterFreightUseCaseResponse {
-  freight: Freight;
+  freight: IFreight;
 }
 
-export async function registerFreightUseCase({
-  type,
-  date,
-  observation,
-  pickupsQuantity,
-  deliveriesQuantity,
-  totalWeightOfPickups,
-  totalWeightOfDeliveries,
-  freightAmountInCents,
-  citiesIds,
-  driverId,
-  creatorId,
-}: RegisterFreightUseCaseRequest): Promise<RegisterFreightUseCaseResponse> {
-  const [user, company] = await Promise.all([
-    await prisma.user.findUnique({
-      where: {
-        id: creatorId,
-      },
-    }),
-    await prisma.company.findFirst({
-      where: {
-        companyMembers: {
-          some: {
-            memberId: creatorId,
-          },
-        },
-      },
-    }),
-  ]);
+export class RegisterFreightUseCase {
+  constructor(
+    private usersRepository: UsersRepository,
+    private driversRepository: DriversRepository,
+    private companiesRepository: CompaniesRepository,
+    private freightsRepository: FreightsRepository,
+    private freightInformationRepository: FreightInformationRepository,
+    private freightsByCompanyRepository: FreightsByCompanyRepository,
+    private citiesByFreightRepository: CitiesByFreightRepository
+  ) {}
 
-  if (user?.role !== ("ADMIN" || "OPERATIONAL")) {
-    throw new UnauthorizedError(
-      "You do not have permission to perform this action, please ask your administrator for access"
+  async execute({
+    type,
+    date,
+    observation,
+    pickupsQuantity,
+    deliveriesQuantity,
+    totalWeightOfPickups,
+    totalWeightOfDeliveries,
+    freightAmountInCents,
+    citiesIds,
+    driverId,
+    creatorId,
+  }: RegisterFreightUseCaseRequest): Promise<RegisterFreightUseCaseResponse> {
+    const user = await this.usersRepository.findById(creatorId);
+    const driver = await this.driversRepository.findById(driverId);
+    const company = await this.companiesRepository.findByCompanyMemberId(
+      creatorId
     );
-  }
 
-  if (!company) {
-    throw new ResourceNotFoundError("Company not found");
-  }
+    if (!user) {
+      throw new ResourceNotFoundError("User not found");
+    }
 
-  const freight = await prisma.freight.create({
-    data: {
+    if (user.role !== "ADMIN" && user.role !== "OPERATIONAL") {
+      throw new UnauthorizedError(
+        "You do not have permission to perform this action, please ask your administrator for access"
+      );
+    }
+
+    if (!driver) {
+      throw new ResourceNotFoundError("Driver not found");
+    }
+
+    if (!company) {
+      throw new ResourceNotFoundError("Company not found");
+    }
+
+    const freight = await this.freightsRepository.create({
       date,
       type,
       pickupsQuantity,
@@ -71,27 +84,26 @@ export async function registerFreightUseCase({
       totalWeightOfDeliveries,
       freightAmountInCents,
       observation,
-      driverId,
-      creatorId,
-      freightInformation: {
-        create: {},
-      },
-      freightsByCompany: {
-        create: {
-          companyId: company.id,
-        },
-      },
-      citiesByFreight: {
-        createMany: {
-          data: citiesIds.map((id) => {
-            return {
-              cityId: id,
-            };
-          }),
-        },
-      },
-    },
-  });
+      driverId: driver.id,
+      creatorId: user.id,
+    });
 
-  return { freight };
+    await this.freightsByCompanyRepository.create({
+      freightId: freight.id,
+      companyId: company.id,
+    });
+
+    await this.freightInformationRepository.create({
+      freightId: freight.id,
+      initialKM: 0,
+      finalKM: 0,
+    });
+
+    await this.citiesByFreightRepository.createMany({
+      freightId: freight.id,
+      citiesIds,
+    });
+
+    return { freight };
+  }
 }
