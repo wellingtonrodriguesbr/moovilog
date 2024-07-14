@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
-import { UnauthorizedError } from "@/use-cases/errors/unauthorized-error";
 import { makeRegisterDriverBankDetailsUseCase } from "@/use-cases/factories/make-register-driver-bank-details-use-case";
+import { NotAllowedError } from "@/use-cases/errors/not-allowed-error";
 
 import z from "zod";
 
@@ -51,8 +51,8 @@ export async function registerDriverBankDetailsController(
     if (error instanceof ResourceNotFoundError) {
       reply.status(404).send({ message: error.message });
     }
-    if (error instanceof UnauthorizedError) {
-      reply.status(401).send({ message: error.message });
+    if (error instanceof NotAllowedError) {
+      reply.status(403).send({ message: error.message });
     }
 
     throw error;

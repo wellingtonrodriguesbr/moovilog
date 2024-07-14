@@ -1,9 +1,9 @@
 import { ResourceNotFoundError } from "./errors/resource-not-found-error";
-import { UnauthorizedError } from "./errors/unauthorized-error";
 import { UsersRepository } from "@/repositories/users-repository";
 import { DriversRepository } from "@/repositories/drivers-repository";
 import { BankDetailsRepository } from "@/repositories/bank-details-repository";
 import { IAccountTypeOfBankDetails } from "@/interfaces/bank-details";
+import { NotAllowedError } from "./errors/not-allowed-error";
 
 interface RegisterDriverBankDetailsUseCaseRequest {
   financialInstitution: string;
@@ -44,8 +44,12 @@ export class RegisterDriverBankDetailsUseCase {
       throw new ResourceNotFoundError("Driver not found");
     }
 
-    if (user?.role !== "ADMIN" && user?.role !== "FINANCIAL") {
-      throw new UnauthorizedError(
+    if (!user) {
+      throw new ResourceNotFoundError("User not found");
+    }
+
+    if (user.role !== "ADMIN" && user.role !== "FINANCIAL") {
+      throw new NotAllowedError(
         "You do not have permission to perform this action, please ask your administrator for access"
       );
     }

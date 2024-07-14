@@ -1,11 +1,11 @@
 import { hash } from "bcryptjs";
 import { DriverAlreadyExistsError } from "./errors/driver-already-exists-error";
-import { UnauthorizedError } from "./errors/unauthorized-error";
 import { ResourceNotFoundError } from "./errors/resource-not-found-error";
 import { UsersRepository } from "@/repositories/users-repository";
 import { DriversRepository } from "@/repositories/drivers-repository";
 import { CompanyMembersRepository } from "@/repositories/company-members-repository";
 import { IDriver } from "@/interfaces/driver";
+import { NotAllowedError } from "./errors/not-allowed-error";
 
 interface RegisterDriverUseCaseRequest {
   name: string;
@@ -15,7 +15,6 @@ interface RegisterDriverUseCaseRequest {
   backupPhone?: string | null;
   creatorId: string;
 }
-
 interface RegisterDriverUseCaseResponse {
   driver: IDriver;
 }
@@ -41,8 +40,12 @@ export class RegisterDriverUseCase {
       await this.companyMembersRepository.findCompanyIdByMemberId(creatorId),
     ]);
 
-    if (user?.role !== "ADMIN" && user?.role !== "OPERATIONAL") {
-      throw new UnauthorizedError(
+    if (!user) {
+      throw new ResourceNotFoundError("User not found");
+    }
+
+    if (user.role !== "ADMIN" && user.role !== "OPERATIONAL") {
+      throw new NotAllowedError(
         "You do not have permission to perform this action, please ask your administrator for access"
       );
     }

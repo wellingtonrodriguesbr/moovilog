@@ -1,9 +1,9 @@
 import { CompanyAlreadyExistsError } from "./errors/company-already-exists-error";
-import { UnauthorizedError } from "./errors/unauthorized-error";
 import { CompaniesRepository } from "@/repositories/companies-repository";
 import { UsersRepository } from "@/repositories/users-repository";
 import { ResourceNotFoundError } from "./errors/resource-not-found-error";
 import { ICompany, ICompanySizes, ICompanyTypes } from "@/interfaces/company";
+import { NotAllowedError } from "./errors/not-allowed-error";
 
 interface RegisterCompanyUseCaseRequest {
   userId: string;
@@ -37,7 +37,7 @@ export class RegisterCompanyUseCase {
     }
 
     if (user.role !== "ADMIN") {
-      throw new UnauthorizedError();
+      throw new NotAllowedError();
     }
 
     const companyAlreadyRegisteredWithThisDocument =

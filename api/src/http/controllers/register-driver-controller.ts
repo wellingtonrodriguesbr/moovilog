@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { DriverAlreadyExistsError } from "@/use-cases/errors/driver-already-exists-error";
-import { UnauthorizedError } from "@/use-cases/errors/unauthorized-error";
+import { NotAllowedError } from "@/use-cases/errors/not-allowed-error";
 import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
 import { makeRegisterDriverUseCase } from "@/use-cases/factories/make-register-driver-use-case";
 
@@ -39,11 +39,11 @@ export async function registerDriverController(
     if (error instanceof DriverAlreadyExistsError) {
       reply.status(409).send({ message: error.message });
     }
-    if (error instanceof UnauthorizedError) {
-      reply.status(401).send({ message: error.message });
+    if (error instanceof NotAllowedError) {
+      reply.status(403).send({ message: error.message });
     }
     if (error instanceof ResourceNotFoundError) {
-      reply.status(400).send({ message: error.message });
+      reply.status(404).send({ message: error.message });
     }
 
     throw error;

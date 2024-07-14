@@ -1,5 +1,5 @@
 import { VehicleAlreadyExistsError } from "./errors/vehicle-already-exists-error";
-import { UnauthorizedError } from "./errors/unauthorized-error";
+import { NotAllowedError } from "./errors/not-allowed-error";
 import { ResourceNotFoundError } from "./errors/resource-not-found-error";
 import { UsersRepository } from "@/repositories/users-repository";
 import { DriversRepository } from "@/repositories/drivers-repository";
@@ -49,8 +49,12 @@ export class RegisterVehicleUseCase {
       await this.vehiclesRepository.findByPlate(plate),
     ]);
 
-    if (user?.role !== "ADMIN" && user?.role !== "OPERATIONAL") {
-      throw new UnauthorizedError(
+    if (!user) {
+      throw new ResourceNotFoundError("User not found");
+    }
+
+    if (user.role !== "ADMIN" && user.role !== "OPERATIONAL") {
+      throw new NotAllowedError(
         "You do not have permission to perform this action, please ask your administrator for access"
       );
     }

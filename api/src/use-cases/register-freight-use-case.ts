@@ -1,6 +1,5 @@
 import { IFreight, IFreightTypes } from "@/interfaces/freight";
 import { ResourceNotFoundError } from "./errors/resource-not-found-error";
-import { UnauthorizedError } from "./errors/unauthorized-error";
 import { UsersRepository } from "@/repositories/users-repository";
 import { CompaniesRepository } from "@/repositories/companies-repository";
 import { FreightsRepository } from "@/repositories/freights-repository";
@@ -8,6 +7,7 @@ import { FreightInformationRepository } from "@/repositories/freight-information
 import { DriversRepository } from "@/repositories/drivers-repository";
 import { FreightsByCompanyRepository } from "@/repositories/freights-by-company-repository";
 import { CitiesByFreightRepository } from "@/repositories/cities-by-freight-repository";
+import { NotAllowedError } from "./errors/not-allowed-error";
 
 interface RegisterFreightUseCaseRequest {
   type: IFreightTypes;
@@ -62,7 +62,7 @@ export class RegisterFreightUseCase {
     }
 
     if (user.role !== "ADMIN" && user.role !== "OPERATIONAL") {
-      throw new UnauthorizedError(
+      throw new NotAllowedError(
         "You do not have permission to perform this action, please ask your administrator for access"
       );
     }

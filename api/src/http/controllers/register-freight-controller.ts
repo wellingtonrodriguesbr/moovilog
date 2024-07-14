@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { UnauthorizedError } from "@/use-cases/errors/unauthorized-error";
+import { NotAllowedError } from "@/use-cases/errors/not-allowed-error";
 import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
 import { makeRegisterfreightUseCase } from "@/use-cases/factories/make-register-freight-use-case";
 
@@ -55,12 +55,11 @@ export async function registerFreightController(
 
     reply.status(201).send({ freight });
   } catch (error) {
-    if (error instanceof UnauthorizedError) {
-      reply.status(401).send({ message: error.message });
+    if (error instanceof NotAllowedError) {
+      reply.status(403).send({ message: error.message });
     }
-
     if (error instanceof ResourceNotFoundError) {
-      reply.status(400).send({ message: error.message });
+      reply.status(404).send({ message: error.message });
     }
 
     throw error;

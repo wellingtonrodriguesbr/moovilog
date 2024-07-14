@@ -1,6 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { CompanyAlreadyExistsError } from "@/use-cases/errors/company-already-exists-error";
-import { UnauthorizedError } from "@/use-cases/errors/unauthorized-error";
+import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
 import { makeRegisterCompanyAddressUseCase } from "@/use-cases/factories/make-register-company-address-use-case";
 
 import z from "zod";
@@ -37,12 +36,8 @@ export async function registerCompanyAddressController(
 
     reply.status(201).send({ address });
   } catch (error) {
-    if (error instanceof CompanyAlreadyExistsError) {
+    if (error instanceof ResourceNotFoundError) {
       reply.status(404).send({ message: error.message });
-    }
-
-    if (error instanceof UnauthorizedError) {
-      reply.status(401).send({ message: error.message });
     }
 
     throw error;
