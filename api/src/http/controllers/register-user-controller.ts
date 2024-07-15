@@ -12,12 +12,9 @@ export async function registerUserController(
     name: z.string(),
     email: z.string().email(),
     password: z.string().min(8),
-    role: z.enum(["ADMIN", "FINANCIAL", "OPERATIONAL", "MEMBER"]),
   });
 
-  const { name, email, password, role } = registerUserBodySchema.parse(
-    req.body
-  );
+  const { name, email, password } = registerUserBodySchema.parse(req.body);
 
   try {
     const registerUserUseCase = makeRegisterUserUseCase();
@@ -25,7 +22,6 @@ export async function registerUserController(
       name,
       email,
       password,
-      role,
     });
 
     reply.status(201).send({ userId: user.id });

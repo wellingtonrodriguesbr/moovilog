@@ -16,15 +16,16 @@ export class FetchCompanyMembersUseCase {
   async execute({
     userId,
   }: FetchCompanyMembersUseCaseRequest): Promise<FetchCompanyMembersUseCaseResponse> {
-    const companyId =
-      await this.companyMembersRepository.findCompanyIdByMemberId(userId);
+    const companyMember = await this.companyMembersRepository.findById(userId);
 
-    if (!companyId) {
-      throw new ResourceNotFoundError("Company id not found");
+    if (!companyMember) {
+      throw new ResourceNotFoundError("Company member not found");
     }
 
     const companyMembers =
-      await this.companyMembersRepository.findManyByCompanyId(companyId);
+      await this.companyMembersRepository.findManyByCompanyId(
+        companyMember.companyId
+      );
 
     return { companyMembers };
   }

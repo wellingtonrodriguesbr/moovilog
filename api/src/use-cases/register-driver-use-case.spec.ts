@@ -2,12 +2,15 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { RegisterDriverUseCase } from "./register-driver-use-case";
 import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
 import { InMemoryDriversRepository } from "@/repositories/in-memory/in-memory-drivers-repository";
+import { InMemoryCompaniesRepository } from "@/repositories/in-memory/in-memory-companies-repository";
 import { InMemoryCompanyMembersRepository } from "@/repositories/in-memory/in-memory-company-member-repository";
 import { DriverAlreadyExistsError } from "./errors/driver-already-exists-error";
-import { UnauthorizedError } from "./errors/unauthorized-error";
+import { NotAllowedError } from "./errors/not-allowed-error";
 import { compare } from "bcryptjs";
 
 let usersRepository: InMemoryUsersRepository;
+let companiesRepository: InMemoryCompaniesRepository;
+
 let companyMembersRepository: InMemoryCompanyMembersRepository;
 let driversRepository: InMemoryDriversRepository;
 let sut: RegisterDriverUseCase;
@@ -15,11 +18,11 @@ let sut: RegisterDriverUseCase;
 describe("Register driver use case", () => {
   beforeEach(async () => {
     usersRepository = new InMemoryUsersRepository();
+    companiesRepository = new InMemoryCompaniesRepository();
     companyMembersRepository = new InMemoryCompanyMembersRepository();
     driversRepository = new InMemoryDriversRepository();
 
     sut = new RegisterDriverUseCase(
-      usersRepository,
       companyMembersRepository,
       driversRepository
     );
@@ -29,7 +32,15 @@ describe("Register driver use case", () => {
       name: "John Doe",
       email: "johndoe@example.com",
       password: "12345678",
-      role: "ADMIN",
+    });
+
+    await companiesRepository.create({
+      id: "company-id-01",
+      name: "Company name",
+      documentNumber: "12312312389899",
+      size: "MEDIUM",
+      type: "HEADQUARTERS",
+      ownerId: "john-doe-id-01",
     });
 
     await companyMembersRepository.create({
@@ -72,10 +83,9 @@ describe("Register driver use case", () => {
   });
 
   it("should not be able to register the driver with the a creatorId role that is different between operational or admin", async () => {
-    const user = await usersRepository.create({
-      name: "John Doe",
-      email: "johndoe@example.com",
-      password: "12345678",
+    const member = await companyMembersRepository.create({
+      memberId: "john-doe-id-02",
+      companyId: "company-id-01",
       role: "FINANCIAL",
     });
 
@@ -85,9 +95,9 @@ describe("Register driver use case", () => {
         password: "123123123",
         documentNumber: "12312312312",
         phone: "11999999999",
-        creatorId: user.id,
+        creatorId: member.memberId,
       })
-    ).rejects.toBeInstanceOf(UnauthorizedError);
+    ).rejects.toBeInstanceOf(NotAllowedError);
   });
 
   it("should be able possible to generate a hash of the driver password in the registry", async () => {

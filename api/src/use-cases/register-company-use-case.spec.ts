@@ -3,23 +3,29 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { InMemoryCompaniesRepository } from "@/repositories/in-memory/in-memory-companies-repository";
 import { RegisterCompanyUseCase } from "./register-company-use-case";
 import { CompanyAlreadyExistsError } from "./errors/company-already-exists-error";
+import { InMemoryCompanyMembersRepository } from "@/repositories/in-memory/in-memory-company-member-repository";
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
+let companyMembersRepository: InMemoryCompanyMembersRepository;
 let sut: RegisterCompanyUseCase;
 
 describe("Register company use case", () => {
   beforeEach(async () => {
     usersRepository = new InMemoryUsersRepository();
     companiesRepository = new InMemoryCompaniesRepository();
-    sut = new RegisterCompanyUseCase(companiesRepository, usersRepository);
+    companyMembersRepository = new InMemoryCompanyMembersRepository();
+    sut = new RegisterCompanyUseCase(
+      companiesRepository,
+      companyMembersRepository,
+      usersRepository
+    );
 
     await usersRepository.create({
       id: "john-doe-01",
       name: "John Doe",
       email: "johndoe@example.com",
       password: "12345678",
-      role: "ADMIN",
     });
   });
 
@@ -29,7 +35,7 @@ describe("Register company use case", () => {
       documentNumber: "12312312389899",
       size: "MEDIUM",
       type: "HEADQUARTERS",
-      userId: "john-doe-01",
+      ownerId: "john-doe-01",
     });
 
     expect(company.id).toEqual(expect.any(String));
@@ -42,7 +48,7 @@ describe("Register company use case", () => {
       documentNumber: "12312312389899",
       size: "MEDIUM",
       type: "HEADQUARTERS",
-      userId: "john-doe-01",
+      ownerId: "john-doe-01",
     });
 
     await expect(() =>
@@ -51,7 +57,7 @@ describe("Register company use case", () => {
         documentNumber: "12312312389899",
         size: "MEDIUM",
         type: "HEADQUARTERS",
-        userId: "john-doe-01",
+        ownerId: "john-doe-01",
       })
     ).rejects.toBeInstanceOf(CompanyAlreadyExistsError);
   });

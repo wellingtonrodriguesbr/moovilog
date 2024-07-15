@@ -28,7 +28,6 @@ CREATE TABLE "users" (
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "role" "Role" NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -70,7 +69,7 @@ CREATE TABLE "company_service_cities" (
 -- CreateTable
 CREATE TABLE "company_members" (
     "id" TEXT NOT NULL,
-    "sector" TEXT NOT NULL,
+    "sector" TEXT,
     "role" "Role" NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
@@ -113,7 +112,7 @@ CREATE TABLE "bank_details" (
     "financial_institution" TEXT NOT NULL,
     "account_type" "AccountTypeOfBankDetails" NOT NULL,
     "agency" INTEGER NOT NULL,
-    "account_number" BIGINT NOT NULL,
+    "account_number" VARCHAR(20) NOT NULL,
     "pix_key" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
@@ -281,6 +280,9 @@ CREATE UNIQUE INDEX "companies_document_number_key" ON "companies"("document_num
 
 -- CreateIndex
 CREATE UNIQUE INDEX "companies_owner_id_key" ON "companies"("owner_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "company_members_company_id_member_id_key" ON "company_members"("company_id", "member_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "drivers_document_number_key" ON "drivers"("document_number");

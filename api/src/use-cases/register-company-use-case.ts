@@ -3,10 +3,10 @@ import { CompaniesRepository } from "@/repositories/companies-repository";
 import { UsersRepository } from "@/repositories/users-repository";
 import { ResourceNotFoundError } from "./errors/resource-not-found-error";
 import { ICompany, ICompanySizes, ICompanyTypes } from "@/interfaces/company";
-import { NotAllowedError } from "./errors/not-allowed-error";
+import { CompanyMembersRepository } from "@/repositories/company-members-repository";
 
 interface RegisterCompanyUseCaseRequest {
-  userId: string;
+  ownerId: string;
   name: string;
   documentNumber: string;
   type: ICompanyTypes;
@@ -20,24 +20,21 @@ interface RegisterCompanyUseCaseResponse {
 export class RegisterCompanyUseCase {
   constructor(
     private companiesRepository: CompaniesRepository,
+    private companyMembersRepository: CompanyMembersRepository,
     private usersRepository: UsersRepository
   ) {}
 
   async execute({
-    userId,
+    ownerId,
     name,
     documentNumber,
     type,
     size,
   }: RegisterCompanyUseCaseRequest): Promise<RegisterCompanyUseCaseResponse> {
-    const user = await this.usersRepository.findById(userId);
+    const user = await this.usersRepository.findById(ownerId);
 
     if (!user) {
       throw new ResourceNotFoundError("User not found");
-    }
-
-    if (user.role !== "ADMIN") {
-      throw new NotAllowedError();
     }
 
     const companyAlreadyRegisteredWithThisDocument =
@@ -53,6 +50,12 @@ export class RegisterCompanyUseCase {
       documentNumber,
       size,
       type,
+    });
+
+    await this.companyMembersRepository.create({
+      memberId: user.id,
+      companyId: company.id,
+      role: "ADMIN",
     });
 
     return { company };

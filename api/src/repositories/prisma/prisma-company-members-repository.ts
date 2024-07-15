@@ -12,7 +12,22 @@ export class PrismaCompanyMembersRepository
 
     return companyMember;
   }
-  async findMemberByCompanyId(memberId: string, companyId: string) {
+
+  async findById(memberId: string) {
+    const member = await prisma.companyMember.findUnique({
+      where: {
+        id: memberId,
+      },
+    });
+
+    if (!member) {
+      return null;
+    }
+
+    return member;
+  }
+
+  async findMemberInCompany(memberId: string, companyId: string) {
     const companyMember = await prisma.companyMember.findUnique({
       where: {
         companyId_memberId: {
@@ -27,20 +42,6 @@ export class PrismaCompanyMembersRepository
     }
 
     return companyMember;
-  }
-
-  async findCompanyIdByMemberId(memberId: string) {
-    const member = await prisma.companyMember.findUnique({
-      where: {
-        id: memberId,
-      },
-    });
-
-    if (!member) {
-      return null;
-    }
-
-    return member.companyId;
   }
 
   async findManyByCompanyId(companyId: string) {

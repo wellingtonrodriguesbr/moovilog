@@ -22,7 +22,7 @@ export async function registerDriverBankDetailsController(
     driverId: z.string(),
   });
 
-  const userId = req.user.sub;
+  const creatorId = req.user.sub;
 
   const {
     financialInstitution,
@@ -43,7 +43,7 @@ export async function registerDriverBankDetailsController(
       agency,
       pixKey,
       driverId,
-      userId,
+      creatorId,
     });
 
     reply.status(201).send({ bankDetailsId });

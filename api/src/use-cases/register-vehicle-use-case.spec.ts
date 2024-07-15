@@ -4,41 +4,62 @@ import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-user
 import { InMemoryDriversRepository } from "@/repositories/in-memory/in-memory-drivers-repository";
 import { InMemoryVehiclesRepository } from "@/repositories/in-memory/in-memory-vehicles-repository";
 import { VehicleAlreadyExistsError } from "./errors/vehicle-already-exists-error";
-import { UnauthorizedError } from "./errors/unauthorized-error";
+import { NotAllowedError } from "./errors/not-allowed-error";
+import { InMemoryCompanyMembersRepository } from "@/repositories/in-memory/in-memory-company-member-repository";
+import { InMemoryCompaniesRepository } from "@/repositories/in-memory/in-memory-companies-repository";
 
 let usersRepository: InMemoryUsersRepository;
+let companiesRepository: InMemoryCompaniesRepository;
+
+let companyMembersRepository: InMemoryCompanyMembersRepository;
 let driversRepository: InMemoryDriversRepository;
 let vehiclesRepository: InMemoryVehiclesRepository;
 let sut: RegisterVehicleUseCase;
 
 describe("Register vehicle use case", () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     usersRepository = new InMemoryUsersRepository();
+    companiesRepository = new InMemoryCompaniesRepository();
+    companyMembersRepository = new InMemoryCompanyMembersRepository();
     driversRepository = new InMemoryDriversRepository();
     vehiclesRepository = new InMemoryVehiclesRepository();
 
     sut = new RegisterVehicleUseCase(
-      usersRepository,
+      companyMembersRepository,
       driversRepository,
       vehiclesRepository
     );
 
-    usersRepository.create({
-      id: "john-doe-id",
+    await usersRepository.create({
+      id: "john-doe-id-01",
       name: "John Doe",
       email: "johndoe@email.com",
       password: "12345678",
+    });
+
+    await companiesRepository.create({
+      id: "company-id-01",
+      name: "Company name",
+      documentNumber: "12312312389899",
+      size: "MEDIUM",
+      type: "HEADQUARTERS",
+      ownerId: "john-doe-id-01",
+    });
+
+    await companyMembersRepository.create({
+      companyId: "company-id-01",
+      memberId: "john-doe-id-01",
       role: "ADMIN",
     });
 
-    driversRepository.create({
+    await driversRepository.create({
       id: "john-doe-driver-id",
       name: "John Doe Driver",
       documentNumber: "11111111111",
       password: "12345678",
       phone: "11111111111",
-      companyId: "company-id",
-      creatorId: "john-doe-id",
+      companyId: "company-id-01",
+      creatorId: "john-doe-id-01",
     });
   });
 
@@ -51,7 +72,7 @@ describe("Register vehicle use case", () => {
       type: "OUTSOURCED",
       fullLoadCapacity: "24.000",
       driverId: "john-doe-driver-id",
-      creatorId: "john-doe-id",
+      creatorId: "john-doe-id-01",
     });
 
     expect(vehicle.id).toEqual(expect.any(String));
@@ -66,7 +87,7 @@ describe("Register vehicle use case", () => {
       type: "OUTSOURCED",
       fullLoadCapacity: "24.000",
       driverId: "john-doe-driver-id",
-      creatorId: "john-doe-id",
+      creatorId: "john-doe-id-01",
     });
 
     await expect(() =>
@@ -78,16 +99,15 @@ describe("Register vehicle use case", () => {
         type: "OUTSOURCED",
         fullLoadCapacity: "24.000",
         driverId: "john-doe-driver-id",
-        creatorId: "john-doe-id",
+        creatorId: "john-doe-id-01",
       })
     ).rejects.toBeInstanceOf(VehicleAlreadyExistsError);
   });
 
   it("not should be able to register a vehicle with the a creatorId role that is different between operational or admin", async () => {
-    const user = await usersRepository.create({
-      name: "John Doe",
-      email: "johndoe@email.com",
-      password: "12345678",
+    const member = await companyMembersRepository.create({
+      memberId: "john-doe-id-02",
+      companyId: "company-id-01",
       role: "FINANCIAL",
     });
 
@@ -100,8 +120,8 @@ describe("Register vehicle use case", () => {
         type: "OUTSOURCED",
         fullLoadCapacity: "24.000",
         driverId: "john-doe-driver-id",
-        creatorId: user.id,
+        creatorId: member.memberId,
       })
-    ).rejects.toBeInstanceOf(UnauthorizedError);
+    ).rejects.toBeInstanceOf(NotAllowedError);
   });
 });

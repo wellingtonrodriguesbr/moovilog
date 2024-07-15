@@ -1,6 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { CompanyAlreadyExistsError } from "@/use-cases/errors/company-already-exists-error";
-import { NotAllowedError } from "@/use-cases/errors/not-allowed-error";
 import { makeRegisterCompanyUseCase } from "@/use-cases/factories/make-register-company-use-case";
 import { Prisma } from "@prisma/client";
 
@@ -20,12 +19,12 @@ export async function registerCompanyController(
   const { name, documentNumber, type, size } = registerCompanyBodySchema.parse(
     req.body
   );
-  const userId = req.user.sub;
+  const ownerId = req.user.sub;
 
   try {
     const registerCompanyUseCase = makeRegisterCompanyUseCase();
     const { company } = await registerCompanyUseCase.execute({
-      userId,
+      ownerId,
       name,
       documentNumber,
       type,
@@ -44,9 +43,6 @@ export async function registerCompanyController(
     }
     if (error instanceof CompanyAlreadyExistsError) {
       reply.status(409).send({ message: error.message });
-    }
-    if (error instanceof NotAllowedError) {
-      reply.status(403).send({ message: error.message });
     }
 
     throw error;

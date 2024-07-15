@@ -23,7 +23,15 @@ export class InMemoryCompanyMembersRepository
     return companyMember;
   }
 
-  async findMemberByCompanyId(memberId: string, companyId: string) {
+  async findById(memberId: string) {
+    const member = this.items.find((item) => item.memberId === memberId);
+
+    if (!member) return null;
+
+    return member;
+  }
+
+  async findMemberInCompany(memberId: string, companyId: string) {
     const member = this.items.find(
       (item) => item.memberId === memberId && item.companyId === companyId
     );
@@ -31,14 +39,6 @@ export class InMemoryCompanyMembersRepository
     if (!member) return null;
 
     return member;
-  }
-
-  async findCompanyIdByMemberId(memberId: string) {
-    const member = this.items.find((item) => item.memberId === memberId);
-
-    if (!member) return null;
-
-    return member.companyId;
   }
 
   async findManyByCompanyId(companyId: string) {

@@ -1,9 +1,9 @@
 import { ResourceNotFoundError } from "./errors/resource-not-found-error";
-import { UsersRepository } from "@/repositories/users-repository";
 import { DriversRepository } from "@/repositories/drivers-repository";
 import { BankDetailsRepository } from "@/repositories/bank-details-repository";
 import { IAccountTypeOfBankDetails } from "@/interfaces/bank-details";
 import { NotAllowedError } from "./errors/not-allowed-error";
+import { CompanyMembersRepository } from "@/repositories/company-members-repository";
 
 interface RegisterDriverBankDetailsUseCaseRequest {
   financialInstitution: string;
@@ -12,7 +12,7 @@ interface RegisterDriverBankDetailsUseCaseRequest {
   accountNumber: string;
   pixKey?: string | null;
   driverId: string;
-  userId: string;
+  creatorId: string;
 }
 
 interface RegisterDriverBankDetailsUseCaseResponse {
@@ -21,7 +21,7 @@ interface RegisterDriverBankDetailsUseCaseResponse {
 
 export class RegisterDriverBankDetailsUseCase {
   constructor(
-    private usersRepository: UsersRepository,
+    private companyMembersRepository: CompanyMembersRepository,
     private driversRepository: DriversRepository,
     private bankDetailsRepository: BankDetailsRepository
   ) {}
@@ -33,10 +33,10 @@ export class RegisterDriverBankDetailsUseCase {
     agency,
     pixKey,
     driverId,
-    userId,
+    creatorId,
   }: RegisterDriverBankDetailsUseCaseRequest): Promise<RegisterDriverBankDetailsUseCaseResponse> {
-    const [user, driver] = await Promise.all([
-      await this.usersRepository.findById(userId),
+    const [member, driver] = await Promise.all([
+      await this.companyMembersRepository.findById(creatorId),
       await this.driversRepository.findById(driverId),
     ]);
 
@@ -44,11 +44,11 @@ export class RegisterDriverBankDetailsUseCase {
       throw new ResourceNotFoundError("Driver not found");
     }
 
-    if (!user) {
-      throw new ResourceNotFoundError("User not found");
+    if (!member) {
+      throw new ResourceNotFoundError("Member not found");
     }
 
-    if (user.role !== "ADMIN" && user.role !== "FINANCIAL") {
+    if (member.role !== "ADMIN" && member.role !== "FINANCIAL") {
       throw new NotAllowedError(
         "You do not have permission to perform this action, please ask your administrator for access"
       );

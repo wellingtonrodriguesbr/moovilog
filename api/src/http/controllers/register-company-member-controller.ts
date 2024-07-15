@@ -2,6 +2,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { CompanyMemberAlreadyExistsError } from "@/use-cases/errors/company-member-already-exists-error";
 import { makeRegisterCompanyMemberUseCase } from "@/use-cases/factories/make-register-company-member-use-case";
 import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
+import { NotAllowedError } from "@/use-cases/errors/not-allowed-error";
 
 import z from "zod";
 
@@ -10,17 +11,17 @@ export async function registerCompanyMemberController(
   reply: FastifyReply
 ) {
   const registerCompanyMemberBodySchema = z.object({
-    userId: z.string(),
+    memberId: z.string(),
     role: z.enum(["ADMIN", "FINANCIAL", "OPERATIONAL", "MEMBER"]),
   });
 
-  const { userId, role } = registerCompanyMemberBodySchema.parse(req.body);
+  const { memberId, role } = registerCompanyMemberBodySchema.parse(req.body);
   const creatorId = req.user.sub;
 
   try {
     const registerCompanyMemberUseCase = makeRegisterCompanyMemberUseCase();
     const { companyMemberId } = await registerCompanyMemberUseCase.execute({
-      userId,
+      memberId,
       creatorId,
       role,
     });
@@ -30,7 +31,9 @@ export async function registerCompanyMemberController(
     if (error instanceof CompanyMemberAlreadyExistsError) {
       reply.status(409).send({ message: error.message });
     }
-
+    if (error instanceof NotAllowedError) {
+      reply.status(403).send({ message: error.message });
+    }
     if (error instanceof ResourceNotFoundError) {
       reply.status(404).send({ message: error.message });
     }

@@ -1,6 +1,5 @@
 import { IFreight, IFreightTypes } from "@/interfaces/freight";
 import { ResourceNotFoundError } from "./errors/resource-not-found-error";
-import { UsersRepository } from "@/repositories/users-repository";
 import { CompaniesRepository } from "@/repositories/companies-repository";
 import { FreightsRepository } from "@/repositories/freights-repository";
 import { FreightInformationRepository } from "@/repositories/freight-information-repository";
@@ -8,6 +7,7 @@ import { DriversRepository } from "@/repositories/drivers-repository";
 import { FreightsByCompanyRepository } from "@/repositories/freights-by-company-repository";
 import { CitiesByFreightRepository } from "@/repositories/cities-by-freight-repository";
 import { NotAllowedError } from "./errors/not-allowed-error";
+import { CompanyMembersRepository } from "@/repositories/company-members-repository";
 
 interface RegisterFreightUseCaseRequest {
   type: IFreightTypes;
@@ -29,9 +29,8 @@ interface RegisterFreightUseCaseResponse {
 
 export class RegisterFreightUseCase {
   constructor(
-    private usersRepository: UsersRepository,
+    private companyMembersRepository: CompanyMembersRepository,
     private driversRepository: DriversRepository,
-    private companiesRepository: CompaniesRepository,
     private freightsRepository: FreightsRepository,
     private freightInformationRepository: FreightInformationRepository,
     private freightsByCompanyRepository: FreightsByCompanyRepository,
@@ -51,17 +50,16 @@ export class RegisterFreightUseCase {
     driverId,
     creatorId,
   }: RegisterFreightUseCaseRequest): Promise<RegisterFreightUseCaseResponse> {
-    const user = await this.usersRepository.findById(creatorId);
-    const driver = await this.driversRepository.findById(driverId);
-    const company = await this.companiesRepository.findByCompanyMemberId(
-      creatorId
-    );
+    const [member, driver] = await Promise.all([
+      await this.companyMembersRepository.findById(creatorId),
+      await this.driversRepository.findById(driverId),
+    ]);
 
-    if (!user) {
-      throw new ResourceNotFoundError("User not found");
+    if (!member) {
+      throw new ResourceNotFoundError("Member not found");
     }
 
-    if (user.role !== "ADMIN" && user.role !== "OPERATIONAL") {
+    if (member.role !== "ADMIN" && member.role !== "OPERATIONAL") {
       throw new NotAllowedError(
         "You do not have permission to perform this action, please ask your administrator for access"
       );
@@ -69,10 +67,6 @@ export class RegisterFreightUseCase {
 
     if (!driver) {
       throw new ResourceNotFoundError("Driver not found");
-    }
-
-    if (!company) {
-      throw new ResourceNotFoundError("Company not found");
     }
 
     const freight = await this.freightsRepository.create({
@@ -85,24 +79,26 @@ export class RegisterFreightUseCase {
       freightAmountInCents,
       observation,
       driverId: driver.id,
-      creatorId: user.id,
+      creatorId: member.memberId,
     });
 
-    await this.freightsByCompanyRepository.create({
-      freightId: freight.id,
-      companyId: company.id,
-    });
+    await Promise.all([
+      await this.freightsByCompanyRepository.create({
+        freightId: freight.id,
+        companyId: member.companyId,
+      }),
 
-    await this.freightInformationRepository.create({
-      freightId: freight.id,
-      initialKM: 0,
-      finalKM: 0,
-    });
+      await this.freightInformationRepository.create({
+        freightId: freight.id,
+        initialKM: 0,
+        finalKM: 0,
+      }),
 
-    await this.citiesByFreightRepository.createMany({
-      freightId: freight.id,
-      citiesIds,
-    });
+      await this.citiesByFreightRepository.createMany({
+        freightId: freight.id,
+        citiesIds,
+      }),
+    ]);
 
     return { freight };
   }

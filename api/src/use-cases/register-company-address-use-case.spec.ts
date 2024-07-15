@@ -28,7 +28,6 @@ describe("Register company address use case", () => {
       name: "John Doe",
       email: "johndoe@example.com",
       password: "12345678",
-      role: "ADMIN",
     });
   });
 

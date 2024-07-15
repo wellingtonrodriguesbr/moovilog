@@ -1,7 +1,6 @@
 import { hash } from "bcryptjs";
 import { DriverAlreadyExistsError } from "./errors/driver-already-exists-error";
 import { ResourceNotFoundError } from "./errors/resource-not-found-error";
-import { UsersRepository } from "@/repositories/users-repository";
 import { DriversRepository } from "@/repositories/drivers-repository";
 import { CompanyMembersRepository } from "@/repositories/company-members-repository";
 import { IDriver } from "@/interfaces/driver";
@@ -21,7 +20,6 @@ interface RegisterDriverUseCaseResponse {
 
 export class RegisterDriverUseCase {
   constructor(
-    private usersRepository: UsersRepository,
     private companyMembersRepository: CompanyMembersRepository,
     private driversRepository: DriversRepository
   ) {}
@@ -34,17 +32,16 @@ export class RegisterDriverUseCase {
     backupPhone,
     creatorId,
   }: RegisterDriverUseCaseRequest): Promise<RegisterDriverUseCaseResponse> {
-    const [user, driverAlreadyExists, companyId] = await Promise.all([
-      await this.usersRepository.findById(creatorId),
+    const [member, driverAlreadyExists] = await Promise.all([
+      await this.companyMembersRepository.findById(creatorId),
       await this.driversRepository.findByDocumentNumber(documentNumber),
-      await this.companyMembersRepository.findCompanyIdByMemberId(creatorId),
     ]);
 
-    if (!user) {
-      throw new ResourceNotFoundError("User not found");
+    if (!member) {
+      throw new ResourceNotFoundError("Member not found");
     }
 
-    if (user.role !== "ADMIN" && user.role !== "OPERATIONAL") {
+    if (member.role !== "ADMIN" && member.role !== "OPERATIONAL") {
       throw new NotAllowedError(
         "You do not have permission to perform this action, please ask your administrator for access"
       );
@@ -52,10 +49,6 @@ export class RegisterDriverUseCase {
 
     if (driverAlreadyExists) {
       throw new DriverAlreadyExistsError();
-    }
-
-    if (!companyId) {
-      throw new ResourceNotFoundError("Company id not found");
     }
 
     const passwordHash = await hash(password, 6);
@@ -66,8 +59,8 @@ export class RegisterDriverUseCase {
       documentNumber,
       phone,
       backupPhone,
-      companyId,
-      creatorId: user.id,
+      companyId: member.companyId,
+      creatorId: member.memberId,
     });
 
     return {

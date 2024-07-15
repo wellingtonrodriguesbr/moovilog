@@ -18,7 +18,6 @@ describe("Register user use case", () => {
       name: "John Doe",
       email: "johndoe@example.com",
       password: "12345678",
-      role: "ADMIN",
     });
 
     expect(user.id).toEqual(expect.any(String));
@@ -29,7 +28,6 @@ describe("Register user use case", () => {
       name: "John Doe",
       email: "johndoe@example.com",
       password: "12345678",
-      role: "ADMIN",
     });
 
     await expect(() =>
@@ -37,7 +35,6 @@ describe("Register user use case", () => {
         name: "John Doe",
         email: "johndoe@example.com",
         password: "12345678",
-        role: "ADMIN",
       })
     ).rejects.toBeInstanceOf(UserAlreadyExistsError);
   });
@@ -47,7 +44,6 @@ describe("Register user use case", () => {
       name: "John Doe",
       email: "johndoe@example.com",
       password: "12345678",
-      role: "ADMIN",
     });
 
     const isPasswordCorrectlyHashed = await compare("12345678", user.password);

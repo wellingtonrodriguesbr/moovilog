@@ -1,14 +1,13 @@
 import { CompanyMembersRepository } from "@/repositories/company-members-repository";
 import { CompanyMemberAlreadyExistsError } from "./errors/company-member-already-exists-error";
 import { ResourceNotFoundError } from "./errors/resource-not-found-error";
-import { CompaniesRepository } from "@/repositories/companies-repository";
-import { UsersRepository } from "@/repositories/users-repository";
-import { IUserRoles } from "@/interfaces/user";
+import { ICompanyMemberRoles } from "@/interfaces/company-member";
+import { NotAllowedError } from "./errors/not-allowed-error";
 
 interface RegisterCompanyMemberUseCaseRequest {
-  userId: string;
+  memberId: string;
   creatorId: string;
-  role: IUserRoles;
+  role: ICompanyMemberRoles;
 }
 
 interface RegisterCompanyMemberUseCaseResponse {
@@ -16,34 +15,29 @@ interface RegisterCompanyMemberUseCaseResponse {
 }
 
 export class RegisterCompanyMemberUseCase {
-  constructor(
-    private companiesRepository: CompaniesRepository,
-    private companyMembersRepository: CompanyMembersRepository,
-    private usersRepository: UsersRepository
-  ) {}
+  constructor(private companyMembersRepository: CompanyMembersRepository) {}
 
   async execute({
-    userId,
+    memberId,
     creatorId,
     role,
   }: RegisterCompanyMemberUseCaseRequest): Promise<RegisterCompanyMemberUseCaseResponse> {
-    const [member, company] = await Promise.all([
-      this.usersRepository.findById(userId),
-      this.companiesRepository.findByOwnerId(creatorId),
-    ]);
+    const creator = await this.companyMembersRepository.findById(creatorId);
 
-    if (!member) {
+    if (!creator) {
       throw new ResourceNotFoundError("User not found");
     }
 
-    if (!company) {
-      throw new ResourceNotFoundError("Company not found");
+    if (creator.role !== "ADMIN") {
+      throw new NotAllowedError(
+        "You do not have permission to perform this action, please ask your administrator for access"
+      );
     }
 
     const memberAlreadyExists =
-      await this.companyMembersRepository.findMemberByCompanyId(
-        member.id,
-        company.id
+      await this.companyMembersRepository.findMemberInCompany(
+        memberId,
+        creator.companyId
       );
 
     if (memberAlreadyExists) {
@@ -51,8 +45,8 @@ export class RegisterCompanyMemberUseCase {
     }
 
     const companyMember = await this.companyMembersRepository.create({
-      companyId: company.id,
-      memberId: member.id,
+      companyId: creator.companyId,
+      memberId,
       role,
     });
 
