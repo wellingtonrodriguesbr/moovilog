@@ -21,7 +21,6 @@ describe("Fetch company members use case", () => {
       name: "John Doe",
       email: "johndoe@example.com",
       password: "12345678",
-      role: "ADMIN",
     });
 
     await companiesRepository.create({
