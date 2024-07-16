@@ -1,13 +1,15 @@
 import { IFreight, IFreightTypes } from "@/interfaces/freight";
 import { ResourceNotFoundError } from "./errors/resource-not-found-error";
-import { CompaniesRepository } from "@/repositories/companies-repository";
 import { FreightsRepository } from "@/repositories/freights-repository";
 import { FreightInformationRepository } from "@/repositories/freight-information-repository";
 import { DriversRepository } from "@/repositories/drivers-repository";
 import { FreightsByCompanyRepository } from "@/repositories/freights-by-company-repository";
 import { CitiesByFreightRepository } from "@/repositories/cities-by-freight-repository";
 import { NotAllowedError } from "./errors/not-allowed-error";
+import { BadRequestError } from "./errors/bad-request-error";
 import { CompanyMembersRepository } from "@/repositories/company-members-repository";
+
+import dayjs from "dayjs";
 
 interface RegisterFreightUseCaseRequest {
   type: IFreightTypes;
@@ -67,6 +69,10 @@ export class RegisterFreightUseCase {
 
     if (!driver) {
       throw new ResourceNotFoundError("Driver not found");
+    }
+
+    if (dayjs(date).isBefore(new Date())) {
+      throw new BadRequestError("Invalid freight date");
     }
 
     const freight = await this.freightsRepository.create({
