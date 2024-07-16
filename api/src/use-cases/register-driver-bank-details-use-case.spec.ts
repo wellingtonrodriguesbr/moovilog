@@ -76,7 +76,7 @@ describe("Register driver bank details use case", () => {
     expect(bankDetailsId).toEqual(expect.any(String));
   });
 
-  it("not should be able to register a bank details with the a userId role that is different between financial or admin", async () => {
+  it("not should be able to register a bank details with the a creator role that is different between financial or admin", async () => {
     const member = await companyMembersRepository.create({
       companyId: "company-id-01",
       memberId: "john-doe-id-02",

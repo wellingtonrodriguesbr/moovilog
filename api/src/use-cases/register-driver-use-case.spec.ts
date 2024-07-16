@@ -82,7 +82,7 @@ describe("Register driver use case", () => {
     ).rejects.toBeInstanceOf(DriverAlreadyExistsError);
   });
 
-  it("should not be able to register the driver with the a creatorId role that is different between operational or admin", async () => {
+  it("should not be able to register the driver with the a creator role that is different between operational or admin", async () => {
     const member = await companyMembersRepository.create({
       memberId: "john-doe-id-02",
       companyId: "company-id-01",

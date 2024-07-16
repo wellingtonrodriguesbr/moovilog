@@ -67,7 +67,7 @@ describe("Register company member use case", () => {
     ).rejects.toBeInstanceOf(CompanyMemberAlreadyExistsError);
   });
 
-  it("should not be able to register the company member with the a creatorId role that is different of admin", async () => {
+  it("should not be able to register the company member with the a creator role that is different of admin", async () => {
     const member = await companyMembersRepository.create({
       memberId: "john-doe-id-02",
       companyId: "company-id-01",
