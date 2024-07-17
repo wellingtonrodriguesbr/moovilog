@@ -151,20 +151,10 @@ CREATE TABLE "freights" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "creator_id" TEXT NOT NULL,
+    "company_id" TEXT NOT NULL,
     "driver_id" TEXT NOT NULL,
 
     CONSTRAINT "freights_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "freights_by_company" (
-    "id" TEXT NOT NULL,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-    "freight_id" TEXT NOT NULL,
-    "company_id" TEXT NOT NULL,
-
-    CONSTRAINT "freights_by_company_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -342,13 +332,10 @@ ALTER TABLE "vehicles" ADD CONSTRAINT "vehicles_driver_id_fkey" FOREIGN KEY ("dr
 ALTER TABLE "freights" ADD CONSTRAINT "freights_creator_id_fkey" FOREIGN KEY ("creator_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "freights" ADD CONSTRAINT "freights_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "freights" ADD CONSTRAINT "freights_driver_id_fkey" FOREIGN KEY ("driver_id") REFERENCES "drivers"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "freights_by_company" ADD CONSTRAINT "freights_by_company_freight_id_fkey" FOREIGN KEY ("freight_id") REFERENCES "freights"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "freights_by_company" ADD CONSTRAINT "freights_by_company_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "freight_information" ADD CONSTRAINT "freight_information_freight_id_fkey" FOREIGN KEY ("freight_id") REFERENCES "freights"("id") ON DELETE CASCADE ON UPDATE CASCADE;

@@ -3,7 +3,6 @@ import { ResourceNotFoundError } from "./errors/resource-not-found-error";
 import { FreightsRepository } from "@/repositories/freights-repository";
 import { FreightInformationRepository } from "@/repositories/freight-information-repository";
 import { DriversRepository } from "@/repositories/drivers-repository";
-import { FreightsByCompanyRepository } from "@/repositories/freights-by-company-repository";
 import { CitiesByFreightRepository } from "@/repositories/cities-by-freight-repository";
 import { NotAllowedError } from "./errors/not-allowed-error";
 import { BadRequestError } from "./errors/bad-request-error";
@@ -35,7 +34,6 @@ export class RegisterFreightUseCase {
     private driversRepository: DriversRepository,
     private freightsRepository: FreightsRepository,
     private freightInformationRepository: FreightInformationRepository,
-    private freightsByCompanyRepository: FreightsByCompanyRepository,
     private citiesByFreightRepository: CitiesByFreightRepository
   ) {}
 
@@ -86,14 +84,10 @@ export class RegisterFreightUseCase {
       observation,
       driverId: driver.id,
       creatorId: member.memberId,
+      companyId: member.companyId,
     });
 
     await Promise.all([
-      await this.freightsByCompanyRepository.create({
-        freightId: freight.id,
-        companyId: member.companyId,
-      }),
-
       await this.freightInformationRepository.create({
         freightId: freight.id,
         initialKM: 0,

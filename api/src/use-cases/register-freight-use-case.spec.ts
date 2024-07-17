@@ -6,7 +6,6 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { RegisterFreightUseCase } from "./register-freight-use-case";
 import { InMemoryFreightsRepository } from "@/repositories/in-memory/in-memory-freights-repository";
 import { InMemoryFreightInformationRepository } from "@/repositories/in-memory/in-memory-freight-information-repository";
-import { InMemoryFreightsByCompanyRepository } from "@/repositories/in-memory/in-memory-freights-by-company-repository";
 import { InMemoryCitiesByFreightRepository } from "@/repositories/in-memory/in-memory-cities-by-freight-repository";
 import { NotAllowedError } from "./errors/not-allowed-error";
 import { BadRequestError } from "./errors/bad-request-error";
@@ -18,7 +17,6 @@ let companyMembersRepository: InMemoryCompanyMembersRepository;
 let driversRepository: InMemoryDriversRepository;
 let freightsRepository: InMemoryFreightsRepository;
 let freightInformationRepository: InMemoryFreightInformationRepository;
-let freightsByCompanyRepository: InMemoryFreightsByCompanyRepository;
 let citiesByFreightRepository: InMemoryCitiesByFreightRepository;
 let sut: RegisterFreightUseCase;
 
@@ -31,7 +29,6 @@ describe("Register freight use case", () => {
     driversRepository = new InMemoryDriversRepository();
     freightsRepository = new InMemoryFreightsRepository();
     freightInformationRepository = new InMemoryFreightInformationRepository();
-    freightsByCompanyRepository = new InMemoryFreightsByCompanyRepository();
     citiesByFreightRepository = new InMemoryCitiesByFreightRepository();
 
     sut = new RegisterFreightUseCase(
@@ -39,7 +36,6 @@ describe("Register freight use case", () => {
       driversRepository,
       freightsRepository,
       freightInformationRepository,
-      freightsByCompanyRepository,
       citiesByFreightRepository
     );
 
@@ -91,7 +87,7 @@ describe("Register freight use case", () => {
     });
 
     expect(freight.id).toEqual(expect.any(String));
-    expect(citiesByFreightRepository.items.length).toEqual(2);
+    expect(citiesByFreightRepository.items).toHaveLength(2);
   });
 
   it("not should be able to register a freight with the a creator role that is different between operational or admin", async () => {

@@ -44,6 +44,7 @@ describe("Fetch company members use case", () => {
       userId: "john-doe-01",
     });
 
-    expect(companyMembers).toHaveLength(1);
+    expect(companyMembersRepository.items).toHaveLength(1);
+    expect(companyMembers[0].role).toEqual("ADMIN");
   });
 });

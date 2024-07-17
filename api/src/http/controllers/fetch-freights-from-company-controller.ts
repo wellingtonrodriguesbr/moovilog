@@ -1,15 +1,17 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { fetchFreightsUseCase } from "@/use-cases/fetch-freights-use-case";
 import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
+import { makeFetchFreightsFromCompanyUseCase } from "@/use-cases/factories/make-fetch-freights-from-company-use-case";
 
-export async function fetchFreightsController(
+export async function fetchFreightsFromCompanyController(
   req: FastifyRequest,
   reply: FastifyReply
 ) {
   const userId = req.user.sub;
 
   try {
-    const { freights } = await fetchFreightsUseCase({
+    const fetchFreightsFromCompanyUseCase =
+      makeFetchFreightsFromCompanyUseCase();
+    const { freights } = await fetchFreightsFromCompanyUseCase.execute({
       userId,
     });
 

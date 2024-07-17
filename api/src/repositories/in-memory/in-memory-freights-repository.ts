@@ -18,15 +18,23 @@ export class InMemoryFreightsRepository implements FreightsRepository {
       observation: data.observation || null,
       creatorId: data.creatorId,
       driverId: data.driverId,
+      companyId: data.companyId,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
 
+    this.items.push(freight);
     return freight;
   }
 
   async findManyByDriverId(driverId: string) {
     const freights = this.items.filter((item) => item.driverId === driverId);
+
+    return freights;
+  }
+
+  async findManyByCompanyId(companyId: string) {
+    const freights = this.items.filter((item) => item.companyId === companyId);
 
     return freights;
   }

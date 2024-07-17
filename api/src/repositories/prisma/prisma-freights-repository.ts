@@ -20,4 +20,14 @@ export class PrismaFreightsRepository implements FreightsRepository {
 
     return freights;
   }
+
+  async findManyByCompanyId(companyId: string) {
+    const freights = await prisma.freight.findMany({
+      where: {
+        companyId,
+      },
+    });
+
+    return freights;
+  }
 }

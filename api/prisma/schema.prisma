@@ -39,9 +39,9 @@ model Company {
   companyServiceCities CompanyServiceCity[]
   companyAddress       CompanyAddress[]
   drivers              Driver[]
-  freightsByCompany    FreightByCompany[]
   companyMembers       CompanyMember[]
   companyDrivers       CompanyDriver[]
+  freights             Freight[]
 
   @@map("companies")
 }
@@ -176,28 +176,16 @@ model Freight {
   creatorId String @map("creator_id")
   creator   User   @relation(fields: [creatorId], references: [id], onDelete: Cascade)
 
+  companyId String  @map("company_id")
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
   driverId String @map("driver_id")
   driver   Driver @relation(fields: [driverId], references: [id], onDelete: Cascade)
 
   freightInformation FreightInformation[]
   citiesByFreight    CityByFreight[]
-  freightsByCompany  FreightByCompany[]
 
   @@map("freights")
-}
-
-model FreightByCompany {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  freightId String  @map("freight_id")
-  freight   Freight @relation(fields: [freightId], references: [id], onDelete: Cascade)
-
-  companyId String  @map("company_id")
-  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
-
-  @@map("freights_by_company")
 }
 
 model FreightInformation {
