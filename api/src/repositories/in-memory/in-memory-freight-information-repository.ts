@@ -30,4 +30,16 @@ export class InMemoryFreightInformationRepository
 
     return freightInformation;
   }
+
+  async findByFreight(freightId: string) {
+    const freightInformation = this.items.find(
+      (item) => item.freightId === freightId
+    );
+
+    if (!freightInformation) {
+      return null;
+    }
+
+    return freightInformation;
+  }
 }
