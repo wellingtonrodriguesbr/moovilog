@@ -69,7 +69,7 @@ export class RegisterFreightUseCase {
       throw new ResourceNotFoundError("Driver not found");
     }
 
-    if (dayjs(date).isBefore(new Date())) {
+    if (dayjs(date).isBefore(new Date(), "day")) {
       throw new BadRequestError("Invalid freight date");
     }
 
@@ -90,8 +90,6 @@ export class RegisterFreightUseCase {
     await Promise.all([
       await this.freightInformationRepository.create({
         freightId: freight.id,
-        initialKM: 0,
-        finalKM: 0,
       }),
 
       await this.citiesByFreightRepository.createMany({

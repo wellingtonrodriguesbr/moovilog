@@ -11,6 +11,20 @@ export class PrismaFreightsRepository implements FreightsRepository {
     return freight;
   }
 
+  async findById(freightId: string) {
+    const freight = await prisma.freight.findUnique({
+      where: {
+        id: freightId,
+      },
+    });
+
+    if (!freight) {
+      return null;
+    }
+
+    return freight;
+  }
+
   async findManyByDriverId(driverId: string) {
     const freights = await prisma.freight.findMany({
       where: {

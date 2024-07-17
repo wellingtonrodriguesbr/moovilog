@@ -7,7 +7,7 @@ export class InMemoryFreightsRepository implements FreightsRepository {
 
   async create(data: Prisma.FreightUncheckedCreateInput) {
     const freight = {
-      id: randomUUID(),
+      id: data.id ?? randomUUID(),
       type: data.type,
       date: new Date(data.date),
       pickupsQuantity: data.pickupsQuantity,
@@ -24,6 +24,16 @@ export class InMemoryFreightsRepository implements FreightsRepository {
     };
 
     this.items.push(freight);
+    return freight;
+  }
+
+  async findById(freightId: string) {
+    const freight = this.items.find((item) => item.id === freightId);
+
+    if (!freight) {
+      return null;
+    }
+
     return freight;
   }
 

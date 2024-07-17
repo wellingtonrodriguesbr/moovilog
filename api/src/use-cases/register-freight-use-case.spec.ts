@@ -88,6 +88,7 @@ describe("Register freight use case", () => {
 
     expect(freight.id).toEqual(expect.any(String));
     expect(citiesByFreightRepository.items).toHaveLength(2);
+    expect(freightInformationRepository.items).toHaveLength(1);
   });
 
   it("not should be able to register a freight with the a creator role that is different between operational or admin", async () => {
