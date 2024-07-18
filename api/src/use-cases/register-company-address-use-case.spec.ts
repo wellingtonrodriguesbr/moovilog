@@ -4,11 +4,13 @@ import { InMemoryCompaniesRepository } from "@/repositories/in-memory/in-memory-
 import { InMemoryCompanyAddressesRepository } from "@/repositories/in-memory/in-memory-company-addresses-repository";
 import { RegisterCompanyAddressUseCase } from "./register-company-address-use-case";
 import { InMemoryCitiesRepository } from "@/repositories/in-memory/in-memory-cities-repository";
+import { InMemoryAddressesRepository } from "@/repositories/in-memory/in-memory-addresses-repository";
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
 let citiesRepository: InMemoryCitiesRepository;
 let companyAddressRepository: InMemoryCompanyAddressesRepository;
+let addressesRepository: InMemoryAddressesRepository;
 let sut: RegisterCompanyAddressUseCase;
 
 describe("Register company address use case", () => {
@@ -17,8 +19,11 @@ describe("Register company address use case", () => {
     companiesRepository = new InMemoryCompaniesRepository();
     citiesRepository = new InMemoryCitiesRepository();
     companyAddressRepository = new InMemoryCompanyAddressesRepository();
+    addressesRepository = new InMemoryAddressesRepository();
+
     sut = new RegisterCompanyAddressUseCase(
       companyAddressRepository,
+      addressesRepository,
       citiesRepository,
       companiesRepository
     );
@@ -56,5 +61,6 @@ describe("Register company address use case", () => {
 
     expect(address.id).toEqual(expect.any(String));
     expect(address.cityId).toEqual(city.id);
+    expect(companyAddressRepository.items).toHaveLength(1);
   });
 });

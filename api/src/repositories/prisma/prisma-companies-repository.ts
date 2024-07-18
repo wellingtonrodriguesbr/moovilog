@@ -19,6 +19,20 @@ export class PrismaCompaniesRepository implements CompaniesRepository {
     return company;
   }
 
+  async findById(id: string) {
+    const company = await prisma.company.findFirst({
+      where: {
+        id,
+      },
+    });
+
+    if (!company) {
+      return null;
+    }
+
+    return company;
+  }
+
   async findByDocumentNumber(documentNumber: string) {
     const company = await prisma.company.findUnique({
       where: {
@@ -37,24 +51,6 @@ export class PrismaCompaniesRepository implements CompaniesRepository {
     const company = await prisma.company.findUnique({
       where: {
         ownerId,
-      },
-    });
-
-    if (!company) {
-      return null;
-    }
-
-    return company;
-  }
-
-  async findByCompanyMemberId(memberId: string) {
-    const company = await prisma.company.findFirst({
-      where: {
-        companyMembers: {
-          some: {
-            id: memberId,
-          },
-        },
       },
     });
 

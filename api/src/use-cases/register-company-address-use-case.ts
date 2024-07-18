@@ -3,6 +3,7 @@ import { CompaniesRepository } from "@/repositories/companies-repository";
 import { CitiesRepository } from "@/repositories/cities-repository";
 import { CompanyAddressesRepository } from "@/repositories/company-addresses-repository";
 import { IAddress } from "@/interfaces/address";
+import { AddressesRepository } from "@/repositories/addresses-repository";
 
 interface RegisterCompanyAddressUseCaseRequest {
   cityName: string;
@@ -21,6 +22,7 @@ interface RegisterCompanyAddressUseCaseResponse {
 export class RegisterCompanyAddressUseCase {
   constructor(
     private companyAddressesRepository: CompanyAddressesRepository,
+    private addressesRepository: AddressesRepository,
     private citiesRepository: CitiesRepository,
     private companiesRepository: CompaniesRepository
   ) {}
@@ -47,10 +49,19 @@ export class RegisterCompanyAddressUseCase {
       throw new ResourceNotFoundError("Company not found");
     }
 
-    const address = await this.companyAddressesRepository.create(
-      { street, number, neighborhood, zipCode, complement, cityId: city.id },
-      company.id
-    );
+    const address = await this.addressesRepository.create({
+      street,
+      number,
+      neighborhood,
+      zipCode,
+      complement,
+      cityId: city.id,
+    });
+
+    await this.companyAddressesRepository.create({
+      addressId: address.id,
+      companyId: company.id,
+    });
 
     return { address };
   }

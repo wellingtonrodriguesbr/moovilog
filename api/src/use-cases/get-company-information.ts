@@ -7,6 +7,7 @@ import { StatesRepository } from "@/repositories/states-repository";
 import { ICompany } from "@/interfaces/company";
 import { ICity } from "@/interfaces/city";
 import { IState } from "@/interfaces/state";
+import { AddressesRepository } from "@/repositories/addresses-repository";
 
 interface GetCompanyInformationUseCaseRequest {
   userId: string;
@@ -36,6 +37,7 @@ export class GetCompanyInformationUseCase {
     private companyMembersRepository: CompanyMembersRepository,
     private companiesRepository: CompaniesRepository,
     private companyAddressesRepository: CompanyAddressesRepository,
+    private addressesRepository: AddressesRepository,
     private citiesRepository: CitiesRepository,
     private statesRepository: StatesRepository
   ) {}
@@ -49,9 +51,7 @@ export class GetCompanyInformationUseCase {
       throw new ResourceNotFoundError("Member not found");
     }
 
-    const company = await this.companiesRepository.findByCompanyMemberId(
-      member.id
-    );
+    const company = await this.companiesRepository.findById(member.companyId);
 
     if (!company) {
       throw new ResourceNotFoundError("Company not found");
@@ -64,9 +64,15 @@ export class GetCompanyInformationUseCase {
       throw new ResourceNotFoundError("Company address not found");
     }
 
-    const cityAddress = await this.citiesRepository.findById(
-      companyAddress.cityId
+    const address = await this.addressesRepository.findById(
+      companyAddress.addressId
     );
+
+    if (!address) {
+      throw new ResourceNotFoundError("Address not found");
+    }
+
+    const cityAddress = await this.citiesRepository.findById(address.cityId);
 
     if (!cityAddress) {
       throw new ResourceNotFoundError("City not found");
@@ -81,7 +87,7 @@ export class GetCompanyInformationUseCase {
     const companyInformation = {
       company,
       companyAddress: {
-        address: companyAddress,
+        address,
         city: cityAddress,
         state,
       },

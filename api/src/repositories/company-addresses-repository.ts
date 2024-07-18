@@ -1,9 +1,8 @@
-import { Address, Prisma } from "@prisma/client";
+import { CompanyAddress, Prisma } from "@prisma/client";
 
 export interface CompanyAddressesRepository {
   create(
-    data: Prisma.AddressUncheckedCreateInput,
-    companyId: string
-  ): Promise<Address>;
-  findByCompanyId(companyId: string): Promise<Address | null>;
+    data: Prisma.CompanyAddressUncheckedCreateInput
+  ): Promise<CompanyAddress>;
+  findByCompanyId(companyId: string): Promise<CompanyAddress | null>;
 }

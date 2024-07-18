@@ -1,32 +1,33 @@
-import { Address, Prisma } from "@prisma/client";
+import { CompanyAddress, Prisma } from "@prisma/client";
 import { CompanyAddressesRepository } from "../company-addresses-repository";
 import { randomUUID } from "crypto";
 
 export class InMemoryCompanyAddressesRepository
   implements CompanyAddressesRepository
 {
-  public items: Address[] = [];
+  public items: CompanyAddress[] = [];
 
-  async createCompanyAddress(
-    data: Prisma.AddressUncheckedCreateInput,
-    companyId: string
-  ) {
+  async create(data: Prisma.CompanyAddressUncheckedCreateInput) {
     const companyAddress = {
-      id: randomUUID(),
-      zipCode: data.zipCode,
-      street: data.street,
-      neighborhood: data.neighborhood,
-      number: data.number,
-      complement: data.complement || null,
-      cityId: data.cityId,
-      companyAddress: {
-        companyId,
-      },
+      id: data.id ?? randomUUID(),
+      companyId: data.companyId,
+      addressId: data.addressId,
       createdAt: new Date(),
-      updatedAt: new Date(),
     };
 
     this.items.push(companyAddress);
+    return companyAddress;
+  }
+
+  async findByCompanyId(companyId: string) {
+    const companyAddress = this.items.find(
+      (item) => item.companyId === companyId
+    );
+
+    if (!companyAddress) {
+      return null;
+    }
+
     return companyAddress;
   }
 }

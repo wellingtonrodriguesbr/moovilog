@@ -21,6 +21,14 @@ export class InMemoryCompaniesRepository implements CompaniesRepository {
     return company;
   }
 
+  async findById(id: string) {
+    const company = this.items.find((item) => item.id === id);
+
+    if (!company) return null;
+
+    return company;
+  }
+
   async findByDocumentNumber(documentNumber: string) {
     const company = this.items.find(
       (item) => item.documentNumber === documentNumber
