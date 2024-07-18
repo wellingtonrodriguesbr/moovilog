@@ -4,7 +4,7 @@ export interface CompanyMembersRepository {
   create(
     data: Prisma.CompanyMemberUncheckedCreateInput
   ): Promise<CompanyMember>;
-  findById(memberId: string): Promise<CompanyMember | null>;
+  findById(id: string): Promise<CompanyMember | null>;
   findMemberInCompany(
     memberId: string,
     companyId: string

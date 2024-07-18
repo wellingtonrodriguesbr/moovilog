@@ -1,21 +1,15 @@
-import { prisma } from "@/lib/prisma";
-import { Company } from "@prisma/client";
 import { ResourceNotFoundError } from "./errors/resource-not-found-error";
+import { CompanyMembersRepository } from "@/repositories/company-members-repository";
+import { CompanyAddressesRepository } from "@/repositories/company-addresses-repository";
+import { CompaniesRepository } from "@/repositories/companies-repository";
+import { CitiesRepository } from "@/repositories/cities-repository";
+import { StatesRepository } from "@/repositories/states-repository";
+import { ICompany } from "@/interfaces/company";
+import { ICity } from "@/interfaces/city";
+import { IState } from "@/interfaces/state";
 
 interface GetCompanyInformationUseCaseRequest {
   userId: string;
-}
-
-export interface State {
-  id: string;
-  name: string;
-  acronym: string;
-}
-
-export interface City {
-  id: string;
-  name: string;
-  state: State;
 }
 
 export interface Address {
@@ -25,72 +19,74 @@ export interface Address {
   neighborhood: string;
   number: number;
   complement: string | null;
-  city: City;
-}
-
-export interface CompanyAddress {
-  address: Address;
+  cityId: string;
 }
 
 interface GetCompanyInformationUseCaseResponse {
-  company: Company;
-  companyAddress: CompanyAddress;
+  company: ICompany;
+  companyAddress: {
+    address: Address;
+    city: ICity;
+    state: IState;
+  };
 }
 
-export async function getCompanyInformationUseCase({
-  userId,
-}: GetCompanyInformationUseCaseRequest): Promise<GetCompanyInformationUseCaseResponse> {
-  const user = await prisma.user.findUnique({
-    where: {
-      id: userId,
-    },
-  });
+export class GetCompanyInformationUseCase {
+  constructor(
+    private companyMembersRepository: CompanyMembersRepository,
+    private companiesRepository: CompaniesRepository,
+    private companyAddressesRepository: CompanyAddressesRepository,
+    private citiesRepository: CitiesRepository,
+    private statesRepository: StatesRepository
+  ) {}
 
-  if (!user) {
-    throw new ResourceNotFoundError("User not found");
-  }
+  async execute({
+    userId,
+  }: GetCompanyInformationUseCaseRequest): Promise<GetCompanyInformationUseCaseResponse> {
+    const member = await this.companyMembersRepository.findById(userId);
 
-  const company = await prisma.companyMember.findFirst({
-    where: {
-      memberId: user.id,
-    },
-    include: {
-      company: true,
-    },
-  });
+    if (!member) {
+      throw new ResourceNotFoundError("Member not found");
+    }
 
-  if (!company) {
-    throw new ResourceNotFoundError("Company not found");
-  }
+    const company = await this.companiesRepository.findByCompanyMemberId(
+      member.id
+    );
 
-  const companyAddress = await prisma.companyAddress.findFirst({
-    where: {
-      companyId: company.companyId,
-    },
-    select: {
-      address: {
-        select: {
-          id: true,
-          zipCode: true,
-          street: true,
-          neighborhood: true,
-          number: true,
-          complement: true,
-          city: {
-            select: {
-              id: true,
-              name: true,
-              state: true,
-            },
-          },
-        },
+    if (!company) {
+      throw new ResourceNotFoundError("Company not found");
+    }
+
+    const companyAddress =
+      await this.companyAddressesRepository.findByCompanyId(company.id);
+
+    if (!companyAddress) {
+      throw new ResourceNotFoundError("Company address not found");
+    }
+
+    const cityAddress = await this.citiesRepository.findById(
+      companyAddress.cityId
+    );
+
+    if (!cityAddress) {
+      throw new ResourceNotFoundError("City not found");
+    }
+
+    const state = await this.statesRepository.findByCityId(cityAddress.id);
+
+    if (!state) {
+      throw new ResourceNotFoundError("State not found");
+    }
+
+    const companyInformation = {
+      company,
+      companyAddress: {
+        address: companyAddress,
+        city: cityAddress,
+        state,
       },
-    },
-  });
+    };
 
-  if (!companyAddress) {
-    throw new ResourceNotFoundError("company address not found");
+    return { ...companyInformation };
   }
-
-  return { ...company, companyAddress };
 }

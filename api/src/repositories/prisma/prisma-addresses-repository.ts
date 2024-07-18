@@ -1,14 +1,11 @@
-import { Prisma } from "@prisma/client";
+import { Address, Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { CompanyAddressesRepository } from "../company-addresses-repository";
 
 export class PrismaCompanyAddressesRepository
   implements CompanyAddressesRepository
 {
-  async createCompanyAddress(
-    data: Prisma.AddressUncheckedCreateInput,
-    companyId: string
-  ) {
+  async create(data: Prisma.AddressUncheckedCreateInput, companyId: string) {
     const address = await prisma.address.create({
       data: {
         ...data,
@@ -19,6 +16,24 @@ export class PrismaCompanyAddressesRepository
         },
       },
     });
+
+    return address;
+  }
+
+  async findByCompanyId(companyId: string) {
+    const address = await prisma.address.findFirst({
+      where: {
+        companyAddress: {
+          some: {
+            companyId,
+          },
+        },
+      },
+    });
+
+    if (!address) {
+      return null;
+    }
 
     return address;
   }

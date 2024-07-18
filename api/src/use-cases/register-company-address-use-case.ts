@@ -47,7 +47,7 @@ export class RegisterCompanyAddressUseCase {
       throw new ResourceNotFoundError("Company not found");
     }
 
-    const address = await this.companyAddressesRepository.createCompanyAddress(
+    const address = await this.companyAddressesRepository.create(
       { street, number, neighborhood, zipCode, complement, cityId: city.id },
       company.id
     );
