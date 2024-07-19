@@ -78,7 +78,7 @@ export class GetCompanyInformationUseCase {
       throw new ResourceNotFoundError("City not found");
     }
 
-    const state = await this.statesRepository.findByCityId(cityAddress.id);
+    const state = await this.statesRepository.findById(cityAddress.stateId);
 
     if (!state) {
       throw new ResourceNotFoundError("State not found");
