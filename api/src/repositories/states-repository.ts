@@ -1,5 +1,6 @@
-import { State } from "@prisma/client";
+import { Prisma, State } from "@prisma/client";
 
 export interface StatesRepository {
-  findByCityId(cityId: string): Promise<State | null>;
+  create(data: Prisma.StateUncheckedCreateInput): Promise<State>;
+  findById(id: string): Promise<State | null>;
 }

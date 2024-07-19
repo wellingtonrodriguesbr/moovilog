@@ -1,16 +1,20 @@
-import { State } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { StatesRepository } from "../states-repository";
 import { prisma } from "@/lib/prisma";
 
 export class PrismaStatesRepository implements StatesRepository {
-  async findByCityId(cityId: string) {
-    const state = await prisma.state.findFirst({
+  async create(data: Prisma.StateUncheckedCreateInput) {
+    const state = await prisma.state.create({
+      data,
+    });
+
+    return state;
+  }
+
+  async findById(id: string) {
+    const state = await prisma.state.findUnique({
       where: {
-        cities: {
-          some: {
-            id: cityId,
-          },
-        },
+        id,
       },
     });
 

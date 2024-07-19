@@ -7,7 +7,7 @@ export class InMemoryCitiesRepository implements CitiesRepository {
 
   async create(data: Prisma.CityUncheckedCreateInput) {
     const city = {
-      id: randomUUID(),
+      id: data.id ?? randomUUID(),
       name: data.name,
       stateId: data.stateId,
     };
