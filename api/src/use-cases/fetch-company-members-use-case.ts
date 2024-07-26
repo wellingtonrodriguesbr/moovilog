@@ -16,7 +16,9 @@ export class FetchCompanyMembersUseCase {
   async execute({
     userId,
   }: FetchCompanyMembersUseCaseRequest): Promise<FetchCompanyMembersUseCaseResponse> {
-    const companyMember = await this.companyMembersRepository.findById(userId);
+    const companyMember = await this.companyMembersRepository.findByMemberId(
+      userId
+    );
 
     if (!companyMember) {
       throw new ResourceNotFoundError("Company member not found");

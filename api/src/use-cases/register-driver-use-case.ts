@@ -33,7 +33,7 @@ export class RegisterDriverUseCase {
     creatorId,
   }: RegisterDriverUseCaseRequest): Promise<RegisterDriverUseCaseResponse> {
     const [member, driverAlreadyExists] = await Promise.all([
-      await this.companyMembersRepository.findById(creatorId),
+      await this.companyMembersRepository.findByMemberId(creatorId),
       await this.driversRepository.findByDocumentNumber(documentNumber),
     ]);
 

@@ -5,15 +5,7 @@ import { CompaniesRepository } from "../companies-repository";
 export class PrismaCompaniesRepository implements CompaniesRepository {
   async create(data: Prisma.CompanyUncheckedCreateInput) {
     const company = await prisma.company.create({
-      data: {
-        ...data,
-        companyMembers: {
-          create: {
-            memberId: data.ownerId,
-            role: "ADMIN",
-          },
-        },
-      },
+      data,
     });
 
     return company;

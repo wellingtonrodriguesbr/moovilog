@@ -22,7 +22,9 @@ export class RegisterCompanyMemberUseCase {
     creatorId,
     role,
   }: RegisterCompanyMemberUseCaseRequest): Promise<RegisterCompanyMemberUseCaseResponse> {
-    const creator = await this.companyMembersRepository.findById(creatorId);
+    const creator = await this.companyMembersRepository.findByMemberId(
+      creatorId
+    );
 
     if (!creator) {
       throw new ResourceNotFoundError("User not found");

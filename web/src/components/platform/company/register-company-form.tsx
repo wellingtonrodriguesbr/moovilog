@@ -28,6 +28,7 @@ import { ArrowRight, Check, Loader2, X } from "lucide-react";
 import { useValidateCompanyDocumentNumber } from "@/hooks/use-validate-company-document-number";
 import { formatCNPJ } from "@/utils/format-cnpj";
 import { useRegisterCompany } from "@/hooks/use-register-company";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   documentNumber: z
@@ -69,7 +70,8 @@ export function RegisterCompanyForm() {
   }: z.infer<typeof formSchema>) {
     try {
       await registerCompany({ name, documentNumber, type, size });
-      router.push("/cadastro/empresa/endereco");
+      toast.success("Empresa cadastrada com sucesso");
+      router.push("/inicio");
     } catch (error) {
       console.log(error);
     }

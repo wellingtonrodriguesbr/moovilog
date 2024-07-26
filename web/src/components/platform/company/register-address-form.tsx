@@ -20,6 +20,7 @@ import { formatCEP } from "@/utils/format-cep";
 import { useEffect } from "react";
 import { useRegisterCompanyAddress } from "@/hooks/use-register-company-address";
 import { useGetCompanyAddressByZipCode } from "@/hooks/use-get-company-address-by-zip-code";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   zipCode: z.coerce
@@ -72,12 +73,13 @@ export function RegisterCompanyAddressForm() {
       await registerCompanyAddress({
         cityName: city,
         street,
-        number,
+        number: Number(number),
         neighborhood,
         zipCode,
         acronym,
         complement,
       });
+      toast.success("Endereço cadastrado com sucesso");
       router.push("/cadastro/empresa/membro");
     } catch (error) {
       console.log(error);

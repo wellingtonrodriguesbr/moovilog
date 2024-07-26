@@ -50,7 +50,7 @@ export function AccountMenu() {
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DialogTrigger asChild>
-            <DropdownMenuItem asChild>
+            <DropdownMenuItem className="hover:bg-zinc-100" asChild>
               <Link
                 className="flex items-center gap-2 cursor-pointer"
                 href="/meus-dados"

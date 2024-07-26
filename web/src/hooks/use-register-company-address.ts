@@ -7,7 +7,7 @@ interface RegisterCompanyAddressData {
   cityName: string;
   street: string;
   neighborhood: string;
-  number: string;
+  number: number;
   complement?: string | null;
   zipCode: string;
   acronym: string;
@@ -32,9 +32,6 @@ export function useRegisterCompanyAddress() {
     isPending: isPendingRegisterCompanyAddress,
   } = useMutation({
     mutationFn: handleRegisterCompanyAddress,
-    onSuccess: () => {
-      toast.success("Endereço cadastrado com sucesso");
-    },
     onError: (error: AxiosError) => {
       if (error.response?.status === 401) {
         toast.error("Você não tem permissão para esta ação");

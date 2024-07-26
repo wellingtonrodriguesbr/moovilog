@@ -45,7 +45,7 @@ export class GetCompanyInformationUseCase {
   async execute({
     userId,
   }: GetCompanyInformationUseCaseRequest): Promise<GetCompanyInformationUseCaseResponse> {
-    const member = await this.companyMembersRepository.findById(userId);
+    const member = await this.companyMembersRepository.findByMemberId(userId);
 
     if (!member) {
       throw new ResourceNotFoundError("Member not found");

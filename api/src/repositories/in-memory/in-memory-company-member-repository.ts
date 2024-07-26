@@ -23,7 +23,15 @@ export class InMemoryCompanyMembersRepository
     return companyMember;
   }
 
-  async findById(memberId: string) {
+  async findById(id: string) {
+    const member = this.items.find((item) => item.id === id);
+
+    if (!member) return null;
+
+    return member;
+  }
+
+  async findByMemberId(memberId: string) {
     const member = this.items.find((item) => item.memberId === memberId);
 
     if (!member) return null;

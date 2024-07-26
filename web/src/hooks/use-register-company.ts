@@ -27,9 +27,6 @@ export function useRegisterCompany() {
   const { mutateAsync: registerCompany, isPending: isPendingRegisterCompany } =
     useMutation({
       mutationFn: handleRegisterCompany,
-      onSuccess: () => {
-        toast.success("Empresa cadastrada com sucesso");
-      },
       onError: (error: AxiosError) => {
         if (error.response?.status === 401) {
           toast.error("Você não tem permissão para esta ação");

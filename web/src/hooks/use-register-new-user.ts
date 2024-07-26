@@ -14,9 +14,6 @@ export function useRegisterNewUser() {
   const { mutateAsync: registerNewUser, isPending: isPendingRegisterNewUser } =
     useMutation({
       mutationFn: handleRegisterNewUser,
-      onSuccess: () => {
-        toast.success("Conta cadastrada com sucesso");
-      },
       onError: (error: AxiosError) => {
         if (error.response?.status === 409) {
           toast.error("Já existe uma conta com este e-mail");

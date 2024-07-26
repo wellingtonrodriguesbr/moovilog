@@ -19,6 +19,7 @@ import { useRegisterNewUser } from "@/hooks/use-register-new-user";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { useLogin } from "@/hooks/use-login";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   name: z.string().min(3, { message: "Digite seu nome completo" }),
@@ -58,7 +59,7 @@ export function RegisterForm() {
       });
 
       await login({ email, password });
-
+      toast.success("Conta cadastrada com sucesso");
       router.push("/cadastro/empresa");
     } catch (error) {
       console.log(error);

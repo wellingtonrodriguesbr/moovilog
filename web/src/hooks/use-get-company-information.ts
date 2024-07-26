@@ -1,5 +1,6 @@
 import { api } from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 export interface Company {
   id: string;
@@ -14,6 +15,8 @@ export interface Company {
 
 export interface CompanyAddress {
   address: Address;
+  city: City;
+  state: State;
 }
 
 export interface Address {
@@ -23,13 +26,14 @@ export interface Address {
   neighborhood: string;
   number: number;
   complement: string;
-  city: City;
+  createdAt: string;
+  cityId: string;
 }
 
 export interface City {
   id: string;
   name: string;
-  state: State;
+  stateId: string;
 }
 
 export interface State {
@@ -52,11 +56,15 @@ export function useGetCompanyInformation() {
   );
 
   async function handleGetCompanyInformation() {
-    const { data } = await api.get<CompanyInformationResponse>(
-      "/companies/information"
-    );
+    try {
+      const { data } = await api.get<CompanyInformationResponse>(
+        "/companies/information"
+      );
 
-    return data;
+      return data;
+    } catch (error) {
+      toast.error("Falha ao encontrar informações da empresa");
+    }
   }
 
   return {

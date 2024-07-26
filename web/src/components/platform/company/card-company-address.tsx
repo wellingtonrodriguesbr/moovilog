@@ -50,15 +50,15 @@ export function CardCompanyAddress() {
         <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
           <fieldset className="col-span-full md:col-span-3 space-y-2">
             <Label>Cidade:</Label>
-            <Input readOnly value={companyAddress.address.city.name} />
+            <Input readOnly value={companyAddress.city.name} />
           </fieldset>
           <fieldset className="col-span-2 space-y-2">
             <Label>Estado:</Label>
-            <Input readOnly value={companyAddress.address.city.state.name} />
+            <Input readOnly value={companyAddress.state.name} />
           </fieldset>
           <fieldset className="space-y-2">
             <Label>UF:</Label>
-            <Input readOnly value={companyAddress.address.city.state.acronym} />
+            <Input readOnly value={companyAddress.state.acronym} />
           </fieldset>
         </div>
       </CardContent>

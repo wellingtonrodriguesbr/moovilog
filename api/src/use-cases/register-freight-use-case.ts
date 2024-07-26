@@ -51,7 +51,7 @@ export class RegisterFreightUseCase {
     creatorId,
   }: RegisterFreightUseCaseRequest): Promise<RegisterFreightUseCaseResponse> {
     const [member, driver] = await Promise.all([
-      await this.companyMembersRepository.findById(creatorId),
+      await this.companyMembersRepository.findByMemberId(creatorId),
       await this.driversRepository.findById(driverId),
     ]);
 
