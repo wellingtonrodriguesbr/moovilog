@@ -31,7 +31,7 @@ export default function RootLayout({
       <body
         cz-shortcut-listen="true"
         className={cn(
-          "min-h-screen bg-white text-app-blue-900 font-sans antialiased",
+          "min-h-screen bg-zinc-50 text-app-blue-900 font-sans antialiased",
           sans.variable
         )}
       >

@@ -5,10 +5,12 @@ import { useGetProfile } from "@/hooks/use-get-profile";
 import { QuickAccess } from "./quick-access";
 import { useGetCompanyInformation } from "@/hooks/use-get-company-information";
 import { formatCNPJ } from "@/utils/format-cnpj";
+import { BarChartComponent } from "../metrics/bar-chart";
 
 export function Home() {
   const { profile, isGetProfilePending } = useGetProfile();
-  const { company } = useGetCompanyInformation();
+  const { company, isGetCompanyInformationPending } =
+    useGetCompanyInformation();
 
   return (
     <section className="space-y-12 w-full">
@@ -20,14 +22,23 @@ export function Home() {
             <>Olá, {profile?.name}</>
           )}
         </h1>
-        <div className="space-y-1">
-          <p className="text-lg">{company?.name}</p>
-          <p className="text-zinc-700 text-xs">
-            {formatCNPJ(company?.documentNumber ?? "")}
-          </p>
+        <div className="hidden md:flex flex-col gap-1 items-end">
+          {isGetCompanyInformationPending ? (
+            <Skeleton className="h-5 md:h-4 w-24 md:w-[250px] rounded-lg" />
+          ) : (
+            <p className="text-lg">{company?.name}</p>
+          )}
+          {isGetCompanyInformationPending ? (
+            <Skeleton className="h-5 md:h-4 w-16 md:w-[150px] rounded-lg" />
+          ) : (
+            <p className="text-zinc-700 text-xs">
+              {formatCNPJ(company?.documentNumber ?? "")}
+            </p>
+          )}
         </div>
       </header>
       <QuickAccess />
+      <BarChartComponent />
     </section>
   );
 }

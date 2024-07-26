@@ -2,10 +2,11 @@ import Image from "next/image";
 
 import { AccountMenu } from "./account-menu";
 import { ButtonOpenCloseSidebar } from "./button-open-close-sidebar";
+import { NotificationsDropdown } from "./notifications-dropdown";
 
 export function HeaderPlatform() {
   return (
-    <header className="col-span-full h-20 px-4 border-b flex justify-between items-center bg-zinc-50">
+    <header className="col-span-full h-20 px-4 border-b flex justify-between items-center bg-white">
       <div className="flex items-center gap-4">
         <ButtonOpenCloseSidebar />
         <Image
@@ -23,7 +24,11 @@ export function HeaderPlatform() {
         width={250}
         height={193}
       />
-      <AccountMenu />
+
+      <div className="flex items-center gap-4">
+        <NotificationsDropdown />
+        <AccountMenu />
+      </div>
     </header>
   );
 }
