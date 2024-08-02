@@ -71,7 +71,7 @@ export function RegisterCompanyForm() {
     try {
       await registerCompany({ name, documentNumber, type, size });
       toast.success("Empresa cadastrada com sucesso");
-      router.push("/inicio");
+      router.push("/cadastro/empresa/endereco");
     } catch (error) {
       console.log(error);
     }

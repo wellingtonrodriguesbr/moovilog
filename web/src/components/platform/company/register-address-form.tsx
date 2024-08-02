@@ -80,7 +80,7 @@ export function RegisterCompanyAddressForm() {
         complement,
       });
       toast.success("Endereço cadastrado com sucesso");
-      router.push("/cadastro/empresa/membro");
+      router.push("/inicio");
     } catch (error) {
       console.log(error);
     }
