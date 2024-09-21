@@ -5,17 +5,17 @@ import { PrismaAddressesRepository } from "@/repositories/prisma/prisma-addresse
 import { PrismaCompanyAddressesRepository } from "@/repositories/prisma/prisma-company-addresses-repository";
 
 export function makeRegisterCompanyAddressUseCase() {
-  const citiesRepository = new PrismaCitiesRepository();
-  const companiesRepository = new PrismaCompaniesRepository();
-  const companyAddressRepository = new PrismaCompanyAddressesRepository();
-  const addressesRepository = new PrismaAddressesRepository();
+	const citiesRepository = new PrismaCitiesRepository();
+	const companiesRepository = new PrismaCompaniesRepository();
+	const companyAddressRepository = new PrismaCompanyAddressesRepository();
+	const addressesRepository = new PrismaAddressesRepository();
 
-  const registerCompanyAddressUseCase = new RegisterCompanyAddressUseCase(
-    companyAddressRepository,
-    addressesRepository,
-    citiesRepository,
-    companiesRepository
-  );
+	const registerCompanyAddressUseCase = new RegisterCompanyAddressUseCase(
+		companyAddressRepository,
+		addressesRepository,
+		citiesRepository,
+		companiesRepository,
+	);
 
-  return registerCompanyAddressUseCase;
+	return registerCompanyAddressUseCase;
 }

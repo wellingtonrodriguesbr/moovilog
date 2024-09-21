@@ -1,3 +1,3 @@
 import { FreightInformation } from "@prisma/client";
 
-export interface IFreightInformation extends FreightInformation {}
+export type IFreightInformation = FreightInformation

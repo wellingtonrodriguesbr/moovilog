@@ -6,18 +6,18 @@ import { RegisterFreightUseCase } from "../register-freight-use-case";
 import { PrismaCompanyMembersRepository } from "@/repositories/prisma/prisma-company-members-repository";
 
 export function makeRegisterfreightUseCase() {
-  const driversRepository = new PrismaDriversRepository();
-  const companyMembersRepository = new PrismaCompanyMembersRepository();
-  const freightsRepository = new PrismaFreightsRepository();
-  const freightInformationRepository = new PrismaFreightInformationRepository();
-  const citiesByFreightRepository = new PrismaCitiesByFreightRepository();
-  const registerFreightUseCase = new RegisterFreightUseCase(
-    companyMembersRepository,
-    driversRepository,
-    freightsRepository,
-    freightInformationRepository,
-    citiesByFreightRepository
-  );
+	const driversRepository = new PrismaDriversRepository();
+	const companyMembersRepository = new PrismaCompanyMembersRepository();
+	const freightsRepository = new PrismaFreightsRepository();
+	const freightInformationRepository = new PrismaFreightInformationRepository();
+	const citiesByFreightRepository = new PrismaCitiesByFreightRepository();
+	const registerFreightUseCase = new RegisterFreightUseCase(
+		companyMembersRepository,
+		driversRepository,
+		freightsRepository,
+		freightInformationRepository,
+		citiesByFreightRepository,
+	);
 
-  return registerFreightUseCase;
+	return registerFreightUseCase;
 }

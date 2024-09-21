@@ -1,22 +1,22 @@
 import { prisma } from "@/lib/prisma";
 import {
-  CitiesByFreightRepository,
-  CreateManyParams,
+	CitiesByFreightRepository,
+	CreateManyParams,
 } from "../cities-by-freight-repository";
 
 export class PrismaCitiesByFreightRepository
-  implements CitiesByFreightRepository
+implements CitiesByFreightRepository
 {
-  async createMany(params: CreateManyParams) {
-    const data = params.citiesIds.map((cityId) => {
-      return {
-        freightId: params.freightId,
-        cityId,
-      };
-    });
+	async createMany(params: CreateManyParams) {
+		const data = params.citiesIds.map((cityId) => {
+			return {
+				freightId: params.freightId,
+				cityId,
+			};
+		});
 
-    await prisma.cityByFreight.createMany({
-      data,
-    });
-  }
+		await prisma.cityByFreight.createMany({
+			data,
+		});
+	}
 }

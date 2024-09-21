@@ -15,43 +15,43 @@ interface RegisterCompanyMemberUseCaseResponse {
 }
 
 export class RegisterCompanyMemberUseCase {
-  constructor(private companyMembersRepository: CompanyMembersRepository) {}
+	constructor(private companyMembersRepository: CompanyMembersRepository) {}
 
-  async execute({
-    memberId,
-    creatorId,
-    role,
-  }: RegisterCompanyMemberUseCaseRequest): Promise<RegisterCompanyMemberUseCaseResponse> {
-    const creator = await this.companyMembersRepository.findByMemberId(
-      creatorId
-    );
+	async execute({
+		memberId,
+		creatorId,
+		role,
+	}: RegisterCompanyMemberUseCaseRequest): Promise<RegisterCompanyMemberUseCaseResponse> {
+		const creator = await this.companyMembersRepository.findByMemberId(
+			creatorId,
+		);
 
-    if (!creator) {
-      throw new ResourceNotFoundError("User not found");
-    }
+		if (!creator) {
+			throw new ResourceNotFoundError("User not found");
+		}
 
-    if (creator.role !== "ADMIN") {
-      throw new NotAllowedError(
-        "You do not have permission to perform this action, please ask your administrator for access"
-      );
-    }
+		if (creator.role !== "ADMIN") {
+			throw new NotAllowedError(
+				"You do not have permission to perform this action, please ask your administrator for access",
+			);
+		}
 
-    const memberAlreadyExists =
+		const memberAlreadyExists =
       await this.companyMembersRepository.findMemberInCompany(
-        memberId,
-        creator.companyId
+      	memberId,
+      	creator.companyId,
       );
 
-    if (memberAlreadyExists) {
-      throw new CompanyMemberAlreadyExistsError();
-    }
+		if (memberAlreadyExists) {
+			throw new CompanyMemberAlreadyExistsError();
+		}
 
-    const companyMember = await this.companyMembersRepository.create({
-      companyId: creator.companyId,
-      memberId,
-      role,
-    });
+		const companyMember = await this.companyMembersRepository.create({
+			companyId: creator.companyId,
+			memberId,
+			role,
+		});
 
-    return { companyMemberId: companyMember.id };
-  }
+		return { companyMemberId: companyMember.id };
+	}
 }

@@ -13,29 +13,29 @@ interface RegisterUserUseCaseResponse {
 }
 
 export class RegisterUserUseCase {
-  constructor(private usersRepository: UsersRepository) {}
+	constructor(private usersRepository: UsersRepository) {}
 
-  async execute({
-    name,
-    email,
-    password,
-  }: RegisterUserUseCaseRequest): Promise<RegisterUserUseCaseResponse> {
-    const userAlreadyExists = await this.usersRepository.findByEmail(email);
+	async execute({
+		name,
+		email,
+		password,
+	}: RegisterUserUseCaseRequest): Promise<RegisterUserUseCaseResponse> {
+		const userAlreadyExists = await this.usersRepository.findByEmail(email);
 
-    if (userAlreadyExists) {
-      throw new UserAlreadyExistsError();
-    }
+		if (userAlreadyExists) {
+			throw new UserAlreadyExistsError();
+		}
 
-    const passwordHash = await hash(password, 6);
+		const passwordHash = await hash(password, 6);
 
-    const user = await this.usersRepository.create({
-      name,
-      email,
-      password: passwordHash,
-    });
+		const user = await this.usersRepository.create({
+			name,
+			email,
+			password: passwordHash,
+		});
 
-    return {
-      user,
-    };
-  }
+		return {
+			user,
+		};
+	}
 }

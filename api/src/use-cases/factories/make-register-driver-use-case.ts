@@ -3,12 +3,12 @@ import { PrismaDriversRepository } from "@/repositories/prisma/prisma-drivers-re
 import { RegisterDriverUseCase } from "../register-driver-use-case";
 
 export function makeRegisterDriverUseCase() {
-  const companyMembersRepository = new PrismaCompanyMembersRepository();
-  const driversRepository = new PrismaDriversRepository();
-  const registerDriverUseCase = new RegisterDriverUseCase(
-    companyMembersRepository,
-    driversRepository
-  );
+	const companyMembersRepository = new PrismaCompanyMembersRepository();
+	const driversRepository = new PrismaDriversRepository();
+	const registerDriverUseCase = new RegisterDriverUseCase(
+		companyMembersRepository,
+		driversRepository,
+	);
 
-  return registerDriverUseCase;
+	return registerDriverUseCase;
 }

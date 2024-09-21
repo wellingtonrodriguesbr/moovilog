@@ -10,41 +10,41 @@ let companyMembersRepository: InMemoryCompanyMembersRepository;
 let sut: FetchCompanyMembersUseCase;
 
 describe("Fetch company members use case", () => {
-  beforeEach(async () => {
-    usersRepository = new InMemoryUsersRepository();
-    companiesRepository = new InMemoryCompaniesRepository();
-    companyMembersRepository = new InMemoryCompanyMembersRepository();
-    sut = new FetchCompanyMembersUseCase(companyMembersRepository);
+	beforeEach(async () => {
+		usersRepository = new InMemoryUsersRepository();
+		companiesRepository = new InMemoryCompaniesRepository();
+		companyMembersRepository = new InMemoryCompanyMembersRepository();
+		sut = new FetchCompanyMembersUseCase(companyMembersRepository);
 
-    await usersRepository.create({
-      id: "john-doe-01",
-      name: "John Doe",
-      email: "johndoe@example.com",
-      password: "12345678",
-    });
+		await usersRepository.create({
+			id: "john-doe-01",
+			name: "John Doe",
+			email: "johndoe@example.com",
+			password: "12345678",
+		});
 
-    await companiesRepository.create({
-      id: "company-id-01",
-      name: "Company name",
-      documentNumber: "12312312389899",
-      size: "MEDIUM",
-      type: "HEADQUARTERS",
-      ownerId: "john-doe-01",
-    });
+		await companiesRepository.create({
+			id: "company-id-01",
+			name: "Company name",
+			documentNumber: "12312312389899",
+			size: "MEDIUM",
+			type: "HEADQUARTERS",
+			ownerId: "john-doe-01",
+		});
 
-    await companyMembersRepository.create({
-      companyId: "company-id-01",
-      memberId: "john-doe-01",
-      role: "ADMIN",
-    });
-  });
+		await companyMembersRepository.create({
+			companyId: "company-id-01",
+			memberId: "john-doe-01",
+			role: "ADMIN",
+		});
+	});
 
-  it("should be able to fetch company members", async () => {
-    const { companyMembers } = await sut.execute({
-      userId: "john-doe-01",
-    });
+	it("should be able to fetch company members", async () => {
+		const { companyMembers } = await sut.execute({
+			userId: "john-doe-01",
+		});
 
-    expect(companyMembersRepository.items).toHaveLength(1);
-    expect(companyMembers[0].role).toEqual("ADMIN");
-  });
+		expect(companyMembersRepository.items).toHaveLength(1);
+		expect(companyMembers[0].role).toEqual("ADMIN");
+	});
 });

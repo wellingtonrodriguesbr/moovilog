@@ -1,5 +1,5 @@
 import { $Enums, CompanyMember } from "@prisma/client";
 
-export interface ICompanyMember extends CompanyMember {}
+export type ICompanyMember = CompanyMember
 
 export type ICompanyMemberRoles = $Enums.Role;

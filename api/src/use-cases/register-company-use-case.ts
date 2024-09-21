@@ -18,46 +18,46 @@ interface RegisterCompanyUseCaseResponse {
 }
 
 export class RegisterCompanyUseCase {
-  constructor(
+	constructor(
     private companiesRepository: CompaniesRepository,
     private companyMembersRepository: CompanyMembersRepository,
-    private usersRepository: UsersRepository
-  ) {}
+    private usersRepository: UsersRepository,
+	) {}
 
-  async execute({
-    ownerId,
-    name,
-    documentNumber,
-    type,
-    size,
-  }: RegisterCompanyUseCaseRequest): Promise<RegisterCompanyUseCaseResponse> {
-    const user = await this.usersRepository.findById(ownerId);
+	async execute({
+		ownerId,
+		name,
+		documentNumber,
+		type,
+		size,
+	}: RegisterCompanyUseCaseRequest): Promise<RegisterCompanyUseCaseResponse> {
+		const user = await this.usersRepository.findById(ownerId);
 
-    if (!user) {
-      throw new ResourceNotFoundError("User not found");
-    }
+		if (!user) {
+			throw new ResourceNotFoundError("User not found");
+		}
 
-    const companyAlreadyRegisteredWithThisDocument =
+		const companyAlreadyRegisteredWithThisDocument =
       await this.companiesRepository.findByDocumentNumber(documentNumber);
 
-    if (companyAlreadyRegisteredWithThisDocument) {
-      throw new CompanyAlreadyExistsError();
-    }
+		if (companyAlreadyRegisteredWithThisDocument) {
+			throw new CompanyAlreadyExistsError();
+		}
 
-    const company = await this.companiesRepository.create({
-      ownerId: user.id,
-      name,
-      documentNumber,
-      size,
-      type,
-    });
+		const company = await this.companiesRepository.create({
+			ownerId: user.id,
+			name,
+			documentNumber,
+			size,
+			type,
+		});
 
-    await this.companyMembersRepository.create({
-      memberId: user.id,
-      companyId: company.id,
-      role: "ADMIN",
-    });
+		await this.companyMembersRepository.create({
+			memberId: user.id,
+			companyId: company.id,
+			role: "ADMIN",
+		});
 
-    return { company };
-  }
+		return { company };
+	}
 }

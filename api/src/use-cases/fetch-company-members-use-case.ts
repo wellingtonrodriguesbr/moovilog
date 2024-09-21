@@ -11,24 +11,24 @@ interface FetchCompanyMembersUseCaseResponse {
 }
 
 export class FetchCompanyMembersUseCase {
-  constructor(private companyMembersRepository: CompanyMembersRepository) {}
+	constructor(private companyMembersRepository: CompanyMembersRepository) {}
 
-  async execute({
-    userId,
-  }: FetchCompanyMembersUseCaseRequest): Promise<FetchCompanyMembersUseCaseResponse> {
-    const companyMember = await this.companyMembersRepository.findByMemberId(
-      userId
-    );
+	async execute({
+		userId,
+	}: FetchCompanyMembersUseCaseRequest): Promise<FetchCompanyMembersUseCaseResponse> {
+		const companyMember = await this.companyMembersRepository.findByMemberId(
+			userId,
+		);
 
-    if (!companyMember) {
-      throw new ResourceNotFoundError("Company member not found");
-    }
+		if (!companyMember) {
+			throw new ResourceNotFoundError("Company member not found");
+		}
 
-    const companyMembers =
+		const companyMembers =
       await this.companyMembersRepository.findManyByCompanyId(
-        companyMember.companyId
+      	companyMember.companyId,
       );
 
-    return { companyMembers };
-  }
+		return { companyMembers };
+	}
 }

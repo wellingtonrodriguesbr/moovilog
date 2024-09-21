@@ -12,24 +12,24 @@ interface FetchFreightsFromDriverUseCaseResponse {
 }
 
 export class FetchFreightsFromDriverUseCase {
-  constructor(
+	constructor(
     private driversRepository: DriversRepository,
-    private freightsRepository: FreightsRepository
-  ) {}
+    private freightsRepository: FreightsRepository,
+	) {}
 
-  async execute({
-    driverId,
-  }: FetchFreightsFromDriverUseCaseRequest): Promise<FetchFreightsFromDriverUseCaseResponse> {
-    const driver = await this.driversRepository.findById(driverId);
+	async execute({
+		driverId,
+	}: FetchFreightsFromDriverUseCaseRequest): Promise<FetchFreightsFromDriverUseCaseResponse> {
+		const driver = await this.driversRepository.findById(driverId);
 
-    if (!driver) {
-      throw new ResourceNotFoundError("Driver not found");
-    }
+		if (!driver) {
+			throw new ResourceNotFoundError("Driver not found");
+		}
 
-    const freights = await this.freightsRepository.findManyByDriverId(
-      driver.id
-    );
+		const freights = await this.freightsRepository.findManyByDriverId(
+			driver.id,
+		);
 
-    return { freights };
-  }
+		return { freights };
+	}
 }

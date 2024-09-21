@@ -4,14 +4,14 @@ import { RegisterDriverBankDetailsUseCase } from "../register-driver-bank-detail
 import { PrismaCompanyMembersRepository } from "@/repositories/prisma/prisma-company-members-repository";
 
 export function makeRegisterDriverBankDetailsUseCase() {
-  const companyMembersRepository = new PrismaCompanyMembersRepository();
-  const driversRepository = new PrismaDriversRepository();
-  const bankDetailsRepository = new PrismaBankDetailsRepository();
-  const registerDriverBankDetailsUseCase = new RegisterDriverBankDetailsUseCase(
-    companyMembersRepository,
-    driversRepository,
-    bankDetailsRepository
-  );
+	const companyMembersRepository = new PrismaCompanyMembersRepository();
+	const driversRepository = new PrismaDriversRepository();
+	const bankDetailsRepository = new PrismaBankDetailsRepository();
+	const registerDriverBankDetailsUseCase = new RegisterDriverBankDetailsUseCase(
+		companyMembersRepository,
+		driversRepository,
+		bankDetailsRepository,
+	);
 
-  return registerDriverBankDetailsUseCase;
+	return registerDriverBankDetailsUseCase;
 }

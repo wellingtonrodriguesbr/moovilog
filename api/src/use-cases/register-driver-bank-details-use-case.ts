@@ -20,49 +20,49 @@ interface RegisterDriverBankDetailsUseCaseResponse {
 }
 
 export class RegisterDriverBankDetailsUseCase {
-  constructor(
+	constructor(
     private companyMembersRepository: CompanyMembersRepository,
     private driversRepository: DriversRepository,
-    private bankDetailsRepository: BankDetailsRepository
-  ) {}
+    private bankDetailsRepository: BankDetailsRepository,
+	) {}
 
-  async execute({
-    financialInstitution,
-    accountType,
-    accountNumber,
-    agency,
-    pixKey,
-    driverId,
-    creatorId,
-  }: RegisterDriverBankDetailsUseCaseRequest): Promise<RegisterDriverBankDetailsUseCaseResponse> {
-    const [member, driver] = await Promise.all([
-      await this.companyMembersRepository.findByMemberId(creatorId),
-      await this.driversRepository.findById(driverId),
-    ]);
+	async execute({
+		financialInstitution,
+		accountType,
+		accountNumber,
+		agency,
+		pixKey,
+		driverId,
+		creatorId,
+	}: RegisterDriverBankDetailsUseCaseRequest): Promise<RegisterDriverBankDetailsUseCaseResponse> {
+		const [member, driver] = await Promise.all([
+			await this.companyMembersRepository.findByMemberId(creatorId),
+			await this.driversRepository.findById(driverId),
+		]);
 
-    if (!driver) {
-      throw new ResourceNotFoundError("Driver not found");
-    }
+		if (!driver) {
+			throw new ResourceNotFoundError("Driver not found");
+		}
 
-    if (!member) {
-      throw new ResourceNotFoundError("Member not found");
-    }
+		if (!member) {
+			throw new ResourceNotFoundError("Member not found");
+		}
 
-    if (member.role !== "ADMIN" && member.role !== "FINANCIAL") {
-      throw new NotAllowedError(
-        "You do not have permission to perform this action, please ask your administrator for access"
-      );
-    }
+		if (member.role !== "ADMIN" && member.role !== "FINANCIAL") {
+			throw new NotAllowedError(
+				"You do not have permission to perform this action, please ask your administrator for access",
+			);
+		}
 
-    const bankDetails = await this.bankDetailsRepository.create({
-      financialInstitution,
-      accountType,
-      accountNumber,
-      agency,
-      pixKey,
-      driverId: driver.id,
-    });
+		const bankDetails = await this.bankDetailsRepository.create({
+			financialInstitution,
+			accountType,
+			accountNumber,
+			agency,
+			pixKey,
+			driverId: driver.id,
+		});
 
-    return { bankDetailsId: bankDetails.id };
-  }
+		return { bankDetailsId: bankDetails.id };
+	}
 }

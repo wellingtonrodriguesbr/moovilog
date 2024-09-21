@@ -11,28 +11,28 @@ import { vehiclesRoutes } from "./routes/vehicles";
 import { freightsRoutes } from "./routes/freights";
 
 export const app = fastify({
-  logger: true,
+	logger: true,
 });
 
 app.register(fastifyJwt, {
-  secret: env.JWT_SECRET,
-  cookie: {
-    cookieName: "refreshToken",
-    signed: false,
-  },
-  sign: {
-    expiresIn: "7d",
-  },
+	secret: env.JWT_SECRET,
+	cookie: {
+		cookieName: "refreshToken",
+		signed: false,
+	},
+	sign: {
+		expiresIn: "7d",
+	},
 });
 
 app.register(fastifyCookie, {
-  secret: env.COOKIE_SECRET_KEY,
-  hook: "onRequest",
+	secret: env.COOKIE_SECRET_KEY,
+	hook: "onRequest",
 });
 
 app.register(fastifyCors, {
-  origin: process.env.CORS_ORIGIN_URL,
-  credentials: true,
+	origin: process.env.CORS_ORIGIN_URL,
+	credentials: true,
 });
 
 app.register(usersRoutes);

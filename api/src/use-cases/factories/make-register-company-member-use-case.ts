@@ -2,11 +2,11 @@ import { RegisterCompanyMemberUseCase } from "../register-company-member-use-cas
 import { PrismaCompanyMembersRepository } from "@/repositories/prisma/prisma-company-members-repository";
 
 export function makeRegisterCompanyMemberUseCase() {
-  const companyMemberRepository = new PrismaCompanyMembersRepository();
+	const companyMemberRepository = new PrismaCompanyMembersRepository();
 
-  const registerCompanyMemberUseCase = new RegisterCompanyMemberUseCase(
-    companyMemberRepository
-  );
+	const registerCompanyMemberUseCase = new RegisterCompanyMemberUseCase(
+		companyMemberRepository,
+	);
 
-  return registerCompanyMemberUseCase;
+	return registerCompanyMemberUseCase;
 }

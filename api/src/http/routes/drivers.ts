@@ -7,27 +7,27 @@ import { authenticateDriverController } from "../controllers/authenticate-driver
 import { getFreightInformationAsADriverController } from "../controllers/get-freight-information-as-a-driver-controller";
 
 export async function driversRoutes(app: FastifyInstance) {
-  app.post("/drivers", { onRequest: [verifyJWT] }, registerDriverController);
-  app.post(
-    "/drivers/sessions",
-    { onRequest: [verifyJWT] },
-    authenticateDriverController
-  );
-  app.post("/drivers/token/refresh", driverRefreshController);
-  app.post(
-    "/drivers/bank-details",
-    { onRequest: [verifyJWT] },
-    registerDriverController
-  );
+	app.post("/drivers", { onRequest: [verifyJWT] }, registerDriverController);
+	app.post(
+		"/drivers/sessions",
+		{ onRequest: [verifyJWT] },
+		authenticateDriverController,
+	);
+	app.post("/drivers/token/refresh", driverRefreshController);
+	app.post(
+		"/drivers/bank-details",
+		{ onRequest: [verifyJWT] },
+		registerDriverController,
+	);
 
-  app.get(
-    "/drivers/freights",
-    { onRequest: [verifyJWT] },
-    fetchFreightFromDriverController
-  );
-  app.get(
-    "/drivers/:freightId/freight-information",
-    { onRequest: [verifyJWT] },
-    getFreightInformationAsADriverController
-  );
+	app.get(
+		"/drivers/freights",
+		{ onRequest: [verifyJWT] },
+		fetchFreightFromDriverController,
+	);
+	app.get(
+		"/drivers/:freightId/freight-information",
+		{ onRequest: [verifyJWT] },
+		getFreightInformationAsADriverController,
+	);
 }

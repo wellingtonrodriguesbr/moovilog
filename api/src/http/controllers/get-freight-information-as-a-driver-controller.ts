@@ -5,33 +5,33 @@ import { makeGetFreightInformationAsADriverUseCase } from "@/use-cases/factories
 import z from "zod";
 
 export async function getFreightInformationAsADriverController(
-  req: FastifyRequest,
-  reply: FastifyReply
+	req: FastifyRequest,
+	reply: FastifyReply,
 ) {
-  const getFreightInformationAsADriverParamsSchema = z.object({
-    freightId: z.string(),
-  });
+	const getFreightInformationAsADriverParamsSchema = z.object({
+		freightId: z.string(),
+	});
 
-  const driverId = req.user.sub;
-  const { freightId } = getFreightInformationAsADriverParamsSchema.parse(
-    req.params
-  );
+	const driverId = req.user.sub;
+	const { freightId } = getFreightInformationAsADriverParamsSchema.parse(
+		req.params,
+	);
 
-  try {
-    const getFreightInformationAsADriverUseCase =
+	try {
+		const getFreightInformationAsADriverUseCase =
       makeGetFreightInformationAsADriverUseCase();
-    const { freightInformation } =
+		const { freightInformation } =
       await getFreightInformationAsADriverUseCase.execute({
-        driverId,
-        freightId,
+      	driverId,
+      	freightId,
       });
 
-    reply.status(200).send({ freightInformation });
-  } catch (error) {
-    if (error instanceof ResourceNotFoundError) {
-      reply.status(404).send({ message: error.message });
-    }
+		reply.status(200).send({ freightInformation });
+	} catch (error) {
+		if (error instanceof ResourceNotFoundError) {
+			reply.status(404).send({ message: error.message });
+		}
 
-    throw error;
-  }
+		throw error;
+	}
 }

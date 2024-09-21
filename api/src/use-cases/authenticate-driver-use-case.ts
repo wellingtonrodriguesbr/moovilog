@@ -13,30 +13,30 @@ interface AuthenticateDriverUseCaseResponse {
 }
 
 export class AuthenticateDriverUseCase {
-  constructor(private driversRepository: DriversRepository) {}
+	constructor(private driversRepository: DriversRepository) {}
 
-  async execute({
-    documentNumber,
-    password,
-  }: AuthenticateDriverUseCaseRequest): Promise<AuthenticateDriverUseCaseResponse> {
-    const driver = await this.driversRepository.findByDocumentNumber(
-      documentNumber
-    );
+	async execute({
+		documentNumber,
+		password,
+	}: AuthenticateDriverUseCaseRequest): Promise<AuthenticateDriverUseCaseResponse> {
+		const driver = await this.driversRepository.findByDocumentNumber(
+			documentNumber,
+		);
 
-    if (!driver) {
-      throw new InvalidCredentialsError(
-        "Incorrect document number or password"
-      );
-    }
+		if (!driver) {
+			throw new InvalidCredentialsError(
+				"Incorrect document number or password",
+			);
+		}
 
-    const doesPasswordsMatch = await compare(password, driver.password);
+		const doesPasswordsMatch = await compare(password, driver.password);
 
-    if (!doesPasswordsMatch) {
-      throw new InvalidCredentialsError(
-        "Incorrect document number or password"
-      );
-    }
+		if (!doesPasswordsMatch) {
+			throw new InvalidCredentialsError(
+				"Incorrect document number or password",
+			);
+		}
 
-    return { driver };
-  }
+		return { driver };
+	}
 }

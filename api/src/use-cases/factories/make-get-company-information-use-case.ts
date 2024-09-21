@@ -7,21 +7,21 @@ import { PrismaStatesRepository } from "@/repositories/prisma/prisma-states-repo
 import { PrismaCompanyAddressesRepository } from "@/repositories/prisma/prisma-company-addresses-repository";
 
 export function makeGetCompanyInformationUseCase() {
-  const companyMembersRepository = new PrismaCompanyMembersRepository();
-  const companyAddressesRepository = new PrismaCompanyAddressesRepository();
-  const addressesRepository = new PrismaAddressesRepository();
-  const companiesRepository = new PrismaCompaniesRepository();
-  const citiesRepository = new PrismaCitiesRepository();
-  const statesRepository = new PrismaStatesRepository();
+	const companyMembersRepository = new PrismaCompanyMembersRepository();
+	const companyAddressesRepository = new PrismaCompanyAddressesRepository();
+	const addressesRepository = new PrismaAddressesRepository();
+	const companiesRepository = new PrismaCompaniesRepository();
+	const citiesRepository = new PrismaCitiesRepository();
+	const statesRepository = new PrismaStatesRepository();
 
-  const getCompanyInformationUseCase = new GetCompanyInformationUseCase(
-    companyMembersRepository,
-    companiesRepository,
-    companyAddressesRepository,
-    addressesRepository,
-    citiesRepository,
-    statesRepository
-  );
+	const getCompanyInformationUseCase = new GetCompanyInformationUseCase(
+		companyMembersRepository,
+		companiesRepository,
+		companyAddressesRepository,
+		addressesRepository,
+		citiesRepository,
+		statesRepository,
+	);
 
-  return getCompanyInformationUseCase;
+	return getCompanyInformationUseCase;
 }

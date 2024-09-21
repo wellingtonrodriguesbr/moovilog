@@ -4,14 +4,14 @@ import { PrismaDriversRepository } from "@/repositories/prisma/prisma-drivers-re
 import { PrismaCompanyMembersRepository } from "@/repositories/prisma/prisma-company-members-repository";
 
 export function makeRegisterVehicleUseCase() {
-  const companyMembersRepository = new PrismaCompanyMembersRepository();
-  const driversRepository = new PrismaDriversRepository();
-  const vehiclesRepository = new PrismaVehiclesRepository();
-  const registerVehicleUseCase = new RegisterVehicleUseCase(
-    companyMembersRepository,
-    driversRepository,
-    vehiclesRepository
-  );
+	const companyMembersRepository = new PrismaCompanyMembersRepository();
+	const driversRepository = new PrismaDriversRepository();
+	const vehiclesRepository = new PrismaVehiclesRepository();
+	const registerVehicleUseCase = new RegisterVehicleUseCase(
+		companyMembersRepository,
+		driversRepository,
+		vehiclesRepository,
+	);
 
-  return registerVehicleUseCase;
+	return registerVehicleUseCase;
 }

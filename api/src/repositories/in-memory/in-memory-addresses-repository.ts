@@ -3,32 +3,32 @@ import { AddressesRepository } from "../addresses-repository";
 import { randomUUID } from "crypto";
 
 export class InMemoryAddressesRepository implements AddressesRepository {
-  public items: Address[] = [];
+	public items: Address[] = [];
 
-  async create(data: Prisma.AddressUncheckedCreateInput) {
-    const address = {
-      id: data.id ?? randomUUID(),
-      zipCode: data.zipCode,
-      street: data.street,
-      neighborhood: data.neighborhood,
-      number: data.number,
-      complement: data.complement ?? null,
-      createdAt: new Date(),
-      cityId: data.cityId,
-    };
+	async create(data: Prisma.AddressUncheckedCreateInput) {
+		const address = {
+			id: data.id ?? randomUUID(),
+			zipCode: data.zipCode,
+			street: data.street,
+			neighborhood: data.neighborhood,
+			number: data.number,
+			complement: data.complement ?? null,
+			createdAt: new Date(),
+			cityId: data.cityId,
+		};
 
-    this.items.push(address);
+		this.items.push(address);
 
-    return address;
-  }
+		return address;
+	}
 
-  async findById(id: string) {
-    const address = this.items.find((item) => item.id === id);
+	async findById(id: string) {
+		const address = this.items.find((item) => item.id === id);
 
-    if (!address) {
-      return null;
-    }
+		if (!address) {
+			return null;
+		}
 
-    return address;
-  }
+		return address;
+	}
 }

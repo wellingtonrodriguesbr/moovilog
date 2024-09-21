@@ -12,24 +12,24 @@ interface FetchFreightsFromCompanyUseCaseResponse {
 }
 
 export class FetchFreightsFromCompanyUseCase {
-  constructor(
+	constructor(
     private companyMembersRepository: CompanyMembersRepository,
-    private freightsRepository: FreightsRepository
-  ) {}
+    private freightsRepository: FreightsRepository,
+	) {}
 
-  async execute({
-    userId,
-  }: FetchFreightsFromCompanyUseCaseRequest): Promise<FetchFreightsFromCompanyUseCaseResponse> {
-    const member = await this.companyMembersRepository.findByMemberId(userId);
+	async execute({
+		userId,
+	}: FetchFreightsFromCompanyUseCaseRequest): Promise<FetchFreightsFromCompanyUseCaseResponse> {
+		const member = await this.companyMembersRepository.findByMemberId(userId);
 
-    if (!member) {
-      throw new ResourceNotFoundError();
-    }
+		if (!member) {
+			throw new ResourceNotFoundError();
+		}
 
-    const freights = await this.freightsRepository.findManyByCompanyId(
-      member.companyId
-    );
+		const freights = await this.freightsRepository.findManyByCompanyId(
+			member.companyId,
+		);
 
-    return { freights };
-  }
+		return { freights };
+	}
 }

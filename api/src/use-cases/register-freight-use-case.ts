@@ -29,75 +29,75 @@ interface RegisterFreightUseCaseResponse {
 }
 
 export class RegisterFreightUseCase {
-  constructor(
+	constructor(
     private companyMembersRepository: CompanyMembersRepository,
     private driversRepository: DriversRepository,
     private freightsRepository: FreightsRepository,
     private freightInformationRepository: FreightInformationRepository,
-    private citiesByFreightRepository: CitiesByFreightRepository
-  ) {}
+    private citiesByFreightRepository: CitiesByFreightRepository,
+	) {}
 
-  async execute({
-    type,
-    date,
-    observation,
-    pickupsQuantity,
-    deliveriesQuantity,
-    totalWeightOfPickups,
-    totalWeightOfDeliveries,
-    freightAmountInCents,
-    citiesIds,
-    driverId,
-    creatorId,
-  }: RegisterFreightUseCaseRequest): Promise<RegisterFreightUseCaseResponse> {
-    const [member, driver] = await Promise.all([
-      await this.companyMembersRepository.findByMemberId(creatorId),
-      await this.driversRepository.findById(driverId),
-    ]);
+	async execute({
+		type,
+		date,
+		observation,
+		pickupsQuantity,
+		deliveriesQuantity,
+		totalWeightOfPickups,
+		totalWeightOfDeliveries,
+		freightAmountInCents,
+		citiesIds,
+		driverId,
+		creatorId,
+	}: RegisterFreightUseCaseRequest): Promise<RegisterFreightUseCaseResponse> {
+		const [member, driver] = await Promise.all([
+			await this.companyMembersRepository.findByMemberId(creatorId),
+			await this.driversRepository.findById(driverId),
+		]);
 
-    if (!member) {
-      throw new ResourceNotFoundError("Member not found");
-    }
+		if (!member) {
+			throw new ResourceNotFoundError("Member not found");
+		}
 
-    if (member.role !== "ADMIN" && member.role !== "OPERATIONAL") {
-      throw new NotAllowedError(
-        "You do not have permission to perform this action, please ask your administrator for access"
-      );
-    }
+		if (member.role !== "ADMIN" && member.role !== "OPERATIONAL") {
+			throw new NotAllowedError(
+				"You do not have permission to perform this action, please ask your administrator for access",
+			);
+		}
 
-    if (!driver) {
-      throw new ResourceNotFoundError("Driver not found");
-    }
+		if (!driver) {
+			throw new ResourceNotFoundError("Driver not found");
+		}
 
-    if (dayjs(date).isBefore(new Date(), "day")) {
-      throw new BadRequestError("Invalid freight date");
-    }
+		if (dayjs(date).isBefore(new Date(), "day")) {
+			throw new BadRequestError("Invalid freight date");
+		}
 
-    const freight = await this.freightsRepository.create({
-      date,
-      type,
-      pickupsQuantity,
-      deliveriesQuantity,
-      totalWeightOfPickups,
-      totalWeightOfDeliveries,
-      freightAmountInCents,
-      observation,
-      driverId: driver.id,
-      creatorId: member.memberId,
-      companyId: member.companyId,
-    });
+		const freight = await this.freightsRepository.create({
+			date,
+			type,
+			pickupsQuantity,
+			deliveriesQuantity,
+			totalWeightOfPickups,
+			totalWeightOfDeliveries,
+			freightAmountInCents,
+			observation,
+			driverId: driver.id,
+			creatorId: member.memberId,
+			companyId: member.companyId,
+		});
 
-    await Promise.all([
-      await this.freightInformationRepository.create({
-        freightId: freight.id,
-      }),
+		await Promise.all([
+			await this.freightInformationRepository.create({
+				freightId: freight.id,
+			}),
 
-      await this.citiesByFreightRepository.createMany({
-        freightId: freight.id,
-        citiesIds,
-      }),
-    ]);
+			await this.citiesByFreightRepository.createMany({
+				freightId: freight.id,
+				citiesIds,
+			}),
+		]);
 
-    return { freight };
-  }
+		return { freight };
+	}
 }

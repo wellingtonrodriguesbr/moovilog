@@ -8,12 +8,12 @@ import { getCompanyInformationController } from "../controllers/get-company-info
 import { fetchFreightsFromCompanyController } from "../controllers/fetch-freights-from-company-controller";
 
 export async function companiesRoutes(app: FastifyInstance) {
-  app.addHook("onRequest", verifyJWT);
+	app.addHook("onRequest", verifyJWT);
 
-  app.post("/companies", registerCompanyController);
-  app.post("/companies/address", registerCompanyAddressController);
-  app.post("/companies/member", registerCompanyMemberController);
-  app.get("/companies/information", getCompanyInformationController);
-  app.get("/companies/members", fetchCompanyMembersController);
-  app.get("/companies/freights", fetchFreightsFromCompanyController);
+	app.post("/companies", registerCompanyController);
+	app.post("/companies/address", registerCompanyAddressController);
+	app.post("/companies/member", registerCompanyMemberController);
+	app.get("/companies/information", getCompanyInformationController);
+	app.get("/companies/members", fetchCompanyMembersController);
+	app.get("/companies/freights", fetchFreightsFromCompanyController);
 }

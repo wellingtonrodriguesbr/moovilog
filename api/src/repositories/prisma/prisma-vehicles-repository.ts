@@ -3,39 +3,39 @@ import { Prisma } from "@prisma/client";
 import { VehiclesRepository } from "../vehicles-repository";
 
 export class PrismaVehiclesRepository implements VehiclesRepository {
-  async create(data: Prisma.VehicleUncheckedCreateInput) {
-    const vehicle = await prisma.vehicle.create({
-      data,
-    });
+	async create(data: Prisma.VehicleUncheckedCreateInput) {
+		const vehicle = await prisma.vehicle.create({
+			data,
+		});
 
-    return vehicle;
-  }
+		return vehicle;
+	}
 
-  async findByPlate(plate: string) {
-    const vehicle = await prisma.vehicle.findUnique({
-      where: {
-        plate,
-      },
-    });
+	async findByPlate(plate: string) {
+		const vehicle = await prisma.vehicle.findUnique({
+			where: {
+				plate,
+			},
+		});
 
-    if (!vehicle) {
-      return null;
-    }
+		if (!vehicle) {
+			return null;
+		}
 
-    return vehicle;
-  }
+		return vehicle;
+	}
 
-  async findById(id: string) {
-    const vehicle = await prisma.vehicle.findUnique({
-      where: {
-        id,
-      },
-    });
+	async findById(id: string) {
+		const vehicle = await prisma.vehicle.findUnique({
+			where: {
+				id,
+			},
+		});
 
-    if (!vehicle) {
-      return null;
-    }
+		if (!vehicle) {
+			return null;
+		}
 
-    return vehicle;
-  }
+		return vehicle;
+	}
 }

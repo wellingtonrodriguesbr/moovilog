@@ -4,17 +4,17 @@ import { GetFreightInformationAsADriverUseCase } from "../get-freight-informatio
 import { PrismaFreightsRepository } from "@/repositories/prisma/prisma-freights-repository";
 
 export function makeGetFreightInformationAsADriverUseCase() {
-  const driversRepository = new PrismaDriversRepository();
-  const freightsRepository = new PrismaFreightsRepository();
-  const freightsInformationRepository =
+	const driversRepository = new PrismaDriversRepository();
+	const freightsRepository = new PrismaFreightsRepository();
+	const freightsInformationRepository =
     new PrismaFreightInformationRepository();
 
-  const getFreightInformationAsADriverUseCase =
+	const getFreightInformationAsADriverUseCase =
     new GetFreightInformationAsADriverUseCase(
-      driversRepository,
-      freightsRepository,
-      freightsInformationRepository
+    	driversRepository,
+    	freightsRepository,
+    	freightsInformationRepository,
     );
 
-  return getFreightInformationAsADriverUseCase;
+	return getFreightInformationAsADriverUseCase;
 }

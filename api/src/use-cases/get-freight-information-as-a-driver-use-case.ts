@@ -15,39 +15,39 @@ interface GetFreightInformationAsADriverUseCaseResponse {
 }
 
 export class GetFreightInformationAsADriverUseCase {
-  constructor(
+	constructor(
     private driversRepsoitory: DriversRepository,
     private freightsRepository: FreightsRepository,
-    private freightsInformationRepository: FreightInformationRepository
-  ) {}
+    private freightsInformationRepository: FreightInformationRepository,
+	) {}
 
-  async execute({
-    driverId,
-    freightId,
-  }: GetFreightInformationAsADriverUseCaseRequest): Promise<GetFreightInformationAsADriverUseCaseResponse> {
-    const driver = await this.driversRepsoitory.findById(driverId);
+	async execute({
+		driverId,
+		freightId,
+	}: GetFreightInformationAsADriverUseCaseRequest): Promise<GetFreightInformationAsADriverUseCaseResponse> {
+		const driver = await this.driversRepsoitory.findById(driverId);
 
-    if (!driver) {
-      throw new ResourceNotFoundError("Driver not found");
-    }
+		if (!driver) {
+			throw new ResourceNotFoundError("Driver not found");
+		}
 
-    const freight = await this.freightsRepository.findById(freightId);
+		const freight = await this.freightsRepository.findById(freightId);
 
-    if (!freight) {
-      throw new ResourceNotFoundError("Freight not found");
-    }
+		if (!freight) {
+			throw new ResourceNotFoundError("Freight not found");
+		}
 
-    if (freight.driverId !== driver.id) {
-      throw new NotAllowedError();
-    }
+		if (freight.driverId !== driver.id) {
+			throw new NotAllowedError();
+		}
 
-    const freightInformation =
+		const freightInformation =
       await this.freightsInformationRepository.findByFreight(freightId);
 
-    if (!freightInformation) {
-      throw new ResourceNotFoundError("Freight information not found");
-    }
+		if (!freightInformation) {
+			throw new ResourceNotFoundError("Freight information not found");
+		}
 
-    return { freightInformation };
-  }
+		return { freightInformation };
+	}
 }

@@ -7,10 +7,10 @@ import { verifyJWT } from "../middlewares/verify-jwt";
 import { logoutController } from "../controllers/logout-controller";
 
 export async function usersRoutes(app: FastifyInstance) {
-  app.post("/users", registerUserController);
-  app.post("/sessions", authenticateController);
-  app.patch("/token/refresh", refreshController);
-  app.post("/logout", logoutController);
+	app.post("/users", registerUserController);
+	app.post("/sessions", authenticateController);
+	app.patch("/token/refresh", refreshController);
+	app.post("/logout", logoutController);
 
-  app.get("/me", { onRequest: [verifyJWT] }, getUserProfileController);
+	app.get("/me", { onRequest: [verifyJWT] }, getUserProfileController);
 }

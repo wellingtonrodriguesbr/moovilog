@@ -19,52 +19,52 @@ interface RegisterDriverUseCaseResponse {
 }
 
 export class RegisterDriverUseCase {
-  constructor(
+	constructor(
     private companyMembersRepository: CompanyMembersRepository,
-    private driversRepository: DriversRepository
-  ) {}
+    private driversRepository: DriversRepository,
+	) {}
 
-  async execute({
-    name,
-    password,
-    documentNumber,
-    phone,
-    backupPhone,
-    creatorId,
-  }: RegisterDriverUseCaseRequest): Promise<RegisterDriverUseCaseResponse> {
-    const [member, driverAlreadyExists] = await Promise.all([
-      await this.companyMembersRepository.findByMemberId(creatorId),
-      await this.driversRepository.findByDocumentNumber(documentNumber),
-    ]);
+	async execute({
+		name,
+		password,
+		documentNumber,
+		phone,
+		backupPhone,
+		creatorId,
+	}: RegisterDriverUseCaseRequest): Promise<RegisterDriverUseCaseResponse> {
+		const [member, driverAlreadyExists] = await Promise.all([
+			await this.companyMembersRepository.findByMemberId(creatorId),
+			await this.driversRepository.findByDocumentNumber(documentNumber),
+		]);
 
-    if (!member) {
-      throw new ResourceNotFoundError("Member not found");
-    }
+		if (!member) {
+			throw new ResourceNotFoundError("Member not found");
+		}
 
-    if (member.role !== "ADMIN" && member.role !== "OPERATIONAL") {
-      throw new NotAllowedError(
-        "You do not have permission to perform this action, please ask your administrator for access"
-      );
-    }
+		if (member.role !== "ADMIN" && member.role !== "OPERATIONAL") {
+			throw new NotAllowedError(
+				"You do not have permission to perform this action, please ask your administrator for access",
+			);
+		}
 
-    if (driverAlreadyExists) {
-      throw new DriverAlreadyExistsError();
-    }
+		if (driverAlreadyExists) {
+			throw new DriverAlreadyExistsError();
+		}
 
-    const passwordHash = await hash(password, 6);
+		const passwordHash = await hash(password, 6);
 
-    const driver = await this.driversRepository.create({
-      name,
-      password: passwordHash,
-      documentNumber,
-      phone,
-      backupPhone,
-      companyId: member.companyId,
-      creatorId: member.memberId,
-    });
+		const driver = await this.driversRepository.create({
+			name,
+			password: passwordHash,
+			documentNumber,
+			phone,
+			backupPhone,
+			companyId: member.companyId,
+			creatorId: member.memberId,
+		});
 
-    return {
-      driver,
-    };
-  }
+		return {
+			driver,
+		};
+	}
 }

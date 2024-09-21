@@ -33,66 +33,66 @@ interface GetCompanyInformationUseCaseResponse {
 }
 
 export class GetCompanyInformationUseCase {
-  constructor(
+	constructor(
     private companyMembersRepository: CompanyMembersRepository,
     private companiesRepository: CompaniesRepository,
     private companyAddressesRepository: CompanyAddressesRepository,
     private addressesRepository: AddressesRepository,
     private citiesRepository: CitiesRepository,
-    private statesRepository: StatesRepository
-  ) {}
+    private statesRepository: StatesRepository,
+	) {}
 
-  async execute({
-    userId,
-  }: GetCompanyInformationUseCaseRequest): Promise<GetCompanyInformationUseCaseResponse> {
-    const member = await this.companyMembersRepository.findByMemberId(userId);
+	async execute({
+		userId,
+	}: GetCompanyInformationUseCaseRequest): Promise<GetCompanyInformationUseCaseResponse> {
+		const member = await this.companyMembersRepository.findByMemberId(userId);
 
-    if (!member) {
-      throw new ResourceNotFoundError("Member not found");
-    }
+		if (!member) {
+			throw new ResourceNotFoundError("Member not found");
+		}
 
-    const company = await this.companiesRepository.findById(member.companyId);
+		const company = await this.companiesRepository.findById(member.companyId);
 
-    if (!company) {
-      throw new ResourceNotFoundError("Company not found");
-    }
+		if (!company) {
+			throw new ResourceNotFoundError("Company not found");
+		}
 
-    const companyAddress =
+		const companyAddress =
       await this.companyAddressesRepository.findByCompanyId(company.id);
 
-    if (!companyAddress) {
-      throw new ResourceNotFoundError("Company address not found");
-    }
+		if (!companyAddress) {
+			throw new ResourceNotFoundError("Company address not found");
+		}
 
-    const address = await this.addressesRepository.findById(
-      companyAddress.addressId
-    );
+		const address = await this.addressesRepository.findById(
+			companyAddress.addressId,
+		);
 
-    if (!address) {
-      throw new ResourceNotFoundError("Address not found");
-    }
+		if (!address) {
+			throw new ResourceNotFoundError("Address not found");
+		}
 
-    const cityAddress = await this.citiesRepository.findById(address.cityId);
+		const cityAddress = await this.citiesRepository.findById(address.cityId);
 
-    if (!cityAddress) {
-      throw new ResourceNotFoundError("City not found");
-    }
+		if (!cityAddress) {
+			throw new ResourceNotFoundError("City not found");
+		}
 
-    const state = await this.statesRepository.findById(cityAddress.stateId);
+		const state = await this.statesRepository.findById(cityAddress.stateId);
 
-    if (!state) {
-      throw new ResourceNotFoundError("State not found");
-    }
+		if (!state) {
+			throw new ResourceNotFoundError("State not found");
+		}
 
-    const companyInformation = {
-      company,
-      companyAddress: {
-        address,
-        city: cityAddress,
-        state,
-      },
-    };
+		const companyInformation = {
+			company,
+			companyAddress: {
+				address,
+				city: cityAddress,
+				state,
+			},
+		};
 
-    return { ...companyInformation };
-  }
+		return { ...companyInformation };
+	}
 }
