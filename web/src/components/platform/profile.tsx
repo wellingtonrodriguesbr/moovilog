@@ -1,7 +1,7 @@
 export function Profile() {
-  return (
-    <section>
-      <header>Profile</header>
-    </section>
-  );
+	return (
+		<section>
+			<header>Profile</header>
+		</section>
+	);
 }

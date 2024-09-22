@@ -5,30 +5,30 @@ import { ButtonOpenCloseSidebar } from "./button-open-close-sidebar";
 import { NotificationsDropdown } from "./notifications-dropdown";
 
 export function HeaderPlatform() {
-  return (
-    <header className="col-span-full h-20 px-4 border-b flex justify-between items-center bg-white">
-      <div className="flex items-center gap-4">
-        <ButtonOpenCloseSidebar />
-        <Image
-          src="/logo-blue.svg"
-          alt="moovilog"
-          className="hidden md:block w-[150px]"
-          width={250}
-          height={193}
-        />
-      </div>
-      <Image
-        src="/logo-blue.svg"
-        alt="moovilog"
-        className="block md:hidden w-[120px]"
-        width={250}
-        height={193}
-      />
+	return (
+		<header className="col-span-full h-20 px-4 border-b flex justify-between items-center bg-white">
+			<div className="flex items-center gap-4">
+				<ButtonOpenCloseSidebar />
+				<Image
+					src="/logo-blue.svg"
+					alt="moovilog"
+					className="hidden md:block w-[150px]"
+					width={250}
+					height={193}
+				/>
+			</div>
+			<Image
+				src="/logo-blue.svg"
+				alt="moovilog"
+				className="block md:hidden w-[120px]"
+				width={250}
+				height={193}
+			/>
 
-      <div className="flex items-center gap-4">
-        <NotificationsDropdown />
-        <AccountMenu />
-      </div>
-    </header>
-  );
+			<div className="flex items-center gap-4">
+				<NotificationsDropdown />
+				<AccountMenu />
+			</div>
+		</header>
+	);
 }

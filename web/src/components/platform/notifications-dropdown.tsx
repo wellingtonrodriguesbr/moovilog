@@ -2,35 +2,28 @@ import { Bell } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuPortal,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuTrigger,
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
 export function NotificationsDropdown() {
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="secondary"
-          className="hover:bg-app-blue-500 hover:text-white data-[state=open]:bg-app-blue-500 data-[state=open]:text-white"
-        >
-          <Bell className="size-4" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-56">
-        <DropdownMenuLabel>Notificações recentes</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        {/* <DropdownMenuGroup>
+	return (
+		<DropdownMenu>
+			<DropdownMenuTrigger asChild>
+				<Button
+					variant="secondary"
+					className="hover:bg-app-blue-500 hover:text-white data-[state=open]:bg-app-blue-500 data-[state=open]:text-white"
+				>
+					<Bell className="size-4" />
+				</Button>
+			</DropdownMenuTrigger>
+			<DropdownMenuContent align="end" className="w-56">
+				<DropdownMenuLabel>Notificações recentes</DropdownMenuLabel>
+				<DropdownMenuSeparator />
+				{/* <DropdownMenuGroup>
           <DropdownMenuItem>
             <User className="mr-2 h-4 w-4" />
             <span>Profile</span>
@@ -52,7 +45,7 @@ export function NotificationsDropdown() {
             <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
           </DropdownMenuItem>
         </DropdownMenuGroup> */}
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
+			</DropdownMenuContent>
+		</DropdownMenu>
+	);
 }

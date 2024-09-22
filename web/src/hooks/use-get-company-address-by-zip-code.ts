@@ -6,53 +6,53 @@ import { useDebounce } from "react-use";
 import { toast } from "sonner";
 
 interface UseGetCompanyAddressByZipCodeProps {
-  zipCode: string;
+	zipCode: string;
 }
 
 export interface DataResponse {
-  cep: string;
-  state: string;
-  city: string;
-  neighborhood: string;
-  street: string;
+	cep: string;
+	state: string;
+	city: string;
+	neighborhood: string;
+	street: string;
 }
 
 export function useGetCompanyAddressByZipCode({
-  zipCode,
+	zipCode,
 }: UseGetCompanyAddressByZipCodeProps) {
-  const [isReady] = useDebounce(
-    () => {
-      setDebouncedValue(zipCode);
-    },
-    2000,
-    [zipCode]
-  );
-  const [debouncedValue, setDebouncedValue] = useState("");
+	const [isReady] = useDebounce(
+		() => {
+			setDebouncedValue(zipCode);
+		},
+		2000,
+		[zipCode]
+	);
+	const [debouncedValue, setDebouncedValue] = useState("");
 
-  const { data, isPending, status } = useQuery({
-    queryKey: ["get-company-address"],
-    queryFn: () => handleValidZipCode({ zipCode }),
-    enabled: !!isReady() && !!debouncedValue.length,
-  });
+	const { data, isPending, status } = useQuery({
+		queryKey: ["get-company-address"],
+		queryFn: () => handleValidZipCode({ zipCode }),
+		enabled: !!isReady() && !!debouncedValue.length,
+	});
 
-  async function handleValidZipCode({ zipCode }: { zipCode: string }) {
-    try {
-      const { data } = await axios.get<DataResponse>(
-        `https://brasilapi.com.br/api/cep/v2/${zipCode}`
-      );
+	async function handleValidZipCode({ zipCode }: { zipCode: string }) {
+		try {
+			const { data } = await axios.get<DataResponse>(
+				`https://brasilapi.com.br/api/cep/v2/${zipCode}`
+			);
 
-      toast.success("CEP encontrado com sucesso");
+			toast.success("CEP encontrado com sucesso");
 
-      return data;
-    } catch (error) {
-      toast.error("CEP não encontrado, tente novamente");
-      console.log(error);
-    }
-  }
+			return data;
+		} catch (error) {
+			toast.error("CEP não encontrado, tente novamente");
+			console.log(error);
+		}
+	}
 
-  return {
-    data,
-    isPendingGetCompanyAddress: isPending,
-    status,
-  };
+	return {
+		data,
+		isPendingGetCompanyAddress: isPending,
+		status,
+	};
 }

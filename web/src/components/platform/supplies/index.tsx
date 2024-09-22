@@ -1,7 +1,7 @@
 export function Supplies() {
-  return (
-    <section>
-      <div></div>
-    </section>
-  );
+	return (
+		<section>
+			<div></div>
+		</section>
+	);
 }

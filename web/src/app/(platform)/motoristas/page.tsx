@@ -2,14 +2,14 @@ import { Drivers } from "@/components/platform/drivers";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Motoristas | Moovilog",
-  description: "",
+	title: "Motoristas | Moovilog",
+	description: "",
 };
 
 export default function DriversPagePlatform() {
-  return (
-    <main>
-      <Drivers />
-    </main>
-  );
+	return (
+		<main>
+			<Drivers />
+		</main>
+	);
 }

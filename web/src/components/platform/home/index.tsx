@@ -8,37 +8,37 @@ import { formatCNPJ } from "@/utils/format-cnpj";
 import { BarChartComponent } from "../metrics/bar-chart";
 
 export function Home() {
-  const { profile, isGetProfilePending } = useGetProfile();
-  const { company, isGetCompanyInformationPending } =
-    useGetCompanyInformation();
+	const { profile, isGetProfilePending } = useGetProfile();
+	const { company, isGetCompanyInformationPending } =
+		useGetCompanyInformation();
 
-  return (
-    <section className="space-y-12 w-full">
-      <header className="flex justify-between">
-        <h1 className="text-2xl md:text-4xl font-medium">
-          {isGetProfilePending ? (
-            <Skeleton className="h-8 md:h-12 w-80 md:w-[450px] rounded-lg" />
-          ) : (
-            <>Olá, {profile?.name}</>
-          )}
-        </h1>
-        <div className="hidden md:flex flex-col gap-1 items-end">
-          {isGetCompanyInformationPending ? (
-            <Skeleton className="h-5 md:h-4 w-24 md:w-[250px] rounded-lg" />
-          ) : (
-            <p className="text-lg">{company?.name}</p>
-          )}
-          {isGetCompanyInformationPending ? (
-            <Skeleton className="h-5 md:h-4 w-16 md:w-[150px] rounded-lg" />
-          ) : (
-            <p className="text-zinc-700 text-xs">
-              {formatCNPJ(company?.documentNumber ?? "")}
-            </p>
-          )}
-        </div>
-      </header>
-      <QuickAccess />
-      <BarChartComponent />
-    </section>
-  );
+	return (
+		<section className="space-y-12 w-full">
+			<header className="flex justify-between">
+				<h1 className="text-2xl md:text-4xl font-medium">
+					{isGetProfilePending ? (
+						<Skeleton className="h-8 md:h-12 w-80 md:w-[450px] rounded-lg" />
+					) : (
+						<>Olá, {profile?.name}</>
+					)}
+				</h1>
+				<div className="hidden md:flex flex-col gap-1 items-end">
+					{isGetCompanyInformationPending ? (
+						<Skeleton className="h-5 md:h-4 w-24 md:w-[250px] rounded-lg" />
+					) : (
+						<p className="text-lg">{company?.name}</p>
+					)}
+					{isGetCompanyInformationPending ? (
+						<Skeleton className="h-5 md:h-4 w-16 md:w-[150px] rounded-lg" />
+					) : (
+						<p className="text-zinc-700 text-xs">
+							{formatCNPJ(company?.documentNumber ?? "")}
+						</p>
+					)}
+				</div>
+			</header>
+			<QuickAccess />
+			<BarChartComponent />
+		</section>
+	);
 }
