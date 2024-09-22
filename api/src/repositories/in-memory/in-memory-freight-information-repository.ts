@@ -3,12 +3,12 @@ import { FreightInformationRepository } from "../freight-information-repository"
 import { randomUUID } from "crypto";
 
 export class InMemoryFreightInformationRepository
-implements FreightInformationRepository
+	implements FreightInformationRepository
 {
 	public items: FreightInformation[] = [];
 
 	private toDate(value: string | Date | null | undefined): Date | null {
-		return typeof value === "string" ? new Date(value) : value ?? null;
+		return typeof value === "string" ? new Date(value) : (value ?? null);
 	}
 
 	async create(data: Prisma.FreightInformationUncheckedCreateInput) {
@@ -33,7 +33,7 @@ implements FreightInformationRepository
 
 	async findByFreight(freightId: string) {
 		const freightInformation = this.items.find(
-			(item) => item.freightId === freightId,
+			(item) => item.freightId === freightId
 		);
 
 		if (!freightInformation) {

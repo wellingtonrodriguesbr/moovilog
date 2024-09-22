@@ -7,7 +7,7 @@ import z from "zod";
 
 export async function authenticateDriverController(
 	req: FastifyRequest,
-	reply: FastifyReply,
+	reply: FastifyReply
 ) {
 	const authenticateDriverBodySchema = z.object({
 		documentNumber: z.string(),
@@ -15,7 +15,7 @@ export async function authenticateDriverController(
 	});
 
 	const { documentNumber, password } = authenticateDriverBodySchema.parse(
-		req.body,
+		req.body
 	);
 
 	try {
@@ -34,7 +34,7 @@ export async function authenticateDriverController(
 					sub: driver.id,
 					expiresIn: "10m",
 				},
-			},
+			}
 		);
 
 		const refreshToken = await reply.jwtSign(
@@ -45,7 +45,7 @@ export async function authenticateDriverController(
 				sign: {
 					sub: driver.id,
 				},
-			},
+			}
 		);
 
 		reply

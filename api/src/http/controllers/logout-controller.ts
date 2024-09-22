@@ -3,7 +3,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 
 export async function logoutController(
 	req: FastifyRequest,
-	reply: FastifyReply,
+	reply: FastifyReply
 ) {
 	await req.jwtVerify({ onlyCookie: true });
 
@@ -19,7 +19,7 @@ export async function logoutController(
 					sub: req.user.sub,
 					expiresIn: 1,
 				},
-			},
+			}
 		);
 
 		return reply.send({ success: true });

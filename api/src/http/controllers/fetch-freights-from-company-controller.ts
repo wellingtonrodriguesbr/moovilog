@@ -4,13 +4,13 @@ import { makeFetchFreightsFromCompanyUseCase } from "@/use-cases/factories/make-
 
 export async function fetchFreightsFromCompanyController(
 	req: FastifyRequest,
-	reply: FastifyReply,
+	reply: FastifyReply
 ) {
 	const userId = req.user.sub;
 
 	try {
 		const fetchFreightsFromCompanyUseCase =
-      makeFetchFreightsFromCompanyUseCase();
+			makeFetchFreightsFromCompanyUseCase();
 		const { freights } = await fetchFreightsFromCompanyUseCase.execute({
 			userId,
 		});

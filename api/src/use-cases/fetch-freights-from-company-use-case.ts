@@ -4,17 +4,17 @@ import { FreightsRepository } from "@/repositories/freights-repository";
 import { IFreight } from "@/interfaces/freight";
 
 interface FetchFreightsFromCompanyUseCaseRequest {
-  userId: string;
+	userId: string;
 }
 
 interface FetchFreightsFromCompanyUseCaseResponse {
-  freights: IFreight[];
+	freights: IFreight[];
 }
 
 export class FetchFreightsFromCompanyUseCase {
 	constructor(
-    private companyMembersRepository: CompanyMembersRepository,
-    private freightsRepository: FreightsRepository,
+		private companyMembersRepository: CompanyMembersRepository,
+		private freightsRepository: FreightsRepository
 	) {}
 
 	async execute({
@@ -27,7 +27,7 @@ export class FetchFreightsFromCompanyUseCase {
 		}
 
 		const freights = await this.freightsRepository.findManyByCompanyId(
-			member.companyId,
+			member.companyId
 		);
 
 		return { freights };

@@ -4,16 +4,16 @@ import { makeGetCompanyInformationUseCase } from "@/use-cases/factories/make-get
 
 export async function getCompanyInformationController(
 	req: FastifyRequest,
-	reply: FastifyReply,
+	reply: FastifyReply
 ) {
 	const userId = req.user.sub;
 
 	try {
 		const getCompanyInformationUseCase = makeGetCompanyInformationUseCase();
 		const { company, companyAddress } =
-      await getCompanyInformationUseCase.execute({
-      	userId,
-      });
+			await getCompanyInformationUseCase.execute({
+				userId,
+			});
 
 		reply.status(200).send({ company, companyAddress });
 	} catch (error) {

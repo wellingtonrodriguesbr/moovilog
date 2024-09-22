@@ -4,12 +4,12 @@ import { IUser } from "@/interfaces/user";
 import { hash } from "bcryptjs";
 
 interface RegisterUserUseCaseRequest {
-  name: string;
-  email: string;
-  password: string;
+	name: string;
+	email: string;
+	password: string;
 }
 interface RegisterUserUseCaseResponse {
-  user: IUser;
+	user: IUser;
 }
 
 export class RegisterUserUseCase {

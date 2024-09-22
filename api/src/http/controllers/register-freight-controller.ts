@@ -7,7 +7,7 @@ import z from "zod";
 
 export async function registerFreightController(
 	req: FastifyRequest,
-	reply: FastifyReply,
+	reply: FastifyReply
 ) {
 	const registerFreightBodySchema = z.object({
 		type: z.enum(["FRACTIONAL", "DIRECT", "DEDICATED"]),

@@ -7,7 +7,7 @@ import z from "zod";
 
 export async function registerDriverBankDetailsController(
 	req: FastifyRequest,
-	reply: FastifyReply,
+	reply: FastifyReply
 ) {
 	const registerDriverBankDetailsBodySchema = z.object({
 		financialInstitution: z.string(),
@@ -35,7 +35,7 @@ export async function registerDriverBankDetailsController(
 
 	try {
 		const registerDriverBankDetailsUseCase =
-      makeRegisterDriverBankDetailsUseCase();
+			makeRegisterDriverBankDetailsUseCase();
 		const { bankDetailsId } = await registerDriverBankDetailsUseCase.execute({
 			financialInstitution,
 			accountType,

@@ -25,7 +25,7 @@ describe("Register company address use case", () => {
 			companyAddressRepository,
 			addressesRepository,
 			citiesRepository,
-			companiesRepository,
+			companiesRepository
 		);
 
 		await usersRepository.create({

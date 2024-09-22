@@ -6,19 +6,19 @@ import { FreightsRepository } from "@/repositories/freights-repository";
 import { NotAllowedError } from "./errors/not-allowed-error";
 
 interface GetFreightInformationAsADriverUseCaseRequest {
-  driverId: string;
-  freightId: string;
+	driverId: string;
+	freightId: string;
 }
 
 interface GetFreightInformationAsADriverUseCaseResponse {
-  freightInformation: IFreightInformation;
+	freightInformation: IFreightInformation;
 }
 
 export class GetFreightInformationAsADriverUseCase {
 	constructor(
-    private driversRepsoitory: DriversRepository,
-    private freightsRepository: FreightsRepository,
-    private freightsInformationRepository: FreightInformationRepository,
+		private driversRepsoitory: DriversRepository,
+		private freightsRepository: FreightsRepository,
+		private freightsInformationRepository: FreightInformationRepository
 	) {}
 
 	async execute({
@@ -42,7 +42,7 @@ export class GetFreightInformationAsADriverUseCase {
 		}
 
 		const freightInformation =
-      await this.freightsInformationRepository.findByFreight(freightId);
+			await this.freightsInformationRepository.findByFreight(freightId);
 
 		if (!freightInformation) {
 			throw new ResourceNotFoundError("Freight information not found");

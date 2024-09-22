@@ -3,7 +3,7 @@ import { CompanyAddressesRepository } from "../company-addresses-repository";
 import { randomUUID } from "crypto";
 
 export class InMemoryCompanyAddressesRepository
-implements CompanyAddressesRepository
+	implements CompanyAddressesRepository
 {
 	public items: CompanyAddress[] = [];
 
@@ -21,7 +21,7 @@ implements CompanyAddressesRepository
 
 	async findByCompanyId(companyId: string) {
 		const companyAddress = this.items.find(
-			(item) => item.companyId === companyId,
+			(item) => item.companyId === companyId
 		);
 
 		if (!companyAddress) {

@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 
 export async function refreshController(
 	req: FastifyRequest,
-	reply: FastifyReply,
+	reply: FastifyReply
 ) {
 	await req.jwtVerify({ onlyCookie: true });
 
@@ -19,7 +19,7 @@ export async function refreshController(
 					sub: req.user.sub,
 					expiresIn: "10m",
 				},
-			},
+			}
 		);
 
 		const refreshToken = await reply.jwtSign(
@@ -30,7 +30,7 @@ export async function refreshController(
 				sign: {
 					sub: req.user.sub,
 				},
-			},
+			}
 		);
 
 		return reply

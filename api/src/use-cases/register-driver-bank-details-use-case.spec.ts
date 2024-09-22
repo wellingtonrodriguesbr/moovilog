@@ -26,7 +26,7 @@ describe("Register driver bank details use case", () => {
 		sut = new RegisterDriverBankDetailsUseCase(
 			companyMembersRepository,
 			driversRepository,
-			bankDetailsRepository,
+			bankDetailsRepository
 		);
 
 		await usersRepository.create({
@@ -92,7 +92,7 @@ describe("Register driver bank details use case", () => {
 				pixKey: "00000000000",
 				driverId: "john-doe-driver-id",
 				creatorId: member.memberId,
-			}),
+			})
 		).rejects.toBeInstanceOf(NotAllowedError);
 	});
 });

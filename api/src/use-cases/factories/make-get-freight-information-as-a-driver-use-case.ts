@@ -7,14 +7,14 @@ export function makeGetFreightInformationAsADriverUseCase() {
 	const driversRepository = new PrismaDriversRepository();
 	const freightsRepository = new PrismaFreightsRepository();
 	const freightsInformationRepository =
-    new PrismaFreightInformationRepository();
+		new PrismaFreightInformationRepository();
 
 	const getFreightInformationAsADriverUseCase =
-    new GetFreightInformationAsADriverUseCase(
-    	driversRepository,
-    	freightsRepository,
-    	freightsInformationRepository,
-    );
+		new GetFreightInformationAsADriverUseCase(
+			driversRepository,
+			freightsRepository,
+			freightsInformationRepository
+		);
 
 	return getFreightInformationAsADriverUseCase;
 }

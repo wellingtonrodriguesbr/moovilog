@@ -29,7 +29,7 @@ describe("Get freight information as a driver use case", () => {
 		sut = new GetFreightInformationAsADriverUseCase(
 			driversRepository,
 			freightsRepository,
-			freightsInformationRepository,
+			freightsInformationRepository
 		);
 
 		await usersRepository.create({
@@ -107,7 +107,7 @@ describe("Get freight information as a driver use case", () => {
 			sut.execute({
 				driverId: "wrong-john-doe-driver-id",
 				freightId: "fake-freight-01",
-			}),
+			})
 		).rejects.toBeInstanceOf(NotAllowedError);
 	});
 });

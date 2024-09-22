@@ -25,7 +25,7 @@ export class InMemoryDriversRepository implements DriversRepository {
 
 	async findByDocumentNumber(documentNumber: string) {
 		const driver = this.items.find(
-			(item) => item.documentNumber === documentNumber,
+			(item) => item.documentNumber === documentNumber
 		);
 
 		if (!driver) {

@@ -36,7 +36,7 @@ describe("Register freight use case", () => {
 			driversRepository,
 			freightsRepository,
 			freightInformationRepository,
-			citiesByFreightRepository,
+			citiesByFreightRepository
 		);
 
 		await usersRepository.create({
@@ -110,7 +110,7 @@ describe("Register freight use case", () => {
 				citiesIds: ["fake-city-01", "fake-city-02"],
 				creatorId: member.memberId,
 				driverId: "john-doe-driver-id",
-			}),
+			})
 		).rejects.toBeInstanceOf(NotAllowedError);
 	});
 
@@ -127,7 +127,7 @@ describe("Register freight use case", () => {
 				citiesIds: ["fake-city-01", "fake-city-02"],
 				creatorId: "john-doe-id-01",
 				driverId: "john-doe-driver-id",
-			}),
+			})
 		).rejects.toBeInstanceOf(BadRequestError);
 	});
 });

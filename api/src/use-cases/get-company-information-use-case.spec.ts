@@ -34,7 +34,7 @@ describe("Get company information use case", () => {
 			companyAddressesRepository,
 			addressesRepository,
 			citiesRepository,
-			statesRepository,
+			statesRepository
 		);
 
 		await usersRepository.create({

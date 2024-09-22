@@ -1,8 +1,8 @@
 export interface CreateManyParams {
-  freightId: string;
-  citiesIds: string[];
+	freightId: string;
+	citiesIds: string[];
 }
 
 export interface CitiesByFreightRepository {
-  createMany(params: CreateManyParams): Promise<void>;
+	createMany(params: CreateManyParams): Promise<void>;
 }

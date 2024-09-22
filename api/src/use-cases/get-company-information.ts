@@ -10,36 +10,36 @@ import { IState } from "@/interfaces/state";
 import { AddressesRepository } from "@/repositories/addresses-repository";
 
 interface GetCompanyInformationUseCaseRequest {
-  userId: string;
+	userId: string;
 }
 
 export interface Address {
-  id: string;
-  zipCode: string;
-  street: string;
-  neighborhood: string;
-  number: number;
-  complement: string | null;
-  cityId: string;
+	id: string;
+	zipCode: string;
+	street: string;
+	neighborhood: string;
+	number: number;
+	complement: string | null;
+	cityId: string;
 }
 
 interface GetCompanyInformationUseCaseResponse {
-  company: ICompany;
-  companyAddress: {
-    address: Address;
-    city: ICity;
-    state: IState;
-  };
+	company: ICompany;
+	companyAddress: {
+		address: Address;
+		city: ICity;
+		state: IState;
+	};
 }
 
 export class GetCompanyInformationUseCase {
 	constructor(
-    private companyMembersRepository: CompanyMembersRepository,
-    private companiesRepository: CompaniesRepository,
-    private companyAddressesRepository: CompanyAddressesRepository,
-    private addressesRepository: AddressesRepository,
-    private citiesRepository: CitiesRepository,
-    private statesRepository: StatesRepository,
+		private companyMembersRepository: CompanyMembersRepository,
+		private companiesRepository: CompaniesRepository,
+		private companyAddressesRepository: CompanyAddressesRepository,
+		private addressesRepository: AddressesRepository,
+		private citiesRepository: CitiesRepository,
+		private statesRepository: StatesRepository
 	) {}
 
 	async execute({
@@ -58,14 +58,14 @@ export class GetCompanyInformationUseCase {
 		}
 
 		const companyAddress =
-      await this.companyAddressesRepository.findByCompanyId(company.id);
+			await this.companyAddressesRepository.findByCompanyId(company.id);
 
 		if (!companyAddress) {
 			throw new ResourceNotFoundError("Company address not found");
 		}
 
 		const address = await this.addressesRepository.findById(
-			companyAddress.addressId,
+			companyAddress.addressId
 		);
 
 		if (!address) {

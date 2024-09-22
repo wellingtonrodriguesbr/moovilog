@@ -7,7 +7,7 @@ export function makeRegisterDriverUseCase() {
 	const driversRepository = new PrismaDriversRepository();
 	const registerDriverUseCase = new RegisterDriverUseCase(
 		companyMembersRepository,
-		driversRepository,
+		driversRepository
 	);
 
 	return registerDriverUseCase;

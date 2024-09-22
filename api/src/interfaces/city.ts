@@ -1,3 +1,3 @@
 import { City } from "@prisma/client";
 
-export type ICity = City
+export type ICity = City;

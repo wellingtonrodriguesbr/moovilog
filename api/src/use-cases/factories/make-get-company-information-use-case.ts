@@ -20,7 +20,7 @@ export function makeGetCompanyInformationUseCase() {
 		companyAddressesRepository,
 		addressesRepository,
 		citiesRepository,
-		statesRepository,
+		statesRepository
 	);
 
 	return getCompanyInformationUseCase;

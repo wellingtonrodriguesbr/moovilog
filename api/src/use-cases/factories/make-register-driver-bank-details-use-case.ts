@@ -10,7 +10,7 @@ export function makeRegisterDriverBankDetailsUseCase() {
 	const registerDriverBankDetailsUseCase = new RegisterDriverBankDetailsUseCase(
 		companyMembersRepository,
 		driversRepository,
-		bankDetailsRepository,
+		bankDetailsRepository
 	);
 
 	return registerDriverBankDetailsUseCase;

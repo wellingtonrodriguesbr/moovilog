@@ -11,7 +11,7 @@ export function makeRegisterCompanyUseCase() {
 	const registerCompanyUseCase = new RegisterCompanyUseCase(
 		companiesRepository,
 		companyMembersRepository,
-		usersRepository,
+		usersRepository
 	);
 
 	return registerCompanyUseCase;

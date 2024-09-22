@@ -6,7 +6,7 @@ import z from "zod";
 
 export async function registerUserController(
 	req: FastifyRequest,
-	reply: FastifyReply,
+	reply: FastifyReply
 ) {
 	const registerUserBodySchema = z.object({
 		name: z.string(),

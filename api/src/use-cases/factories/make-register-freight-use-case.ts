@@ -16,7 +16,7 @@ export function makeRegisterfreightUseCase() {
 		driversRepository,
 		freightsRepository,
 		freightInformationRepository,
-		citiesByFreightRepository,
+		citiesByFreightRepository
 	);
 
 	return registerFreightUseCase;

@@ -4,7 +4,7 @@ import { AuthenticateDriverUseCase } from "../authenticate-driver-use-case";
 export function makeAuthenticateDriverUseCase() {
 	const driversRepository = new PrismaDriversRepository();
 	const authenticateDriverUseCase = new AuthenticateDriverUseCase(
-		driversRepository,
+		driversRepository
 	);
 
 	return authenticateDriverUseCase;

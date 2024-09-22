@@ -4,12 +4,12 @@ import { DriversRepository } from "@/repositories/drivers-repository";
 import { IDriver } from "@/interfaces/driver";
 
 interface AuthenticateDriverUseCaseRequest {
-  documentNumber: string;
-  password: string;
+	documentNumber: string;
+	password: string;
 }
 
 interface AuthenticateDriverUseCaseResponse {
-  driver: IDriver;
+	driver: IDriver;
 }
 
 export class AuthenticateDriverUseCase {
@@ -19,13 +19,12 @@ export class AuthenticateDriverUseCase {
 		documentNumber,
 		password,
 	}: AuthenticateDriverUseCaseRequest): Promise<AuthenticateDriverUseCaseResponse> {
-		const driver = await this.driversRepository.findByDocumentNumber(
-			documentNumber,
-		);
+		const driver =
+			await this.driversRepository.findByDocumentNumber(documentNumber);
 
 		if (!driver) {
 			throw new InvalidCredentialsError(
-				"Incorrect document number or password",
+				"Incorrect document number or password"
 			);
 		}
 
@@ -33,7 +32,7 @@ export class AuthenticateDriverUseCase {
 
 		if (!doesPasswordsMatch) {
 			throw new InvalidCredentialsError(
-				"Incorrect document number or password",
+				"Incorrect document number or password"
 			);
 		}
 

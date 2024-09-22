@@ -28,7 +28,7 @@ describe("Get user profile use case", () => {
 		expect(() =>
 			sut.execute({
 				userId: "does-not-exist-id",
-			}),
+			})
 		).rejects.toBeInstanceOf(ResourceNotFoundError);
 	});
 });

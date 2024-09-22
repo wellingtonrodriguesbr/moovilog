@@ -4,12 +4,12 @@ import { UsersRepository } from "@/repositories/users-repository";
 import { IUser } from "@/interfaces/user";
 
 interface AuthenticateUseCaseRequest {
-  email: string;
-  password: string;
+	email: string;
+	password: string;
 }
 
 interface AuthenticateUseCaseResponse {
-  user: IUser;
+	user: IUser;
 }
 
 export class AuthenticateUseCase {

@@ -27,7 +27,7 @@ describe("Register vehicle use case", () => {
 		sut = new RegisterVehicleUseCase(
 			companyMembersRepository,
 			driversRepository,
-			vehiclesRepository,
+			vehiclesRepository
 		);
 
 		await usersRepository.create({
@@ -100,7 +100,7 @@ describe("Register vehicle use case", () => {
 				fullLoadCapacity: "24.000",
 				driverId: "john-doe-driver-id",
 				creatorId: "john-doe-id-01",
-			}),
+			})
 		).rejects.toBeInstanceOf(VehicleAlreadyExistsError);
 	});
 
@@ -121,7 +121,7 @@ describe("Register vehicle use case", () => {
 				fullLoadCapacity: "24.000",
 				driverId: "john-doe-driver-id",
 				creatorId: member.memberId,
-			}),
+			})
 		).rejects.toBeInstanceOf(NotAllowedError);
 	});
 });

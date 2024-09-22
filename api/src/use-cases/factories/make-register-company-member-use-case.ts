@@ -5,7 +5,7 @@ export function makeRegisterCompanyMemberUseCase() {
 	const companyMemberRepository = new PrismaCompanyMembersRepository();
 
 	const registerCompanyMemberUseCase = new RegisterCompanyMemberUseCase(
-		companyMemberRepository,
+		companyMemberRepository
 	);
 
 	return registerCompanyMemberUseCase;

@@ -18,7 +18,7 @@ describe("Register company use case", () => {
 		sut = new RegisterCompanyUseCase(
 			companiesRepository,
 			companyMembersRepository,
-			usersRepository,
+			usersRepository
 		);
 
 		await usersRepository.create({
@@ -58,7 +58,7 @@ describe("Register company use case", () => {
 				size: "MEDIUM",
 				type: "HEADQUARTERS",
 				ownerId: "john-doe-01",
-			}),
+			})
 		).rejects.toBeInstanceOf(CompanyAlreadyExistsError);
 	});
 });

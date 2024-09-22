@@ -4,7 +4,7 @@ import { makeGetUserProfileUseCase } from "@/use-cases/factories/make-get-user-p
 
 export async function getUserProfileController(
 	req: FastifyRequest,
-	reply: FastifyReply,
+	reply: FastifyReply
 ) {
 	const userId = req.user.sub;
 

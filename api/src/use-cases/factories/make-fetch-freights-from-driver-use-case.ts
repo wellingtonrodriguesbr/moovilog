@@ -8,7 +8,7 @@ export function makeFetchFreightsFromDriverUseCase() {
 
 	const fetchFreightsFromDriverUseCase = new FetchFreightsFromDriverUseCase(
 		driversRepository,
-		freightsRepository,
+		freightsRepository
 	);
 
 	return fetchFreightsFromDriverUseCase;

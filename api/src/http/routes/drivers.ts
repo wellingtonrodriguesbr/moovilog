@@ -11,23 +11,23 @@ export async function driversRoutes(app: FastifyInstance) {
 	app.post(
 		"/drivers/sessions",
 		{ onRequest: [verifyJWT] },
-		authenticateDriverController,
+		authenticateDriverController
 	);
 	app.post("/drivers/token/refresh", driverRefreshController);
 	app.post(
 		"/drivers/bank-details",
 		{ onRequest: [verifyJWT] },
-		registerDriverController,
+		registerDriverController
 	);
 
 	app.get(
 		"/drivers/freights",
 		{ onRequest: [verifyJWT] },
-		fetchFreightFromDriverController,
+		fetchFreightFromDriverController
 	);
 	app.get(
 		"/drivers/:freightId/freight-information",
 		{ onRequest: [verifyJWT] },
-		getFreightInformationAsADriverController,
+		getFreightInformationAsADriverController
 	);
 }

@@ -5,7 +5,7 @@ import {
 } from "../cities-by-freight-repository";
 
 export class PrismaCitiesByFreightRepository
-implements CitiesByFreightRepository
+	implements CitiesByFreightRepository
 {
 	async createMany(params: CreateManyParams) {
 		const data = params.citiesIds.map((cityId) => {

@@ -30,8 +30,8 @@ export class RegisterVehicleUseCase {
 	constructor(
 		private companyMembersRepository: CompanyMembersRepository,
 		private driversRepository: DriversRepository,
-		private vehiclesRepository: VehiclesRepository,
-	) { }
+		private vehiclesRepository: VehiclesRepository
+	) {}
 
 	async execute({
 		plate,
@@ -55,7 +55,7 @@ export class RegisterVehicleUseCase {
 
 		if (member.role !== "ADMIN" && member.role !== "OPERATIONAL") {
 			throw new NotAllowedError(
-				"You do not have permission to perform this action, please ask your administrator for access",
+				"You do not have permission to perform this action, please ask your administrator for access"
 			);
 		}
 
@@ -65,7 +65,7 @@ export class RegisterVehicleUseCase {
 
 		if (vehicleAlreadyExists) {
 			throw new VehicleAlreadyExistsError(
-				"There is already a vehicle registered with this plate",
+				"There is already a vehicle registered with this plate"
 			);
 		}
 

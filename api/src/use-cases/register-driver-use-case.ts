@@ -7,21 +7,21 @@ import { IDriver } from "@/interfaces/driver";
 import { NotAllowedError } from "./errors/not-allowed-error";
 
 interface RegisterDriverUseCaseRequest {
-  name: string;
-  password: string;
-  documentNumber: string;
-  phone: string;
-  backupPhone?: string | null;
-  creatorId: string;
+	name: string;
+	password: string;
+	documentNumber: string;
+	phone: string;
+	backupPhone?: string | null;
+	creatorId: string;
 }
 interface RegisterDriverUseCaseResponse {
-  driver: IDriver;
+	driver: IDriver;
 }
 
 export class RegisterDriverUseCase {
 	constructor(
-    private companyMembersRepository: CompanyMembersRepository,
-    private driversRepository: DriversRepository,
+		private companyMembersRepository: CompanyMembersRepository,
+		private driversRepository: DriversRepository
 	) {}
 
 	async execute({
@@ -43,7 +43,7 @@ export class RegisterDriverUseCase {
 
 		if (member.role !== "ADMIN" && member.role !== "OPERATIONAL") {
 			throw new NotAllowedError(
-				"You do not have permission to perform this action, please ask your administrator for access",
+				"You do not have permission to perform this action, please ask your administrator for access"
 			);
 		}
 

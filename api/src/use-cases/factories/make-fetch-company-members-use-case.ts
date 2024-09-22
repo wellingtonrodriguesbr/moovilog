@@ -4,7 +4,7 @@ import { PrismaCompanyMembersRepository } from "@/repositories/prisma/prisma-com
 export function makeFetchCompanyMembersUseCase() {
 	const companyMembersRepository = new PrismaCompanyMembersRepository();
 	const fetchCompanyMembersUseCase = new FetchCompanyMembersUseCase(
-		companyMembersRepository,
+		companyMembersRepository
 	);
 
 	return fetchCompanyMembersUseCase;

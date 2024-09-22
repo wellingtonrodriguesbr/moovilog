@@ -35,7 +35,7 @@ describe("Register user use case", () => {
 				name: "John Doe",
 				email: "johndoe@example.com",
 				password: "12345678",
-			}),
+			})
 		).rejects.toBeInstanceOf(UserAlreadyExistsError);
 	});
 

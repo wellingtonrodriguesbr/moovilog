@@ -8,7 +8,7 @@ import z from "zod";
 
 export async function registerVehicleController(
 	req: FastifyRequest,
-	reply: FastifyReply,
+	reply: FastifyReply
 ) {
 	const registerVehicleBodySchema = z.object({
 		plate: z.string(),
@@ -30,7 +30,7 @@ export async function registerVehicleController(
 	});
 
 	const { plate, year, category, type, body, fullLoadCapacity, driverId } =
-    registerVehicleBodySchema.parse(req.body);
+		registerVehicleBodySchema.parse(req.body);
 
 	const creatorId = req.user.sub;
 

@@ -1,3 +1,3 @@
 import { State } from "@prisma/client";
 
-export type IState = State
+export type IState = State;

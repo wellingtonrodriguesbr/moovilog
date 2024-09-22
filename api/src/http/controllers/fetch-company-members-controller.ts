@@ -4,7 +4,7 @@ import { makeFetchCompanyMembersUseCase } from "@/use-cases/factories/make-fetch
 
 export async function fetchCompanyMembersController(
 	req: FastifyRequest,
-	reply: FastifyReply,
+	reply: FastifyReply
 ) {
 	const userId = req.user.sub;
 

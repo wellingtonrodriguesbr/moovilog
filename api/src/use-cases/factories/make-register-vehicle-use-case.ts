@@ -10,7 +10,7 @@ export function makeRegisterVehicleUseCase() {
 	const registerVehicleUseCase = new RegisterVehicleUseCase(
 		companyMembersRepository,
 		driversRepository,
-		vehiclesRepository,
+		vehiclesRepository
 	);
 
 	return registerVehicleUseCase;

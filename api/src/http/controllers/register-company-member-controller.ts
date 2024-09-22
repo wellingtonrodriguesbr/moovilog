@@ -8,7 +8,7 @@ import z from "zod";
 
 export async function registerCompanyMemberController(
 	req: FastifyRequest,
-	reply: FastifyReply,
+	reply: FastifyReply
 ) {
 	const registerCompanyMemberBodySchema = z.object({
 		memberId: z.string(),

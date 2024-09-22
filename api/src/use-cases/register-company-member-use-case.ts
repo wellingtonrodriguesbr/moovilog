@@ -5,13 +5,13 @@ import { ICompanyMemberRoles } from "@/interfaces/company-member";
 import { NotAllowedError } from "./errors/not-allowed-error";
 
 interface RegisterCompanyMemberUseCaseRequest {
-  memberId: string;
-  creatorId: string;
-  role: ICompanyMemberRoles;
+	memberId: string;
+	creatorId: string;
+	role: ICompanyMemberRoles;
 }
 
 interface RegisterCompanyMemberUseCaseResponse {
-  companyMemberId: string;
+	companyMemberId: string;
 }
 
 export class RegisterCompanyMemberUseCase {
@@ -22,9 +22,8 @@ export class RegisterCompanyMemberUseCase {
 		creatorId,
 		role,
 	}: RegisterCompanyMemberUseCaseRequest): Promise<RegisterCompanyMemberUseCaseResponse> {
-		const creator = await this.companyMembersRepository.findByMemberId(
-			creatorId,
-		);
+		const creator =
+			await this.companyMembersRepository.findByMemberId(creatorId);
 
 		if (!creator) {
 			throw new ResourceNotFoundError("User not found");
@@ -32,15 +31,15 @@ export class RegisterCompanyMemberUseCase {
 
 		if (creator.role !== "ADMIN") {
 			throw new NotAllowedError(
-				"You do not have permission to perform this action, please ask your administrator for access",
+				"You do not have permission to perform this action, please ask your administrator for access"
 			);
 		}
 
 		const memberAlreadyExists =
-      await this.companyMembersRepository.findMemberInCompany(
-      	memberId,
-      	creator.companyId,
-      );
+			await this.companyMembersRepository.findMemberInCompany(
+				memberId,
+				creator.companyId
+			);
 
 		if (memberAlreadyExists) {
 			throw new CompanyMemberAlreadyExistsError();

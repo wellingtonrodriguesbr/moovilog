@@ -1,3 +1,3 @@
 import { Address } from "@prisma/client";
 
-export type IAddress = Address
+export type IAddress = Address;

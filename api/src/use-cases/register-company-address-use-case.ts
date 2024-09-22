@@ -6,25 +6,25 @@ import { IAddress } from "@/interfaces/address";
 import { AddressesRepository } from "@/repositories/addresses-repository";
 
 interface RegisterCompanyAddressUseCaseRequest {
-  cityName: string;
-  street: string;
-  neighborhood: string;
-  number: number;
-  complement?: string | null;
-  zipCode: string;
-  userId: string;
+	cityName: string;
+	street: string;
+	neighborhood: string;
+	number: number;
+	complement?: string | null;
+	zipCode: string;
+	userId: string;
 }
 
 interface RegisterCompanyAddressUseCaseResponse {
-  address: IAddress;
+	address: IAddress;
 }
 
 export class RegisterCompanyAddressUseCase {
 	constructor(
-    private companyAddressesRepository: CompanyAddressesRepository,
-    private addressesRepository: AddressesRepository,
-    private citiesRepository: CitiesRepository,
-    private companiesRepository: CompaniesRepository,
+		private companyAddressesRepository: CompanyAddressesRepository,
+		private addressesRepository: AddressesRepository,
+		private citiesRepository: CitiesRepository,
+		private companiesRepository: CompaniesRepository
 	) {}
 
 	async execute({

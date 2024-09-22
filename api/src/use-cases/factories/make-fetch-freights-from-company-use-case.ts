@@ -8,7 +8,7 @@ export function makeFetchFreightsFromCompanyUseCase() {
 
 	const fetchFreightsFromCompanyUseCase = new FetchFreightsFromCompanyUseCase(
 		companyMembersRepository,
-		freightsRepository,
+		freightsRepository
 	);
 
 	return fetchFreightsFromCompanyUseCase;

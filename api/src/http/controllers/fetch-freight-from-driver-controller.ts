@@ -4,7 +4,7 @@ import { makeFetchFreightsFromDriverUseCase } from "@/use-cases/factories/make-f
 
 export async function fetchFreightFromDriverController(
 	req: FastifyRequest,
-	reply: FastifyReply,
+	reply: FastifyReply
 ) {
 	const driverId = req.user.sub;
 

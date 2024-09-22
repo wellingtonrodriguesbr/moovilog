@@ -36,7 +36,7 @@ describe("Authenticate driver use case", () => {
 			sut.execute({
 				documentNumber: "11111111111",
 				password: "12345678",
-			}),
+			})
 		).rejects.toBeInstanceOf(InvalidCredentialsError);
 	});
 
@@ -45,7 +45,7 @@ describe("Authenticate driver use case", () => {
 			sut.execute({
 				documentNumber: "12312312312",
 				password: "11111111",
-			}),
+			})
 		).rejects.toBeInstanceOf(InvalidCredentialsError);
 	});
 });

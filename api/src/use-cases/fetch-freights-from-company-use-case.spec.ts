@@ -20,7 +20,7 @@ describe("Fetch freights from company use case", () => {
 		freightsRepository = new InMemoryFreightsRepository();
 		sut = new FetchFreightsFromCompanyUseCase(
 			companyMembersRepository,
-			freightsRepository,
+			freightsRepository
 		);
 
 		await usersRepository.create({

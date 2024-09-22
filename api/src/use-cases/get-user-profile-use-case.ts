@@ -2,15 +2,15 @@ import { ResourceNotFoundError } from "./errors/resource-not-found-error";
 import { UsersRepository } from "@/repositories/users-repository";
 
 interface GetUserProfileUseCaseRequest {
-  userId: string;
+	userId: string;
 }
 
 interface GetUserProfileUseCaseResponse {
-  user: {
-    id: string;
-    name: string;
-    email: string;
-  };
+	user: {
+		id: string;
+		name: string;
+		email: string;
+	};
 }
 
 export class GetUserProfileUseCase {

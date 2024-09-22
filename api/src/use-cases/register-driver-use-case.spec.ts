@@ -24,7 +24,7 @@ describe("Register driver use case", () => {
 
 		sut = new RegisterDriverUseCase(
 			companyMembersRepository,
-			driversRepository,
+			driversRepository
 		);
 
 		await usersRepository.create({
@@ -78,7 +78,7 @@ describe("Register driver use case", () => {
 				documentNumber: "12312312312",
 				phone: "11999999999",
 				creatorId: "john-doe-id-01",
-			}),
+			})
 		).rejects.toBeInstanceOf(DriverAlreadyExistsError);
 	});
 
@@ -96,7 +96,7 @@ describe("Register driver use case", () => {
 				documentNumber: "12312312312",
 				phone: "11999999999",
 				creatorId: member.memberId,
-			}),
+			})
 		).rejects.toBeInstanceOf(NotAllowedError);
 	});
 
@@ -111,7 +111,7 @@ describe("Register driver use case", () => {
 
 		const isPasswordCorrectlyHashed = await compare(
 			"123123123",
-			driver.password,
+			driver.password
 		);
 		expect(isPasswordCorrectlyHashed).toBe(true);
 	});

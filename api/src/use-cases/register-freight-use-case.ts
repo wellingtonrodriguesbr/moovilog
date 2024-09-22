@@ -11,30 +11,30 @@ import { CompanyMembersRepository } from "@/repositories/company-members-reposit
 import dayjs from "dayjs";
 
 interface RegisterFreightUseCaseRequest {
-  type: IFreightTypes;
-  date: Date;
-  observation?: string | null;
-  pickupsQuantity: number;
-  deliveriesQuantity: number;
-  totalWeightOfPickups: number;
-  totalWeightOfDeliveries: number;
-  freightAmountInCents: number;
-  citiesIds: string[];
-  driverId: string;
-  creatorId: string;
+	type: IFreightTypes;
+	date: Date;
+	observation?: string | null;
+	pickupsQuantity: number;
+	deliveriesQuantity: number;
+	totalWeightOfPickups: number;
+	totalWeightOfDeliveries: number;
+	freightAmountInCents: number;
+	citiesIds: string[];
+	driverId: string;
+	creatorId: string;
 }
 
 interface RegisterFreightUseCaseResponse {
-  freight: IFreight;
+	freight: IFreight;
 }
 
 export class RegisterFreightUseCase {
 	constructor(
-    private companyMembersRepository: CompanyMembersRepository,
-    private driversRepository: DriversRepository,
-    private freightsRepository: FreightsRepository,
-    private freightInformationRepository: FreightInformationRepository,
-    private citiesByFreightRepository: CitiesByFreightRepository,
+		private companyMembersRepository: CompanyMembersRepository,
+		private driversRepository: DriversRepository,
+		private freightsRepository: FreightsRepository,
+		private freightInformationRepository: FreightInformationRepository,
+		private citiesByFreightRepository: CitiesByFreightRepository
 	) {}
 
 	async execute({
@@ -61,7 +61,7 @@ export class RegisterFreightUseCase {
 
 		if (member.role !== "ADMIN" && member.role !== "OPERATIONAL") {
 			throw new NotAllowedError(
-				"You do not have permission to perform this action, please ask your administrator for access",
+				"You do not have permission to perform this action, please ask your administrator for access"
 			);
 		}
 

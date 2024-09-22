@@ -20,7 +20,7 @@ describe("Fetch freights from driver use case", () => {
 		freightsRepository = new InMemoryFreightsRepository();
 		sut = new FetchFreightsFromDriverUseCase(
 			driversRepository,
-			freightsRepository,
+			freightsRepository
 		);
 
 		await usersRepository.create({

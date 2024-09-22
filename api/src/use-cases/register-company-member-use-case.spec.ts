@@ -63,7 +63,7 @@ describe("Register company member use case", () => {
 				memberId: "john-doe-member-id",
 				creatorId: "john-doe-id-01",
 				role: "OPERATIONAL",
-			}),
+			})
 		).rejects.toBeInstanceOf(CompanyMemberAlreadyExistsError);
 	});
 
@@ -79,7 +79,7 @@ describe("Register company member use case", () => {
 				memberId: "john-doe-id-02",
 				role: "OPERATIONAL",
 				creatorId: member.memberId,
-			}),
+			})
 		).rejects.toBeInstanceOf(NotAllowedError);
 	});
 });

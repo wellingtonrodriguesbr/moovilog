@@ -6,22 +6,22 @@ import { ICompany, ICompanySizes, ICompanyTypes } from "@/interfaces/company";
 import { CompanyMembersRepository } from "@/repositories/company-members-repository";
 
 interface RegisterCompanyUseCaseRequest {
-  ownerId: string;
-  name: string;
-  documentNumber: string;
-  type: ICompanyTypes;
-  size: ICompanySizes;
+	ownerId: string;
+	name: string;
+	documentNumber: string;
+	type: ICompanyTypes;
+	size: ICompanySizes;
 }
 
 interface RegisterCompanyUseCaseResponse {
-  company: ICompany;
+	company: ICompany;
 }
 
 export class RegisterCompanyUseCase {
 	constructor(
-    private companiesRepository: CompaniesRepository,
-    private companyMembersRepository: CompanyMembersRepository,
-    private usersRepository: UsersRepository,
+		private companiesRepository: CompaniesRepository,
+		private companyMembersRepository: CompanyMembersRepository,
+		private usersRepository: UsersRepository
 	) {}
 
 	async execute({
@@ -38,7 +38,7 @@ export class RegisterCompanyUseCase {
 		}
 
 		const companyAlreadyRegisteredWithThisDocument =
-      await this.companiesRepository.findByDocumentNumber(documentNumber);
+			await this.companiesRepository.findByDocumentNumber(documentNumber);
 
 		if (companyAlreadyRegisteredWithThisDocument) {
 			throw new CompanyAlreadyExistsError();

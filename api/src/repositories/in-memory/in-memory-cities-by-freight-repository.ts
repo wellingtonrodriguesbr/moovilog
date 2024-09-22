@@ -6,7 +6,7 @@ import {
 import { randomUUID } from "crypto";
 
 export class InMemoryCitiesByFreightRepository
-implements CitiesByFreightRepository
+	implements CitiesByFreightRepository
 {
 	public items: CityByFreight[] = [];
 
@@ -16,7 +16,7 @@ implements CitiesByFreightRepository
 				id: randomUUID(),
 				freightId: params.freightId,
 				cityId,
-			}),
+			})
 		);
 	}
 }

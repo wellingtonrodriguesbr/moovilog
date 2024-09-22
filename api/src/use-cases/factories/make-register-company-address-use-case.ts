@@ -14,7 +14,7 @@ export function makeRegisterCompanyAddressUseCase() {
 		companyAddressRepository,
 		addressesRepository,
 		citiesRepository,
-		companiesRepository,
+		companiesRepository
 	);
 
 	return registerCompanyAddressUseCase;

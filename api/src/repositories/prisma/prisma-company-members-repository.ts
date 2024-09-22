@@ -2,7 +2,9 @@ import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { CompanyMembersRepository } from "../company-members-repository";
 
-export class PrismaCompanyMembersRepository implements CompanyMembersRepository {
+export class PrismaCompanyMembersRepository
+	implements CompanyMembersRepository
+{
 	async create(data: Prisma.CompanyMemberUncheckedCreateInput) {
 		const companyMember = await prisma.companyMember.create({
 			data,

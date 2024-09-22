@@ -6,7 +6,7 @@ import z from "zod";
 
 export async function getFreightInformationAsADriverController(
 	req: FastifyRequest,
-	reply: FastifyReply,
+	reply: FastifyReply
 ) {
 	const getFreightInformationAsADriverParamsSchema = z.object({
 		freightId: z.string(),
@@ -14,17 +14,17 @@ export async function getFreightInformationAsADriverController(
 
 	const driverId = req.user.sub;
 	const { freightId } = getFreightInformationAsADriverParamsSchema.parse(
-		req.params,
+		req.params
 	);
 
 	try {
 		const getFreightInformationAsADriverUseCase =
-      makeGetFreightInformationAsADriverUseCase();
+			makeGetFreightInformationAsADriverUseCase();
 		const { freightInformation } =
-      await getFreightInformationAsADriverUseCase.execute({
-      	driverId,
-      	freightId,
-      });
+			await getFreightInformationAsADriverUseCase.execute({
+				driverId,
+				freightId,
+			});
 
 		reply.status(200).send({ freightInformation });
 	} catch (error) {

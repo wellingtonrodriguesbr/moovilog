@@ -6,7 +6,7 @@ import z from "zod";
 
 export async function registerCompanyAddressController(
 	req: FastifyRequest,
-	reply: FastifyReply,
+	reply: FastifyReply
 ) {
 	const registerCompanyAddressBodySchema = z.object({
 		cityName: z.string(),
@@ -18,7 +18,7 @@ export async function registerCompanyAddressController(
 	});
 
 	const { cityName, street, neighborhood, number, complement, zipCode } =
-    registerCompanyAddressBodySchema.parse(req.body);
+		registerCompanyAddressBodySchema.parse(req.body);
 
 	const userId = req.user.sub;
 

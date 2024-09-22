@@ -4,17 +4,17 @@ import { FreightsRepository } from "@/repositories/freights-repository";
 import { IFreight } from "@/interfaces/freight";
 
 interface FetchFreightsFromDriverUseCaseRequest {
-  driverId: string;
+	driverId: string;
 }
 
 interface FetchFreightsFromDriverUseCaseResponse {
-  freights: IFreight[];
+	freights: IFreight[];
 }
 
 export class FetchFreightsFromDriverUseCase {
 	constructor(
-    private driversRepository: DriversRepository,
-    private freightsRepository: FreightsRepository,
+		private driversRepository: DriversRepository,
+		private freightsRepository: FreightsRepository
 	) {}
 
 	async execute({
@@ -27,7 +27,7 @@ export class FetchFreightsFromDriverUseCase {
 		}
 
 		const freights = await this.freightsRepository.findManyByDriverId(
-			driver.id,
+			driver.id
 		);
 
 		return { freights };

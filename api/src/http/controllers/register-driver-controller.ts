@@ -8,7 +8,7 @@ import z from "zod";
 
 export async function registerDriverController(
 	req: FastifyRequest,
-	reply: FastifyReply,
+	reply: FastifyReply
 ) {
 	const registerDriverBodySchema = z.object({
 		name: z.string(),
@@ -19,7 +19,7 @@ export async function registerDriverController(
 	});
 
 	const { name, password, documentNumber, phone, backupPhone } =
-    registerDriverBodySchema.parse(req.body);
+		registerDriverBodySchema.parse(req.body);
 
 	const creatorId = req.user.sub;
 

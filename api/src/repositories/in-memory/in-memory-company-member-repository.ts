@@ -3,7 +3,7 @@ import { CompanyMembersRepository } from "../company-members-repository";
 import { randomUUID } from "crypto";
 
 export class InMemoryCompanyMembersRepository
-implements CompanyMembersRepository
+	implements CompanyMembersRepository
 {
 	public items: CompanyMember[] = [];
 
@@ -41,7 +41,7 @@ implements CompanyMembersRepository
 
 	async findMemberInCompany(memberId: string, companyId: string) {
 		const member = this.items.find(
-			(item) => item.memberId === memberId && item.companyId === companyId,
+			(item) => item.memberId === memberId && item.companyId === companyId
 		);
 
 		if (!member) return null;

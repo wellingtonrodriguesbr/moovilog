@@ -7,7 +7,7 @@ import z from "zod";
 
 export async function registerCompanyController(
 	req: FastifyRequest,
-	reply: FastifyReply,
+	reply: FastifyReply
 ) {
 	const registerCompanyBodySchema = z.object({
 		name: z.string(),
@@ -17,7 +17,7 @@ export async function registerCompanyController(
 	});
 
 	const { name, documentNumber, type, size } = registerCompanyBodySchema.parse(
-		req.body,
+		req.body
 	);
 	const ownerId = req.user.sub;
 
@@ -37,7 +37,7 @@ export async function registerCompanyController(
 			if (error.code === "P2002") {
 				reply.status(409).send({
 					message:
-            "User already owns a company. Conflict with existing resource.",
+						"User already owns a company. Conflict with existing resource.",
 				});
 			}
 		}

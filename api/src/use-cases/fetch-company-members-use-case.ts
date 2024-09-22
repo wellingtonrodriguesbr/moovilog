@@ -3,11 +3,11 @@ import { CompanyMembersRepository } from "@/repositories/company-members-reposit
 import { ICompanyMember } from "@/interfaces/company-member";
 
 interface FetchCompanyMembersUseCaseRequest {
-  userId: string;
+	userId: string;
 }
 
 interface FetchCompanyMembersUseCaseResponse {
-  companyMembers: ICompanyMember[];
+	companyMembers: ICompanyMember[];
 }
 
 export class FetchCompanyMembersUseCase {
@@ -16,18 +16,17 @@ export class FetchCompanyMembersUseCase {
 	async execute({
 		userId,
 	}: FetchCompanyMembersUseCaseRequest): Promise<FetchCompanyMembersUseCaseResponse> {
-		const companyMember = await this.companyMembersRepository.findByMemberId(
-			userId,
-		);
+		const companyMember =
+			await this.companyMembersRepository.findByMemberId(userId);
 
 		if (!companyMember) {
 			throw new ResourceNotFoundError("Company member not found");
 		}
 
 		const companyMembers =
-      await this.companyMembersRepository.findManyByCompanyId(
-      	companyMember.companyId,
-      );
+			await this.companyMembersRepository.findManyByCompanyId(
+				companyMember.companyId
+			);
 
 		return { companyMembers };
 	}

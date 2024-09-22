@@ -6,24 +6,24 @@ import { NotAllowedError } from "./errors/not-allowed-error";
 import { CompanyMembersRepository } from "@/repositories/company-members-repository";
 
 interface RegisterDriverBankDetailsUseCaseRequest {
-  financialInstitution: string;
-  accountType: IAccountTypeOfBankDetails;
-  agency: number;
-  accountNumber: string;
-  pixKey?: string | null;
-  driverId: string;
-  creatorId: string;
+	financialInstitution: string;
+	accountType: IAccountTypeOfBankDetails;
+	agency: number;
+	accountNumber: string;
+	pixKey?: string | null;
+	driverId: string;
+	creatorId: string;
 }
 
 interface RegisterDriverBankDetailsUseCaseResponse {
-  bankDetailsId: string;
+	bankDetailsId: string;
 }
 
 export class RegisterDriverBankDetailsUseCase {
 	constructor(
-    private companyMembersRepository: CompanyMembersRepository,
-    private driversRepository: DriversRepository,
-    private bankDetailsRepository: BankDetailsRepository,
+		private companyMembersRepository: CompanyMembersRepository,
+		private driversRepository: DriversRepository,
+		private bankDetailsRepository: BankDetailsRepository
 	) {}
 
 	async execute({
@@ -50,7 +50,7 @@ export class RegisterDriverBankDetailsUseCase {
 
 		if (member.role !== "ADMIN" && member.role !== "FINANCIAL") {
 			throw new NotAllowedError(
-				"You do not have permission to perform this action, please ask your administrator for access",
+				"You do not have permission to perform this action, please ask your administrator for access"
 			);
 		}
 
