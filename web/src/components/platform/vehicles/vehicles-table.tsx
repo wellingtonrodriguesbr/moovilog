@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import {
 	Table,
 	TableBody,
@@ -7,48 +6,60 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 import { Ellipsis } from "lucide-react";
+import { formatPlate } from "@/utils/format-plate";
 
 const data = [
 	{
-		id: "INV001",
-		name: "Wellington Rodrigues",
-		email: "moovilog@gmail.com",
-		sector: "Tecnologia",
-		role: "ADMIN",
+		plate: "BIS1611",
+		driverName: "Wellington Rodrigues",
+		ownerName: "Wellington Rodrigues",
+		category: "Truck",
+		type: "Terceirizado",
+		body: "Fechada",
 		createdAt: "20/06/2024",
+		fullLoadCapacity: "4 toneladas",
 	},
 	{
-		id: "INV002",
-		name: "Wellington Rodrigues",
-		email: "moovilog@gmail.com",
-		sector: "Tecnologia",
-		role: "ADMIN",
+		plate: "BIS1611",
+		driverName: "Wellington Rodrigues",
+		ownerName: "Wellington Rodrigues",
+		category: "Truck",
+		type: "Terceirizado",
+		body: "Fechada",
 		createdAt: "20/06/2024",
+		fullLoadCapacity: "4 toneladas",
 	},
 	{
-		id: "INV003",
-		name: "Wellington Rodrigues",
-		email: "moovilog@gmail.com",
-		sector: "Tecnologia",
-		role: "ADMIN",
+		plate: "BIS1611",
+		driverName: "Wellington Rodrigues",
+		ownerName: "Wellington Rodrigues",
+		category: "Truck",
+		type: "Terceirizado",
+		body: "Fechada",
 		createdAt: "20/06/2024",
+		fullLoadCapacity: "4 toneladas",
 	},
 	{
-		id: "INV004",
-		name: "Wellington Rodrigues",
-		email: "moovilog@gmail.com",
-		sector: "Tecnologia",
-		role: "ADMIN",
+		plate: "BIS1611",
+		driverName: "Wellington Rodrigues",
+		ownerName: "Wellington Rodrigues",
+		category: "Truck",
+		type: "Terceirizado",
+		body: "Fechada",
 		createdAt: "20/06/2024",
+		fullLoadCapacity: "4 toneladas",
 	},
 	{
-		id: "INV005",
-		name: "Wellington Rodrigues",
-		email: "moovilog@gmail.com",
-		sector: "Tecnologia",
-		role: "ADMIN",
+		plate: "BIS1611",
+		driverName: "Wellington Rodrigues",
+		ownerName: "Wellington Rodrigues",
+		category: "Truck",
+		type: "Terceirizado",
+		body: "Fechada",
 		createdAt: "20/06/2024",
+		fullLoadCapacity: "4 toneladas",
 	},
 ];
 
@@ -58,36 +69,44 @@ export function VehiclesTable() {
 			<TableHeader className="bg-zinc-100 hover:bg-zinc-100">
 				<TableRow className="hover:bg-zinc-100">
 					<TableHead className="text-app-blue-900 font-medium rounded-tl-lg text-nowrap">
-						ID do colaborador
+						Placa
 					</TableHead>
 					<TableHead className="text-app-blue-900 font-medium">
-						Nome
+						Proprietário
 					</TableHead>
 					<TableHead className="text-app-blue-900 font-medium">
-						E-mail
+						Motorista
 					</TableHead>
 					<TableHead className="text-app-blue-900 font-medium">
-						Setor
+						Categoria
 					</TableHead>
 					<TableHead className="text-app-blue-900 font-medium">
-						Autorização
+						Tipo
 					</TableHead>
 					<TableHead className="text-app-blue-900 font-medium">
-						Desde
+						Carroceria
+					</TableHead>
+					<TableHead className="text-app-blue-900 font-medium">
+						Tara
+					</TableHead>
+					<TableHead className="text-app-blue-900 font-medium">
+						Cadastro em
 					</TableHead>
 					<TableHead className="text-app-blue-900 font-medium rounded-tr-lg"></TableHead>
 				</TableRow>
 			</TableHeader>
 			<TableBody>
-				{data.map((item) => (
-					<TableRow className="hover:bg-transparent" key={item.id}>
-						<TableCell>{item.id}</TableCell>
+				{data.map((item, index) => (
+					<TableRow className="hover:bg-transparent" key={index}>
+						<TableCell>{formatPlate(item.plate)}</TableCell>
 						<TableCell className="text-nowrap">
-							{item.name}
+							{item.ownerName}
 						</TableCell>
-						<TableCell>{item.email}</TableCell>
-						<TableCell>{item.sector}</TableCell>
-						<TableCell>{item.role}</TableCell>
+						<TableCell>{item.driverName}</TableCell>
+						<TableCell>{item.category}</TableCell>
+						<TableCell>{item.type}</TableCell>
+						<TableCell>{item.body}</TableCell>
+						<TableCell>{item.fullLoadCapacity}</TableCell>
 						<TableCell>{item.createdAt}</TableCell>
 						<TableCell className="text-right">
 							<Button variant="ghost">

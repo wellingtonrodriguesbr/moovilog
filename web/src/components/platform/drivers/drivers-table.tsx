@@ -1,3 +1,4 @@
+import { CopyButton } from "@/components/copy-button";
 import { Button } from "@/components/ui/button";
 import {
 	Table,
@@ -7,47 +8,49 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import { formatCPF } from "@/utils/format-cpf";
+import { formatPhone } from "@/utils/format-phone";
 import { Ellipsis } from "lucide-react";
 
 const data = [
 	{
 		id: "INV001",
 		name: "Wellington Rodrigues",
-		email: "moovilog@gmail.com",
-		sector: "Tecnologia",
-		role: "ADMIN",
+		documentNumber: "00000000000",
+		phone: "15981036058",
+		backupPhone: "-",
 		createdAt: "20/06/2024",
 	},
 	{
 		id: "INV002",
 		name: "Wellington Rodrigues",
-		email: "moovilog@gmail.com",
-		sector: "Tecnologia",
-		role: "ADMIN",
+		documentNumber: "00000000000",
+		phone: "15981036058",
+		backupPhone: "-",
 		createdAt: "20/06/2024",
 	},
 	{
 		id: "INV003",
 		name: "Wellington Rodrigues",
-		email: "moovilog@gmail.com",
-		sector: "Tecnologia",
-		role: "ADMIN",
+		documentNumber: "00000000000",
+		phone: "15981036058",
+		backupPhone: "-",
 		createdAt: "20/06/2024",
 	},
 	{
 		id: "INV004",
 		name: "Wellington Rodrigues",
-		email: "moovilog@gmail.com",
-		sector: "Tecnologia",
-		role: "ADMIN",
+		documentNumber: "00000000000",
+		phone: "15981036058",
+		backupPhone: "-",
 		createdAt: "20/06/2024",
 	},
 	{
 		id: "INV005",
 		name: "Wellington Rodrigues",
-		email: "moovilog@gmail.com",
-		sector: "Tecnologia",
-		role: "ADMIN",
+		documentNumber: "00000000000",
+		phone: "15981036058",
+		backupPhone: "-",
 		createdAt: "20/06/2024",
 	},
 ];
@@ -78,13 +81,19 @@ export function DriversTable() {
 			<TableBody>
 				{data.map((item) => (
 					<TableRow className="hover:bg-transparent" key={item.id}>
-						<TableCell>{item.id}</TableCell>
 						<TableCell className="text-nowrap">
 							{item.name}
 						</TableCell>
-						<TableCell>{item.email}</TableCell>
-						<TableCell>{item.sector}</TableCell>
-						<TableCell>{item.role}</TableCell>
+						<TableCell>
+							<CopyButton
+								data={item.documentNumber}
+								title="Copiar CPF"
+							>
+								{formatCPF(item.documentNumber)}
+							</CopyButton>
+						</TableCell>
+						<TableCell>{formatPhone(item.phone)}</TableCell>
+						<TableCell>{item.backupPhone}</TableCell>
 						<TableCell>{item.createdAt}</TableCell>
 						<TableCell className="text-right">
 							<Button variant="ghost">

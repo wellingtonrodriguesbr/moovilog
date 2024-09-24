@@ -15,10 +15,10 @@ import {
 } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import { useFetchCompanyMembers } from "@/hooks/use-fetch-company-members";
-import { ButtonToCopyEmail } from "./button-to-copy-email";
 import { Ellipsis, Info } from "lucide-react";
 
 import dayjs from "dayjs";
+import { CopyButton } from "@/components/copy-button";
 
 const COMPANY_MEMBER_ROLE: Record<string, string> = {
 	ADMIN: "Administrador",
@@ -78,9 +78,12 @@ export function CollaboratorsTable() {
 							{companyMember.member.name}
 						</TableCell>
 						<TableCell>
-							<ButtonToCopyEmail
-								email={companyMember.member.email}
-							/>
+							<CopyButton
+								data={companyMember.member.email}
+								title="Copiar e-mail"
+							>
+								{companyMember.member.email}
+							</CopyButton>
 						</TableCell>
 						<TableCell>-</TableCell>
 						<TableCell>
