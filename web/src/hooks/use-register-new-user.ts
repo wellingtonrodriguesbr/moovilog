@@ -1,7 +1,5 @@
 import { api } from "@/lib/axios";
 import { useMutation } from "@tanstack/react-query";
-import { AxiosError } from "axios";
-import { toast } from "sonner";
 
 interface RegisterNewUserData {
 	name: string;
@@ -16,11 +14,6 @@ export function useRegisterNewUser() {
 		isPending: isPendingRegisterNewUser,
 	} = useMutation({
 		mutationFn: handleRegisterNewUser,
-		onError: (error: AxiosError) => {
-			if (error.response?.status === 409) {
-				toast.error("Já existe uma conta com este e-mail");
-			}
-		},
 	});
 
 	async function handleRegisterNewUser({

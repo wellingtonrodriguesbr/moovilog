@@ -22,7 +22,7 @@ export function useValidateCompanyDocumentNumber({
 	const [debouncedValue, setDebouncedValue] = useState("");
 
 	const { isPending, status } = useQuery({
-		queryKey: ["validate-company-document-number"],
+		queryKey: ["validate-company-document-number", documentNumber],
 		queryFn: () => handleValidDocumentNumber({ documentNumber }),
 		enabled: !!isReady() && !!debouncedValue.length,
 	});

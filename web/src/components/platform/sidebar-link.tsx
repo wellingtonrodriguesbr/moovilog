@@ -23,7 +23,7 @@ export function SidebarbarLink({
 	return (
 		<Link
 			data-state={isOpen ? "open" : "closed"}
-			data-disabled={false}
+			data-disabled={path.includes("/cadastro/empresa")}
 			data-active={path === url || path.includes(url)}
 			href={url}
 			className={cn(

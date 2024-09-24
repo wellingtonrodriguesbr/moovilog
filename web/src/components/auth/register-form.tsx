@@ -20,6 +20,7 @@ import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { useLogin } from "@/hooks/use-login";
 import { toast } from "sonner";
+import { AxiosError } from "axios";
 
 const formSchema = z.object({
 	name: z.string().min(3, { message: "Digite seu nome completo" }),
@@ -62,7 +63,11 @@ export function RegisterForm() {
 			toast.success("Conta cadastrada com sucesso");
 			router.push("/cadastro/empresa");
 		} catch (error) {
-			console.log(error);
+			if (error instanceof AxiosError) {
+				if (error.response?.status === 409) {
+					toast.error("Já existe uma conta com este e-mail");
+				}
+			}
 		}
 	}
 

@@ -1,7 +1,5 @@
 import { api } from "@/lib/axios";
 import { useMutation } from "@tanstack/react-query";
-import { AxiosError } from "axios";
-import { toast } from "sonner";
 
 interface RegisterCompanyData {
 	name: string;
@@ -29,14 +27,6 @@ export function useRegisterCompany() {
 		isPending: isPendingRegisterCompany,
 	} = useMutation({
 		mutationFn: handleRegisterCompany,
-		onError: (error: AxiosError) => {
-			if (error.response?.status === 401) {
-				toast.error("Você não tem permissão para esta ação");
-			}
-			if (error.response?.status === 409) {
-				toast.error("Já existe uma empresa com este CNPJ");
-			}
-		},
 	});
 
 	async function handleRegisterCompany({

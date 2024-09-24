@@ -23,6 +23,8 @@ import { SidebarItem } from "./sidebar-item";
 import { useOpenCloseSidebar } from "@/providers/sidebar-provider";
 import { SidebarbarLink } from "./sidebar-link";
 
+const ACCORDION_VALUE = "my-enterprise";
+
 export function SidebarContent() {
 	const path = usePathname();
 	const { isOpen, handleOpenAndCloseSidebar } = useOpenCloseSidebar();
@@ -38,11 +40,11 @@ export function SidebarContent() {
 				/>
 			))}
 			<Accordion type="single" collapsible className="w-full">
-				<AccordionItem value="item-1">
+				<AccordionItem value={ACCORDION_VALUE}>
 					<AccordionTrigger
 						onClick={!isOpen ? handleOpenAndCloseSidebar : () => {}}
 						data-sidebar={isOpen ? "open" : "closed"}
-						data-disabled={false}
+						data-disabled={path.includes("/cadastro/empresa")}
 						className="pl-1 [&[data-sidebar=closed]>svg]:hidden py-6 hover:text-app-blue-500 data-[disabled=true]:opacity-50 data-[disabled=true]:pointer-events-none"
 					>
 						<div className="flex items-center gap-2">
@@ -80,7 +82,7 @@ export function SidebarContent() {
 
 const items = [
 	{
-		name: "Home",
+		name: "Início",
 		url: "/inicio",
 		icon: <Home className="size-4" />,
 	},

@@ -17,6 +17,8 @@ import { z } from "zod";
 import { useLogin } from "@/hooks/use-login";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { AxiosError } from "axios";
+import { toast } from "sonner";
 
 const formSchema = z.object({
 	email: z.string().email({ message: "Digite um endereço de e-mail válido" }),
@@ -41,7 +43,15 @@ export function CompanyLoginForm() {
 			await login({ email, password });
 			router.push("/inicio");
 		} catch (error) {
-			console.log(error);
+			if (error instanceof AxiosError) {
+				if (error.response?.status === 404) {
+					toast.error("Não existe uma conta com este e-mail");
+					return;
+				} else if (error.response?.status === 401) {
+					toast.error("E-mail ou senha incorretos");
+					return;
+				}
+			}
 		}
 	}
 

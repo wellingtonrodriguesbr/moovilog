@@ -29,6 +29,7 @@ import { useValidateCompanyDocumentNumber } from "@/hooks/use-validate-company-d
 import { formatCNPJ } from "@/utils/format-cnpj";
 import { useRegisterCompany } from "@/hooks/use-register-company";
 import { toast } from "sonner";
+import { AxiosError } from "axios";
 
 const formSchema = z.object({
 	documentNumber: z
@@ -73,7 +74,25 @@ export function RegisterCompanyForm() {
 			toast.success("Empresa cadastrada com sucesso");
 			router.push("/cadastro/empresa/endereco");
 		} catch (error) {
-			console.log(error);
+			if (error instanceof AxiosError) {
+				if (error.response?.status === 401) {
+					toast.error("Você não tem permissão para esta ação");
+				} else if (
+					error.response?.status === 409 &&
+					error.response.data.message ===
+						"A company already exists with this document number"
+				) {
+					toast.error("Já existe uma empresa com este CNPJ");
+				} else if (
+					error.response?.status === 409 &&
+					error.response.data.message ===
+						"User already owns a company. Conflict with existing resource."
+				) {
+					toast.error(
+						"Você já tem uma empresa cadastrada na plataforma."
+					);
+				}
+			}
 		}
 	}
 
@@ -132,7 +151,13 @@ export function RegisterCompanyForm() {
 						<FormItem>
 							<FormLabel>Razão social</FormLabel>
 							<FormControl>
-								<Input placeholder="" {...field} />
+								<Input
+									disabled={
+										isValidateCompanyDocumentNumberPending ||
+										status === "pending"
+									}
+									{...field}
+								/>
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -147,6 +172,10 @@ export function RegisterCompanyForm() {
 							<Select
 								onValueChange={field.onChange}
 								defaultValue={field.value}
+								disabled={
+									isValidateCompanyDocumentNumberPending ||
+									status === "pending"
+								}
 							>
 								<FormControl>
 									<SelectTrigger>
@@ -180,6 +209,10 @@ export function RegisterCompanyForm() {
 							<Select
 								onValueChange={field.onChange}
 								defaultValue={field.value}
+								disabled={
+									isValidateCompanyDocumentNumberPending ||
+									status === "pending"
+								}
 							>
 								<FormControl>
 									<SelectTrigger>

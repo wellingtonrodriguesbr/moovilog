@@ -21,6 +21,7 @@ import { useEffect } from "react";
 import { useRegisterCompanyAddress } from "@/hooks/use-register-company-address";
 import { useGetCompanyAddressByZipCode } from "@/hooks/use-get-company-address-by-zip-code";
 import { toast } from "sonner";
+import { AxiosError } from "axios";
 
 const formSchema = z.object({
 	zipCode: z.coerce
@@ -82,7 +83,16 @@ export function RegisterCompanyAddressForm() {
 			toast.success("Endereço cadastrado com sucesso");
 			router.push("/inicio");
 		} catch (error) {
-			console.log(error);
+			if (error instanceof AxiosError) {
+				if (
+					error.response?.status === 404 &&
+					error.response.data.message === "City not found"
+				) {
+					toast.error("Cidade não encontrada, fale com o suporte.");
+				} else {
+					toast.error("Erro desconhecido, fale com o suporte.");
+				}
+			}
 		}
 	}
 
