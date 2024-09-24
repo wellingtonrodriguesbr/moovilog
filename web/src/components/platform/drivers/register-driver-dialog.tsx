@@ -19,7 +19,7 @@ export function RegisterDriverDialog() {
 					<span className="hidden md:block">Adicionar novo</span>
 				</Button>
 			</DialogTrigger>
-			<DialogContent className="sm:max-w-[600px]">
+			<DialogContent className="rounded-md max-w-[350px] md:max-w-[600px]">
 				<DialogHeader>
 					<DialogTitle>Novo cadastro</DialogTitle>
 					<DialogDescription>

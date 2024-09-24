@@ -71,25 +71,25 @@ export function VehiclesTable() {
 					<TableHead className="text-app-blue-900 font-medium rounded-tl-lg text-nowrap">
 						Placa
 					</TableHead>
-					<TableHead className="text-app-blue-900 font-medium">
+					<TableHead className="text-app-blue-900 font-medium text-nowrap">
 						Proprietário
 					</TableHead>
-					<TableHead className="text-app-blue-900 font-medium">
+					<TableHead className="text-app-blue-900 font-medium text-nowrap">
 						Motorista
 					</TableHead>
-					<TableHead className="text-app-blue-900 font-medium">
+					<TableHead className="text-app-blue-900 font-medium text-nowrap">
 						Categoria
 					</TableHead>
-					<TableHead className="text-app-blue-900 font-medium">
+					<TableHead className="text-app-blue-900 font-medium text-nowrap">
 						Tipo
 					</TableHead>
-					<TableHead className="text-app-blue-900 font-medium">
+					<TableHead className="text-app-blue-900 font-medium text-nowrap">
 						Carroceria
 					</TableHead>
-					<TableHead className="text-app-blue-900 font-medium">
+					<TableHead className="text-app-blue-900 font-medium text-nowrap">
 						Tara
 					</TableHead>
-					<TableHead className="text-app-blue-900 font-medium">
+					<TableHead className="text-app-blue-900 font-medium text-nowrap">
 						Cadastro em
 					</TableHead>
 					<TableHead className="text-app-blue-900 font-medium rounded-tr-lg"></TableHead>
@@ -98,16 +98,30 @@ export function VehiclesTable() {
 			<TableBody>
 				{data.map((item, index) => (
 					<TableRow className="hover:bg-transparent" key={index}>
-						<TableCell>{formatPlate(item.plate)}</TableCell>
+						<TableCell className="text-nowrap">
+							{formatPlate(item.plate)}
+						</TableCell>
 						<TableCell className="text-nowrap">
 							{item.ownerName}
 						</TableCell>
-						<TableCell>{item.driverName}</TableCell>
-						<TableCell>{item.category}</TableCell>
-						<TableCell>{item.type}</TableCell>
-						<TableCell>{item.body}</TableCell>
-						<TableCell>{item.fullLoadCapacity}</TableCell>
-						<TableCell>{item.createdAt}</TableCell>
+						<TableCell className="text-nowrap">
+							{item.driverName}
+						</TableCell>
+						<TableCell className="text-nowrap">
+							{item.category}
+						</TableCell>
+						<TableCell className="text-nowrap">
+							{item.type}
+						</TableCell>
+						<TableCell className="text-nowrap">
+							{item.body}
+						</TableCell>
+						<TableCell className="text-nowrap">
+							{item.fullLoadCapacity}
+						</TableCell>
+						<TableCell className="text-nowrap">
+							{item.createdAt}
+						</TableCell>
 						<TableCell className="text-right">
 							<Button variant="ghost">
 								<Ellipsis className="size-4" />

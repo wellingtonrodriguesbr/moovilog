@@ -40,7 +40,7 @@ export function CollaboratorsTable() {
 					<TableHead className="text-app-blue-900 font-medium rounded-tl-lg">
 						Nome
 					</TableHead>
-					<TableHead className="text-app-blue-900 font-medium pl-8">
+					<TableHead className="text-app-blue-900 font-medium">
 						E-mail
 					</TableHead>
 					<TableHead className="text-app-blue-900 font-medium">

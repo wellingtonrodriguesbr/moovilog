@@ -63,16 +63,16 @@ export function DriversTable() {
 					<TableHead className="text-app-blue-900 font-medium rounded-tl-lg text-nowrap">
 						Nome
 					</TableHead>
-					<TableHead className="text-app-blue-900 font-medium">
+					<TableHead className="text-app-blue-900 font-medium text-nowrap">
 						CPF
 					</TableHead>
-					<TableHead className="text-app-blue-900 font-medium">
+					<TableHead className="text-app-blue-900 font-medium text-nowrap">
 						Contato
 					</TableHead>
-					<TableHead className="text-app-blue-900 font-medium">
+					<TableHead className="text-app-blue-900 font-medium text-nowrap">
 						Contato reserva
 					</TableHead>
-					<TableHead className="text-app-blue-900 font-medium">
+					<TableHead className="text-app-blue-900 font-medium text-nowrap">
 						Cadastrado em
 					</TableHead>
 					<TableHead className="text-app-blue-900 font-medium rounded-tr-lg"></TableHead>
@@ -84,7 +84,7 @@ export function DriversTable() {
 						<TableCell className="text-nowrap">
 							{item.name}
 						</TableCell>
-						<TableCell>
+						<TableCell className="text-nowrap">
 							<CopyButton
 								data={item.documentNumber}
 								title="Copiar CPF"
@@ -92,9 +92,15 @@ export function DriversTable() {
 								{formatCPF(item.documentNumber)}
 							</CopyButton>
 						</TableCell>
-						<TableCell>{formatPhone(item.phone)}</TableCell>
-						<TableCell>{item.backupPhone}</TableCell>
-						<TableCell>{item.createdAt}</TableCell>
+						<TableCell className="text-nowrap">
+							{formatPhone(item.phone)}
+						</TableCell>
+						<TableCell className="text-nowrap">
+							{item.backupPhone}
+						</TableCell>
+						<TableCell className="text-nowrap">
+							{item.createdAt}
+						</TableCell>
 						<TableCell className="text-right">
 							<Button variant="ghost">
 								<Ellipsis className="size-4" />
