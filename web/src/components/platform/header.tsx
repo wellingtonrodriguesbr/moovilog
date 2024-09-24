@@ -12,7 +12,7 @@ export function HeaderPlatform() {
 				<Image
 					src="/logo-blue.svg"
 					alt="moovilog"
-					className="hidden md:block w-[150px]"
+					className="hidden md:block w-[200px]"
 					width={250}
 					height={193}
 				/>
@@ -20,7 +20,7 @@ export function HeaderPlatform() {
 			<Image
 				src="/logo-blue.svg"
 				alt="moovilog"
-				className="block md:hidden w-[120px]"
+				className="block md:hidden w-[160px]"
 				width={250}
 				height={193}
 			/>
