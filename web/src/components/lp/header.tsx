@@ -40,7 +40,7 @@ export function Header() {
 							className="text-white font-bold gap-2"
 							asChild
 						>
-							<Link href="/entrar/selecionar-conta">
+							<Link href="/entrar">
 								<User className="size-4" />
 								Entrar
 							</Link>

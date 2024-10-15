@@ -1,60 +1,52 @@
-import Image from "next/image";
 import Link from "next/link";
+
 import {
-	Sheet,
-	SheetContent,
-	SheetHeader,
-	SheetTitle,
-	SheetTrigger,
-} from "@/components/ui/sheet";
-import { ArrowRight, Menu } from "lucide-react";
+	Drawer,
+	DrawerClose,
+	DrawerContent,
+	DrawerFooter,
+	DrawerTrigger,
+} from "@/components/ui/drawer";
+
 import { useUserAuthenticate } from "@/hooks/use-user-authenticate";
+import { ArrowRight, Menu } from "lucide-react";
+import { Button } from "../ui/button";
 
 export function MenuMobile() {
 	const { isAuthenticate } = useUserAuthenticate();
 
 	return (
-		<Sheet>
-			<SheetTrigger className="block md:hidden">
+		<Drawer>
+			<DrawerTrigger className="block md:hidden">
 				<Menu className="size-6 text-white" />
-			</SheetTrigger>
-			<SheetContent>
-				<SheetHeader className="text-left">
-					<SheetTitle>
-						<Image
-							src="/logo-blue.svg"
-							alt="moovilog"
-							className="w-[180px]"
-							width={250}
-							height={193}
-						/>
-					</SheetTitle>
-				</SheetHeader>
+			</DrawerTrigger>
+			<DrawerContent className="px-4">
 				{isAuthenticate ? (
 					<Link
-						className="flex items-center justify-between w-full mt-12 py-4 border-b"
+						className="flex items-center justify-between w-full py-4 border-b"
 						href="/inicio"
 					>
 						Acessar plataforma
 						<ArrowRight className="size-4" />
 					</Link>
 				) : (
-					<ul className="mt-12 flex flex-col">
+					<ul className="flex flex-col">
+						<li className="py-4 border-b">
+							<Link href="/entrar">Entrar</Link>
+						</li>
 						<li className="py-4 border-b">
 							<Link href="/">Demonstração gratuita</Link>
 						</li>
-						<li className="py-4 border-b">
-							<Link href="/">Saiba mais</Link>
-						</li>
-						<li className="py-4 border-b">
-							<Link href="/cadastro">Criar minha conta</Link>
-						</li>
-						<li className="py-4 border-b">
-							<Link href="/entrar/selecionar-conta">Entrar</Link>
-						</li>
 					</ul>
 				)}
-			</SheetContent>
-		</Sheet>
+				<DrawerFooter className="px-0">
+					<Button asChild>
+						<Link href="/cadastro">
+							Criar uma conta gratuitamente
+						</Link>
+					</Button>
+				</DrawerFooter>
+			</DrawerContent>
+		</Drawer>
 	);
 }
