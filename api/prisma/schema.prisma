@@ -12,13 +12,12 @@ model User {
   name      String
   email     String   @unique
   password  String
+  phone     String   @unique
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  ownsCompanies Company[]       @relation("user_company_owner")
-  ownsFreights  Freight[]
+  company       Company?        @relation("user_company_owner")
   companyMember CompanyMember[]
-  drivers       Driver[]
 
   @@map("users")
 }
@@ -27,7 +26,6 @@ model Company {
   id             String      @id @default(uuid())
   name           String
   documentNumber String      @unique @map("document_number")
-  type           CompanyType
   size           CompanySize
   createdAt      DateTime    @default(now()) @map("created_at")
   updatedAt      DateTime    @updatedAt @map("updated_at")
@@ -35,93 +33,58 @@ model Company {
   ownerId String @unique @map("owner_id")
   owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade, name: "user_company_owner")
 
-  companyServiceAreas  CompanyServiceArea[]
-  companyServiceCities CompanyServiceCity[]
-  companyAddress       CompanyAddress[]
-  drivers              Driver[]
-  companyMembers       CompanyMember[]
-  companyDrivers       CompanyDriver[]
-  freights             Freight[]
+  addressId String  @map("address_id")
+  address   Address @relation(fields: [addressId], references: [id], onDelete: Cascade)
+
+  companyMembers CompanyMember[]
+  drivers        Driver[]
+  freights       Freight[]
+  routes         Route[]
 
   @@map("companies")
 }
 
-model CompanyServiceArea {
-  id String @id @default(uuid())
-
-  companyId String  @map("company_id")
-  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
-
-  areaId String @map("area_id")
-  area   Area   @relation(fields: [areaId], references: [id], onDelete: Cascade)
-
-  @@map("company_service_areas")
-}
-
-model CompanyServiceCity {
-  id String @id @default(uuid())
-
-  companyId String  @map("company_id")
-  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
-
-  cityId String @map("city_id")
-  city   City   @relation(fields: [cityId], references: [id], onDelete: Cascade)
-
-  @@map("company_service_cities")
-}
-
 model CompanyMember {
-  id        String   @id @default(uuid())
-  sector    String?
+  id        String        @id @default(uuid())
+  sector    String
   role      Role
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  status    AccountStatus @default(PENDING)
+  createdAt DateTime      @default(now()) @map("created_at")
+  updatedAt DateTime      @updatedAt @map("updated_at")
 
-  memberId String @map("member_id")
-  member   User   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   companyId String  @map("company_id")
   company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
-  @@unique([companyId, memberId])
+  drivers  Driver[]
+  freights Freight[]
+
+  @@unique([companyId, userId])
   @@map("company_members")
 }
 
-model CompanyDriver {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  driverId String @map("driver_id")
-  driver   Driver @relation(fields: [driverId], references: [id], onDelete: Cascade)
-
-  companyId String  @map("company_id")
-  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
-
-  @@map("company_drivers")
-}
-
 model Driver {
-  id             String   @id @default(uuid())
+  id             String        @id @default(uuid())
   name           String
-  password       String
-  documentNumber String   @unique @map("document_number")
-  phone          String   @unique
-  backupPhone    String?  @map("backup_phone")
-  createdAt      DateTime @default(now()) @map("created_at")
-  updatedAt      DateTime @updatedAt @map("updated_at")
+  documentNumber String        @unique @map("document_number")
+  phone          String        @unique
+  status         AccountStatus @default(ACTIVE)
+  type           DriverType
+  createdAt      DateTime      @default(now()) @map("created_at")
+  updatedAt      DateTime      @updatedAt @map("updated_at")
+
+  creatorId String        @map("creator_id")
+  creator   CompanyMember @relation(fields: [creatorId], references: [id], onDelete: Cascade)
 
   companyId String  @map("company_id")
   company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
-  creatorId String @map("creator_id")
-  creator   User   @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  addressId String  @map("address_id")
+  address   Address @relation(fields: [addressId], references: [id], onDelete: Cascade)
 
-  driverAddress  DriverAddress[]
-  vehicle        Vehicle[]
-  freights       Freight[]
-  bankDetails    BankDetails[]
-  companyDrivers CompanyDriver[]
+  freights Freight[]
 
   @@map("drivers")
 }
@@ -136,9 +99,6 @@ model BankDetails {
   createdAt            DateTime                 @default(now()) @map("created_at")
   updatedAt            DateTime                 @updatedAt @map("updated_at")
 
-  driverId String @map("driver_id")
-  driver   Driver @relation(fields: [driverId], references: [id], onDelete: Cascade)
-
   @@map("bank_details")
 }
 
@@ -146,6 +106,8 @@ model Vehicle {
   id               String          @id @default(uuid())
   plate            String          @unique
   year             Int
+  brand            String
+  model            String
   category         VehicleCategory
   type             VehicleType
   body             VehicleBody
@@ -153,78 +115,74 @@ model Vehicle {
   createdAt        DateTime        @default(now()) @map("created_at")
   updatedAt        DateTime        @updatedAt @map("updated_at")
 
-  driverId String @map("driver_id")
-  driver   Driver @relation(fields: [driverId], references: [id], onDelete: Cascade)
+  freights Freight[]
 
-  @@unique([driverId, plate])
   @@map("vehicles")
 }
 
 model Freight {
-  id                      String      @id @default(uuid())
+  id                      String          @id @default(uuid())
   type                    FreightType
+  modality                FreightModality
   date                    DateTime
-  pickupsQuantity         Int         @map("pickups_quantity")
-  deliveriesQuantity      Int         @map("deliveries_quantity")
-  totalWeightOfPickups    Float?      @map("total_weight_of_pickups")
-  totalWeightOfDeliveries Float       @map("total_weight_of_deliveries")
-  freightAmountInCents    Int         @map("freight_amount_in_cents")
+  pickupsQuantity         Int?            @map("pickups_quantity")
+  deliveriesQuantity      Int             @map("deliveries_quantity")
+  totalWeightOfPickups    Decimal?        @map("total_weight_of_pickups") @db.Decimal(10, 2)
+  totalWeightOfDeliveries Decimal         @map("total_weight_of_deliveries") @db.Decimal(10, 2)
+  freightAmountInCents    Int             @map("freight_amount_in_cents")
   observation             String?
-  createdAt               DateTime    @default(now()) @map("created_at")
-  updatedAt               DateTime    @updatedAt @map("updated_at")
-
-  creatorId String @map("creator_id")
-  creator   User   @relation(fields: [creatorId], references: [id], onDelete: Cascade)
-
-  companyId String  @map("company_id")
-  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  createdAt               DateTime        @default(now()) @map("created_at")
+  updatedAt               DateTime        @updatedAt @map("updated_at")
 
   driverId String @map("driver_id")
   driver   Driver @relation(fields: [driverId], references: [id], onDelete: Cascade)
 
-  freightInformation FreightInformation[]
-  citiesByFreight    CityByFreight[]
+  vehicleId String  @map("vehicle_id")
+  vehicle   Vehicle @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
 
+  creatorId String        @map("creator_id")
+  creator   CompanyMember @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+
+  companyId String  @map("company_id")
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@index([date])
   @@map("freights")
 }
 
-model FreightInformation {
-  id                String    @id @default(uuid())
-  departureTime     DateTime? @map("departure_time")
-  arrivalTime       DateTime? @map("arrival_time")
-  pickupsNotMade    Int?      @map("pickups_not_made")
-  deliveriesNotMade Int?      @map("deliveries_not_made")
-  initialKM         Float?    @map("initial_km")
-  finalKM           Float?    @map("final_km")
-  viewed            Boolean?  @default(false)
-  viewedAt          DateTime? @map("viewed_at")
-  updatedAt         DateTime  @updatedAt @map("updated_at")
+model Route {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
-  freightId String  @map("freight_id")
-  freight   Freight @relation(fields: [freightId], references: [id], onDelete: Cascade)
+  companyId String  @map("company_id")
+  company   Company @relation(fields: [companyId], references: [id])
 
-  @@map("freight_information")
+  citiesInRoute CityInRoute[]
+
+  @@map("routes")
 }
 
-model CityByFreight {
+model CityInRoute {
   id String @id @default(uuid())
 
-  freightId String  @map("freight_id")
-  freight   Freight @relation(fields: [freightId], references: [id], onDelete: Cascade)
+  routeId String @map("route_id")
+  route   Route  @relation(fields: [routeId], references: [id])
 
   cityId String @map("city_id")
-  city   City   @relation(fields: [cityId], references: [id], onDelete: Cascade)
+  city   City   @relation(fields: [cityId], references: [id])
 
-  @@map("cities_by_freight")
+  @@map("cities_in_route")
 }
 
 model State {
   id      String @id @default(uuid())
   name    String
-  acronym String
+  acronym String @unique
 
-  areas_by_state AreasByState[]
-  cities         City[]
+  areasInState AreaInState[]
+  cities       City[]
 
   @@map("states")
 }
@@ -232,16 +190,15 @@ model State {
 model Area {
   id   String @id @default(uuid())
   name String
-  code String
+  code String @unique
 
-  areasByState        AreasByState[]
-  citiesByArea        CitiesByArea[]
-  companyServiceAreas CompanyServiceArea[]
+  areasInState AreaInState[]
+  citiesInArea CityInArea[]
 
   @@map("areas")
 }
 
-model AreasByState {
+model AreaInState {
   id String @id @default(uuid())
 
   stateId String @map("state_id")
@@ -250,7 +207,7 @@ model AreasByState {
   areaId String @map("area_id")
   area   Area   @relation(fields: [areaId], references: [id], onDelete: Cascade)
 
-  @@map("areas_by_state")
+  @@map("areas_in_state")
 }
 
 model City {
@@ -260,16 +217,15 @@ model City {
   stateId String @map("state_id")
   state   State  @relation(fields: [stateId], references: [id], onDelete: Cascade)
 
-  citiesByArea         CitiesByArea[]
-  companyServiceCities CompanyServiceCity[]
-  addresses            Address[]
-  citiesByFreight      CityByFreight[]
+  citiesInArea  CityInArea[]
+  addresses     Address[]
+  citiesInRoute CityInRoute[]
 
   @@unique([stateId, name])
   @@map("cities")
 }
 
-model CitiesByArea {
+model CityInArea {
   id String @id @default(uuid())
 
   cityId String @map("city_id")
@@ -278,7 +234,7 @@ model CitiesByArea {
   areaId String @map("area_id")
   area   Area   @relation(fields: [areaId], references: [id], onDelete: Cascade)
 
-  @@map("cities_by_area")
+  @@map("cities_in_area")
 }
 
 model Address {
@@ -290,51 +246,21 @@ model Address {
   complement   String?
   createdAt    DateTime @default(now()) @map("created_at")
 
-  cityId         String           @map("city_id")
-  city           City             @relation(fields: [cityId], references: [id], onDelete: Cascade)
-  companyAddress CompanyAddress[]
-  driverAddress  DriverAddress[]
+  cityId String @map("city_id")
+  city   City   @relation(fields: [cityId], references: [id], onDelete: Cascade)
+
+  companies Company[]
+  drivers   Driver[]
 
   @@map("addresses")
 }
 
-model CompanyAddress {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now()) @map("created_at")
-
-  companyId String  @map("company_id")
-  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
-
-  addressId String  @map("address_id")
-  address   Address @relation(fields: [addressId], references: [id], onDelete: Cascade)
-
-  @@map("company_address")
-}
-
-model DriverAddress {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now()) @map("created_at")
-
-  driverId String @map("driver_id")
-  driver   Driver @relation(fields: [driverId], references: [id], onDelete: Cascade)
-
-  addressId String  @map("address_id")
-  address   Address @relation(fields: [addressId], references: [id], onDelete: Cascade)
-
-  @@map("driver_address")
-}
-
 enum Role {
   ADMIN
+  MANAGER
   FINANCIAL
+  COMERCIAL
   OPERATIONAL
-  MEMBER
-}
-
-enum CompanyType {
-  HEADQUARTERS
-  BRANCH
-  AGENCY
 }
 
 enum CompanySize {
@@ -375,8 +301,26 @@ enum FreightType {
   DEDICATED
 }
 
+enum FreightModality {
+  DAILY
+  PERCENTAGE
+  PRODUCTIVITY
+}
+
 enum AccountTypeOfBankDetails {
   CURRENT_ACCOUNT
   SALARY_ACCOUNT
   SAVINGS_ACCOUNT
+}
+
+enum AccountStatus {
+  PENDING
+  ACTIVE
+  INACTIVE
+}
+
+enum DriverType {
+  INTERNAL
+  FREELANCER
+  AGGREGATE
 }
