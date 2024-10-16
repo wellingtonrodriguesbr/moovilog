@@ -1,15 +1,15 @@
 import { UsersRepository } from "@/repositories/users-repository";
 import { UserAlreadyExistsError } from "./errors/user-already-exists-error";
-import { IUser } from "@/interfaces/user";
 import { hash } from "bcryptjs";
 
 interface RegisterUserUseCaseRequest {
 	name: string;
 	email: string;
 	password: string;
+	phone: string;
 }
 interface RegisterUserUseCaseResponse {
-	user: IUser;
+	userId: string;
 }
 
 export class RegisterUserUseCase {
@@ -19,10 +19,19 @@ export class RegisterUserUseCase {
 		name,
 		email,
 		password,
+		phone,
 	}: RegisterUserUseCaseRequest): Promise<RegisterUserUseCaseResponse> {
-		const userAlreadyExists = await this.usersRepository.findByEmail(email);
+		const [userAlreadyExistsWithSameEmail, userAlreadyExistsWithSamePhone] =
+			await Promise.all([
+				this.usersRepository.findByEmail(email),
+				this.usersRepository.findByPhone(phone),
+			]);
 
-		if (userAlreadyExists) {
+		if (userAlreadyExistsWithSameEmail) {
+			throw new UserAlreadyExistsError();
+		}
+
+		if (userAlreadyExistsWithSamePhone) {
 			throw new UserAlreadyExistsError();
 		}
 
@@ -32,10 +41,11 @@ export class RegisterUserUseCase {
 			name,
 			email,
 			password: passwordHash,
+			phone,
 		});
 
 		return {
-			user,
+			userId: user.id,
 		};
 	}
 }

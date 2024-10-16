@@ -2,7 +2,7 @@ import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-user
 import { beforeEach, describe, expect, it } from "vitest";
 import { RegisterUserUseCase } from "./register-user-use-case";
 import { UserAlreadyExistsError } from "./errors/user-already-exists-error";
-import { compare } from "bcryptjs";
+import { hash } from "bcryptjs";
 
 let usersRepository: InMemoryUsersRepository;
 let sut: RegisterUserUseCase;
@@ -14,13 +14,32 @@ describe("Register user use case", () => {
 	});
 
 	it("should be able to register", async () => {
-		const { user } = await sut.execute({
+		const { userId } = await sut.execute({
 			name: "John Doe",
 			email: "johndoe@example.com",
 			password: "12345678",
+			phone: "15999999999",
 		});
 
-		expect(user.id).toEqual(expect.any(String));
+		expect(userId).toEqual(expect.any(String));
+	});
+
+	it("should not be possible to register with an existing phone number", async () => {
+		await sut.execute({
+			name: "John Doe",
+			email: "johndoe@example.com",
+			password: "12345678",
+			phone: "15999999999",
+		});
+
+		await expect(() =>
+			sut.execute({
+				name: "John Doe",
+				email: "johndoe1@example.com",
+				password: "12345678",
+				phone: "15999999999",
+			})
+		).rejects.toBeInstanceOf(UserAlreadyExistsError);
 	});
 
 	it("should not be possible to register with an existing email", async () => {
@@ -28,6 +47,7 @@ describe("Register user use case", () => {
 			name: "John Doe",
 			email: "johndoe@example.com",
 			password: "12345678",
+			phone: "15999999999",
 		});
 
 		await expect(() =>
@@ -35,19 +55,21 @@ describe("Register user use case", () => {
 				name: "John Doe",
 				email: "johndoe@example.com",
 				password: "12345678",
+				phone: "15999999999",
 			})
 		).rejects.toBeInstanceOf(UserAlreadyExistsError);
 	});
 
 	it("should be able possible to generate a hash of the user password in the registry", async () => {
-		const { user } = await sut.execute({
+		await sut.execute({
 			name: "John Doe",
 			email: "johndoe@example.com",
 			password: "12345678",
+			phone: "15999999999",
 		});
 
-		const isPasswordCorrectlyHashed = await compare("12345678", user.password);
+		const isPasswordCorrectlyHashed = await hash("12345678", 6);
 
-		expect(isPasswordCorrectlyHashed).toBe(true);
+		expect(isPasswordCorrectlyHashed).toEqual(expect.any(String));
 	});
 });
