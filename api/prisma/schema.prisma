@@ -40,6 +40,7 @@ model Company {
   drivers        Driver[]
   freights       Freight[]
   routes         Route[]
+  vehicles       Vehicle[]
 
   @@map("companies")
 }
@@ -86,20 +87,8 @@ model Driver {
 
   freights Freight[]
 
+  @@unique([documentNumber, companyId])
   @@map("drivers")
-}
-
-model BankDetails {
-  id                   String                   @id @default(uuid())
-  financialInstitution String                   @map("financial_institution")
-  accountType          AccountTypeOfBankDetails @map("account_type")
-  agency               Int
-  accountNumber        String                   @map("account_number") @db.VarChar(20)
-  pixKey               String?                  @map("pix_key")
-  createdAt            DateTime                 @default(now()) @map("created_at")
-  updatedAt            DateTime                 @updatedAt @map("updated_at")
-
-  @@map("bank_details")
 }
 
 model Vehicle {
@@ -115,8 +104,12 @@ model Vehicle {
   createdAt        DateTime        @default(now()) @map("created_at")
   updatedAt        DateTime        @updatedAt @map("updated_at")
 
+  companyId String  @map("company_id")
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
   freights Freight[]
 
+  @@unique([plate, companyId])
   @@map("vehicles")
 }
 
