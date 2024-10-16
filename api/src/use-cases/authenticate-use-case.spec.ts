@@ -16,6 +16,7 @@ describe("Authenticate use case", () => {
 			name: "John Doe",
 			email: "johndoe@example.com",
 			password: await hash("12345678", 6),
+			phone: "15999999999",
 		});
 	});
 
