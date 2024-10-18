@@ -2,14 +2,15 @@ import { CompanyAlreadyExistsError } from "./errors/company-already-exists-error
 import { CompaniesRepository } from "@/repositories/companies-repository";
 import { UsersRepository } from "@/repositories/users-repository";
 import { ResourceNotFoundError } from "./errors/resource-not-found-error";
-import { ICompany, ICompanySizes, ICompanyTypes } from "@/interfaces/company";
+import { ICompany, ICompanySizes } from "@/interfaces/company";
 import { CompanyMembersRepository } from "@/repositories/company-members-repository";
+import { UserAlreadyHasACompanyError } from "./errors/user-already-has-a-company-error";
 
 interface RegisterCompanyUseCaseRequest {
 	ownerId: string;
 	name: string;
 	documentNumber: string;
-	type: ICompanyTypes;
+	ownerSector: string;
 	size: ICompanySizes;
 }
 
@@ -28,7 +29,7 @@ export class RegisterCompanyUseCase {
 		ownerId,
 		name,
 		documentNumber,
-		type,
+		ownerSector,
 		size,
 	}: RegisterCompanyUseCaseRequest): Promise<RegisterCompanyUseCaseResponse> {
 		const user = await this.usersRepository.findById(ownerId);
@@ -44,18 +45,26 @@ export class RegisterCompanyUseCase {
 			throw new CompanyAlreadyExistsError();
 		}
 
+		const userAlreadyOwnsAnotherCompany =
+			await this.companiesRepository.findByOwnerId(ownerId);
+
+		if (userAlreadyOwnsAnotherCompany) {
+			throw new UserAlreadyHasACompanyError();
+		}
+
 		const company = await this.companiesRepository.create({
 			ownerId: user.id,
 			name,
 			documentNumber,
 			size,
-			type,
 		});
 
 		await this.companyMembersRepository.create({
-			memberId: user.id,
+			userId: user.id,
 			companyId: company.id,
 			role: "ADMIN",
+			sector: ownerSector,
+			status: "ACTIVE",
 		});
 
 		return { company };
