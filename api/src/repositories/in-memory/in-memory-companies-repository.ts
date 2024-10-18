@@ -12,7 +12,7 @@ export class InMemoryCompaniesRepository implements CompaniesRepository {
 			name: data.name,
 			documentNumber: data.documentNumber,
 			size: data.size,
-			type: data.type,
+			addressId: data.addressId ?? null,
 			createdAt: new Date(),
 			updatedAt: new Date(),
 		};

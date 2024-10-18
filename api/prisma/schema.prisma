@@ -33,8 +33,8 @@ model Company {
   ownerId String @unique @map("owner_id")
   owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade, name: "user_company_owner")
 
-  addressId String  @map("address_id")
-  address   Address @relation(fields: [addressId], references: [id], onDelete: Cascade)
+  addressId String?  @unique @map("address_id")
+  address   Address? @relation(fields: [addressId], references: [id], onDelete: Cascade)
 
   companyMembers CompanyMember[]
   drivers        Driver[]
