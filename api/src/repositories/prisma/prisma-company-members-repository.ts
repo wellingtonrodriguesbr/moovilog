@@ -68,6 +68,7 @@ export class PrismaCompanyMembersRepository
 					select: {
 						name: true,
 						email: true,
+						phone: true,
 						createdAt: true,
 						updatedAt: true,
 					},

@@ -28,13 +28,13 @@ describe("Fetch company members use case", () => {
 			name: "Company name",
 			documentNumber: "12312312389899",
 			size: "MEDIUM",
-			type: "HEADQUARTERS",
 			ownerId: "john-doe-01",
 		});
 
 		await companyMembersRepository.create({
 			companyId: "company-id-01",
-			memberId: "john-doe-01",
+			userId: "john-doe-01",
+			sector: "Gerência",
 			role: "ADMIN",
 		});
 	});
