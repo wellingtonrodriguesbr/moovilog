@@ -11,13 +11,13 @@ model User {
   id        String   @id @default(uuid())
   name      String
   email     String   @unique
-  password  String
-  phone     String   @unique
+  password  String?
+  phone     String?  @unique
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  company       Company?        @relation("user_company_owner")
-  companyMember CompanyMember[]
+  company        Company?        @relation("user_company_owner")
+  companyMembers CompanyMember[]
 
   @@map("users")
 }
@@ -246,6 +246,14 @@ model Address {
   drivers   Driver[]
 
   @@map("addresses")
+}
+
+model AuthLink {
+  id        String   @id @default(uuid())
+  code      String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("auth_links")
 }
 
 enum Role {

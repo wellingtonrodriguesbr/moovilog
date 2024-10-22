@@ -14,9 +14,10 @@ export class RegisterCompanyController {
 			ownerSector: z.string(),
 		});
 
+		const ownerId = req.user.sub;
+
 		const { name, documentNumber, size, ownerSector } =
 			registerCompanyBodySchema.parse(req.body);
-		const ownerId = req.user.sub;
 
 		try {
 			const registerCompanyUseCase = makeRegisterCompanyUseCase();

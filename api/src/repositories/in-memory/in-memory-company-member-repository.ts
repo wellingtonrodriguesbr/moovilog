@@ -11,9 +11,10 @@ export class InMemoryCompanyMembersRepository
 		const companyMember = {
 			id: randomUUID(),
 			companyId: data.companyId,
-			memberId: data.memberId,
+			userId: data.userId,
 			role: data.role,
-			sector: data.sector || null,
+			status: data.status ?? "PENDING",
+			sector: data.sector,
 			createdAt: new Date(),
 			updatedAt: new Date(),
 		};
@@ -31,17 +32,17 @@ export class InMemoryCompanyMembersRepository
 		return member;
 	}
 
-	async findByMemberId(memberId: string) {
-		const member = this.items.find((item) => item.memberId === memberId);
+	async findByMemberId(userId: string) {
+		const member = this.items.find((item) => item.userId === userId);
 
 		if (!member) return null;
 
 		return member;
 	}
 
-	async findMemberInCompany(memberId: string, companyId: string) {
+	async findMemberInCompany(userId: string, companyId: string) {
 		const member = this.items.find(
-			(item) => item.memberId === memberId && item.companyId === companyId
+			(item) => item.userId === userId && item.companyId === companyId
 		);
 
 		if (!member) return null;

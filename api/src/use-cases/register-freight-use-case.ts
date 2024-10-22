@@ -1,7 +1,6 @@
 import { IFreight, IFreightTypes } from "@/interfaces/freight";
 import { ResourceNotFoundError } from "./errors/resource-not-found-error";
 import { FreightsRepository } from "@/repositories/freights-repository";
-import { FreightInformationRepository } from "@/repositories/freight-information-repository";
 import { DriversRepository } from "@/repositories/drivers-repository";
 import { CitiesByFreightRepository } from "@/repositories/cities-by-freight-repository";
 import { NotAllowedError } from "./errors/not-allowed-error";
@@ -33,7 +32,6 @@ export class RegisterFreightUseCase {
 		private companyMembersRepository: CompanyMembersRepository,
 		private driversRepository: DriversRepository,
 		private freightsRepository: FreightsRepository,
-		private freightInformationRepository: FreightInformationRepository,
 		private citiesByFreightRepository: CitiesByFreightRepository
 	) {}
 
@@ -88,10 +86,6 @@ export class RegisterFreightUseCase {
 		});
 
 		await Promise.all([
-			await this.freightInformationRepository.create({
-				freightId: freight.id,
-			}),
-
 			await this.citiesByFreightRepository.createMany({
 				freightId: freight.id,
 				citiesIds,

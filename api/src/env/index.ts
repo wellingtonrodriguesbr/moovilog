@@ -10,6 +10,9 @@ const envSchema = z.object({
 	COOKIES_DOMAIN: z.string(),
 	PORT: z.coerce.number().default(3333),
 	JWT_SECRET: z.string(),
+	RESEND_API_KEY: z.string(),
+	WEBSITE_DOMAIN_URL: z.string(),
+	SENDER_EMAIL: z.string(),
 });
 
 const _env = envSchema.safeParse(process.env);

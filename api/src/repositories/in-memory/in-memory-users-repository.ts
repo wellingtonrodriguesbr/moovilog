@@ -10,7 +10,8 @@ export class InMemoryUsersRepository implements UsersRepository {
 			id: data.id ?? randomUUID(),
 			name: data.name,
 			email: data.email,
-			password: data.password,
+			password: data.password || null,
+			phone: data.phone || null,
 			createdAt: new Date(),
 			updatedAt: new Date(),
 		};
@@ -19,16 +20,24 @@ export class InMemoryUsersRepository implements UsersRepository {
 		return user;
 	}
 
-	async findByEmail(email: string) {
-		const user = this.items.find((item) => item.email === email);
+	async findById(id: string) {
+		const user = this.items.find((item) => item.id === id);
 
 		if (!user) return null;
 
 		return user;
 	}
 
-	async findById(id: string) {
-		const user = this.items.find((item) => item.id === id);
+	async findByPhone(phone: string) {
+		const user = this.items.find((item) => item.phone === phone);
+
+		if (!user) return null;
+
+		return user;
+	}
+
+	async findByEmail(email: string) {
+		const user = this.items.find((item) => item.email === email);
 
 		if (!user) return null;
 

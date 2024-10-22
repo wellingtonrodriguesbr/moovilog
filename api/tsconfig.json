@@ -10,6 +10,7 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "jsx": "react-jsx", // support JSX
     "moduleResolution": "node16",
     "baseUrl": ".",
     "paths": {

@@ -9,6 +9,7 @@ import { companiesRoutes } from "./routes/companies";
 import { driversRoutes } from "./routes/drivers";
 import { vehiclesRoutes } from "./routes/vehicles";
 import { freightsRoutes } from "./routes/freights";
+import { companyMembersRoutes } from "./routes/company-members";
 
 export const app = fastify({
 	logger: true,
@@ -37,6 +38,7 @@ app.register(fastifyCors, {
 
 app.register(usersRoutes);
 app.register(companiesRoutes);
+app.register(companyMembersRoutes);
 app.register(driversRoutes);
 app.register(vehiclesRoutes);
 app.register(freightsRoutes);
