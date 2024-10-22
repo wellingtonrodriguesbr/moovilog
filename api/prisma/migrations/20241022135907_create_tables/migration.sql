@@ -33,8 +33,8 @@ CREATE TABLE "users" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "password" TEXT NOT NULL,
-    "phone" TEXT NOT NULL,
+    "password" TEXT,
+    "phone" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -50,7 +50,7 @@ CREATE TABLE "companies" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "owner_id" TEXT NOT NULL,
-    "address_id" TEXT NOT NULL,
+    "address_id" TEXT,
 
     CONSTRAINT "companies_pkey" PRIMARY KEY ("id")
 );
@@ -64,6 +64,7 @@ CREATE TABLE "company_members" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "user_id" TEXT NOT NULL,
+    "creator_id" TEXT NOT NULL,
     "company_id" TEXT NOT NULL,
 
     CONSTRAINT "company_members_pkey" PRIMARY KEY ("id")
@@ -87,20 +88,6 @@ CREATE TABLE "drivers" (
 );
 
 -- CreateTable
-CREATE TABLE "bank_details" (
-    "id" TEXT NOT NULL,
-    "financial_institution" TEXT NOT NULL,
-    "account_type" "AccountTypeOfBankDetails" NOT NULL,
-    "agency" INTEGER NOT NULL,
-    "account_number" VARCHAR(20) NOT NULL,
-    "pix_key" TEXT,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "bank_details_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "vehicles" (
     "id" TEXT NOT NULL,
     "plate" TEXT NOT NULL,
@@ -113,6 +100,7 @@ CREATE TABLE "vehicles" (
     "full_load_capacity" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
+    "company_id" TEXT NOT NULL,
 
     CONSTRAINT "vehicles_pkey" PRIMARY KEY ("id")
 );
@@ -218,6 +206,15 @@ CREATE TABLE "addresses" (
     CONSTRAINT "addresses_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "auth_links" (
+    "id" TEXT NOT NULL,
+    "code" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "auth_links_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
@@ -231,6 +228,9 @@ CREATE UNIQUE INDEX "companies_document_number_key" ON "companies"("document_num
 CREATE UNIQUE INDEX "companies_owner_id_key" ON "companies"("owner_id");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "companies_address_id_key" ON "companies"("address_id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "company_members_company_id_user_id_key" ON "company_members"("company_id", "user_id");
 
 -- CreateIndex
@@ -240,7 +240,13 @@ CREATE UNIQUE INDEX "drivers_document_number_key" ON "drivers"("document_number"
 CREATE UNIQUE INDEX "drivers_phone_key" ON "drivers"("phone");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "drivers_document_number_company_id_key" ON "drivers"("document_number", "company_id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "vehicles_plate_key" ON "vehicles"("plate");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "vehicles_plate_company_id_key" ON "vehicles"("plate", "company_id");
 
 -- CreateIndex
 CREATE INDEX "freights_date_idx" ON "freights"("date");
@@ -254,6 +260,9 @@ CREATE UNIQUE INDEX "areas_code_key" ON "areas"("code");
 -- CreateIndex
 CREATE UNIQUE INDEX "cities_state_id_name_key" ON "cities"("state_id", "name");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "auth_links_code_key" ON "auth_links"("code");
+
 -- AddForeignKey
 ALTER TABLE "companies" ADD CONSTRAINT "companies_owner_id_fkey" FOREIGN KEY ("owner_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
@@ -262,6 +271,9 @@ ALTER TABLE "companies" ADD CONSTRAINT "companies_address_id_fkey" FOREIGN KEY (
 
 -- AddForeignKey
 ALTER TABLE "company_members" ADD CONSTRAINT "company_members_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "company_members" ADD CONSTRAINT "company_members_creator_id_fkey" FOREIGN KEY ("creator_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "company_members" ADD CONSTRAINT "company_members_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -274,6 +286,9 @@ ALTER TABLE "drivers" ADD CONSTRAINT "drivers_company_id_fkey" FOREIGN KEY ("com
 
 -- AddForeignKey
 ALTER TABLE "drivers" ADD CONSTRAINT "drivers_address_id_fkey" FOREIGN KEY ("address_id") REFERENCES "addresses"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "vehicles" ADD CONSTRAINT "vehicles_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "freights" ADD CONSTRAINT "freights_driver_id_fkey" FOREIGN KEY ("driver_id") REFERENCES "drivers"("id") ON DELETE CASCADE ON UPDATE CASCADE;

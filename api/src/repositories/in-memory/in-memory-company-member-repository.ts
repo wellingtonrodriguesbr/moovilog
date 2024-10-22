@@ -12,6 +12,7 @@ export class InMemoryCompanyMembersRepository
 			id: randomUUID(),
 			companyId: data.companyId,
 			userId: data.userId,
+			creatorId: data.creatorId,
 			role: data.role,
 			status: data.status ?? "PENDING",
 			sector: data.sector,
