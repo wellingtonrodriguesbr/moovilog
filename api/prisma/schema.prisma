@@ -16,9 +16,8 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  company               Company?        @relation("user_company_owner")
-  companyMembers        CompanyMember[] @relation("user_as_member")
-  createdCompanyMembers CompanyMember[] @relation("user_as_creator")
+  company        Company?        @relation("user_company_owner")
+  companyMembers CompanyMember[]
 
   @@map("users")
 }
@@ -55,10 +54,7 @@ model CompanyMember {
   updatedAt DateTime      @updatedAt @map("updated_at")
 
   userId String @map("user_id")
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, name: "user_as_member")
-
-  creatorId String @map("creator_id")
-  creator   User   @relation(fields: [creatorId], references: [id], onDelete: Cascade, name: "user_as_creator")
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   companyId String  @map("company_id")
   company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)

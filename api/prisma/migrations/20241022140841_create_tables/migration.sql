@@ -64,7 +64,6 @@ CREATE TABLE "company_members" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "user_id" TEXT NOT NULL,
-    "creator_id" TEXT NOT NULL,
     "company_id" TEXT NOT NULL,
 
     CONSTRAINT "company_members_pkey" PRIMARY KEY ("id")
@@ -271,9 +270,6 @@ ALTER TABLE "companies" ADD CONSTRAINT "companies_address_id_fkey" FOREIGN KEY (
 
 -- AddForeignKey
 ALTER TABLE "company_members" ADD CONSTRAINT "company_members_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "company_members" ADD CONSTRAINT "company_members_creator_id_fkey" FOREIGN KEY ("creator_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "company_members" ADD CONSTRAINT "company_members_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE CASCADE ON UPDATE CASCADE;

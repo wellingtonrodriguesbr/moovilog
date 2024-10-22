@@ -79,7 +79,6 @@ export class SendInvitationToCompanyMemberUseCase {
 
 		const companyMember = await this.companyMembersRepository.create({
 			companyId: creator.companyId,
-			creatorId: creator.id,
 			userId: user.id,
 			sector,
 			role,

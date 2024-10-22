@@ -61,7 +61,6 @@ export class RegisterCompanyUseCase {
 
 		await this.companyMembersRepository.create({
 			userId: user.id,
-			creatorId: user.id,
 			companyId: company.id,
 			role: "ADMIN",
 			sector: ownerSector,

@@ -43,7 +43,6 @@ describe("Send invitation to company member use case", () => {
 		await companyMembersRepository.create({
 			companyId: "company-id-01",
 			userId: "john-doe-id-01",
-			creatorId: "john-doe-id-01",
 			sector: "Diretoria",
 			role: "ADMIN",
 		});
@@ -92,7 +91,6 @@ describe("Send invitation to company member use case", () => {
 
 		const member = await companyMembersRepository.create({
 			userId: user.id,
-			creatorId: user.id,
 			companyId: "company-id-01",
 			role: "FINANCIAL",
 			sector: "Financeiro",
