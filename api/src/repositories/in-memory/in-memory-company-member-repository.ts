@@ -9,10 +9,9 @@ export class InMemoryCompanyMembersRepository
 
 	async create(data: Prisma.CompanyMemberUncheckedCreateInput) {
 		const companyMember = {
-			id: randomUUID(),
+			id: data.id ?? randomUUID(),
 			companyId: data.companyId,
 			userId: data.userId,
-			creatorId: data.creatorId,
 			role: data.role,
 			status: data.status ?? "PENDING",
 			sector: data.sector,
@@ -33,7 +32,7 @@ export class InMemoryCompanyMembersRepository
 		return member;
 	}
 
-	async findByMemberId(userId: string) {
+	async findByUserId(userId: string) {
 		const member = this.items.find((item) => item.userId === userId);
 
 		if (!member) return null;

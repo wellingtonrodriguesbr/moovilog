@@ -26,7 +26,7 @@ export class GetUserProfileUseCase {
 			throw new ResourceNotFoundError("User profile not found");
 		}
 
-		const companyMember = await this.companyMembersRepository.findByMemberId(
+		const companyMember = await this.companyMembersRepository.findByUserId(
 			user.id
 		);
 

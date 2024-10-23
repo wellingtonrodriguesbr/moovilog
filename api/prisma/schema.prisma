@@ -82,8 +82,8 @@ model Driver {
   companyId String  @map("company_id")
   company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
-  addressId String  @map("address_id")
-  address   Address @relation(fields: [addressId], references: [id], onDelete: Cascade)
+  addressId String?  @map("address_id")
+  address   Address? @relation(fields: [addressId], references: [id], onDelete: Cascade)
 
   freights Freight[]
 

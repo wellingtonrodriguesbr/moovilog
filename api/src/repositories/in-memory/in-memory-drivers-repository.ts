@@ -11,10 +11,11 @@ export class InMemoryDriversRepository implements DriversRepository {
 			creatorId: data.creatorId,
 			id: data.id ?? randomUUID(),
 			name: data.name,
-			password: data.password,
 			documentNumber: data.documentNumber,
 			phone: data.phone,
-			backupPhone: data.backupPhone || null,
+			type: data.type,
+			status: data.status ?? "ACTIVE",
+			addressId: data.addressId ?? null,
 			createdAt: new Date(),
 			updatedAt: new Date(),
 		};

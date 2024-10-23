@@ -6,7 +6,6 @@ import { InMemoryCompaniesRepository } from "@/repositories/in-memory/in-memory-
 import { InMemoryCompanyMembersRepository } from "@/repositories/in-memory/in-memory-company-member-repository";
 import { DriverAlreadyExistsError } from "./errors/driver-already-exists-error";
 import { NotAllowedError } from "./errors/not-allowed-error";
-import { compare } from "bcryptjs";
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
@@ -39,13 +38,14 @@ describe("Register driver use case", () => {
 			name: "Company name",
 			documentNumber: "12312312389899",
 			size: "MEDIUM",
-			type: "HEADQUARTERS",
 			ownerId: "john-doe-id-01",
 		});
 
 		await companyMembersRepository.create({
+			id: "company-member-id-01",
 			companyId: "company-id-01",
-			memberId: "john-doe-id-01",
+			userId: "john-doe-id-01",
+			sector: "Diretoria",
 			role: "ADMIN",
 		});
 	});
@@ -53,66 +53,61 @@ describe("Register driver use case", () => {
 	it("should be able to register driver", async () => {
 		const { driver } = await sut.execute({
 			name: "John Doe Driver",
-			password: "123123123",
 			documentNumber: "12312312312",
 			phone: "11999999999",
-			creatorId: "john-doe-id-01",
+			type: "AGGREGATE",
+			companyMemberId: "company-member-id-01",
 		});
 
 		expect(driver.id).toEqual(expect.any(String));
+		expect(driversRepository.items).toHaveLength(1);
+		expect(driversRepository.items[0].creatorId).toEqual(
+			"company-member-id-01"
+		);
 	});
 
 	it("should not be able to register driver with an existing same document number", async () => {
 		await sut.execute({
 			name: "John Doe Driver",
-			password: "123123123",
 			documentNumber: "12312312312",
 			phone: "11999999999",
-			creatorId: "john-doe-id-01",
+			type: "AGGREGATE",
+			companyMemberId: "company-member-id-01",
 		});
 
 		await expect(() =>
 			sut.execute({
 				name: "John Doe Driver",
-				password: "123123123",
 				documentNumber: "12312312312",
 				phone: "11999999999",
-				creatorId: "john-doe-id-01",
+				type: "AGGREGATE",
+				companyMemberId: "company-member-id-01",
 			})
 		).rejects.toBeInstanceOf(DriverAlreadyExistsError);
 	});
 
-	it("should not be able to register the driver with the a creator role that is different between operational or admin", async () => {
+	it("should not be able to register the driver with the a creator role that is different between manager or admin", async () => {
+		const user = await usersRepository.create({
+			name: "John Doe",
+			email: "johndoe@example.com",
+			password: "12345678",
+		});
+
 		const member = await companyMembersRepository.create({
-			memberId: "john-doe-id-02",
+			userId: user.id,
 			companyId: "company-id-01",
 			role: "FINANCIAL",
+			sector: "Financeiro",
 		});
 
 		expect(() =>
 			sut.execute({
 				name: "John Doe Driver",
-				password: "123123123",
-				documentNumber: "12312312312",
+				documentNumber: "12312312313",
 				phone: "11999999999",
-				creatorId: member.memberId,
+				type: "AGGREGATE",
+				companyMemberId: member.id,
 			})
 		).rejects.toBeInstanceOf(NotAllowedError);
-	});
-
-	it("should be able possible to generate a hash of the driver password in the registry", async () => {
-		const { driver } = await sut.execute({
-			name: "John Doe Driver",
-			password: "123123123",
-			documentNumber: "12312312312",
-			phone: "11999999999",
-			creatorId: "john-doe-id-01",
-		});
-
-		const isPasswordCorrectlyHashed = await compare(
-			"123123123",
-			driver.password
-		);
-		expect(isPasswordCorrectlyHashed).toBe(true);
 	});
 });

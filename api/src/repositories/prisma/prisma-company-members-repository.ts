@@ -27,7 +27,7 @@ export class PrismaCompanyMembersRepository
 		return member;
 	}
 
-	async findByMemberId(userId: string) {
+	async findByUserId(userId: string) {
 		const member = await prisma.companyMember.findFirst({
 			where: {
 				userId,

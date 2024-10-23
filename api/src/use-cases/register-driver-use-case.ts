@@ -1,18 +1,16 @@
-import { hash } from "bcryptjs";
 import { DriverAlreadyExistsError } from "./errors/driver-already-exists-error";
 import { ResourceNotFoundError } from "./errors/resource-not-found-error";
 import { DriversRepository } from "@/repositories/drivers-repository";
 import { CompanyMembersRepository } from "@/repositories/company-members-repository";
-import { IDriver } from "@/interfaces/driver";
+import { IDriver, IDriverType } from "@/interfaces/driver";
 import { NotAllowedError } from "./errors/not-allowed-error";
 
 interface RegisterDriverUseCaseRequest {
 	name: string;
-	password: string;
 	documentNumber: string;
 	phone: string;
-	backupPhone?: string | null;
-	creatorId: string;
+	type: IDriverType;
+	companyMemberId: string;
 }
 interface RegisterDriverUseCaseResponse {
 	driver: IDriver;
@@ -26,14 +24,13 @@ export class RegisterDriverUseCase {
 
 	async execute({
 		name,
-		password,
 		documentNumber,
 		phone,
-		backupPhone,
-		creatorId,
+		type,
+		companyMemberId,
 	}: RegisterDriverUseCaseRequest): Promise<RegisterDriverUseCaseResponse> {
 		const [member, driverAlreadyExists] = await Promise.all([
-			await this.companyMembersRepository.findByMemberId(creatorId),
+			await this.companyMembersRepository.findById(companyMemberId),
 			await this.driversRepository.findByDocumentNumber(documentNumber),
 		]);
 
@@ -41,7 +38,7 @@ export class RegisterDriverUseCase {
 			throw new ResourceNotFoundError("Member not found");
 		}
 
-		if (member.role !== "ADMIN" && member.role !== "OPERATIONAL") {
+		if (member.role !== "ADMIN" && member.role !== "MANAGER") {
 			throw new NotAllowedError(
 				"You do not have permission to perform this action, please ask your administrator for access"
 			);
@@ -51,16 +48,13 @@ export class RegisterDriverUseCase {
 			throw new DriverAlreadyExistsError();
 		}
 
-		const passwordHash = await hash(password, 6);
-
 		const driver = await this.driversRepository.create({
 			name,
-			password: passwordHash,
 			documentNumber,
 			phone,
-			backupPhone,
+			type,
 			companyId: member.companyId,
-			creatorId: member.memberId,
+			creatorId: member.id,
 		});
 
 		return {

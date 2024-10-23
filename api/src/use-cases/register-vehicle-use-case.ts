@@ -44,7 +44,7 @@ export class RegisterVehicleUseCase {
 		creatorId,
 	}: RegisterVehicleUseCaseRequest): Promise<RegisterVehicleUseCaseResponse> {
 		const [member, driver, vehicleAlreadyExists] = await Promise.all([
-			await this.companyMembersRepository.findByMemberId(creatorId),
+			await this.companyMembersRepository.findByUserId(creatorId),
 			await this.driversRepository.findById(driverId),
 			await this.vehiclesRepository.findByPlate(plate),
 		]);

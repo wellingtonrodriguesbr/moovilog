@@ -20,7 +20,7 @@ export class FetchFreightsFromCompanyUseCase {
 	async execute({
 		userId,
 	}: FetchFreightsFromCompanyUseCaseRequest): Promise<FetchFreightsFromCompanyUseCaseResponse> {
-		const member = await this.companyMembersRepository.findByMemberId(userId);
+		const member = await this.companyMembersRepository.findByUserId(userId);
 
 		if (!member) {
 			throw new ResourceNotFoundError();
