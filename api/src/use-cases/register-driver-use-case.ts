@@ -29,10 +29,8 @@ export class RegisterDriverUseCase {
 		type,
 		companyMemberId,
 	}: RegisterDriverUseCaseRequest): Promise<RegisterDriverUseCaseResponse> {
-		const [member, driverAlreadyExists] = await Promise.all([
-			await this.companyMembersRepository.findById(companyMemberId),
-			await this.driversRepository.findByDocumentNumber(documentNumber),
-		]);
+		const member =
+			await this.companyMembersRepository.findById(companyMemberId);
 
 		if (!member) {
 			throw new ResourceNotFoundError("Member not found");
@@ -44,7 +42,13 @@ export class RegisterDriverUseCase {
 			);
 		}
 
-		if (driverAlreadyExists) {
+		const driverAlreadyExistsInCompany =
+			await this.driversRepository.findDriverInCompany(
+				documentNumber,
+				member.companyId
+			);
+
+		if (driverAlreadyExistsInCompany) {
 			throw new DriverAlreadyExistsError();
 		}
 

@@ -66,7 +66,7 @@ describe("Register driver use case", () => {
 		);
 	});
 
-	it("should not be able to register driver with an existing same document number", async () => {
+	it("should not be able to register driver with an existing same document number in company", async () => {
 		await sut.execute({
 			name: "John Doe Driver",
 			documentNumber: "12312312312",

@@ -24,6 +24,19 @@ export class InMemoryDriversRepository implements DriversRepository {
 		return driver;
 	}
 
+	async findDriverInCompany(documentNumber: string, companyId: string) {
+		const driver = this.items.find(
+			(item) =>
+				item.documentNumber === documentNumber && item.companyId === companyId
+		);
+
+		if (!driver) {
+			return null;
+		}
+
+		return driver;
+	}
+
 	async findByDocumentNumber(documentNumber: string) {
 		const driver = this.items.find(
 			(item) => item.documentNumber === documentNumber
