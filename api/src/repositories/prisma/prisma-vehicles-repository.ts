@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
-import { VehiclesRepository } from "../vehicles-repository";
+import { VehiclesRepository } from "@/repositories/vehicles-repository";
 
 export class PrismaVehiclesRepository implements VehiclesRepository {
 	async create(data: Prisma.VehicleUncheckedCreateInput) {
@@ -9,6 +9,23 @@ export class PrismaVehiclesRepository implements VehiclesRepository {
 		});
 
 		return vehicle;
+	}
+
+	async findVehicleInCompany(plate: string, companyId: string) {
+		const member = await prisma.vehicle.findUnique({
+			where: {
+				plate_companyId: {
+					plate,
+					companyId,
+				},
+			},
+		});
+
+		if (!member) {
+			return null;
+		}
+
+		return member;
 	}
 
 	async findByPlate(plate: string) {

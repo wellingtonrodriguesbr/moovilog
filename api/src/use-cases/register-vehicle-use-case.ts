@@ -1,7 +1,6 @@
 import { VehicleAlreadyExistsError } from "./errors/vehicle-already-exists-error";
 import { NotAllowedError } from "./errors/not-allowed-error";
 import { ResourceNotFoundError } from "./errors/resource-not-found-error";
-import { DriversRepository } from "@/repositories/drivers-repository";
 import { VehiclesRepository } from "@/repositories/vehicles-repository";
 import { CompanyMembersRepository } from "@/repositories/company-members-repository";
 import {
@@ -17,9 +16,10 @@ interface RegisterVehicleUseCaseRequest {
 	category: IVehicleCategory;
 	type: IVehicleType;
 	body: IVehicleBody;
-	fullLoadCapacity: string;
-	driverId: string;
-	creatorId: string;
+	fullLoadCapacity: number;
+	brand: string;
+	model: string;
+	companyMemberId: string;
 }
 
 interface RegisterVehicleUseCaseResponse {
@@ -29,7 +29,6 @@ interface RegisterVehicleUseCaseResponse {
 export class RegisterVehicleUseCase {
 	constructor(
 		private companyMembersRepository: CompanyMembersRepository,
-		private driversRepository: DriversRepository,
 		private vehiclesRepository: VehiclesRepository
 	) {}
 
@@ -40,30 +39,30 @@ export class RegisterVehicleUseCase {
 		type,
 		body,
 		fullLoadCapacity,
-		driverId,
-		creatorId,
+		brand,
+		model,
+		companyMemberId,
 	}: RegisterVehicleUseCaseRequest): Promise<RegisterVehicleUseCaseResponse> {
-		const [member, driver, vehicleAlreadyExists] = await Promise.all([
-			await this.companyMembersRepository.findByUserId(creatorId),
-			await this.driversRepository.findById(driverId),
-			await this.vehiclesRepository.findByPlate(plate),
-		]);
+		const member =
+			await this.companyMembersRepository.findById(companyMemberId);
 
 		if (!member) {
 			throw new ResourceNotFoundError("Member not found");
 		}
 
-		if (member.role !== "ADMIN" && member.role !== "OPERATIONAL") {
+		if (member.role !== "ADMIN" && member.role !== "MANAGER") {
 			throw new NotAllowedError(
 				"You do not have permission to perform this action, please ask your administrator for access"
 			);
 		}
 
-		if (!driver) {
-			throw new ResourceNotFoundError("Driver not found");
-		}
+		const vehicleAlreadyExistsInCompany =
+			await this.vehiclesRepository.findVehicleInCompany(
+				plate,
+				member.companyId
+			);
 
-		if (vehicleAlreadyExists) {
+		if (vehicleAlreadyExistsInCompany) {
 			throw new VehicleAlreadyExistsError(
 				"There is already a vehicle registered with this plate"
 			);
@@ -75,8 +74,11 @@ export class RegisterVehicleUseCase {
 			body,
 			category,
 			fullLoadCapacity,
+			brand,
+			model,
 			type,
-			driverId,
+			creatorId: member.id,
+			companyId: member.companyId,
 		});
 
 		return { vehicle };

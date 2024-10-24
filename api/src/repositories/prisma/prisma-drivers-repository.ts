@@ -7,11 +7,6 @@ export class PrismaDriversRepository implements DriversRepository {
 		const driver = await prisma.driver.create({
 			data: {
 				...data,
-				companyDrivers: {
-					create: {
-						companyId: data.companyId,
-					},
-				},
 			},
 		});
 
@@ -22,6 +17,23 @@ export class PrismaDriversRepository implements DriversRepository {
 		const driver = await prisma.driver.findUnique({
 			where: {
 				documentNumber,
+			},
+		});
+
+		if (!driver) {
+			return null;
+		}
+
+		return driver;
+	}
+
+	async findDriverInCompany(documentNumber: string, companyId: string) {
+		const driver = await prisma.driver.findUnique({
+			where: {
+				documentNumber_companyId: {
+					documentNumber,
+					companyId,
+				},
 			},
 		});
 

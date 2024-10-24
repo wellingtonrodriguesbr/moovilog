@@ -1,7 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { RegisterVehicleUseCase } from "./register-vehicle-use-case";
 import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
-import { InMemoryDriversRepository } from "@/repositories/in-memory/in-memory-drivers-repository";
 import { InMemoryVehiclesRepository } from "@/repositories/in-memory/in-memory-vehicles-repository";
 import { VehicleAlreadyExistsError } from "./errors/vehicle-already-exists-error";
 import { NotAllowedError } from "./errors/not-allowed-error";
@@ -12,7 +11,6 @@ let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
 
 let companyMembersRepository: InMemoryCompanyMembersRepository;
-let driversRepository: InMemoryDriversRepository;
 let vehiclesRepository: InMemoryVehiclesRepository;
 let sut: RegisterVehicleUseCase;
 
@@ -21,19 +19,17 @@ describe("Register vehicle use case", () => {
 		usersRepository = new InMemoryUsersRepository();
 		companiesRepository = new InMemoryCompaniesRepository();
 		companyMembersRepository = new InMemoryCompanyMembersRepository();
-		driversRepository = new InMemoryDriversRepository();
 		vehiclesRepository = new InMemoryVehiclesRepository();
 
 		sut = new RegisterVehicleUseCase(
 			companyMembersRepository,
-			driversRepository,
 			vehiclesRepository
 		);
 
 		await usersRepository.create({
 			id: "john-doe-id-01",
 			name: "John Doe",
-			email: "johndoe@email.com",
+			email: "johndoe@example.com",
 			password: "12345678",
 		});
 
@@ -42,24 +38,15 @@ describe("Register vehicle use case", () => {
 			name: "Company name",
 			documentNumber: "12312312389899",
 			size: "MEDIUM",
-			type: "HEADQUARTERS",
-			ownerId: "john-doe-id-01",
+			ownerId: "john-doe-01",
 		});
 
 		await companyMembersRepository.create({
+			id: "company-member-id-01",
 			companyId: "company-id-01",
-			memberId: "john-doe-id-01",
+			userId: "john-doe-id-01",
+			sector: "Diretoria",
 			role: "ADMIN",
-		});
-
-		await driversRepository.create({
-			id: "john-doe-driver-id",
-			name: "John Doe Driver",
-			documentNumber: "11111111111",
-			password: "12345678",
-			phone: "11111111111",
-			companyId: "company-id-01",
-			creatorId: "john-doe-id-01",
 		});
 	});
 
@@ -70,45 +57,59 @@ describe("Register vehicle use case", () => {
 			body: "CLOSED",
 			category: "STRAIGHT_TRUCKS",
 			type: "OUTSOURCED",
-			fullLoadCapacity: "24.000",
-			driverId: "john-doe-driver-id",
-			creatorId: "john-doe-id-01",
+			fullLoadCapacity: 4500,
+			brand: "Mercedes-Benz",
+			model: "710",
+			companyMemberId: "company-member-id-01",
 		});
 
 		expect(vehicle.id).toEqual(expect.any(String));
+		expect(vehiclesRepository.items).toHaveLength(1);
+		expect(vehiclesRepository.items[0].creatorId).toEqual(
+			"company-member-id-01"
+		);
 	});
 
 	it("not should be able to register a vehicle with same plate", async () => {
 		await sut.execute({
-			plate: "ABC-123",
+			plate: "ABC-143",
 			year: 1996,
 			body: "CLOSED",
 			category: "STRAIGHT_TRUCKS",
 			type: "OUTSOURCED",
-			fullLoadCapacity: "24.000",
-			driverId: "john-doe-driver-id",
-			creatorId: "john-doe-id-01",
+			fullLoadCapacity: 4500,
+			brand: "Mercedes-Benz",
+			model: "710",
+			companyMemberId: "company-member-id-01",
 		});
 
 		await expect(() =>
 			sut.execute({
-				plate: "ABC-123",
+				plate: "ABC-143",
 				year: 1996,
-				body: "CLOSED",
+				body: "OPEN",
 				category: "STRAIGHT_TRUCKS",
 				type: "OUTSOURCED",
-				fullLoadCapacity: "24.000",
-				driverId: "john-doe-driver-id",
-				creatorId: "john-doe-id-01",
+				fullLoadCapacity: 4500,
+				brand: "Mercedes-Benz",
+				model: "710",
+				companyMemberId: "company-member-id-01",
 			})
 		).rejects.toBeInstanceOf(VehicleAlreadyExistsError);
 	});
 
-	it("not should be able to register a vehicle with the a creator role that is different between operational or admin", async () => {
+	it("not should be able to register a vehicle with the a creator role that is different between manager or admin", async () => {
+		const user = await usersRepository.create({
+			name: "John Doe",
+			email: "johndoe@example.com",
+			password: "12345678",
+		});
+
 		const member = await companyMembersRepository.create({
-			memberId: "john-doe-id-02",
+			userId: user.id,
 			companyId: "company-id-01",
 			role: "FINANCIAL",
+			sector: "Financeiro",
 		});
 
 		await expect(() =>
@@ -118,10 +119,12 @@ describe("Register vehicle use case", () => {
 				body: "CLOSED",
 				category: "STRAIGHT_TRUCKS",
 				type: "OUTSOURCED",
-				fullLoadCapacity: "24.000",
-				driverId: "john-doe-driver-id",
-				creatorId: member.memberId,
+				fullLoadCapacity: 4500,
+				brand: "Mercedes-Benz",
+				model: "710",
+				companyMemberId: member.id,
 			})
 		).rejects.toBeInstanceOf(NotAllowedError);
+		expect(vehiclesRepository.items).toHaveLength(0);
 	});
 });

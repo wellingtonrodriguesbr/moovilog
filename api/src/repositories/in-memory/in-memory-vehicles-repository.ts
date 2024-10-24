@@ -1,5 +1,5 @@
 import { Prisma, Vehicle } from "@prisma/client";
-import { VehiclesRepository } from "../vehicles-repository";
+import { VehiclesRepository } from "@/repositories/vehicles-repository";
 import { randomUUID } from "crypto";
 
 export class InMemoryVehiclesRepository implements VehiclesRepository {
@@ -7,14 +7,17 @@ export class InMemoryVehiclesRepository implements VehiclesRepository {
 
 	async create(data: Prisma.VehicleUncheckedCreateInput) {
 		const vehicle = {
-			id: randomUUID(),
+			id: data.id ?? randomUUID(),
 			plate: data.plate,
 			year: data.year,
 			category: data.category,
 			type: data.type,
 			body: data.body,
 			fullLoadCapacity: data.fullLoadCapacity,
-			driverId: data.driverId,
+			brand: data.brand,
+			model: data.model,
+			creatorId: data.creatorId,
+			companyId: data.companyId,
 			createdAt: new Date(),
 			updatedAt: new Date(),
 		};
@@ -23,8 +26,20 @@ export class InMemoryVehiclesRepository implements VehiclesRepository {
 		return vehicle;
 	}
 
+	async findVehicleInCompany(plate: string, companyId: string) {
+		const vehicle = this.items.find(
+			(item) => item.plate === plate && item.companyId === companyId
+		);
+
+		if (!vehicle) {
+			return null;
+		}
+
+		return vehicle;
+	}
+
 	async findByPlate(plate: string) {
-		const vehicle = await this.items.find((item) => item.plate === plate);
+		const vehicle = this.items.find((item) => item.plate === plate);
 
 		if (!vehicle) {
 			return null;
@@ -34,7 +49,7 @@ export class InMemoryVehiclesRepository implements VehiclesRepository {
 	}
 
 	async findById(id: string) {
-		const vehicle = await this.items.find((item) => item.id === id);
+		const vehicle = this.items.find((item) => item.id === id);
 
 		if (!vehicle) {
 			return null;
