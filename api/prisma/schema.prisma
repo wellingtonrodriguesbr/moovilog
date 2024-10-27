@@ -143,6 +143,9 @@ model Freight {
   companyId String  @map("company_id")
   company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
+  routeId String @map("route_id")
+  route   Route  @relation(fields: [routeId], references: [id])
+
   @@index([date])
   @@map("freights")
 }
@@ -157,6 +160,7 @@ model Route {
   company   Company @relation(fields: [companyId], references: [id])
 
   citiesInRoute CityInRoute[]
+  freights      Freight[]
 
   @@map("routes")
 }

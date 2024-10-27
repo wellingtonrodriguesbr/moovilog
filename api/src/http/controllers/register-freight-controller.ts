@@ -5,63 +5,68 @@ import { makeRegisterfreightUseCase } from "@/use-cases/factories/make-register-
 
 import z from "zod";
 
-export async function registerFreightController(
-	req: FastifyRequest,
-	reply: FastifyReply
-) {
-	const registerFreightBodySchema = z.object({
-		type: z.enum(["FRACTIONAL", "DIRECT", "DEDICATED"]),
-		date: z.coerce.date(),
-		observation: z.string().optional().nullable(),
-		pickupsQuantity: z.number(),
-		deliveriesQuantity: z.number(),
-		totalWeightOfPickups: z.number(),
-		totalWeightOfDeliveries: z.number(),
-		freightAmountInCents: z.number(),
-		citiesIds: z.array(z.string()),
-		driverId: z.string(),
-	});
+export class RegisterFreightController {
+	static async handle(req: FastifyRequest, reply: FastifyReply) {
+		const registerFreightBodySchema = z.object({
+			type: z.enum(["FRACTIONAL", "DIRECT", "DEDICATED"]),
+			date: z.coerce.date(),
+			modality: z.enum(["DAILY", "PERCENTAGE", "PRODUCTIVITY"]),
+			observation: z.string().optional().nullable(),
+			pickupsQuantity: z.number().optional(),
+			deliveriesQuantity: z.number(),
+			totalWeightOfPickups: z.number().optional(),
+			totalWeightOfDeliveries: z.number(),
+			freightAmountInCents: z.number(),
+			companyMemberId: z.string().uuid(),
+			driverId: z.string().uuid(),
+			vehicleId: z.string().uuid(),
+			routeId: z.string().uuid(),
+		});
 
-	const {
-		type,
-		date,
-		observation,
-		pickupsQuantity,
-		deliveriesQuantity,
-		totalWeightOfPickups,
-		totalWeightOfDeliveries,
-		freightAmountInCents,
-		citiesIds,
-		driverId,
-	} = registerFreightBodySchema.parse(req.body);
-
-	const creatorId = req.user.sub;
-
-	try {
-		const registerFreightUseCase = makeRegisterfreightUseCase();
-		const { freight } = await registerFreightUseCase.execute({
+		const {
 			type,
 			date,
+			modality,
 			observation,
 			pickupsQuantity,
 			deliveriesQuantity,
 			totalWeightOfPickups,
 			totalWeightOfDeliveries,
 			freightAmountInCents,
-			citiesIds,
+			companyMemberId,
 			driverId,
-			creatorId,
-		});
+			vehicleId,
+			routeId,
+		} = registerFreightBodySchema.parse(req.body);
 
-		reply.status(201).send({ freight });
-	} catch (error) {
-		if (error instanceof NotAllowedError) {
-			reply.status(403).send({ message: error.message });
-		}
-		if (error instanceof ResourceNotFoundError) {
-			reply.status(404).send({ message: error.message });
-		}
+		try {
+			const registerFreightUseCase = makeRegisterfreightUseCase();
+			const { freight } = await registerFreightUseCase.execute({
+				type,
+				date,
+				modality,
+				observation,
+				pickupsQuantity,
+				deliveriesQuantity,
+				totalWeightOfPickups,
+				totalWeightOfDeliveries,
+				freightAmountInCents,
+				companyMemberId,
+				driverId,
+				vehicleId,
+				routeId,
+			});
 
-		throw error;
+			reply.status(201).send({ freight });
+		} catch (error) {
+			if (error instanceof NotAllowedError) {
+				reply.status(403).send({ message: error.message });
+			}
+			if (error instanceof ResourceNotFoundError) {
+				reply.status(404).send({ message: error.message });
+			}
+
+			throw error;
+		}
 	}
 }

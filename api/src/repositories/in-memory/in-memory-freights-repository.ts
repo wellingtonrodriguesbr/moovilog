@@ -1,24 +1,32 @@
 import { Freight, Prisma } from "@prisma/client";
 import { FreightsRepository } from "../freights-repository";
 import { randomUUID } from "crypto";
+import { Decimal } from "@prisma/client/runtime/library";
 
 export class InMemoryFreightsRepository implements FreightsRepository {
 	public items: Freight[] = [];
 
-	async create(data: Prisma.FreightUncheckedCreateInput) {
+	async create(data: Prisma.FreightUncheckedCreateInput): Promise<Freight> {
 		const freight = {
 			id: data.id ?? randomUUID(),
 			type: data.type,
+			modality: data.modality,
 			date: new Date(data.date),
-			pickupsQuantity: data.pickupsQuantity,
+			pickupsQuantity: data.pickupsQuantity || null,
 			deliveriesQuantity: data.deliveriesQuantity,
-			totalWeightOfPickups: data.totalWeightOfPickups || null,
-			totalWeightOfDeliveries: data.totalWeightOfDeliveries,
+			totalWeightOfPickups: data.totalWeightOfPickups
+				? new Decimal(data.totalWeightOfPickups as number | string)
+				: null,
+			totalWeightOfDeliveries: new Decimal(
+				data.totalWeightOfDeliveries as number | string
+			),
 			freightAmountInCents: data.freightAmountInCents,
 			observation: data.observation || null,
 			creatorId: data.creatorId,
 			driverId: data.driverId,
 			companyId: data.companyId,
+			routeId: data.routeId,
+			vehicleId: data.vehicleId,
 			createdAt: new Date(),
 			updatedAt: new Date(),
 		};

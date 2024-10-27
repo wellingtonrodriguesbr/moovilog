@@ -2,41 +2,39 @@ import { InMemoryCompaniesRepository } from "@/repositories/in-memory/in-memory-
 import { InMemoryCompanyMembersRepository } from "@/repositories/in-memory/in-memory-company-member-repository";
 import { InMemoryDriversRepository } from "@/repositories/in-memory/in-memory-drivers-repository";
 import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
+import { InMemoryFreightsRepository } from "@/repositories/in-memory/in-memory-freights-repository";
+import { InMemoryVehiclesRepository } from "@/repositories/in-memory/in-memory-vehicles-repository";
+import { InMemoryRoutesRepository } from "@/repositories/in-memory/in-memory-routes-repository";
 import { beforeEach, describe, expect, it } from "vitest";
 import { RegisterFreightUseCase } from "./register-freight-use-case";
-import { InMemoryFreightsRepository } from "@/repositories/in-memory/in-memory-freights-repository";
-import { InMemoryFreightInformationRepository } from "@/repositories/in-memory/in-memory-freight-information-repository";
-import { InMemoryCitiesByFreightRepository } from "@/repositories/in-memory/in-memory-cities-by-freight-repository";
 import { NotAllowedError } from "./errors/not-allowed-error";
 import { BadRequestError } from "./errors/bad-request-error";
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
-
 let companyMembersRepository: InMemoryCompanyMembersRepository;
 let driversRepository: InMemoryDriversRepository;
+let vehiclesRepository: InMemoryVehiclesRepository;
 let freightsRepository: InMemoryFreightsRepository;
-let freightInformationRepository: InMemoryFreightInformationRepository;
-let citiesByFreightRepository: InMemoryCitiesByFreightRepository;
+let routesRepository: InMemoryRoutesRepository;
 let sut: RegisterFreightUseCase;
 
 describe("Register freight use case", () => {
 	beforeEach(async () => {
 		usersRepository = new InMemoryUsersRepository();
 		companiesRepository = new InMemoryCompaniesRepository();
-
+		vehiclesRepository = new InMemoryVehiclesRepository();
 		companyMembersRepository = new InMemoryCompanyMembersRepository();
 		driversRepository = new InMemoryDriversRepository();
 		freightsRepository = new InMemoryFreightsRepository();
-		freightInformationRepository = new InMemoryFreightInformationRepository();
-		citiesByFreightRepository = new InMemoryCitiesByFreightRepository();
+		routesRepository = new InMemoryRoutesRepository();
 
 		sut = new RegisterFreightUseCase(
 			companyMembersRepository,
 			driversRepository,
+			vehiclesRepository,
 			freightsRepository,
-			freightInformationRepository,
-			citiesByFreightRepository
+			routesRepository
 		);
 
 		await usersRepository.create({
@@ -51,24 +49,45 @@ describe("Register freight use case", () => {
 			name: "Company name",
 			documentNumber: "12312312389899",
 			size: "MEDIUM",
-			type: "HEADQUARTERS",
-			ownerId: "john-doe-id-01",
-		});
-
-		await driversRepository.create({
-			id: "john-doe-driver-id",
-			name: "John Doe Driver",
-			documentNumber: "11111111111",
-			password: "12345678",
-			phone: "11111111111",
-			companyId: "company-id-01",
-			creatorId: "john-doe-id-01",
+			ownerId: "john-doe-01",
 		});
 
 		await companyMembersRepository.create({
+			id: "company-member-id-01",
 			companyId: "company-id-01",
-			memberId: "john-doe-id-01",
+			userId: "john-doe-id-01",
+			sector: "Diretoria",
 			role: "ADMIN",
+		});
+
+		await driversRepository.create({
+			id: "fake-driver-id-01",
+			name: "John Doe Driver",
+			documentNumber: "12312312312",
+			phone: "11999999999",
+			type: "AGGREGATE",
+			creatorId: "company-member-id-01",
+			companyId: "company-id-01",
+		});
+
+		await vehiclesRepository.create({
+			id: "fake-vehicle-id-01",
+			plate: "ABC-123",
+			year: 1996,
+			body: "CLOSED",
+			category: "STRAIGHT_TRUCKS",
+			type: "OUTSOURCED",
+			fullLoadCapacity: 4500,
+			brand: "Mercedes-Benz",
+			model: "710",
+			creatorId: "company-member-id-01",
+			companyId: "company-id-01",
+		});
+
+		await routesRepository.create({
+			id: "fake-route-01",
+			name: "Fake route",
+			companyId: "company-id-01",
 		});
 	});
 
@@ -80,22 +99,31 @@ describe("Register freight use case", () => {
 			pickupsQuantity: 5,
 			totalWeightOfDeliveries: 2400,
 			totalWeightOfPickups: 1000,
-			freightAmountInCents: 60000,
-			citiesIds: ["fake-city-01", "fake-city-02"],
-			creatorId: "john-doe-id-01",
-			driverId: "john-doe-driver-id",
+			freightAmountInCents: 600,
+			modality: "DAILY",
+			companyMemberId: "company-member-id-01",
+			driverId: "fake-driver-id-01",
+			routeId: "fake-route-01",
+			vehicleId: "fake-vehicle-id-01",
 		});
 
 		expect(freight.id).toEqual(expect.any(String));
-		expect(citiesByFreightRepository.items).toHaveLength(2);
-		expect(freightInformationRepository.items).toHaveLength(1);
+		expect(freightsRepository.items[0].companyId).toEqual("company-id-01");
+		expect(freightsRepository.items[0].freightAmountInCents).toEqual(60000);
 	});
 
-	it("not should be able to register a freight with the a creator role that is different between operational or admin", async () => {
+	it("not should be able to register a freight with the a creator role that is different between operational, manager or admin", async () => {
+		const user = await usersRepository.create({
+			name: "John Doe",
+			email: "johndoe@example.com",
+			password: "12345678",
+		});
+
 		const member = await companyMembersRepository.create({
-			memberId: "john-doe-id-02",
 			companyId: "company-id-01",
-			role: "MEMBER",
+			userId: user.id,
+			sector: "Diretoria",
+			role: "COMERCIAL",
 		});
 
 		expect(() =>
@@ -106,10 +134,12 @@ describe("Register freight use case", () => {
 				pickupsQuantity: 5,
 				totalWeightOfDeliveries: 2400,
 				totalWeightOfPickups: 1000,
-				freightAmountInCents: 60000,
-				citiesIds: ["fake-city-01", "fake-city-02"],
-				creatorId: member.memberId,
-				driverId: "john-doe-driver-id",
+				freightAmountInCents: 450,
+				modality: "DAILY",
+				companyMemberId: member.id,
+				driverId: "fake-driver-id-01",
+				routeId: "fake-route-01",
+				vehicleId: "fake-vehicle-id-01",
 			})
 		).rejects.toBeInstanceOf(NotAllowedError);
 	});
@@ -123,10 +153,12 @@ describe("Register freight use case", () => {
 				pickupsQuantity: 5,
 				totalWeightOfDeliveries: 2400,
 				totalWeightOfPickups: 1000,
-				freightAmountInCents: 60000,
-				citiesIds: ["fake-city-01", "fake-city-02"],
-				creatorId: "john-doe-id-01",
-				driverId: "john-doe-driver-id",
+				freightAmountInCents: 580,
+				modality: "DAILY",
+				companyMemberId: "company-member-id-01",
+				driverId: "fake-driver-id-01",
+				routeId: "fake-route-01",
+				vehicleId: "fake-vehicle-id-01",
 			})
 		).rejects.toBeInstanceOf(BadRequestError);
 	});
