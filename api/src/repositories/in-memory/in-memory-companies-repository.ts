@@ -46,4 +46,13 @@ export class InMemoryCompaniesRepository implements CompaniesRepository {
 
 		return company;
 	}
+
+	async setCompanyAddress(companyId: string, addressId: string) {
+		const company = this.items.find((item) => item.id === companyId);
+
+		if (!company) throw new Error("Company not found");
+
+		company.addressId = addressId;
+		this.items.push(company);
+	}
 }

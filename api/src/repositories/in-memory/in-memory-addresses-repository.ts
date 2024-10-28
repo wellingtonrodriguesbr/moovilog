@@ -5,7 +5,12 @@ import { randomUUID } from "crypto";
 export class InMemoryAddressesRepository implements AddressesRepository {
 	public items: Address[] = [];
 
-	async create(data: Prisma.AddressUncheckedCreateInput) {
+	async create(
+		data: Prisma.AddressUncheckedCreateInput & {
+			companyId?: string;
+			driverId?: string;
+		}
+	) {
 		const address = {
 			id: data.id ?? randomUUID(),
 			zipCode: data.zipCode,

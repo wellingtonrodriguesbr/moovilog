@@ -52,4 +52,15 @@ export class PrismaCompaniesRepository implements CompaniesRepository {
 
 		return company;
 	}
+
+	async setCompanyAddress(companyId: string, addressId: string) {
+		await prisma.company.update({
+			where: {
+				id: companyId,
+			},
+			data: {
+				addressId,
+			},
+		});
+	}
 }

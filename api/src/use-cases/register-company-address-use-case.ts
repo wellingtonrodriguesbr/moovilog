@@ -1,7 +1,6 @@
 import { ResourceNotFoundError } from "./errors/resource-not-found-error";
 import { CompaniesRepository } from "@/repositories/companies-repository";
 import { CitiesRepository } from "@/repositories/cities-repository";
-import { CompanyAddressesRepository } from "@/repositories/company-addresses-repository";
 import { IAddress } from "@/interfaces/address";
 import { AddressesRepository } from "@/repositories/addresses-repository";
 
@@ -21,7 +20,6 @@ interface RegisterCompanyAddressUseCaseResponse {
 
 export class RegisterCompanyAddressUseCase {
 	constructor(
-		private companyAddressesRepository: CompanyAddressesRepository,
 		private addressesRepository: AddressesRepository,
 		private citiesRepository: CitiesRepository,
 		private companiesRepository: CompaniesRepository
@@ -58,10 +56,7 @@ export class RegisterCompanyAddressUseCase {
 			cityId: city.id,
 		});
 
-		await this.companyAddressesRepository.create({
-			addressId: address.id,
-			companyId: company.id,
-		});
+		this.companiesRepository.setCompanyAddress(company.id, address.id);
 
 		return { address };
 	}
