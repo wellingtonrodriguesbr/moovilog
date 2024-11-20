@@ -20,7 +20,7 @@ interface SendInvitationToCompanyMemberUseCaseRequest {
 	email: string;
 	sector: string;
 	role: ICompanyMemberRoles;
-	companyMemberId: string;
+	senderId: string;
 }
 
 interface SendInvitationToCompanyMemberUseCaseResponse {
@@ -39,16 +39,26 @@ export class SendInvitationToCompanyMemberUseCase {
 		email,
 		sector,
 		role,
-		companyMemberId,
+		senderId,
 	}: SendInvitationToCompanyMemberUseCaseRequest): Promise<SendInvitationToCompanyMemberUseCaseResponse> {
-		const member =
-			await this.companyMembersRepository.findById(companyMemberId);
+		const sender = await this.usersRepository.findById(senderId);
 
-		if (!member) {
-			throw new ResourceNotFoundError("Creator not found");
+		if (!sender) {
+			throw new ResourceNotFoundError("Sender not found");
 		}
 
-		if (member.role !== "ADMIN" && member.role !== "MANAGER") {
+		const senderInCompany = await this.companyMembersRepository.findByUserId(
+			sender.id
+		);
+
+		if (!senderInCompany) {
+			throw new ResourceNotFoundError("Sender not found in company");
+		}
+
+		if (
+			senderInCompany.role !== "ADMIN" &&
+			senderInCompany.role !== "MANAGER"
+		) {
 			throw new NotAllowedError(
 				"You do not have permission to perform this action, please ask your administrator for access"
 			);
@@ -60,7 +70,7 @@ export class SendInvitationToCompanyMemberUseCase {
 			const memberAlreadyExists =
 				await this.companyMembersRepository.findMemberInCompany(
 					userAlreadyExists.id,
-					member.companyId
+					senderInCompany.companyId
 				);
 
 			if (memberAlreadyExists) {
@@ -78,7 +88,7 @@ export class SendInvitationToCompanyMemberUseCase {
 		});
 
 		const companyMember = await this.companyMembersRepository.create({
-			companyId: member.companyId,
+			companyId: senderInCompany.companyId,
 			userId: user.id,
 			sector,
 			role,

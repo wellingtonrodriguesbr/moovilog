@@ -53,7 +53,7 @@ describe("Send invitation to company member use case", () => {
 		const { companyMember } = await sut.execute({
 			name: "John Doe",
 			email: "johndoe-member@example.com",
-			companyMemberId: "company-member-id-01",
+			senderId: "john-doe-id-01",
 			role: "MANAGER",
 			sector: "Gerência",
 		});
@@ -67,7 +67,7 @@ describe("Send invitation to company member use case", () => {
 		await sut.execute({
 			name: "John Doe",
 			email: "johndoe-member@example.com",
-			companyMemberId: "company-member-id-01",
+			senderId: "john-doe-id-01",
 			role: "MANAGER",
 			sector: "Gerência",
 		});
@@ -76,7 +76,7 @@ describe("Send invitation to company member use case", () => {
 			sut.execute({
 				name: "John Doe",
 				email: "johndoe-member@example.com",
-				companyMemberId: "company-member-id-01",
+				senderId: "john-doe-id-01",
 				role: "COMERCIAL",
 				sector: "Vendas",
 			})
@@ -90,7 +90,7 @@ describe("Send invitation to company member use case", () => {
 			password: "12345678",
 		});
 
-		const member = await companyMembersRepository.create({
+		await companyMembersRepository.create({
 			userId: user.id,
 			companyId: "company-id-01",
 			role: "FINANCIAL",
@@ -101,7 +101,7 @@ describe("Send invitation to company member use case", () => {
 			sut.execute({
 				name: "John Doe",
 				email: "johndoe-member@example.com",
-				companyMemberId: member.id,
+				senderId: user.id,
 				role: "OPERATIONAL",
 				sector: "Ajudante geral",
 			})
