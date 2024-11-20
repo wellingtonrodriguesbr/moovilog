@@ -1,7 +1,8 @@
 import { compare } from "bcryptjs";
-import { InvalidCredentialsError } from "./errors/invalid-credentials-error";
+import { InvalidCredentialsError } from "@/use-cases/errors/invalid-credentials-error";
 import { UsersRepository } from "@/repositories/users-repository";
 import { IUser } from "@/interfaces/user";
+import { BadRequestError } from "@/use-cases/errors/bad-request-error";
 
 interface AuthenticateUseCaseRequest {
 	email: string;
@@ -23,6 +24,10 @@ export class AuthenticateUseCase {
 
 		if (!user) {
 			throw new InvalidCredentialsError("Incorrect email or password");
+		}
+
+		if (!user.password) {
+			throw new BadRequestError("Password is missing");
 		}
 
 		const doesPasswordsMatch = await compare(password, user.password);

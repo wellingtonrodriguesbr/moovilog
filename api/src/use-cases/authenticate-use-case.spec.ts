@@ -3,6 +3,7 @@ import { AuthenticateUseCase } from "./authenticate-use-case";
 import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
 import { hash } from "bcryptjs";
 import { InvalidCredentialsError } from "./errors/invalid-credentials-error";
+import { BadRequestError } from "./errors/bad-request-error";
 
 let usersRepository: InMemoryUsersRepository;
 let sut: AuthenticateUseCase;
@@ -45,5 +46,19 @@ describe("Authenticate use case", () => {
 				password: "11111111",
 			})
 		).rejects.toBeInstanceOf(InvalidCredentialsError);
+	});
+
+	it("should not be able to authenticate with missing password", async () => {
+		await usersRepository.create({
+			name: "John Doe",
+			email: "johndoe1@example.com",
+		});
+
+		expect(() =>
+			sut.execute({
+				email: "johndoe1@example.com",
+				password: "11111111",
+			})
+		).rejects.toBeInstanceOf(BadRequestError);
 	});
 });
