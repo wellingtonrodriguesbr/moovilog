@@ -1,8 +1,7 @@
 import { InMemoryCompaniesRepository } from "@/repositories/in-memory/in-memory-companies-repository";
-import { InMemoryCompanyAddressesRepository } from "@/repositories/in-memory/in-memory-company-addresses-repository";
 import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
 import { beforeEach, describe, expect, it } from "vitest";
-import { GetCompanyInformationUseCase } from "./get-company-information";
+import { GetCompanyInformationUseCase } from "./get-company-information-use-case";
 import { InMemoryAddressesRepository } from "@/repositories/in-memory/in-memory-addresses-repository";
 import { InMemoryCitiesRepository } from "@/repositories/in-memory/in-memory-cities-repository";
 import { InMemoryStatesRepository } from "@/repositories/in-memory/in-memory-states-repository";
@@ -10,7 +9,6 @@ import { InMemoryCompanyMembersRepository } from "@/repositories/in-memory/in-me
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
-let companyAddressesRepository: InMemoryCompanyAddressesRepository;
 let companyMembersRepository: InMemoryCompanyMembersRepository;
 let addressesRepository: InMemoryAddressesRepository;
 let citiesRepository: InMemoryCitiesRepository;
@@ -22,7 +20,6 @@ describe("Get company information use case", () => {
 	beforeEach(async () => {
 		usersRepository = new InMemoryUsersRepository();
 		companiesRepository = new InMemoryCompaniesRepository();
-		companyAddressesRepository = new InMemoryCompanyAddressesRepository();
 		companyMembersRepository = new InMemoryCompanyMembersRepository();
 		addressesRepository = new InMemoryAddressesRepository();
 		citiesRepository = new InMemoryCitiesRepository();
@@ -31,7 +28,6 @@ describe("Get company information use case", () => {
 		sut = new GetCompanyInformationUseCase(
 			companyMembersRepository,
 			companiesRepository,
-			companyAddressesRepository,
 			addressesRepository,
 			citiesRepository,
 			statesRepository
@@ -49,13 +45,14 @@ describe("Get company information use case", () => {
 			name: "Company name",
 			documentNumber: "12312312389899",
 			size: "MEDIUM",
-			type: "HEADQUARTERS",
-			ownerId: "john-doe-id-01",
+			ownerId: "john-doe-01",
 		});
 
 		await companyMembersRepository.create({
+			id: "company-member-id-01",
 			companyId: "company-id-01",
-			memberId: "john-doe-id-01",
+			userId: "john-doe-id-01",
+			sector: "Diretoria",
 			role: "ADMIN",
 		});
 
@@ -80,10 +77,10 @@ describe("Get company information use case", () => {
 			zipCode: "00000-000",
 		});
 
-		await companyAddressesRepository.create({
-			addressId: "fake-address-id",
-			companyId: "company-id-01",
-		});
+		await companiesRepository.setCompanyAddress(
+			"company-id-01",
+			"fake-address-id"
+		);
 	});
 
 	it("should be able to get company information", async () => {
@@ -93,6 +90,7 @@ describe("Get company information use case", () => {
 
 		expect(company.id).toEqual("company-id-01");
 		expect(company.size).toEqual("MEDIUM");
+		expect(company.addressId).toEqual("fake-address-id");
 		expect(companyAddress.state.id).toEqual("fake-state-id");
 	});
 });

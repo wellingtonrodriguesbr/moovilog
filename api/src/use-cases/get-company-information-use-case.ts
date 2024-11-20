@@ -1,6 +1,5 @@
 import { ResourceNotFoundError } from "./errors/resource-not-found-error";
 import { CompanyMembersRepository } from "@/repositories/company-members-repository";
-import { CompanyAddressesRepository } from "@/repositories/company-addresses-repository";
 import { CompaniesRepository } from "@/repositories/companies-repository";
 import { CitiesRepository } from "@/repositories/cities-repository";
 import { StatesRepository } from "@/repositories/states-repository";
@@ -36,7 +35,6 @@ export class GetCompanyInformationUseCase {
 	constructor(
 		private companyMembersRepository: CompanyMembersRepository,
 		private companiesRepository: CompaniesRepository,
-		private companyAddressesRepository: CompanyAddressesRepository,
 		private addressesRepository: AddressesRepository,
 		private citiesRepository: CitiesRepository,
 		private statesRepository: StatesRepository
@@ -57,16 +55,7 @@ export class GetCompanyInformationUseCase {
 			throw new ResourceNotFoundError("Company not found");
 		}
 
-		const companyAddress =
-			await this.companyAddressesRepository.findByCompanyId(company.id);
-
-		if (!companyAddress) {
-			throw new ResourceNotFoundError("Company address not found");
-		}
-
-		const address = await this.addressesRepository.findById(
-			companyAddress.addressId
-		);
+		const address = await this.addressesRepository.findById(company.addressId!);
 
 		if (!address) {
 			throw new ResourceNotFoundError("Address not found");
