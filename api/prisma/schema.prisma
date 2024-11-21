@@ -182,8 +182,8 @@ model State {
   name    String
   acronym String @unique
 
-  areasInState AreaInState[]
-  cities       City[]
+  cities City[]
+  areas  Area[]
 
   @@map("states")
 }
@@ -193,22 +193,12 @@ model Area {
   name String
   code String @unique
 
-  areasInState AreaInState[]
-  citiesInArea CityInArea[]
-
-  @@map("areas")
-}
-
-model AreaInState {
-  id String @id @default(uuid())
-
   stateId String @map("state_id")
   state   State  @relation(fields: [stateId], references: [id], onDelete: Cascade)
 
-  areaId String @map("area_id")
-  area   Area   @relation(fields: [areaId], references: [id], onDelete: Cascade)
+  cities City[]
 
-  @@map("areas_in_state")
+  @@map("areas")
 }
 
 model City {
@@ -218,24 +208,13 @@ model City {
   stateId String @map("state_id")
   state   State  @relation(fields: [stateId], references: [id], onDelete: Cascade)
 
-  citiesInArea  CityInArea[]
-  addresses     Address[]
-  citiesInRoute CityInRoute[]
-
-  @@unique([stateId, name])
-  @@map("cities")
-}
-
-model CityInArea {
-  id String @id @default(uuid())
-
-  cityId String @map("city_id")
-  city   City   @relation(fields: [cityId], references: [id], onDelete: Cascade)
-
   areaId String @map("area_id")
   area   Area   @relation(fields: [areaId], references: [id], onDelete: Cascade)
 
-  @@map("cities_in_area")
+  addresses     Address[]
+  citiesInRoute CityInRoute[]
+
+  @@map("cities")
 }
 
 model Address {

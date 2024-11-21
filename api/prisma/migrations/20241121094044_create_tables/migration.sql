@@ -81,7 +81,7 @@ CREATE TABLE "drivers" (
     "updated_at" TIMESTAMP(3) NOT NULL,
     "creator_id" TEXT NOT NULL,
     "company_id" TEXT NOT NULL,
-    "address_id" TEXT NOT NULL,
+    "address_id" TEXT,
 
     CONSTRAINT "drivers_pkey" PRIMARY KEY ("id")
 );
@@ -96,10 +96,11 @@ CREATE TABLE "vehicles" (
     "category" "VehicleCategory" NOT NULL,
     "type" "VehicleType" NOT NULL,
     "body" "VehicleBody" NOT NULL,
-    "full_load_capacity" TEXT NOT NULL,
+    "full_load_capacity" INTEGER NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "company_id" TEXT NOT NULL,
+    "creator_id" TEXT NOT NULL,
 
     CONSTRAINT "vehicles_pkey" PRIMARY KEY ("id")
 );
@@ -122,6 +123,7 @@ CREATE TABLE "freights" (
     "vehicle_id" TEXT NOT NULL,
     "creator_id" TEXT NOT NULL,
     "company_id" TEXT NOT NULL,
+    "route_id" TEXT NOT NULL,
 
     CONSTRAINT "freights_pkey" PRIMARY KEY ("id")
 );
@@ -160,17 +162,9 @@ CREATE TABLE "areas" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "code" TEXT NOT NULL,
+    "state_id" TEXT NOT NULL,
 
     CONSTRAINT "areas_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "areas_in_state" (
-    "id" TEXT NOT NULL,
-    "state_id" TEXT NOT NULL,
-    "area_id" TEXT NOT NULL,
-
-    CONSTRAINT "areas_in_state_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -178,17 +172,9 @@ CREATE TABLE "cities" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "state_id" TEXT NOT NULL,
-
-    CONSTRAINT "cities_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "cities_in_area" (
-    "id" TEXT NOT NULL,
-    "city_id" TEXT NOT NULL,
     "area_id" TEXT NOT NULL,
 
-    CONSTRAINT "cities_in_area_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "cities_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -257,9 +243,6 @@ CREATE UNIQUE INDEX "states_acronym_key" ON "states"("acronym");
 CREATE UNIQUE INDEX "areas_code_key" ON "areas"("code");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "cities_state_id_name_key" ON "cities"("state_id", "name");
-
--- CreateIndex
 CREATE UNIQUE INDEX "auth_links_code_key" ON "auth_links"("code");
 
 -- AddForeignKey
@@ -287,6 +270,9 @@ ALTER TABLE "drivers" ADD CONSTRAINT "drivers_address_id_fkey" FOREIGN KEY ("add
 ALTER TABLE "vehicles" ADD CONSTRAINT "vehicles_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "vehicles" ADD CONSTRAINT "vehicles_creator_id_fkey" FOREIGN KEY ("creator_id") REFERENCES "company_members"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "freights" ADD CONSTRAINT "freights_driver_id_fkey" FOREIGN KEY ("driver_id") REFERENCES "drivers"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -299,6 +285,9 @@ ALTER TABLE "freights" ADD CONSTRAINT "freights_creator_id_fkey" FOREIGN KEY ("c
 ALTER TABLE "freights" ADD CONSTRAINT "freights_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "freights" ADD CONSTRAINT "freights_route_id_fkey" FOREIGN KEY ("route_id") REFERENCES "routes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "routes" ADD CONSTRAINT "routes_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -308,19 +297,13 @@ ALTER TABLE "cities_in_route" ADD CONSTRAINT "cities_in_route_route_id_fkey" FOR
 ALTER TABLE "cities_in_route" ADD CONSTRAINT "cities_in_route_city_id_fkey" FOREIGN KEY ("city_id") REFERENCES "cities"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "areas_in_state" ADD CONSTRAINT "areas_in_state_state_id_fkey" FOREIGN KEY ("state_id") REFERENCES "states"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "areas_in_state" ADD CONSTRAINT "areas_in_state_area_id_fkey" FOREIGN KEY ("area_id") REFERENCES "areas"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "areas" ADD CONSTRAINT "areas_state_id_fkey" FOREIGN KEY ("state_id") REFERENCES "states"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "cities" ADD CONSTRAINT "cities_state_id_fkey" FOREIGN KEY ("state_id") REFERENCES "states"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "cities_in_area" ADD CONSTRAINT "cities_in_area_city_id_fkey" FOREIGN KEY ("city_id") REFERENCES "cities"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "cities_in_area" ADD CONSTRAINT "cities_in_area_area_id_fkey" FOREIGN KEY ("area_id") REFERENCES "areas"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "cities" ADD CONSTRAINT "cities_area_id_fkey" FOREIGN KEY ("area_id") REFERENCES "areas"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "addresses" ADD CONSTRAINT "addresses_city_id_fkey" FOREIGN KEY ("city_id") REFERENCES "cities"("id") ON DELETE CASCADE ON UPDATE CASCADE;

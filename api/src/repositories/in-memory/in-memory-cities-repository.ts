@@ -16,8 +16,10 @@ export class InMemoryCitiesRepository implements CitiesRepository {
 		return city;
 	}
 
-	async findByName(name: string) {
-		const city = this.items.find((item) => item.name === name);
+	async findByNameAndState(name: string, stateId: string) {
+		const city = this.items.find(
+			(item) => item.name === name && item.stateId === stateId
+		);
 
 		if (!city) return null;
 

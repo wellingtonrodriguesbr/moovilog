@@ -7,6 +7,8 @@ import z from "zod";
 export class RegisterCompanyAddressController {
 	static async handle(req: FastifyRequest, reply: FastifyReply) {
 		const registerCompanyAddressBodySchema = z.object({
+			stateName: z.string(),
+			stateAcronym: z.string().max(2),
 			cityName: z.string(),
 			street: z.string(),
 			neighborhood: z.string(),
@@ -15,14 +17,24 @@ export class RegisterCompanyAddressController {
 			zipCode: z.string(),
 		});
 
-		const { cityName, street, neighborhood, number, complement, zipCode } =
-			registerCompanyAddressBodySchema.parse(req.body);
+		const {
+			stateName,
+			stateAcronym,
+			cityName,
+			street,
+			neighborhood,
+			number,
+			complement,
+			zipCode,
+		} = registerCompanyAddressBodySchema.parse(req.body);
 
 		const userId = req.user.sub;
 
 		try {
 			const registerCompanyAddressUseCase = makeRegisterCompanyAddressUseCase();
 			const { address } = await registerCompanyAddressUseCase.execute({
+				stateName,
+				stateAcronym,
 				cityName,
 				street,
 				neighborhood,

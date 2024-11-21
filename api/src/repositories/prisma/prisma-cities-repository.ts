@@ -3,7 +3,7 @@ import { CitiesRepository } from "../cities-repository";
 import { City } from "@prisma/client";
 
 export class PrismaCitiesRepository implements CitiesRepository {
-	async findByName(name: string) {
+	async findByNameAndState(name: string) {
 		const city = await prisma.city.findFirst({
 			where: {
 				name,

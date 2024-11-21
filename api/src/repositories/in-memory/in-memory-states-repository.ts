@@ -25,4 +25,19 @@ export class InMemoryStatesRepository implements StatesRepository {
 
 		return state;
 	}
+
+	async findByNameAndAcronym(
+		name: string,
+		acronym: string
+	): Promise<State | null> {
+		const state = this.items.find(
+			(item) => item.name === name && item.acronym === acronym
+		);
+
+		if (!state) {
+			return null;
+		}
+
+		return state;
+	}
 }
