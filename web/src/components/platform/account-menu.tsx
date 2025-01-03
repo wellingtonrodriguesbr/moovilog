@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -14,7 +15,8 @@ import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useGetProfile } from "@/hooks/use-get-profile";
 import { useLogout } from "@/hooks/use-logout";
-import { Loader2, LogOut, User } from "lucide-react";
+
+import { Building2, Loader2, LogOut, User } from "lucide-react";
 
 export function AccountMenu() {
 	const router = useRouter();
@@ -25,13 +27,16 @@ export function AccountMenu() {
 
 	async function handleLogout() {
 		await logout();
-		router.push("/entrar/selecionar-conta");
+		router.push("/entrar");
 	}
 
 	return (
 		<Dialog>
 			<DropdownMenu>
-				<DropdownMenuTrigger className="border cursor-pointer" asChild>
+				<DropdownMenuTrigger
+					className="flex items-center gap-2 cursor-pointer"
+					asChild
+				>
 					<Avatar>
 						<AvatarImage src="" alt="" />
 						<AvatarFallback className="text-xs font-semibold">
@@ -60,6 +65,18 @@ export function AccountMenu() {
 							</Link>
 						</DropdownMenuItem>
 					</DialogTrigger>
+					<DialogTrigger asChild>
+						<DropdownMenuItem className="hover:bg-zinc-100" asChild>
+							<Link
+								className="flex items-center gap-2 cursor-pointer"
+								href="/minha-empresa/dados-cadastrais"
+							>
+								<Building2 className="size-4" />
+								Empresa
+							</Link>
+						</DropdownMenuItem>
+					</DialogTrigger>
+					<DropdownMenuSeparator />
 					<DropdownMenuItem
 						asChild
 						className="text-rose-500 hover:text-rose-500 hover:bg-rose-50 rounded-sm cursor-pointer"
