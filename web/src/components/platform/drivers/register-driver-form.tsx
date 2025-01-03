@@ -27,7 +27,6 @@ const formSchema = z.object({
 		.min(14, { message: "Digite um CNPJ válido" })
 		.max(14, { message: "Digite um CNPJ válido" }),
 	name: z.string().min(3, { message: "Digite seu nome completo" }),
-	type: z.enum(["HEADQUARTERS", "BRANCH", "AGENCY"]),
 	size: z.enum(["MICRO", "SMALL", "MEDIUM", "BIG"]),
 	acceptTerms: z.boolean({ message: "Aceite os termos para prosseguir" }),
 });
@@ -41,7 +40,6 @@ export function RegisterDriverForm() {
 		defaultValues: {
 			documentNumber: "",
 			name: "",
-			type: undefined,
 			size: undefined,
 			acceptTerms: false,
 		},
@@ -56,11 +54,10 @@ export function RegisterDriverForm() {
 	async function onSubmit({
 		name,
 		documentNumber,
-		type,
 		size,
 	}: z.infer<typeof formSchema>) {
 		try {
-			await registerCompany({ name, documentNumber, type, size });
+			await registerCompany({ name, documentNumber, size });
 			router.push("/cadastro/empresa/endereco");
 		} catch (error) {
 			console.log(error);
