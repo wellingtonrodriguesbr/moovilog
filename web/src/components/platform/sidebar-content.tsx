@@ -38,14 +38,14 @@ export function SidebarContent() {
 					className="flex flex-col group"
 				>
 					{isGetCompanyInformationPending ? (
-						<Skeleton className="h-5 md:h-4 w-24 md:w-[250px] rounded-lg" />
+						<Skeleton className="h-5 md:h-4 w-24 md:w-[150px] rounded-lg" />
 					) : (
 						<p className="text-base font-medium md:group-data-[state=closed]:sr-only text-nowrap">
 							{company?.name}
 						</p>
 					)}
 					{isGetCompanyInformationPending ? (
-						<Skeleton className="h-5 md:h-4 w-16 md:w-[150px] rounded-lg" />
+						<Skeleton className="h-5 md:h-4 w-16 md:w-[130px] rounded-lg mt-1" />
 					) : (
 						<p className="text-zinc-700 text-xs md:group-data-[state=closed]:sr-only text-nowrap">
 							{formatCNPJ(company?.documentNumber ?? "")}
