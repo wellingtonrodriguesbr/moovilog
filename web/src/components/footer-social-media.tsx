@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { WhatsappIcon } from "./icons/whatsapp-icons";
+import { WhatsappIcon } from "./icons/whatsapp-icon";
 import { InstagramIcon } from "./icons/instagram-icon";
 import { LinkedinIcon } from "./icons/linkedin-icon";
 

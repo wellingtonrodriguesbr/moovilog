@@ -5,7 +5,6 @@ import { useGetProfile } from "@/hooks/use-get-profile";
 import { QuickAccess } from "./quick-access";
 import { useGetCompanyInformation } from "@/hooks/use-get-company-information";
 import { formatCNPJ } from "@/utils/format-cnpj";
-import { BarChartComponent } from "../metrics/bar-chart";
 
 export function Home() {
 	const { profile, isGetProfilePending } = useGetProfile();
@@ -38,7 +37,6 @@ export function Home() {
 				</div>
 			</header>
 			<QuickAccess />
-			<BarChartComponent />
 		</section>
 	);
 }

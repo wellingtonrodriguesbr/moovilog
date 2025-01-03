@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic";
 
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { DM_Sans } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { ReactQueryProvider } from "@/providers/react-query-provider";
 import { Toaster } from "@/components/ui/sonner";
@@ -13,7 +13,11 @@ const SidebarProvider = dynamic(() => import("@/providers/sidebar-provider"), {
 
 import "./globals.css";
 
-const sans = Plus_Jakarta_Sans({ subsets: ["latin"], variable: "--font-sans" });
+const sans = DM_Sans({
+	subsets: ["latin"],
+	weight: ["400", "500", "600", "700"],
+	variable: "--font-sans",
+});
 
 export const metadata: Metadata = {
 	title: "Moovilog | Gerencie toda sua operação logística em uma única plataforma",
@@ -38,7 +42,7 @@ export default function RootLayout({
 					<TooltipProvider>
 						<ReactQueryProvider>{children}</ReactQueryProvider>
 						<Toaster
-							position="bottom-center"
+							position="top-center"
 							theme="light"
 							richColors
 						/>

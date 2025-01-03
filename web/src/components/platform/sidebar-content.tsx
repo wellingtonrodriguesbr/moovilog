@@ -15,6 +15,7 @@ import {
 	Home,
 	Landmark,
 	LayoutGrid,
+	Route,
 	Settings,
 	Truck,
 	Users,
@@ -102,14 +103,9 @@ const items = [
 		icon: <LayoutGrid className="size-4" />,
 	},
 	{
-		name: "Suprimentos",
-		url: "/suprimentos",
-		icon: <Container className="size-4" />,
-	},
-	{
-		name: "Chamados",
-		url: "/chamados",
-		icon: <Headset className="size-4" />,
+		name: "Rotas",
+		url: "/rotas",
+		icon: <Route className="size-4" />,
 	},
 	{
 		name: "Motoristas",
