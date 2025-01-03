@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { useOpenCloseSidebar } from "@/providers/sidebar-provider";
 
-import { ChevronsLeftRight } from "lucide-react";
+import { PanelLeft } from "lucide-react";
 
 export function ButtonOpenCloseSidebar() {
 	const { handleOpenAndCloseSidebar } = useOpenCloseSidebar();
@@ -14,7 +14,7 @@ export function ButtonOpenCloseSidebar() {
 			onClick={handleOpenAndCloseSidebar}
 			className="w-fit h-fit p-2"
 		>
-			<ChevronsLeftRight className="size-4" />
+			<PanelLeft className="size-4" />
 		</Button>
 	);
 }

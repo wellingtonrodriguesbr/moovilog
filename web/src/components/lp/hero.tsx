@@ -1,10 +1,12 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import { WhatsappIcon } from "@/components/icons/whatsapp-icon";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/lp/header";
 
 import { PlatformDemoDialog } from "@/components/lp/platform-demo-dialog";
+import { links } from "@/utils/links";
 
 export function Hero() {
 	return (
@@ -28,9 +30,14 @@ export function Hero() {
 						transformar sua operação logística.
 					</p>
 					<div className="flex flex-col xl:flex-row items-center md:items-start xl:items-center gap-4 mt-8">
-						<Button className="w-full md:w-fit bg-app-cyan-100 hover:bg-app-cyan-300 text-app-blue-900 gap-2">
-							<WhatsappIcon className="size-4 fill-app-blue-900" />
-							Solicite uma demonstração gratuita
+						<Button
+							className="w-full md:w-fit bg-app-cyan-100 hover:bg-app-cyan-300 text-app-blue-900 gap-2"
+							asChild
+						>
+							<Link href={links["request-demo"]}>
+								<WhatsappIcon className="size-4 fill-app-blue-900" />
+								Solicite uma demonstração gratuita
+							</Link>
 						</Button>
 						<PlatformDemoDialog />
 					</div>

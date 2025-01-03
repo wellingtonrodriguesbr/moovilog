@@ -6,6 +6,8 @@ import { BreadcrumbPlatform } from "@/components/platform/breadcrumb-platform";
 
 import { CircleHelp, MessageSquareMore } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
+import { links } from "@/utils/links";
 
 export function HeaderPlatform() {
 	return (
@@ -27,13 +29,17 @@ export function HeaderPlatform() {
 			</div>
 
 			<div className="flex items-center gap-4">
-				<Button className="hidden md:flex" variant="ghost">
-					<CircleHelp className="size-4" />
-					Preciso de ajuda
+				<Button className="hidden md:flex" variant="ghost" asChild>
+					<Link href={links["contact-us"]}>
+						<CircleHelp className="size-4" />
+						Preciso de ajuda
+					</Link>
 				</Button>
-				<Button className="hidden md:flex" variant="outline">
-					<MessageSquareMore className="size-4" />
-					Enviar feedback
+				<Button className="hidden md:flex" variant="outline" asChild>
+					<Link href={links["send-feedback"]} target="_blank">
+						<MessageSquareMore className="size-4" />
+						Enviar feedback
+					</Link>
 				</Button>
 				<AccountMenu />
 			</div>
