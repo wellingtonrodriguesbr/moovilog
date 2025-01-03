@@ -26,7 +26,7 @@ export function Header() {
 				{isAuthenticate ? (
 					<Button
 						variant="outline"
-						className="text-white border-white hover:bg-app-cyan-100 font-bold gap-2"
+						className="text-white border-white hover:bg-app-cyan-100 hover:border-transparent font-bold gap-2"
 						asChild
 					>
 						<Link href="/inicio">
@@ -48,7 +48,7 @@ export function Header() {
 						</Button>
 						<Button
 							variant="outline"
-							className="text-white border-white font-bold gap-2"
+							className="text-white border-white hover:bg-app-cyan-100 hover:border-transparent font-bold gap-2"
 							asChild
 						>
 							<Link href="/cadastro">
