@@ -56,7 +56,7 @@ describe("Register driver use case", () => {
 			documentNumber: "12312312312",
 			phone: "11999999999",
 			type: "AGGREGATE",
-			companyMemberId: "company-member-id-01",
+			creatorId: "john-doe-id-01",
 		});
 
 		expect(driver.id).toEqual(expect.any(String));
@@ -72,7 +72,7 @@ describe("Register driver use case", () => {
 			documentNumber: "12312312312",
 			phone: "11999999999",
 			type: "AGGREGATE",
-			companyMemberId: "company-member-id-01",
+			creatorId: "john-doe-id-01",
 		});
 
 		await expect(() =>
@@ -81,7 +81,7 @@ describe("Register driver use case", () => {
 				documentNumber: "12312312312",
 				phone: "11999999999",
 				type: "AGGREGATE",
-				companyMemberId: "company-member-id-01",
+				creatorId: "john-doe-id-01",
 			})
 		).rejects.toBeInstanceOf(DriverAlreadyExistsError);
 	});
@@ -106,7 +106,7 @@ describe("Register driver use case", () => {
 				documentNumber: "12312312313",
 				phone: "11999999999",
 				type: "AGGREGATE",
-				companyMemberId: member.id,
+				creatorId: member.userId,
 			})
 		).rejects.toBeInstanceOf(NotAllowedError);
 	});

@@ -11,12 +11,13 @@ export class RegisterDriverController {
 		const registerDriverBodySchema = z.object({
 			name: z.string(),
 			documentNumber: z.string().min(11).max(11),
-			companyMemberId: z.string().uuid(),
 			phone: z.string().min(11).max(11),
 			type: z.enum(["AGGREGATE", "FREELANCER", "INTERNAL"]),
 		});
 
-		const { name, documentNumber, phone, type, companyMemberId } =
+		const creatorId = req.user.sub;
+
+		const { name, documentNumber, phone, type } =
 			registerDriverBodySchema.parse(req.body);
 
 		try {
@@ -26,7 +27,7 @@ export class RegisterDriverController {
 				documentNumber,
 				phone,
 				type,
-				companyMemberId,
+				creatorId,
 			});
 
 			reply.status(201).send({ driverId: driver.id });

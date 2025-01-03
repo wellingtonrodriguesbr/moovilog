@@ -10,7 +10,7 @@ interface RegisterDriverUseCaseRequest {
 	documentNumber: string;
 	phone: string;
 	type: IDriverType;
-	companyMemberId: string;
+	creatorId: string;
 }
 interface RegisterDriverUseCaseResponse {
 	driver: IDriver;
@@ -27,10 +27,9 @@ export class RegisterDriverUseCase {
 		documentNumber,
 		phone,
 		type,
-		companyMemberId,
+		creatorId,
 	}: RegisterDriverUseCaseRequest): Promise<RegisterDriverUseCaseResponse> {
-		const member =
-			await this.companyMembersRepository.findById(companyMemberId);
+		const member = await this.companyMembersRepository.findByUserId(creatorId);
 
 		if (!member) {
 			throw new ResourceNotFoundError("Member not found");
