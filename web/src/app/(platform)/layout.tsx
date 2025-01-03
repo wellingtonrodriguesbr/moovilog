@@ -7,13 +7,13 @@ export default function PlattformLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<main className="w-full grid grid-cols-[auto_1fr] grid-rows-[auto_1fr]">
-			<HeaderPlatform />
+		<div className="w-full grid grid-cols-[auto_1fr] grid-rows-[auto_1fr]">
 			<Sidebar />
 
-			<div className="w-full col-span-full md:col-span-1 overflow-y-auto h-[calc(100vh-80px)] p-4 md:p-6">
-				{children}
+			<div className="w-full col-span-full md:col-span-1 overflow-y-auto h-[calc(100vh-80px)]">
+				<HeaderPlatform />
+				<main className="p-4 md:p-6">{children}</main>
 			</div>
-		</main>
+		</div>
 	);
 }

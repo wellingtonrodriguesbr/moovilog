@@ -5,7 +5,7 @@ export function CompanyInformation() {
 	return (
 		<section>
 			<header className="space-y-4">
-				<h1 className="text-2xl md:text-4xl font-medium">
+				<h1 className="text-2xl md:text-3xl font-medium">
 					Dados cadastrais da empresa
 				</h1>
 				<p className="text-zinc-600">

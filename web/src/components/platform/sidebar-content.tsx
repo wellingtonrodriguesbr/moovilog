@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 import {
@@ -11,22 +12,59 @@ import {
 } from "lucide-react";
 import { SidebarItem } from "@/components/platform/sidebar-item";
 import { useOpenCloseSidebar } from "@/providers/sidebar-provider";
+import { useGetCompanyInformation } from "@/hooks/use-get-company-information";
+import { Skeleton } from "../ui/skeleton";
+import { formatCNPJ } from "@/utils/format-cnpj";
 
 export function SidebarContent() {
 	const path = usePathname();
 	const { isOpen } = useOpenCloseSidebar();
+	const { company, isGetCompanyInformationPending } =
+		useGetCompanyInformation();
 
 	return (
-		<ul className="flex flex-col px-4">
-			{ITEMS.map((item) => (
-				<SidebarItem
-					key={item.name}
-					item={item}
-					isOpen={isOpen}
-					path={path}
+		<div className="px-4">
+			<div className="flex items-center gap-4">
+				<Image
+					src="/moovilog-icon-blue.svg"
+					alt="moovilog"
+					width={250}
+					height={193}
+					className="w-[50px]"
 				/>
-			))}
-		</ul>
+
+				<div
+					data-state={isOpen ? "open" : "closed"}
+					className="flex flex-col group"
+				>
+					{isGetCompanyInformationPending ? (
+						<Skeleton className="h-5 md:h-4 w-24 md:w-[250px] rounded-lg" />
+					) : (
+						<p className="text-base font-medium md:group-data-[state=closed]:sr-only text-nowrap">
+							{company?.name}
+						</p>
+					)}
+					{isGetCompanyInformationPending ? (
+						<Skeleton className="h-5 md:h-4 w-16 md:w-[150px] rounded-lg" />
+					) : (
+						<p className="text-zinc-700 text-xs md:group-data-[state=closed]:sr-only text-nowrap">
+							{formatCNPJ(company?.documentNumber ?? "")}
+						</p>
+					)}
+				</div>
+			</div>
+
+			<ul className="flex flex-col mt-8">
+				{ITEMS.map((item) => (
+					<SidebarItem
+						key={item.name}
+						item={item}
+						isOpen={isOpen}
+						path={path}
+					/>
+				))}
+			</ul>
+		</div>
 	);
 }
 
