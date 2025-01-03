@@ -2,7 +2,9 @@
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGetProfile } from "@/hooks/use-get-profile";
-import { QuickAccess } from "./quick-access";
+import { QuickAccess } from "@/components/platform/home/quick-access";
+import { BarChartComponent } from "@/components/platform/metrics/bar-chart";
+import { PieChartComponent } from "@/components/platform/metrics/pie-chart";
 
 export function Home() {
 	const { profile, isGetProfilePending } = useGetProfile();
@@ -19,6 +21,10 @@ export function Home() {
 				</h1>
 			</header>
 			<QuickAccess />
+			<div className="grid grid-cols-1 md:grid-cols-[1fr_400px] gap-4">
+				<BarChartComponent />
+				<PieChartComponent />
+			</div>
 		</section>
 	);
 }

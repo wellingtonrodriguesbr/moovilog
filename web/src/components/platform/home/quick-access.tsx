@@ -43,14 +43,6 @@ export function QuickAccess() {
 					</CardHeader>
 					<CardContent></CardContent>
 				</Card>
-
-				<Card className="h-48">
-					<CardHeader>
-						<CardTitle className="flex items-center gap-2"></CardTitle>
-						<CardDescription className="text-zinc-600"></CardDescription>
-					</CardHeader>
-					<CardContent></CardContent>
-				</Card>
 			</div>
 		</section>
 	);

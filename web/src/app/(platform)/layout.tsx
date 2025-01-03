@@ -10,7 +10,7 @@ export default function PlattformLayout({
 		<div className="w-full grid grid-cols-[auto_1fr] grid-rows-[auto_1fr]">
 			<Sidebar />
 
-			<div className="w-full col-span-full md:col-span-1 overflow-y-auto h-[calc(100vh-80px)]">
+			<div className="w-full col-span-full md:col-span-1 overflow-y-auto h-screen">
 				<HeaderPlatform />
 				<main className="p-4 md:p-6">{children}</main>
 			</div>

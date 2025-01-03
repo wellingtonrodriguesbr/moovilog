@@ -8,7 +8,7 @@ import { Info, MessageSquareMore } from "lucide-react";
 
 export function HeaderPlatform() {
 	return (
-		<header className="col-span-full h-16 px-4 border-b flex justify-between items-center bg-white">
+		<header className="col-span-full h-16 px-4 border-b sticky top-0 left-0 right-0 flex justify-between items-center bg-white">
 			<div className="flex items-center gap-2">
 				<ButtonOpenCloseSidebar />
 				<Separator
