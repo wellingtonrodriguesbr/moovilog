@@ -20,7 +20,7 @@ export function HeaderPlatform() {
 				/>
 				<ButtonOpenCloseSidebar />
 				<Separator
-					className=" bg-zinc-200 h-6"
+					className=" bg-zinc-200 h-4"
 					orientation="vertical"
 				/>
 				<BreadcrumbPlatform />
