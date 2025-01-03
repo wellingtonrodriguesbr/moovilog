@@ -19,6 +19,7 @@ export function Header() {
 				className="w-[150px] md:w-[200px]"
 				width={250}
 				height={193}
+				priority
 			/>
 			<MenuMobile />
 			<div className="hidden md:flex items-center gap-4">

@@ -43,6 +43,7 @@ export function Hero() {
 						width={580}
 						height={749}
 						quality={100}
+						priority
 					/>
 				</div>
 			</div>
@@ -53,6 +54,7 @@ export function Hero() {
 				width={580}
 				height={749}
 				quality={100}
+				priority
 			/>
 			<Image
 				src="/bg-hero.svg"
@@ -61,6 +63,7 @@ export function Hero() {
 				width={580}
 				height={749}
 				quality={100}
+				priority
 			/>
 		</section>
 	);
