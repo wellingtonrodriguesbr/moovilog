@@ -21,9 +21,14 @@ import { Loader2 } from "lucide-react";
 import { useLogin } from "@/hooks/use-login";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
+import { formatPhone } from "@/utils/format-phone";
 
 const formSchema = z.object({
 	name: z.string().min(3, { message: "Digite seu nome completo" }),
+	phone: z
+		.string()
+		.min(11, { message: "Digite um telefone válido" })
+		.transform((value) => value.replace(/\D/g, "")),
 	email: z.string().email({ message: "Digite um endereço de e-mail válido" }),
 	password: z
 		.string()
@@ -40,26 +45,20 @@ export function RegisterForm() {
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			name: "",
+			phone: "",
 			email: "",
 			password: "",
 			acceptTerms: false,
 		},
 	});
 
-	async function onSubmit({
-		name,
-		email,
-		password,
-	}: z.infer<typeof formSchema>) {
+	async function onSubmit(data: z.infer<typeof formSchema>) {
 		try {
 			await registerNewUser({
-				name,
-				email,
-				password,
-				role: "ADMIN",
+				...data,
 			});
 
-			await login({ email, password });
+			await login({ email: data.email, password: data.password });
 			toast.success("Conta cadastrada com sucesso");
 			router.push("/cadastro/empresa");
 		} catch (error) {
@@ -85,6 +84,22 @@ export function RegisterForm() {
 							<FormLabel>Nome completo</FormLabel>
 							<FormControl>
 								<Input {...field} />
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+				<FormField
+					control={form.control}
+					name="phone"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>Celular</FormLabel>
+							<FormControl>
+								<Input
+									{...field}
+									value={formatPhone(field.value)}
+								/>
 							</FormControl>
 							<FormMessage />
 						</FormItem>

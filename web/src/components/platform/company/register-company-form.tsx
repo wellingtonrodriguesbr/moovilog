@@ -37,7 +37,6 @@ const formSchema = z.object({
 		.min(14, { message: "Digite um CNPJ válido" })
 		.max(14, { message: "Digite um CNPJ válido" }),
 	name: z.string().min(3, { message: "Digite seu nome completo" }),
-	type: z.enum(["HEADQUARTERS", "BRANCH", "AGENCY"]),
 	size: z.enum(["MICRO", "SMALL", "MEDIUM", "BIG"]),
 	acceptTerms: z.boolean({ message: "Aceite os termos para prosseguir" }),
 });
@@ -51,7 +50,6 @@ export function RegisterCompanyForm() {
 		defaultValues: {
 			documentNumber: "",
 			name: "",
-			type: undefined,
 			size: undefined,
 			acceptTerms: false,
 		},
@@ -66,11 +64,10 @@ export function RegisterCompanyForm() {
 	async function onSubmit({
 		name,
 		documentNumber,
-		type,
 		size,
 	}: z.infer<typeof formSchema>) {
 		try {
-			await registerCompany({ name, documentNumber, type, size });
+			await registerCompany({ name, documentNumber, size });
 			toast.success("Empresa cadastrada com sucesso");
 			router.push("/cadastro/empresa/endereco");
 		} catch (error) {
@@ -159,42 +156,6 @@ export function RegisterCompanyForm() {
 									{...field}
 								/>
 							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-				<FormField
-					control={form.control}
-					name="type"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Tipo</FormLabel>
-							<Select
-								onValueChange={field.onChange}
-								defaultValue={field.value}
-								disabled={
-									isValidateCompanyDocumentNumberPending ||
-									status === "pending"
-								}
-							>
-								<FormControl>
-									<SelectTrigger>
-										<SelectValue placeholder="Selecione qual é o tipo da sua empresa" />
-									</SelectTrigger>
-								</FormControl>
-
-								<SelectContent>
-									<SelectItem value="HEADQUARTERS">
-										Matriz
-									</SelectItem>
-									<SelectItem value="BRANCH">
-										Filial
-									</SelectItem>
-									<SelectItem value="AGENCY">
-										Agência
-									</SelectItem>
-								</SelectContent>
-							</Select>
 							<FormMessage />
 						</FormItem>
 					)}

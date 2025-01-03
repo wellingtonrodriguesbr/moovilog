@@ -1,7 +1,17 @@
 export function formatPhone(phone: string): string {
-	const ddd = phone.slice(0, 2);
-	const part1 = phone.slice(2, 7);
-	const part2 = phone.slice(7);
+	phone = phone.replace(/\D/g, "");
 
-	return `(${ddd}) ${part1}-${part2}`;
+	phone = phone.substring(0, 11);
+
+	if (phone.length > 0) {
+		phone = "(" + phone;
+	}
+	if (phone.length > 3) {
+		phone = phone.substring(0, 3) + ") " + phone.substring(3);
+	}
+	if (phone.length > 10) {
+		phone = phone.substring(0, 10) + "-" + phone.substring(10);
+	}
+
+	return phone;
 }

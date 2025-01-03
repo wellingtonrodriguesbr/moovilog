@@ -3,19 +3,22 @@ import { useQuery } from "@tanstack/react-query";
 
 export interface CompanyMember {
 	id: string;
+	sector: string;
 	role: string;
-	createdAt: string;
-	updatedAt: string;
-	memberId: string;
+	status: string;
+	createdAt: Date;
+	updatedAt: Date;
+	userId: string;
 	companyId: string;
-	member: Member;
+	user: User;
 }
 
-export interface Member {
+export interface User {
 	name: string;
 	email: string;
-	createdAt: string;
-	updatedAt: string;
+	phone: string;
+	createdAt: Date;
+	updatedAt: Date;
 }
 
 export function useFetchCompanyMembers() {

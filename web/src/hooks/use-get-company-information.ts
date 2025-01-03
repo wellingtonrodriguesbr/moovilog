@@ -6,7 +6,6 @@ export interface Company {
 	id: string;
 	name: string;
 	documentNumber: string;
-	type: string;
 	size: string;
 	createdAt: string;
 	updatedAt: string;

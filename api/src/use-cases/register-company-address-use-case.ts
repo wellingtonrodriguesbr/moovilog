@@ -6,7 +6,6 @@ import { AddressesRepository } from "@/repositories/addresses-repository";
 import { StatesRepository } from "@/repositories/states-repository";
 
 interface RegisterCompanyAddressUseCaseRequest {
-	stateName: string;
 	stateAcronym: string;
 	cityName: string;
 	street: string;
@@ -21,6 +20,36 @@ interface RegisterCompanyAddressUseCaseResponse {
 	address: IAddress;
 }
 
+const STATES: Record<string, string> = {
+	AC: "Acre",
+	AL: "Alagoas",
+	AP: "Amapá",
+	AM: "Amazonas",
+	BA: "Bahia",
+	CE: "Ceará",
+	DF: "Distrito Federal",
+	ES: "Espírito Santo",
+	GO: "Goiás",
+	MA: "Maranhão",
+	MT: "Mato Grosso",
+	MS: "Mato Grosso do Sul",
+	MG: "Minas Gerais",
+	PA: "Pará",
+	PB: "Paraíba",
+	PR: "Paraná",
+	PE: "Pernambuco",
+	PI: "Piauí",
+	RJ: "Rio de Janeiro",
+	RN: "Rio Grande do Norte",
+	RS: "Rio Grande do Sul",
+	RO: "Rondônia",
+	RR: "Roraima",
+	SC: "Santa Catarina",
+	SP: "São Paulo",
+	SE: "Sergipe",
+	TO: "Tocantins",
+};
+
 export class RegisterCompanyAddressUseCase {
 	constructor(
 		private addressesRepository: AddressesRepository,
@@ -30,7 +59,6 @@ export class RegisterCompanyAddressUseCase {
 	) {}
 
 	async execute({
-		stateName,
 		stateAcronym,
 		cityName,
 		street,
@@ -40,6 +68,7 @@ export class RegisterCompanyAddressUseCase {
 		complement,
 		userId,
 	}: RegisterCompanyAddressUseCaseRequest): Promise<RegisterCompanyAddressUseCaseResponse> {
+		const stateName = STATES[stateAcronym];
 		const state = await this.statesRepository.findByNameAndAcronym(
 			stateName,
 			stateAcronym

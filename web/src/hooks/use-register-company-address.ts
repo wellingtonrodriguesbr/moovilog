@@ -8,7 +8,7 @@ interface RegisterCompanyAddressData {
 	number: number;
 	complement?: string | null;
 	zipCode: string;
-	acronym: string;
+	stateAcronym: string;
 }
 
 interface Response {
@@ -32,23 +32,13 @@ export function useRegisterCompanyAddress() {
 		mutationFn: handleRegisterCompanyAddress,
 	});
 
-	async function handleRegisterCompanyAddress({
-		cityName,
-		street,
-		neighborhood,
-		number,
-		zipCode,
-		complement,
-	}: RegisterCompanyAddressData) {
+	async function handleRegisterCompanyAddress(
+		registerData: RegisterCompanyAddressData
+	) {
 		const { data } = await api.post<{ address: Response }>(
 			"/companies/address",
 			{
-				cityName,
-				street,
-				neighborhood,
-				number,
-				zipCode,
-				complement,
+				...registerData,
 			}
 		);
 		return data.address;

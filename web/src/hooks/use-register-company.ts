@@ -4,7 +4,6 @@ import { useMutation } from "@tanstack/react-query";
 interface RegisterCompanyData {
 	name: string;
 	documentNumber: string;
-	type: "HEADQUARTERS" | "BRANCH" | "AGENCY";
 	size: "MICRO" | "SMALL" | "MEDIUM" | "BIG";
 }
 
@@ -32,14 +31,13 @@ export function useRegisterCompany() {
 	async function handleRegisterCompany({
 		name,
 		documentNumber,
-		type,
 		size,
 	}: RegisterCompanyData) {
 		const { data } = await api.post<{ company: Response }>("/companies", {
 			name,
 			documentNumber,
-			type,
 			size,
+			ownerSector: "Diretoria",
 		});
 		return data.company;
 	}

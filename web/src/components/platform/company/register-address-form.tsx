@@ -33,7 +33,7 @@ const formSchema = z.object({
 	number: z.string().min(1, { message: "Campo obrigatório" }),
 	complement: z.string().optional().nullable(),
 	city: z.string().min(2, { message: "Campo obrigatório" }),
-	acronym: z.string().min(2, { message: "Campo obrigatório" }),
+	stateAcronym: z.string().min(2, { message: "Campo obrigatório" }),
 });
 
 export function RegisterCompanyAddressForm() {
@@ -50,7 +50,7 @@ export function RegisterCompanyAddressForm() {
 			number: "",
 			complement: "",
 			city: "",
-			acronym: "",
+			stateAcronym: "",
 		},
 	});
 
@@ -67,7 +67,7 @@ export function RegisterCompanyAddressForm() {
 		number,
 		neighborhood,
 		zipCode,
-		acronym,
+		stateAcronym,
 		complement,
 	}: z.infer<typeof formSchema>) {
 		try {
@@ -77,7 +77,7 @@ export function RegisterCompanyAddressForm() {
 				number: Number(number),
 				neighborhood,
 				zipCode,
-				acronym,
+				stateAcronym,
 				complement,
 			});
 			toast.success("Endereço cadastrado com sucesso");
@@ -100,7 +100,7 @@ export function RegisterCompanyAddressForm() {
 		form.setValue("street", data?.street ?? "");
 		form.setValue("neighborhood", data?.neighborhood ?? "");
 		form.setValue("city", data?.city ?? "");
-		form.setValue("acronym", data?.state ?? "");
+		form.setValue("stateAcronym", data?.state ?? "");
 
 		if (status === "error") {
 			form.reset();
@@ -263,7 +263,7 @@ export function RegisterCompanyAddressForm() {
 					/>
 					<FormField
 						control={form.control}
-						name="acronym"
+						name="stateAcronym"
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel>UF</FormLabel>

@@ -15,10 +15,10 @@ import {
 } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import { useFetchCompanyMembers } from "@/hooks/use-fetch-company-members";
+import { CopyButton } from "@/components/copy-button";
 import { Ellipsis, Info } from "lucide-react";
 
 import dayjs from "dayjs";
-import { CopyButton } from "@/components/copy-button";
 
 const COMPANY_MEMBER_ROLE: Record<string, string> = {
 	ADMIN: "Administrador",
@@ -48,7 +48,7 @@ export function CollaboratorsTable() {
 					</TableHead>
 					<TableHead className="flex items-center gap-2 text-app-blue-900 font-medium">
 						Cargo
-						<Tooltip defaultOpen={true}>
+						<Tooltip defaultOpen>
 							<TooltipTrigger className="mt-1">
 								<Info className="size-4" />
 							</TooltipTrigger>
@@ -75,22 +75,22 @@ export function CollaboratorsTable() {
 						key={companyMember.id}
 					>
 						<TableCell className="text-nowrap">
-							{companyMember.member.name}
+							{companyMember.user.name}
 						</TableCell>
 						<TableCell>
 							<CopyButton
-								data={companyMember.member.email}
+								data={companyMember.user.email}
 								title="Copiar e-mail"
 							>
-								{companyMember.member.email}
+								{companyMember.user.email}
 							</CopyButton>
 						</TableCell>
-						<TableCell>-</TableCell>
+						<TableCell>{companyMember.sector}</TableCell>
 						<TableCell>
 							{COMPANY_MEMBER_ROLE[companyMember.role]}
 						</TableCell>
 						<TableCell>
-							{dayjs(companyMember.createdAt).format(
+							{dayjs(companyMember?.createdAt).format(
 								"DD/MM/YYYY"
 							)}
 						</TableCell>

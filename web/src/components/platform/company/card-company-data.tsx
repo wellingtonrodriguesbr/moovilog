@@ -9,12 +9,6 @@ import { Building } from "lucide-react";
 
 import dayjs from "dayjs";
 
-const COMPANY_TYPE: Record<string, string> = {
-	HEADQUARTERS: "Matriz",
-	BRANCH: "Filial",
-	AGENCY: "Agência",
-};
-
 const COMPANY_SIZE: Record<string, string> = {
 	MICRO: "Microempresa (Faturamento anual de até R$ 360mil)",
 	SMALL: "Pequena empresa (Faturamento anual de até R$ 4.8 milhões)",
@@ -38,7 +32,7 @@ export function CardCompanyData() {
 				</CardTitle>
 			</CardHeader>
 			<CardContent className="space-y-6 mt-2">
-				<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+				<div className="grid grid-cols-1 md:grid-cols-4 gap-4">
 					<fieldset className="space-y-2">
 						<Label>Nome:</Label>
 						<Input readOnly value={company.name} />
@@ -49,12 +43,6 @@ export function CardCompanyData() {
 							readOnly
 							value={formatCNPJ(company.documentNumber)}
 						/>
-					</fieldset>
-				</div>
-				<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-					<fieldset className="space-y-2">
-						<Label>Tipo:</Label>
-						<Input readOnly value={COMPANY_TYPE[company.type]} />
 					</fieldset>
 					<fieldset className="space-y-2">
 						<Label>Tamanho:</Label>
