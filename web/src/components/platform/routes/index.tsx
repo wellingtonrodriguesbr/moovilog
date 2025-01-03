@@ -1,4 +1,4 @@
-export function Supplies() {
+export function Routes() {
 	return (
 		<section>
 			<div></div>
