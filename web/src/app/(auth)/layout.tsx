@@ -8,7 +8,7 @@ export default function AuthLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<main className="w-full h-screen grid grid-cols-1 md:grid-cols-[450px_1fr]">
+		<main className="w-full h-screen grid grid-cols-1 md:grid-cols-[1fr_450px]">
 			<div className="hidden md:block w-full h-full bg-zinc-100"></div>
 			<aside className="w-full h-full flex flex-col justify-center p-4 md:p-8">
 				<header className="flex flex-col gap-8 mb-6">
