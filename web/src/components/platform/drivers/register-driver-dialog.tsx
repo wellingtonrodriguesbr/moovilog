@@ -1,4 +1,7 @@
-import { Button } from "@/components/ui/button";
+"use client";
+
+import { useState } from "react";
+
 import {
 	Dialog,
 	DialogContent,
@@ -7,12 +10,20 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { RegisterDriverForm } from "@/components/platform/drivers/register-driver-form";
+
 import { Plus } from "lucide-react";
-import { RegisterDriverForm } from "./register-driver-form";
 
 export function RegisterDriverDialog() {
+	const [dialogOpen, setDialogOpen] = useState(false);
+
+	function handleCloseDialog() {
+		setDialogOpen(false);
+	}
+
 	return (
-		<Dialog>
+		<Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
 			<DialogTrigger asChild>
 				<Button className="gap-2">
 					<Plus className="size-4" />
@@ -24,10 +35,10 @@ export function RegisterDriverDialog() {
 					<DialogTitle>Novo cadastro</DialogTitle>
 					<DialogDescription>
 						Preencha os campos abaixo e lembre-se sempre de conferir
-						os documentos do motorista
+						os documentos do motorista para evitar erros.
 					</DialogDescription>
 				</DialogHeader>
-				<RegisterDriverForm />
+				<RegisterDriverForm onCloseDialog={handleCloseDialog} />
 			</DialogContent>
 		</Dialog>
 	);

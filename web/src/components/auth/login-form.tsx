@@ -27,7 +27,7 @@ const formSchema = z.object({
 		.min(8, { message: "A senha precisa ter no mínimo 8 caracteres" }),
 });
 
-export function CompanyLoginForm() {
+export function LoginForm() {
 	const router = useRouter();
 	const { login, isPendingLogin } = useLogin();
 	const form = useForm<z.infer<typeof formSchema>>({

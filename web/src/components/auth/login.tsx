@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { CompanyLoginForm } from "./company-login-form";
+import { LoginForm } from "./login-form";
 
 export function Login() {
 	return (
@@ -8,7 +8,7 @@ export function Login() {
 			<h1 className="font-semibold text-2xl md:text-3xl my-8">
 				Acesse sua conta
 			</h1>
-			<CompanyLoginForm />
+			<LoginForm />
 			<Link href="/cadastro" className="text-center mt-8">
 				Ainda não possui uma conta?{" "}
 				<span className="underline font-medium">Registre-se</span>

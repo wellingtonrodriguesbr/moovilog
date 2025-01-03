@@ -1,8 +1,13 @@
 export function formatCPF(cpf: string): string {
-	const part1 = cpf.slice(0, 3);
-	const part2 = cpf.slice(3, 6);
-	const part3 = cpf.slice(6, 9);
-	const part4 = cpf.slice(9);
+	const numericCPF = cpf.replace(/\D/g, "");
 
-	return `${part1}.${part2}.${part3}-${part4}`;
+	if (numericCPF.length <= 3) {
+		return numericCPF;
+	} else if (numericCPF.length <= 6) {
+		return `${numericCPF.slice(0, 3)}.${numericCPF.slice(3)}`;
+	} else if (numericCPF.length <= 9) {
+		return `${numericCPF.slice(0, 3)}.${numericCPF.slice(3, 6)}.${numericCPF.slice(6)}`;
+	} else {
+		return `${numericCPF.slice(0, 3)}.${numericCPF.slice(3, 6)}.${numericCPF.slice(6, 9)}-${numericCPF.slice(9, 11)}`;
+	}
 }

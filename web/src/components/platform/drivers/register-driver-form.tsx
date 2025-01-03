@@ -1,66 +1,72 @@
-"use client";
-
 import {
 	Form,
 	FormControl,
-	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { useRouter } from "next/navigation";
-import { ArrowRight, Check, Loader2, X } from "lucide-react";
-import { useValidateCompanyDocumentNumber } from "@/hooks/use-validate-company-document-number";
-import { formatCNPJ } from "@/utils/format-cnpj";
-import { useRegisterCompany } from "@/hooks/use-register-company";
+import { useRegisterDriver } from "./hooks/use-register-driver";
+import { toast } from "sonner";
+
+import { formatCPF } from "@/utils/format-cpf";
+import { formatPhone } from "@/utils/format-phone";
+
+import { Loader2 } from "lucide-react";
+
+interface RegisterDriverFormProps {
+	onCloseDialog: () => void;
+}
 
 const formSchema = z.object({
+	name: z.string().min(3, { message: "Digite o nome completo" }),
 	documentNumber: z
 		.string()
-		.min(14, { message: "Digite um CNPJ válido" })
-		.max(14, { message: "Digite um CNPJ válido" }),
-	name: z.string().min(3, { message: "Digite seu nome completo" }),
-	size: z.enum(["MICRO", "SMALL", "MEDIUM", "BIG"]),
-	acceptTerms: z.boolean({ message: "Aceite os termos para prosseguir" }),
+		.min(11, { message: "Digite um CPF válido" })
+		.transform((value) => value.replace(/\D/g, ""))
+		.transform((cpf) => cpf.slice(0, 11)),
+	phone: z
+		.string()
+		.min(11, { message: "Digite um telefone válido" })
+		.transform((value) => value.replace(/\D/g, ""))
+		.transform((phone) => phone.slice(0, 11)),
+	type: z.enum(["AGGREGATE", "INTERNAL", "FREELANCER"]),
 });
 
-export function RegisterDriverForm() {
-	const router = useRouter();
-	const { registerCompany, isPendingRegisterCompany } = useRegisterCompany();
+export function RegisterDriverForm({ onCloseDialog }: RegisterDriverFormProps) {
+	const { registerDriver, isPendingRegisterDriver } = useRegisterDriver();
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			documentNumber: "",
 			name: "",
-			size: undefined,
-			acceptTerms: false,
+			documentNumber: "",
+			phone: "",
+			type: undefined,
 		},
 	});
-	const documentNumber = form.watch("documentNumber");
 
-	const { isValidateCompanyDocumentNumberPending, status } =
-		useValidateCompanyDocumentNumber({
-			documentNumber,
-		});
-
-	async function onSubmit({
-		name,
-		documentNumber,
-		size,
-	}: z.infer<typeof formSchema>) {
+	async function onSubmit(registerData: z.infer<typeof formSchema>) {
 		try {
-			await registerCompany({ name, documentNumber, size });
-			router.push("/cadastro/empresa/endereco");
+			await registerDriver({ ...registerData });
+			onCloseDialog();
+			toast.success("Motorista cadastrado com sucesso");
 		} catch (error) {
 			console.log(error);
+			toast.error("Erro ao cadastrar motorista");
 		}
 	}
 
@@ -80,34 +86,13 @@ export function RegisterDriverForm() {
 								<div className="flex items-center rounded-md overflow-hidden border pr-4">
 									<Input
 										className="border-0 rounded-none outline-none focus-visible:ring-0"
-										placeholder="00.000.000-00"
+										placeholder="000.000.000-00"
 										autoComplete="off"
 										{...field}
-										onChange={({ currentTarget }) =>
-											form.setValue(
-												"documentNumber",
-												currentTarget.value
-											)
-										}
-										value={formatCNPJ(field.value)}
+										value={formatCPF(field.value)}
 									/>
-									{documentNumber.length === 14 &&
-									isValidateCompanyDocumentNumberPending ? (
-										<Loader2 className="size-4 text-app-blue-500 animate-spin" />
-									) : null}
-									{!isValidateCompanyDocumentNumberPending &&
-									status === "error" ? (
-										<X className="size-4 text-red-500" />
-									) : null}
-									{!isValidateCompanyDocumentNumberPending &&
-									status === "success" ? (
-										<Check className="size-4 text-emerald-500" />
-									) : null}
 								</div>
 							</FormControl>
-							<FormDescription>
-								Digite apenas os números, sem traços ou pontos
-							</FormDescription>
 							<FormMessage />
 						</FormItem>
 					)}
@@ -127,59 +112,63 @@ export function RegisterDriverForm() {
 				/>
 				<FormField
 					control={form.control}
-					name="name"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Senha</FormLabel>
-							<FormControl>
-								<Input placeholder="" {...field} />
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-				<FormField
-					control={form.control}
-					name="name"
+					name="phone"
 					render={({ field }) => (
 						<FormItem>
 							<FormLabel>Celular</FormLabel>
 							<FormControl>
-								<Input placeholder="" {...field} />
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-				<FormField
-					control={form.control}
-					name="name"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Celular reserva (opcional)</FormLabel>
-							<FormControl>
-								<Input placeholder="" {...field} />
+								<Input
+									{...field}
+									placeholder="(00) 00000-0000"
+									value={formatPhone(field.value)}
+								/>
 							</FormControl>
 							<FormMessage />
 						</FormItem>
 					)}
 				/>
 
+				<FormField
+					control={form.control}
+					name="type"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>Tipo de motorista</FormLabel>
+							<Select
+								onValueChange={field.onChange}
+								defaultValue={field.value}
+							>
+								<FormControl>
+									<SelectTrigger>
+										<SelectValue placeholder="Selecione uma opção" />
+									</SelectTrigger>
+								</FormControl>
+								<SelectContent>
+									<SelectItem value="INTERNAL">
+										Interno
+									</SelectItem>
+									<SelectItem value="AGGREGATE">
+										Agregado
+									</SelectItem>
+									<SelectItem value="FREELANCER">
+										Freelancer
+									</SelectItem>
+								</SelectContent>
+							</Select>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+
 				<Button
-					disabled={
-						isValidateCompanyDocumentNumberPending ||
-						isPendingRegisterCompany
-					}
+					disabled={isPendingRegisterDriver}
 					type="submit"
 					className="w-full mt-6 gap-2"
 				>
-					{isPendingRegisterCompany ? (
+					{isPendingRegisterDriver ? (
 						<Loader2 className="size-4 animate-spin" />
 					) : (
-						<>
-							Avançar
-							<ArrowRight className="size-4" />
-						</>
+						"Concluir cadastro"
 					)}
 				</Button>
 			</form>

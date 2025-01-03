@@ -28,7 +28,8 @@ const formSchema = z.object({
 	phone: z
 		.string()
 		.min(11, { message: "Digite um telefone válido" })
-		.transform((value) => value.replace(/\D/g, "")),
+		.transform((value) => value.replace(/\D/g, ""))
+		.transform((phone) => phone.slice(0, 11)),
 	email: z.string().email({ message: "Digite um endereço de e-mail válido" }),
 	password: z
 		.string()
