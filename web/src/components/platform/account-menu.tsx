@@ -16,7 +16,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useGetProfile } from "@/hooks/use-get-profile";
 import { useLogout } from "@/hooks/use-logout";
 
-import { Building2, Loader2, LogOut, User } from "lucide-react";
+import { Building, Loader2, LogOut, User } from "lucide-react";
 
 export function AccountMenu() {
 	const router = useRouter();
@@ -71,7 +71,7 @@ export function AccountMenu() {
 								className="flex items-center gap-2 cursor-pointer"
 								href="/minha-empresa/dados-cadastrais"
 							>
-								<Building2 className="size-4" />
+								<Building className="size-4" />
 								Empresa
 							</Link>
 						</DropdownMenuItem>

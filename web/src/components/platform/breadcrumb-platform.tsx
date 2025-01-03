@@ -29,7 +29,7 @@ export function BreadcrumbPlatform() {
 	return (
 		<Breadcrumb>
 			<BreadcrumbList>
-				<BreadcrumbItem>
+				<BreadcrumbItem className="ml-1">
 					<BreadcrumbLink href="/inicio">Início</BreadcrumbLink>
 				</BreadcrumbItem>
 				{path !== "/inicio" && (
