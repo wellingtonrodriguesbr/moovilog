@@ -3,7 +3,8 @@ import Image from "next/image";
 import { AccountMenu } from "./account-menu";
 import { ButtonOpenCloseSidebar } from "./button-open-close-sidebar";
 import { Button } from "../ui/button";
-import { MessageSquareMore } from "lucide-react";
+import { Info, MessageSquareMore } from "lucide-react";
+import { Separator } from "../ui/separator";
 
 export function HeaderPlatform() {
 	return (
@@ -27,10 +28,15 @@ export function HeaderPlatform() {
 			/>
 
 			<div className="flex items-center gap-4">
+				<Button variant="ghost">
+					<Info className="size-4" />
+					Preciso de ajuda
+				</Button>
 				<Button variant="outline">
 					<MessageSquareMore className="size-4" />
 					Enviar feedback
 				</Button>
+				<Separator className="bg-zinc-200 h-8" orientation="vertical" />
 				<AccountMenu />
 			</div>
 		</header>

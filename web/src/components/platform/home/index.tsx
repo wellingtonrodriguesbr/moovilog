@@ -12,7 +12,7 @@ export function Home() {
 		useGetCompanyInformation();
 
 	return (
-		<section className="space-y-12 w-full">
+		<section className="mt-4 space-y-6 w-full">
 			<header className="flex justify-between">
 				<h1 className="text-2xl md:text-4xl font-medium">
 					{isGetProfilePending ? (
