@@ -10,7 +10,7 @@ export default function AuthLayout({
 }>) {
 	return (
 		<main className="w-full h-screen flex items-center justify-center">
-			<aside className="w-[600px] flex flex-col p-4 md:p-8">
+			<aside className="w-[550px] flex flex-col p-4 md:p-8">
 				<header className="flex flex-col gap-8 mb-6">
 					<Link
 						href="/"

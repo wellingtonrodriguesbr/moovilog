@@ -98,6 +98,7 @@ export function RegisterForm() {
 							<FormControl>
 								<Input
 									{...field}
+									placeholder="(00) 00000-0000"
 									value={formatPhone(field.value)}
 								/>
 							</FormControl>
