@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { SidebarbarLink } from "./sidebar-link";
+import { SidebarbarLink } from "@/components/platform/sidebar-link";
 
 interface SidebarItemProps {
 	isOpen: boolean;

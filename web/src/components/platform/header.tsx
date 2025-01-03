@@ -1,9 +1,10 @@
-import { AccountMenu } from "./account-menu";
-import { ButtonOpenCloseSidebar } from "./button-open-close-sidebar";
+import { AccountMenu } from "@/components/platform/account-menu";
+import { ButtonOpenCloseSidebar } from "@/components/platform/button-open-close-sidebar";
 import { Button } from "@/components/ui/button";
-import { Info, MessageSquareMore } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { BreadcrumbPlatform } from "@/components/platform/breadcrumb-platform";
+
+import { Info, MessageSquareMore } from "lucide-react";
 
 export function HeaderPlatform() {
 	return (

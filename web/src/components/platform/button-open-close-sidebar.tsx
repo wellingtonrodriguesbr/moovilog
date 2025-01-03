@@ -1,8 +1,9 @@
 "use client";
 
-import { ChevronsLeftRight } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { useOpenCloseSidebar } from "@/providers/sidebar-provider";
+
+import { ChevronsLeftRight } from "lucide-react";
 
 export function ButtonOpenCloseSidebar() {
 	const { handleOpenAndCloseSidebar } = useOpenCloseSidebar();

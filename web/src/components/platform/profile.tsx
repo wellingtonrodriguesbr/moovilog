@@ -1,7 +1,7 @@
 export function Profile() {
 	return (
 		<section>
-			<header>Profile</header>
+			<header>Meus dados</header>
 		</section>
 	);
 }

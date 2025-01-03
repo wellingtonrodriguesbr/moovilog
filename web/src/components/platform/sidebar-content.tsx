@@ -1,6 +1,11 @@
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 
+import { SidebarItem } from "@/components/platform/sidebar-item";
+import { useOpenCloseSidebar } from "@/providers/sidebar-provider";
+import { useGetCompanyInformation } from "@/hooks/use-get-company-information";
+import { Skeleton } from "@/components/ui/skeleton";
+import { formatCNPJ } from "@/utils/format-cnpj";
 import {
 	Handshake,
 	Home,
@@ -10,14 +15,10 @@ import {
 	Truck,
 	Users,
 } from "lucide-react";
-import { SidebarItem } from "@/components/platform/sidebar-item";
-import { useOpenCloseSidebar } from "@/providers/sidebar-provider";
-import { useGetCompanyInformation } from "@/hooks/use-get-company-information";
-import { Skeleton } from "../ui/skeleton";
-import { formatCNPJ } from "@/utils/format-cnpj";
 
 export function SidebarContent() {
 	const path = usePathname();
+
 	const { isOpen } = useOpenCloseSidebar();
 	const { company, isGetCompanyInformationPending } =
 		useGetCompanyInformation();
@@ -38,23 +39,24 @@ export function SidebarContent() {
 					className="flex flex-col group"
 				>
 					{isGetCompanyInformationPending ? (
-						<Skeleton className="h-5 md:h-4 w-24 md:w-[150px] rounded-lg" />
+						<>
+							<Skeleton className="h-5 md:h-4 w-24 md:w-[150px] rounded-lg" />
+							<Skeleton className="h-5 md:h-4 w-16 md:w-[130px] rounded-lg mt-1" />
+						</>
 					) : (
-						<p className="text-base font-medium md:group-data-[state=closed]:sr-only text-nowrap">
-							{company?.name}
-						</p>
-					)}
-					{isGetCompanyInformationPending ? (
-						<Skeleton className="h-5 md:h-4 w-16 md:w-[130px] rounded-lg mt-1" />
-					) : (
-						<p className="text-zinc-700 text-xs md:group-data-[state=closed]:sr-only text-nowrap">
-							{formatCNPJ(company?.documentNumber ?? "")}
-						</p>
+						<>
+							<p className="text-base font-medium md:group-data-[state=closed]:w-0 md:group-data-[state=closed]:opacity-0 text-nowrap transition-all ease-in-out duration-300">
+								{company?.name}
+							</p>
+							<p className="text-zinc-700 text-xs md:group-data-[state=closed]:w-0 md:group-data-[state=closed]:opacity-0 text-nowrap transition-all ease-in-out duration-300">
+								{formatCNPJ(company?.documentNumber ?? "")}
+							</p>
+						</>
 					)}
 				</div>
 			</div>
 
-			<ul className="flex flex-col mt-8">
+			<ul className="flex flex-col mt-6">
 				{ITEMS.map((item) => (
 					<SidebarItem
 						key={item.name}
