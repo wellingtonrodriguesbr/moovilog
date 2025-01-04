@@ -13,8 +13,6 @@ import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useRouter } from "next/navigation";
-/* import { Loader2 } from "lucide-react"; */
 import { toast } from "sonner";
 import {
 	Select,
@@ -23,39 +21,57 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Info, Loader2 } from "lucide-react";
+import { useSendInvitationToCompanyMember } from "@/hooks/use-send-invitation-to-company-member";
+
+interface RegisterNewCollaboratorFormProps {
+	onCloseDialog: () => void;
+}
 
 const formSchema = z.object({
 	name: z.coerce.string().min(8, { message: "Digite o nome completo" }),
 	email: z.string().email({ message: "Digite um e-mail válido" }),
 	sector: z.string(),
-	role: z.string(),
+	role: z.enum(
+		["ADMIN", "FINANCIAL", "OPERATIONAL", "MANAGER", "COMERCIAL"],
+		{
+			message: "Selecione uma opção",
+		}
+	),
 });
 
-export function RegisterNewCollaboratorForm() {
-	const router = useRouter();
-
+export function RegisterNewCollaboratorForm({
+	onCloseDialog,
+}: RegisterNewCollaboratorFormProps) {
+	const {
+		sendinvitationtoCompanyMember,
+		isPendingSendInvitationToCompanyMember,
+	} = useSendInvitationToCompanyMember();
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
-		defaultValues: {},
+		defaultValues: {
+			name: "",
+			email: "",
+			sector: "",
+			role: undefined,
+		},
 	});
 
-	async function onSubmit({
-		name,
-		email,
-		sector,
-		role,
-	}: z.infer<typeof formSchema>) {
-		console.log({
-			name,
-			email,
-			sector,
-			role,
-		});
+	async function onSubmit(registerData: z.infer<typeof formSchema>) {
 		try {
-			toast.success("Endereço cadastrado com sucesso");
-			router.push("/cadastro/empresa/membro");
+			await sendinvitationtoCompanyMember({
+				...registerData,
+			});
+			onCloseDialog();
+			toast.success("Convite enviado com sucesso");
 		} catch (error) {
 			console.log(error);
+			toast.error("Erro ao enviar convite");
 		}
 	}
 
@@ -124,7 +140,25 @@ export function RegisterNewCollaboratorForm() {
 					name="role"
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel>Cargo</FormLabel>
+							<FormLabel className="flex items-center gap-2">
+								Cargo
+								<Tooltip>
+									<TooltipTrigger>
+										<Info className="size-4" />
+									</TooltipTrigger>
+									<TooltipContent className="max-w-64">
+										<p className="font-normal text-zinc-700">
+											O{" "}
+											<strong className="underline">
+												cargo
+											</strong>{" "}
+											refere-se as permissões que este
+											usuário poderá realizar dentro da
+											conta da empresa.
+										</p>
+									</TooltipContent>
+								</Tooltip>
+							</FormLabel>
 							<Select
 								onValueChange={field.onChange}
 								defaultValue={field.value}
@@ -135,6 +169,12 @@ export function RegisterNewCollaboratorForm() {
 									</SelectTrigger>
 								</FormControl>
 								<SelectContent>
+									<SelectItem value="ADMIN">
+										Administrador
+									</SelectItem>
+									<SelectItem value="MANAGER">
+										Gerente
+									</SelectItem>
 									<SelectItem value="OPERATIONAL">
 										Operacional
 									</SelectItem>
@@ -144,9 +184,6 @@ export function RegisterNewCollaboratorForm() {
 									<SelectItem value="COMERCIAL">
 										Comercial
 									</SelectItem>
-									<SelectItem value="ADMIN">
-										Administrador
-									</SelectItem>
 								</SelectContent>
 							</Select>
 							<FormMessage />
@@ -155,17 +192,15 @@ export function RegisterNewCollaboratorForm() {
 				/>
 
 				<Button
-					// disabled={
-					//   isPendingRegisterCompanyAddress || isPendingGetCompanyAddress
-					// }
+					disabled={isPendingSendInvitationToCompanyMember}
 					type="submit"
 					className="w-full mt-6 gap-2"
 				>
-					{/* {false ? (
+					{isPendingSendInvitationToCompanyMember ? (
 						<Loader2 className="size-4 animate-spin" />
 					) : (
 						"Enviar convite"
-					)} */}
+					)}
 				</Button>
 			</form>
 		</Form>

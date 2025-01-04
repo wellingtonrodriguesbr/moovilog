@@ -102,8 +102,9 @@ export class SendInvitationToCompanyMemberUseCase {
 		const emailDetails: EmailDetails = {
 			from: env.SENDER_EMAIL,
 			to: [email],
-			subject: "Boas-vindas a plataforma do Moovilog",
+			subject: "Seu convite para acessar a plataforma do Moovilog",
 			react: SendInvitationToCompanyMemberTemplate({
+				senderName: sender.name,
 				userName: name,
 				userEmail: email,
 				authLink: link,

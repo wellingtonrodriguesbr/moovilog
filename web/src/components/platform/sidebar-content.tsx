@@ -31,7 +31,8 @@ export function SidebarContent() {
 					alt="moovilog"
 					width={250}
 					height={193}
-					className="w-[50px]"
+					data-state={isOpen ? "open" : "closed"}
+					className="w-[50px] data-[state=closed]:w-[32px] transition-all ease-in-out duration-300"
 				/>
 
 				<div

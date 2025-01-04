@@ -13,18 +13,19 @@ import {
 } from "@react-email/components";
 
 interface SendInvitationToCompanyMemberTemplateProps {
+	senderName: string;
 	userName: string;
 	userEmail: string;
 	authLink: string;
 }
 
 export default function SendInvitationToCompanyMemberTemplate({
+	senderName,
 	userName,
 	userEmail,
 	authLink,
 }: SendInvitationToCompanyMemberTemplateProps) {
-	const previewText =
-		"Se este e-mail chegou até você, é porque você quer simplificar sua vida.";
+	const previewText = `${userName}, seu convite acaba de chegar 🚚`;
 
 	return (
 		<Html>
@@ -37,30 +38,35 @@ export default function SendInvitationToCompanyMemberTemplate({
 							Olá, {userName}.
 						</Heading>
 						<Text className="text-[20px]">
-							Seu cadastro foi realizado com sucesso!
+							Voce recebeu um convite para se juntar com {senderName} e
+							companhia dentro da plataforma do{" "}
+							<Link href="https://moovilog.com" className="text-[#2222FF]">
+								Moovilog
+							</Link>
+							. Seu e-mail cadastrado é {userEmail}.
 						</Text>
 						<Text className="text-black text-[14px] leading-[24px]">
-							Você se cadastrou na plataforna do Busca Simples através do email{" "}
-							<strong>{userEmail}</strong>. Abaixo está o seu link de acesso,
-							agradecemos seu cadastro e esperamos que nossa plataforma te ajude
-							a encontrar o profissional ou o cliente ideal.
+							Abaixo está o seu link de acesso, basta clicar no botão e concluir
+							seu cadastro. Vamos juntos simplificar a gestão logística no
+							Brasil?! 🎉
 						</Text>
 
 						<Text className="text-black text-[14px] leading-[24px]">
-							E se precisar estaremos aqui para te auxiliar 😉
+							Ah, e se precisar de alguma coisa estaremos aqui para te auxiliar
+							😉
 						</Text>
 						<Section className="text-center mt-[32px] mb-[32px]">
 							<Link
-								className="block w-full bg-[#007AFF] rounded text-white px-5 py-3 text-[16px] font-semibold no-underline text-center"
+								className="block w-full bg-[#2222FF] rounded text-white px-5 py-3 text-[16px] font-semibold no-underline text-center"
 								href={authLink}
 							>
-								Entrar agora
+								Concluir meu cadastro
 							</Link>
 						</Section>
 						<Hr className="border border-solid border-[#eaeaea] my-[26px] mx-0 w-full" />
 						<Text className="text-center text-[#666666] text-[12px] leading-[24px]">
-							Se você não solicitou esse link de autenticação, apenas descarte
-							esse e-mail.
+							Caso prefira, copie e cole esse código em seu navegador:
+							{authLink}
 						</Text>
 					</Container>
 				</Body>

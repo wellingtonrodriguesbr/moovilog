@@ -5,6 +5,7 @@
 	"main": "index.js",
 	"scripts": {
 		"dev": "tsx watch --env-file .env src/http/server.ts",
+		"email:dev": "email dev --dir src/mail",
 		"test": "vitest run --dir src/use-cases",
 		"test:watch": "vitest --dir src/use-cases",
 		"lint": "eslint . --ext .js,.jsx,.ts,.tsx",
