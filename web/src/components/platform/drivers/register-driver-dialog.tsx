@@ -25,9 +25,9 @@ export function RegisterDriverDialog() {
 	return (
 		<Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
 			<DialogTrigger asChild>
-				<Button className="gap-2">
+				<Button>
 					<Plus className="size-4" />
-					<span className="hidden md:block">Adicionar novo</span>
+					Adicionar novo
 				</Button>
 			</DialogTrigger>
 			<DialogContent className="rounded-md max-w-[350px] md:max-w-[600px]">

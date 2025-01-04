@@ -19,7 +19,7 @@ import { Button } from "@/components/ui/button";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useRegisterDriver } from "./hooks/use-register-driver";
+import { useRegisterDriver } from "@/hooks/use-register-driver";
 import { toast } from "sonner";
 
 import { formatCPF } from "@/utils/format-cpf";

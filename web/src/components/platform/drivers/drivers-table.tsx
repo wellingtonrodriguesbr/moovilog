@@ -1,114 +1,28 @@
-import { CopyButton } from "@/components/copy-button";
-import { Button } from "@/components/ui/button";
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from "@/components/ui/table";
-import { formatCPF } from "@/utils/format-cpf";
-import { formatPhone } from "@/utils/format-phone";
-import { Ellipsis } from "lucide-react";
+"use client";
 
-const data = [
-	{
-		id: "INV001",
-		name: "Wellington Rodrigues",
-		documentNumber: "00000000000",
-		phone: "15981036058",
-		backupPhone: "-",
-		createdAt: "20/06/2024",
-	},
-	{
-		id: "INV002",
-		name: "Wellington Rodrigues",
-		documentNumber: "00000000000",
-		phone: "15981036058",
-		backupPhone: "-",
-		createdAt: "20/06/2024",
-	},
-	{
-		id: "INV003",
-		name: "Wellington Rodrigues",
-		documentNumber: "00000000000",
-		phone: "15981036058",
-		backupPhone: "-",
-		createdAt: "20/06/2024",
-	},
-	{
-		id: "INV004",
-		name: "Wellington Rodrigues",
-		documentNumber: "00000000000",
-		phone: "15981036058",
-		backupPhone: "-",
-		createdAt: "20/06/2024",
-	},
-	{
-		id: "INV005",
-		name: "Wellington Rodrigues",
-		documentNumber: "00000000000",
-		phone: "15981036058",
-		backupPhone: "-",
-		createdAt: "20/06/2024",
-	},
-];
+import { Table, TableBody } from "@/components/ui/table";
+import { useFetchDriversByCompany } from "@/hooks/use-fetch-drivers-by-company";
+import { SkeletonDriversTable } from "@/components/platform/drivers/skeleton-drivers-table";
+import { DriversTableRow } from "@/components/platform/drivers/drivers-table-row";
+import { DriversTableHeader } from "@/components/platform/drivers/drivers-table-header";
 
 export function DriversTable() {
+	const { driversByCompany, isFetchDriversByCompanyPending } =
+		useFetchDriversByCompany();
 	return (
-		<Table>
-			<TableHeader className="bg-zinc-100 hover:bg-zinc-100">
-				<TableRow className="hover:bg-zinc-100">
-					<TableHead className="text-app-blue-900 font-medium rounded-tl-lg text-nowrap">
-						Nome
-					</TableHead>
-					<TableHead className="text-app-blue-900 font-medium text-nowrap">
-						CPF
-					</TableHead>
-					<TableHead className="text-app-blue-900 font-medium text-nowrap">
-						Contato
-					</TableHead>
-					<TableHead className="text-app-blue-900 font-medium text-nowrap">
-						Contato reserva
-					</TableHead>
-					<TableHead className="text-app-blue-900 font-medium text-nowrap">
-						Cadastrado em
-					</TableHead>
-					<TableHead className="text-app-blue-900 font-medium rounded-tr-lg"></TableHead>
-				</TableRow>
-			</TableHeader>
-			<TableBody>
-				{data.map((item) => (
-					<TableRow className="hover:bg-transparent" key={item.id}>
-						<TableCell className="text-nowrap">
-							{item.name}
-						</TableCell>
-						<TableCell className="text-nowrap">
-							<CopyButton
-								data={item.documentNumber}
-								title="Copiar CPF"
-							>
-								{formatCPF(item.documentNumber)}
-							</CopyButton>
-						</TableCell>
-						<TableCell className="text-nowrap">
-							{formatPhone(item.phone)}
-						</TableCell>
-						<TableCell className="text-nowrap">
-							{item.backupPhone}
-						</TableCell>
-						<TableCell className="text-nowrap">
-							{item.createdAt}
-						</TableCell>
-						<TableCell className="text-right">
-							<Button variant="ghost">
-								<Ellipsis className="size-4" />
-							</Button>
-						</TableCell>
-					</TableRow>
-				))}
-			</TableBody>
-		</Table>
+		<>
+			{isFetchDriversByCompanyPending ? (
+				<SkeletonDriversTable />
+			) : (
+				<Table>
+					<DriversTableHeader />
+					<TableBody>
+						{driversByCompany?.map((item) => (
+							<DriversTableRow key={item.id} driver={item} />
+						))}
+					</TableBody>
+				</Table>
+			)}
+		</>
 	);
 }

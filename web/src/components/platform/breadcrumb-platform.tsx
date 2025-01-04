@@ -10,6 +10,7 @@ import {
 	BreadcrumbPage,
 	BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import Link from "next/link";
 
 const ROUTES_MAP: Record<string, string> = {
 	"/inicio": "Início",
@@ -30,7 +31,9 @@ export function BreadcrumbPlatform() {
 		<Breadcrumb>
 			<BreadcrumbList>
 				<BreadcrumbItem className="ml-1">
-					<BreadcrumbLink href="/inicio">Início</BreadcrumbLink>
+					<BreadcrumbLink asChild>
+						<Link href="/inicio">Início</Link>
+					</BreadcrumbLink>
 				</BreadcrumbItem>
 				{path !== "/inicio" && (
 					<>
