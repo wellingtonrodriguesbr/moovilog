@@ -1,4 +1,4 @@
-import { ResourceNotFoundError } from "./errors/resource-not-found-error";
+import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
 import { CompanyMembersRepository } from "@/repositories/company-members-repository";
 import { ICompanyMember } from "@/interfaces/company-member";
 

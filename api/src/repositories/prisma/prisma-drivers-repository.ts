@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { DriversRepository } from "../drivers-repository";
+import { DriversRepository } from "@/repositories/drivers-repository";
 import { Prisma } from "@prisma/client";
 
 export class PrismaDriversRepository implements DriversRepository {
@@ -56,5 +56,15 @@ export class PrismaDriversRepository implements DriversRepository {
 		}
 
 		return driver;
+	}
+
+	async findManyByCompanyId(companyId: string) {
+		const drivers = await prisma.driver.findMany({
+			where: {
+				companyId,
+			},
+		});
+
+		return drivers;
 	}
 }

@@ -8,4 +8,5 @@ export interface DriversRepository {
 		companyId: string
 	): Promise<Driver | null>;
 	findById(id: string): Promise<Driver | null>;
+	findManyByCompanyId(companyId: string): Promise<Driver[]>;
 }

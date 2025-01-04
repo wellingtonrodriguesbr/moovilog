@@ -58,4 +58,10 @@ export class InMemoryDriversRepository implements DriversRepository {
 
 		return driver;
 	}
+
+	async findManyByCompanyId(companyId: string) {
+		const drivers = this.items.filter((item) => item.companyId === companyId);
+
+		return drivers;
+	}
 }
