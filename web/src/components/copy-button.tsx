@@ -9,6 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Check, Copy } from "lucide-react";
 import { ReactNode, useState } from "react";
+import { toast } from "sonner";
 
 interface CopyButtonProps {
 	children: ReactNode;
@@ -20,12 +21,17 @@ export function CopyButton({ children, data, title }: CopyButtonProps) {
 	const [copyEmail, setCopyEmail] = useState(false);
 
 	async function handleCopyData(data: string) {
-		await navigator.clipboard.writeText(data);
-		setCopyEmail(true);
-
-		setTimeout(() => {
-			setCopyEmail(false);
-		}, 1000);
+		try {
+			await navigator.clipboard.writeText(data);
+			setCopyEmail(true);
+			toast.success("Copiado com sucesso");
+			setTimeout(() => {
+				setCopyEmail(false);
+			}, 1000);
+		} catch (error) {
+			toast.error("Erro ao copiar");
+			console.log(error);
+		}
 	}
 
 	return (
