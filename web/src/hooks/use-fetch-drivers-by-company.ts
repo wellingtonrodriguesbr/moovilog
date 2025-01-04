@@ -23,7 +23,7 @@ export function useFetchDriversByCompany() {
 		data: driversByCompany,
 		isPending: isFetchDriversByCompanyPending,
 	} = useQuery({
-		queryKey: ["fetch-drivers-by-company"],
+		queryKey: ["drivers"],
 		queryFn: handleFetchDriversByCompany,
 		enabled: !!company && !isGetCompanyInformationPending,
 	});

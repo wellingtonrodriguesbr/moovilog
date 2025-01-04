@@ -11,7 +11,7 @@ import { formatBrazilianDate } from "@/utils/format-brazilian-date";
 import { Badge } from "@/components/ui/badge";
 
 const DRIVER_TYPE: Record<string, string> = {
-	AGGREGATE: "Aggregado",
+	AGGREGATE: "Agregado",
 	FREELANCER: "Freelancer",
 	INTERNAL: "Interno",
 };

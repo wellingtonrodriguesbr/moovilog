@@ -1,5 +1,5 @@
 import { api } from "@/lib/axios";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface RegisterDriverData {
 	name: string;
@@ -9,9 +9,13 @@ interface RegisterDriverData {
 }
 
 export function useRegisterDriver() {
+	const queryClient = useQueryClient();
 	const { mutateAsync: registerDriver, isPending: isPendingRegisterDriver } =
 		useMutation({
 			mutationFn: handleRegisterDriver,
+			onSuccess: () => {
+				queryClient.invalidateQueries({ queryKey: ["drivers"] });
+			},
 		});
 
 	async function handleRegisterDriver(registerData: RegisterDriverData) {
