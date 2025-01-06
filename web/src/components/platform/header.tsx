@@ -1,13 +1,14 @@
+import Image from "next/image";
+import Link from "next/link";
+
 import { AccountMenu } from "@/components/platform/account-menu";
 import { ButtonOpenCloseSidebar } from "@/components/platform/button-open-close-sidebar";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { BreadcrumbPlatform } from "@/components/platform/breadcrumb-platform";
+import { links } from "@/utils/links";
 
 import { CircleHelp, MessageSquareMore } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { links } from "@/utils/links";
 
 export function HeaderPlatform() {
 	return (
@@ -29,13 +30,13 @@ export function HeaderPlatform() {
 			</div>
 
 			<div className="flex items-center gap-4">
-				<Button className="hidden md:flex" variant="ghost" asChild>
+				<Button className="hidden xl:flex" variant="ghost" asChild>
 					<Link href={links["contact-us"]}>
 						<CircleHelp className="size-4" />
 						Preciso de ajuda
 					</Link>
 				</Button>
-				<Button className="hidden md:flex" variant="outline" asChild>
+				<Button className="hidden xl:flex" variant="outline" asChild>
 					<Link href={links["send-feedback"]} target="_blank">
 						<MessageSquareMore className="size-4" />
 						Enviar feedback

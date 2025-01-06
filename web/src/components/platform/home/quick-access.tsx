@@ -26,7 +26,7 @@ export function QuickAccess() {
 					<CardContent></CardContent>
 				</Card>
 
-				<Card className="h-48">
+				<Card className="col-span-1 md:col-span-2 xl:col-span-1 h-48">
 					<CardHeader>
 						<CardTitle className="flex items-center gap-2"></CardTitle>
 						<CardDescription className="text-zinc-600"></CardDescription>

@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
+import { VehiclesTable } from "@/components/platform/vehicles/vehicles-table";
+
 import { Plus } from "lucide-react";
-import { VehiclesTable } from "./vehicles-table";
 
 export function Vehicles() {
 	return (
@@ -9,7 +10,7 @@ export function Vehicles() {
 				<h1 className="text-2xl md:text-3xl font-medium">Veículos</h1>
 				<Button className="gap-2">
 					<Plus className="size-4" />
-					<span className="hidden md:block">Adicionar novo</span>
+					Adicionar novo
 				</Button>
 			</header>
 			<div className="mt-12">

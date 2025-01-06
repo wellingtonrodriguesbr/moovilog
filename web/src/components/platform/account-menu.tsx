@@ -16,7 +16,15 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useGetProfile } from "@/hooks/use-get-profile";
 import { useLogout } from "@/hooks/use-logout";
 
-import { Building, Loader2, LogOut, User } from "lucide-react";
+import {
+	Building,
+	CircleHelp,
+	Loader2,
+	LogOut,
+	MessageSquareMore,
+	User,
+} from "lucide-react";
+import { links } from "@/utils/links";
 
 export function AccountMenu() {
 	const router = useRouter();
@@ -54,28 +62,49 @@ export function AccountMenu() {
 						</span>
 					</DropdownMenuLabel>
 					<DropdownMenuSeparator />
-					<DialogTrigger asChild>
-						<DropdownMenuItem className="hover:bg-zinc-100" asChild>
-							<Link
-								className="flex items-center gap-2 cursor-pointer"
-								href="/meus-dados"
-							>
-								<User className="size-4" />
-								Meus dados
-							</Link>
-						</DropdownMenuItem>
-					</DialogTrigger>
-					<DialogTrigger asChild>
-						<DropdownMenuItem className="hover:bg-zinc-100" asChild>
-							<Link
-								className="flex items-center gap-2 cursor-pointer"
-								href="/minha-empresa/dados-cadastrais"
-							>
-								<Building className="size-4" />
-								Empresa
-							</Link>
-						</DropdownMenuItem>
-					</DialogTrigger>
+					<DropdownMenuItem className="hover:bg-zinc-100" asChild>
+						<Link
+							className="gap-2 cursor-pointer"
+							href="/meus-dados"
+						>
+							<User className="size-4" />
+							Meus dados
+						</Link>
+					</DropdownMenuItem>
+					<DropdownMenuItem className="hover:bg-zinc-100" asChild>
+						<Link
+							className="gap-2 cursor-pointer"
+							href="/minha-empresa/dados-cadastrais"
+						>
+							<Building className="size-4" />
+							Dados da empresa
+						</Link>
+					</DropdownMenuItem>
+					<DropdownMenuItem
+						className="flex xl:hidden hover:bg-zinc-100"
+						asChild
+					>
+						<Link
+							className="gap-2 cursor-pointer"
+							href={links["send-feedback"]}
+							target="_blank"
+						>
+							<MessageSquareMore className="size-4" />
+							Enviar feedback
+						</Link>
+					</DropdownMenuItem>
+					<DropdownMenuItem
+						className="flex xl:hidden hover:bg-zinc-100"
+						asChild
+					>
+						<Link
+							className="gap-2 cursor-pointer"
+							href={links["contact-us"]}
+						>
+							<CircleHelp className="size-4" />
+							Preciso de ajuda
+						</Link>
+					</DropdownMenuItem>
 					<DropdownMenuSeparator />
 					<DropdownMenuItem
 						asChild

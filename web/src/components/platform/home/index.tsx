@@ -21,7 +21,7 @@ export function Home() {
 				</h1>
 			</header>
 			<QuickAccess />
-			<div className="grid grid-cols-1 md:grid-cols-[1fr_400px] gap-4">
+			<div className="grid grid-cols-1 xl:grid-cols-[1fr_400px] gap-4">
 				<BarChartComponent />
 				<PieChartComponent />
 			</div>
