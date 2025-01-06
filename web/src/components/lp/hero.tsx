@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 import { WhatsappIcon } from "@/components/icons/whatsapp-icon";
 import { Button } from "@/components/ui/button";
@@ -6,7 +7,6 @@ import { Header } from "@/components/lp/header";
 
 import { PlatformDemoDialog } from "@/components/lp/platform-demo-dialog";
 import { links } from "@/utils/links";
-import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 
 export function Hero() {
@@ -40,7 +40,7 @@ export function Hero() {
 								<ArrowRight className="size-4" />
 							</Link>
 						</Button>
-						<PlatformDemoDialog />
+						{/* <PlatformDemoDialog /> */}
 					</div>
 				</div>
 				<div className="flex items-center justify-end bg-white/20 rounded-t-xl mt-auto overflow-hidden p-2 xl:p-3">
