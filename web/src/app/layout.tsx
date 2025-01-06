@@ -42,7 +42,7 @@ export default function RootLayout({
 					<TooltipProvider>
 						<ReactQueryProvider>{children}</ReactQueryProvider>
 						<Toaster
-							position="top-center"
+							position="top-right"
 							theme="light"
 							richColors
 						/>

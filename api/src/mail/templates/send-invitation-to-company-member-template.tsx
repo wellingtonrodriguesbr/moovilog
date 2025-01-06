@@ -66,7 +66,12 @@ export default function SendInvitationToCompanyMemberTemplate({
 						<Hr className="border border-solid border-[#eaeaea] my-[26px] mx-0 w-full" />
 						<Text className="text-center text-[#666666] text-[12px] leading-[24px]">
 							Caso prefira, copie e cole esse código em seu navegador:
-							{authLink}
+							<Link
+								className="block w-full bg-[#2222FF] rounded text-white px-5 py-3 text-[16px] font-semibold no-underline text-center"
+								href={authLink}
+							>
+								{authLink}
+							</Link>
 						</Text>
 					</Container>
 				</Body>

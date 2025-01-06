@@ -43,4 +43,12 @@ export class InMemoryUsersRepository implements UsersRepository {
 
 		return user;
 	}
+
+	async updatePassword(id: string, password: string) {
+		const user = this.items.find((item) => item.id === id);
+
+		if (!user) throw new Error("User not found");
+
+		user.password = password;
+	}
 }

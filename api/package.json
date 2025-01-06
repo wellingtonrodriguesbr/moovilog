@@ -6,8 +6,8 @@
 	"scripts": {
 		"dev": "tsx watch --env-file .env src/http/server.ts",
 		"email:dev": "email dev --dir src/mail",
-		"test": "vitest run --dir src/use-cases",
-		"test:watch": "vitest --dir src/use-cases",
+		"test": "vitest run --dir src",
+		"test:watch": "vitest --dir src",
 		"lint": "eslint . --ext .js,.jsx,.ts,.tsx",
 		"lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix"
 	},

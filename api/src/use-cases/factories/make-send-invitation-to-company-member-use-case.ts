@@ -8,11 +8,12 @@ export function makeSendInvitationToCompanyMemberUseCase() {
 	const companyMemberRepository = new PrismaCompanyMembersRepository();
 	const authLinksRepository = new PrismaAuthLinksRepository();
 
-	const registerCompanyMemberUseCase = new SendInvitationToCompanyMemberUseCase(
-		usersRepository,
-		companyMemberRepository,
-		authLinksRepository
-	);
+	const sendInvitationToCompanyMemberUseCase =
+		new SendInvitationToCompanyMemberUseCase(
+			usersRepository,
+			companyMemberRepository,
+			authLinksRepository
+		);
 
-	return registerCompanyMemberUseCase;
+	return sendInvitationToCompanyMemberUseCase;
 }

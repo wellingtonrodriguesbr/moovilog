@@ -3,13 +3,15 @@ import fastifyJwt from "@fastify/jwt";
 import fastifyCookie from "@fastify/cookie";
 import fastifyCors from "@fastify/cors";
 
-import { usersRoutes } from "./routes/users";
+import { usersRoutes } from "@/http/routes/users";
+import { companiesRoutes } from "@/http/routes/companies";
+import { driversRoutes } from "@/http/routes/drivers";
+import { vehiclesRoutes } from "@/http/routes/vehicles";
+import { freightsRoutes } from "@/http/routes/freights";
+import { companyMembersRoutes } from "@/http/routes/company-members";
+import { authLinksRoutes } from "@/http/routes/auth-links";
+
 import { env } from "@/env";
-import { companiesRoutes } from "./routes/companies";
-import { driversRoutes } from "./routes/drivers";
-import { vehiclesRoutes } from "./routes/vehicles";
-import { freightsRoutes } from "./routes/freights";
-import { companyMembersRoutes } from "./routes/company-members";
 
 export const app = fastify({
 	logger: true,
@@ -42,3 +44,4 @@ app.register(companyMembersRoutes);
 app.register(driversRoutes);
 app.register(vehiclesRoutes);
 app.register(freightsRoutes);
+app.register(authLinksRoutes);

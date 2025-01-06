@@ -95,7 +95,7 @@ export class SendInvitationToCompanyMemberUseCase {
 		});
 
 		const code = generateRamdonCode();
-		const link = `${env.WEBSITE_DOMAIN_URL}/concluir-cadastro?codigo=${code}`;
+		const link = `${env.WEBSITE_DOMAIN_URL}/validacao-do-codigo?codigo=${code}`;
 
 		const emailQueue = new EmailQueue(500);
 
@@ -115,6 +115,7 @@ export class SendInvitationToCompanyMemberUseCase {
 
 		await this.authLinksRepository.create({
 			code,
+			userId: user.id,
 		});
 
 		return { companyMember };

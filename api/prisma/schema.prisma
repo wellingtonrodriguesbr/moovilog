@@ -18,6 +18,7 @@ model User {
 
   company        Company?        @relation("user_company_owner")
   companyMembers CompanyMember[]
+  authLinks      AuthLink[]
 
   @@map("users")
 }
@@ -240,6 +241,9 @@ model AuthLink {
   code      String   @unique
   createdAt DateTime @default(now()) @map("created_at")
 
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id])
+
   @@map("auth_links")
 }
 
@@ -293,12 +297,6 @@ enum FreightModality {
   DAILY
   PERCENTAGE
   PRODUCTIVITY
-}
-
-enum AccountTypeOfBankDetails {
-  CURRENT_ACCOUNT
-  SALARY_ACCOUNT
-  SAVINGS_ACCOUNT
 }
 
 enum AccountStatus {

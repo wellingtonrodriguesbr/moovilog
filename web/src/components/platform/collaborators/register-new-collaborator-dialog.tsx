@@ -25,7 +25,7 @@ export function RegisterNewCollaboratorDialog() {
 			<DialogTrigger asChild>
 				<Button className="gap-2">
 					<Plus className="size-4" />
-					<span className="hidden md:block">Adicionar novo</span>
+					Adicionar novo
 				</Button>
 			</DialogTrigger>
 			<DialogContent className="rounded-md max-w-[350px] md:max-w-[600px]">

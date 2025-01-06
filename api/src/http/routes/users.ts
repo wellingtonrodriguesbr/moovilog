@@ -5,12 +5,14 @@ import { AuthenticateController } from "@/http/controllers/authenticate-controll
 import { RefreshToken } from "@/http/controllers/refresh-token";
 import { LogoutController } from "@/http/controllers/logout-controller";
 import { GetUserProfileController } from "@/http/controllers/get-user-profile-controller";
+import { UpdateUserPasswordController } from "@/http/controllers/update-user-password-controller";
 
 export async function usersRoutes(app: FastifyInstance) {
 	app.post("/users", RegisterUserController.handle);
 	app.post("/sessions", AuthenticateController.handle);
 	app.patch("/token/refresh", RefreshToken.handle);
 	app.post("/logout", LogoutController.handle);
+	app.patch("/user/update-password", UpdateUserPasswordController.handle);
 
 	app.get("/me", { onRequest: [verifyJWT] }, GetUserProfileController.handle);
 }

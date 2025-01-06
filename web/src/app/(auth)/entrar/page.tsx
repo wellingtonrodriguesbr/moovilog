@@ -1,6 +1,12 @@
+import { Metadata } from "next";
 import { Login } from "@/components/auth/login";
 
-export default function CompanyLoginPage() {
+export const metadata: Metadata = {
+	title: "Entrar | Moovilog",
+	description: "",
+};
+
+export default function LoginPage() {
 	return (
 		<section className="w-full">
 			<Login />
