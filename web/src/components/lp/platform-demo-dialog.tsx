@@ -17,7 +17,7 @@ export function PlatformDemoDialog() {
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
-				<Button className="w-full md:w-fit text-app-cyan-500 gap-2 bg-transparent hover:bg-app-cyan-100/10">
+				<Button className="w-full md:w-fit text-app-cyan-500 gap-2 bg-transparent hover:bg-app-cyan-100/30">
 					Ver mais detalhes
 					<ChevronDown className="size-4 animate-bounce" />
 				</Button>

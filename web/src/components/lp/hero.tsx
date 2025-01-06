@@ -13,7 +13,7 @@ export function Hero() {
 	return (
 		<section className="relative w-full min-h-screen flex flex-col bg-app-blue-500">
 			<Header />
-			<div className="flex-1 w-full h-full max-w-screen-xl mx-auto px-4 mt-20 grid grid-cols-1 gap-12 md:gap-24">
+			<div className="flex-1 w-full h-full max-w-screen-xl mx-auto px-4 mt-14 xl:mt-20 grid grid-cols-1 gap-12 md:gap-24">
 				<div className="flex flex-col items-center">
 					<small className="flex items-center gap-1 text-white mb-2">
 						Esqueça as planilhas e transforme sua gestão hoje
@@ -43,7 +43,7 @@ export function Hero() {
 						<PlatformDemoDialog />
 					</div>
 				</div>
-				<div className="flex items-center justify-end w-full h-full bg-white/10 rounded-t-2xl mt-auto overflow-hidden p-3 pb-0">
+				<div className="flex items-center justify-end bg-white/20 rounded-t-xl mt-auto overflow-hidden p-2 xl:p-3">
 					<Image
 						src="/platform-home.svg"
 						alt=""
