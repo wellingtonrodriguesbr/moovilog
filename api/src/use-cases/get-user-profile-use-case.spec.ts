@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
 import { GetUserProfileUseCase } from "./get-user-profile-use-case";
 import { ResourceNotFoundError } from "./errors/resource-not-found-error";
-import { InMemoryCompanyMembersRepository } from "@/repositories/in-memory/in-memory-company-member-repository";
+import { InMemoryCompanyMembersRepository } from "@/repositories/in-memory/in-memory-company-members-repository";
 
 let usersRepository: InMemoryUsersRepository;
 let companyMembersRepository: InMemoryCompanyMembersRepository;

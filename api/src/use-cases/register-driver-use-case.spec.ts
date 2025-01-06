@@ -3,7 +3,7 @@ import { RegisterDriverUseCase } from "./register-driver-use-case";
 import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
 import { InMemoryDriversRepository } from "@/repositories/in-memory/in-memory-drivers-repository";
 import { InMemoryCompaniesRepository } from "@/repositories/in-memory/in-memory-companies-repository";
-import { InMemoryCompanyMembersRepository } from "@/repositories/in-memory/in-memory-company-member-repository";
+import { InMemoryCompanyMembersRepository } from "@/repositories/in-memory/in-memory-company-members-repository";
 import { DriverAlreadyExistsError } from "./errors/driver-already-exists-error";
 import { NotAllowedError } from "./errors/not-allowed-error";
 

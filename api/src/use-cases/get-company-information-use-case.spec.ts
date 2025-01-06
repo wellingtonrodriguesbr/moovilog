@@ -5,7 +5,7 @@ import { GetCompanyInformationUseCase } from "./get-company-information-use-case
 import { InMemoryAddressesRepository } from "@/repositories/in-memory/in-memory-addresses-repository";
 import { InMemoryCitiesRepository } from "@/repositories/in-memory/in-memory-cities-repository";
 import { InMemoryStatesRepository } from "@/repositories/in-memory/in-memory-states-repository";
-import { InMemoryCompanyMembersRepository } from "@/repositories/in-memory/in-memory-company-member-repository";
+import { InMemoryCompanyMembersRepository } from "@/repositories/in-memory/in-memory-company-members-repository";
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;

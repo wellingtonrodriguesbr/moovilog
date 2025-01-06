@@ -4,7 +4,7 @@ import { InMemoryCompaniesRepository } from "@/repositories/in-memory/in-memory-
 import { RegisterCompanyUseCase } from "./register-company-use-case";
 import { CompanyAlreadyExistsError } from "./errors/company-already-exists-error";
 import { UserAlreadyHasACompanyError } from "./errors/user-already-has-a-company-error";
-import { InMemoryCompanyMembersRepository } from "@/repositories/in-memory/in-memory-company-member-repository";
+import { InMemoryCompanyMembersRepository } from "@/repositories/in-memory/in-memory-company-members-repository";
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;

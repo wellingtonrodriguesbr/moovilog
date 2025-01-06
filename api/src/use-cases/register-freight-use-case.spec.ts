@@ -1,5 +1,5 @@
 import { InMemoryCompaniesRepository } from "@/repositories/in-memory/in-memory-companies-repository";
-import { InMemoryCompanyMembersRepository } from "@/repositories/in-memory/in-memory-company-member-repository";
+import { InMemoryCompanyMembersRepository } from "@/repositories/in-memory/in-memory-company-members-repository";
 import { InMemoryDriversRepository } from "@/repositories/in-memory/in-memory-drivers-repository";
 import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
 import { InMemoryFreightsRepository } from "@/repositories/in-memory/in-memory-freights-repository";

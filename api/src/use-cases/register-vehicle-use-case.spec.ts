@@ -4,7 +4,7 @@ import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-user
 import { InMemoryVehiclesRepository } from "@/repositories/in-memory/in-memory-vehicles-repository";
 import { VehicleAlreadyExistsError } from "./errors/vehicle-already-exists-error";
 import { NotAllowedError } from "./errors/not-allowed-error";
-import { InMemoryCompanyMembersRepository } from "@/repositories/in-memory/in-memory-company-member-repository";
+import { InMemoryCompanyMembersRepository } from "@/repositories/in-memory/in-memory-company-members-repository";
 import { InMemoryCompaniesRepository } from "@/repositories/in-memory/in-memory-companies-repository";
 
 let usersRepository: InMemoryUsersRepository;

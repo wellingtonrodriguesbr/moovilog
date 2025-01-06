@@ -55,4 +55,12 @@ export class InMemoryCompanyMembersRepository
 
 		return members;
 	}
+
+	async updateAccountStatus(id: string, status: "ACTIVE" | "INACTIVE") {
+		const member = this.items.find((item) => item.id === id);
+
+		if (!member) throw new Error("Member not found");
+
+		member.status = status;
+	}
 }

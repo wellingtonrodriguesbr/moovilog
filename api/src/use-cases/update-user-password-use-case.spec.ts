@@ -1,11 +1,13 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
 import { InMemoryAuthLinksRepository } from "@/repositories/in-memory/in-memory-auth-links-repository";
+import { InMemoryCompanyMembersRepository } from "@/repositories/in-memory/in-memory-company-members-repository";
 import { UpdateUserPasswordUseCase } from "@/use-cases/update-user-password-use-case";
 import { BadRequestError } from "@/use-cases/errors/bad-request-error";
 import { compare } from "bcryptjs";
 
 let usersRepository: InMemoryUsersRepository;
+let companyMembersRepository: InMemoryCompanyMembersRepository;
 let authLinksRepository: InMemoryAuthLinksRepository;
 let sut: UpdateUserPasswordUseCase;
 
@@ -13,13 +15,26 @@ describe("Update user password use case", () => {
 	beforeEach(async () => {
 		usersRepository = new InMemoryUsersRepository();
 		authLinksRepository = new InMemoryAuthLinksRepository();
-		sut = new UpdateUserPasswordUseCase(usersRepository, authLinksRepository);
+		companyMembersRepository = new InMemoryCompanyMembersRepository();
+		sut = new UpdateUserPasswordUseCase(
+			usersRepository,
+			companyMembersRepository,
+			authLinksRepository
+		);
 
 		await usersRepository.create({
 			id: "john-doe-id-01",
 			name: "John Doe",
 			email: "johndoe@example.com",
 			password: "12345678",
+		});
+
+		await companyMembersRepository.create({
+			id: "company-member-id-01",
+			companyId: "company-id-01",
+			userId: "john-doe-id-01",
+			sector: "Diretoria",
+			role: "ADMIN",
 		});
 
 		await authLinksRepository.create({
@@ -43,6 +58,7 @@ describe("Update user password use case", () => {
 		expect(newPassword).toBeTruthy();
 		expect(usersRepository.items[0].password).toEqual(expect.any(String));
 		expect(authLinksRepository.items).toHaveLength(0);
+		expect(companyMembersRepository.items[0].status).toStrictEqual("ACTIVE");
 	});
 
 	it("should not be able to update password when new password does not match with confirm new password", async () => {

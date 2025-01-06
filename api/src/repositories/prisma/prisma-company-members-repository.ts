@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
-import { CompanyMembersRepository } from "../company-members-repository";
+import { CompanyMembersRepository } from "@/repositories/company-members-repository";
 
 export class PrismaCompanyMembersRepository
 	implements CompanyMembersRepository
@@ -77,5 +77,16 @@ export class PrismaCompanyMembersRepository
 		});
 
 		return companyMembers;
+	}
+
+	async updateAccountStatus(id: string, status: "ACTIVE" | "INACTIVE") {
+		await prisma.companyMember.update({
+			where: {
+				id,
+			},
+			data: {
+				status,
+			},
+		});
 	}
 }

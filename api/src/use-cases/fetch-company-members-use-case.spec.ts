@@ -1,4 +1,4 @@
-import { InMemoryCompanyMembersRepository } from "@/repositories/in-memory/in-memory-company-member-repository";
+import { InMemoryCompanyMembersRepository } from "@/repositories/in-memory/in-memory-company-members-repository";
 import { beforeEach, describe, expect, it } from "vitest";
 import { FetchCompanyMembersUseCase } from "./fetch-company-members-use-case";
 import { InMemoryCompaniesRepository } from "@/repositories/in-memory/in-memory-companies-repository";

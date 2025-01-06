@@ -11,4 +11,5 @@ export interface CompanyMembersRepository {
 		companyId: string
 	): Promise<CompanyMember | null>;
 	findManyByCompanyId(companyId: string): Promise<CompanyMember[]>;
+	updateAccountStatus(id: string, status: "ACTIVE" | "INACTIVE"): Promise<void>;
 }
