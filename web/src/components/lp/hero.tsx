@@ -40,6 +40,12 @@ export function Hero() {
 								<ArrowRight className="size-4" />
 							</Link>
 						</Button>
+						<Button variant="link" className="text-white" asChild>
+							<Link href={links["whatsapp-doubts"]}>
+								<WhatsappIcon className="size-4" />
+								Quero tirar algumas dúvidas
+							</Link>
+						</Button>
 						{/* <PlatformDemoDialog /> */}
 					</div>
 				</div>
