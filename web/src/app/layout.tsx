@@ -20,7 +20,7 @@ const sans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-	title: "Moovilog | Menos planilhas, mais resultados para sua transportadora",
+	title: "Moovilog | Gerencie toda sua operação logística em uma única plataforma.",
 	description: "",
 };
 
