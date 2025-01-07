@@ -19,7 +19,7 @@ interface RegisterVehicleUseCaseRequest {
 	fullLoadCapacity: number;
 	brand: string;
 	model: string;
-	companyMemberId: string;
+	userId: string;
 }
 
 interface RegisterVehicleUseCaseResponse {
@@ -41,10 +41,9 @@ export class RegisterVehicleUseCase {
 		fullLoadCapacity,
 		brand,
 		model,
-		companyMemberId,
+		userId,
 	}: RegisterVehicleUseCaseRequest): Promise<RegisterVehicleUseCaseResponse> {
-		const member =
-			await this.companyMembersRepository.findById(companyMemberId);
+		const member = await this.companyMembersRepository.findByUserId(userId);
 
 		if (!member) {
 			throw new ResourceNotFoundError("Member not found");

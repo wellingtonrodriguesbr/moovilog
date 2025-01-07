@@ -57,4 +57,10 @@ export class InMemoryVehiclesRepository implements VehiclesRepository {
 
 		return vehicle;
 	}
+
+	async findManyByCompanyId(companyId: string) {
+		const vehicles = this.items.filter((item) => item.companyId === companyId);
+
+		return vehicles;
+	}
 }

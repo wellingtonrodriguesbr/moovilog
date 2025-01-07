@@ -7,11 +7,11 @@ export function makeFetchDriversByCompanyUseCase() {
 	const driversRepository = new PrismaDriversRepository();
 	const companiesRepository = new PrismaCompaniesRepository();
 	const companyMembersRepository = new PrismaCompanyMembersRepository();
-	const fetchCompanyMembersUseCase = new FetchDriversByCompanyUseCase(
+	const fetchDriversByCompanyUseCase = new FetchDriversByCompanyUseCase(
 		driversRepository,
 		companiesRepository,
 		companyMembersRepository
 	);
 
-	return fetchCompanyMembersUseCase;
+	return fetchDriversByCompanyUseCase;
 }

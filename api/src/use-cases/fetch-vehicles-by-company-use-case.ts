@@ -1,32 +1,32 @@
-import { IDriver } from "@/interfaces/driver";
 import { CompaniesRepository } from "@/repositories/companies-repository";
 import { CompanyMembersRepository } from "@/repositories/company-members-repository";
-import { DriversRepository } from "@/repositories/drivers-repository";
-import { ResourceNotFoundError } from "./errors/resource-not-found-error";
+import { VehiclesRepository } from "@/repositories/vehicles-repository";
+import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
+import { IVehicle } from "@/interfaces/vehicle";
 
-interface FetchDriversByCompanyUseCaseRequest {
+interface FetchVehiclesByCompanyUseCaseRequest {
 	companyId: string;
 	userId: string;
 }
 
-interface FetchDriversByCompanyUseCaseResponse {
-	drivers: IDriver[];
+interface FetchVehiclesByCompanyUseCaseResponse {
+	vehicles: IVehicle[];
 }
 
-export class FetchDriversByCompanyUseCase {
+export class FetchVehiclesByCompanyUseCase {
 	constructor(
-		private driversRepository: DriversRepository,
+		private vehiclesRepository: VehiclesRepository,
 		private companyRepository: CompaniesRepository,
 		private companyMemberRepository: CompanyMembersRepository
 	) {}
 	async execute({
 		companyId,
 		userId,
-	}: FetchDriversByCompanyUseCaseRequest): Promise<FetchDriversByCompanyUseCaseResponse> {
-		const [company, memberInCompany, drivers] = await Promise.all([
+	}: FetchVehiclesByCompanyUseCaseRequest): Promise<FetchVehiclesByCompanyUseCaseResponse> {
+		const [company, memberInCompany, vehicles] = await Promise.all([
 			this.companyRepository.findById(companyId),
 			this.companyMemberRepository.findMemberInCompany(userId, companyId),
-			this.driversRepository.findManyByCompanyId(companyId),
+			this.vehiclesRepository.findManyByCompanyId(companyId),
 		]);
 
 		if (!company) {
@@ -37,6 +37,6 @@ export class FetchDriversByCompanyUseCase {
 			throw new ResourceNotFoundError("Member not found in company");
 		}
 
-		return { drivers };
+		return { vehicles };
 	}
 }

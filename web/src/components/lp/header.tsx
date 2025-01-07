@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, User } from "lucide-react";
 import { links } from "@/utils/links";
 
 export function Header() {
@@ -16,16 +16,25 @@ export function Header() {
 				height={193}
 				priority
 			/>
-			<Button
-				variant="outline"
-				className="text-white border-white hover:bg-app-cyan-100 hover:border-transparent font-bold gap-2"
-				asChild
-			>
-				<Link href={links["waiting-list"]} target="_blank">
-					Lista de espera
-					<ArrowRight className="size-4" />
-				</Link>
-			</Button>
+			<div className="flex items-center gap-2">
+				<Button variant="link" className="text-white" asChild>
+					<Link href="/entrar">
+						<User className="size-4" />
+						Entrar
+					</Link>
+				</Button>
+
+				<Button
+					variant="outline"
+					className="text-white border-white hover:bg-app-cyan-100 hover:border-transparent font-bold gap-2"
+					asChild
+				>
+					<Link href="/cadastro">
+						Criar uma conta
+						<ArrowRight className="size-4" />
+					</Link>
+				</Button>
+			</div>
 		</header>
 	);
 }

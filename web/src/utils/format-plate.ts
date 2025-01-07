@@ -1,6 +1,8 @@
 export function formatPlate(plate: string): string {
-	const part1 = plate.slice(0, 3);
-	const part2 = plate.slice(3);
+	const cleanPlate = plate.replace(/-/g, "");
 
-	return `${part1}-${part2}`;
+	const part1 = cleanPlate.slice(0, 3);
+	const part2 = cleanPlate.slice(3);
+
+	return part2 ? `${part1}-${part2}` : part1;
 }
