@@ -3,8 +3,8 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGetProfile } from "@/hooks/use-get-profile";
 import { QuickAccess } from "@/components/platform/home/quick-access";
-import { BarChartComponent } from "@/components/platform/metrics/bar-chart";
-import { PieChartComponent } from "@/components/platform/metrics/pie-chart";
+import { BarChartComponent } from "@/components/platform/home/home-metrics/bar-chart";
+import { PieChartComponent } from "@/components/platform/home/home-metrics/pie-chart";
 
 export function Home() {
 	const { profile, isGetProfilePending } = useGetProfile();
