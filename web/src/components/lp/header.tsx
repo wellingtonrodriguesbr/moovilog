@@ -26,7 +26,7 @@ export function Header() {
 
 				<Button
 					variant="outline"
-					className="text-white border-white hover:bg-app-cyan-100 hover:border-transparent font-bold gap-2"
+					className="text-white border-white hover:bg-app-cyan-100 hover:border-transparent gap-2"
 					asChild
 				>
 					<Link href={links["waiting-list"]}>
