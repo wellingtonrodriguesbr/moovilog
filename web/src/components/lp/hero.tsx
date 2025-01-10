@@ -42,7 +42,7 @@ export function Hero() {
 						<Button variant="link" className="text-white" asChild>
 							<Link href={links["whatsapp-doubts"]}>
 								<WhatsappIcon className="size-4" />
-								Quero tirar algumas dúvidas
+								Quero tirar dúvidas no WhatsApp
 							</Link>
 						</Button>
 					</div>
