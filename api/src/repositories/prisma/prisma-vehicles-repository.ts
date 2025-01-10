@@ -55,4 +55,14 @@ export class PrismaVehiclesRepository implements VehiclesRepository {
 
 		return vehicle;
 	}
+
+	async findManyByCompanyId(companyId: string) {
+		const vehicles = await prisma.vehicle.findMany({
+			where: {
+				companyId,
+			},
+		});
+
+		return vehicles;
+	}
 }

@@ -1,13 +1,13 @@
 import Link from "next/link";
 import Image from "next/image";
 
-import { WhatsappIcon } from "@/components/icons/whatsapp-icon";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/lp/header";
 
 import { PlatformDemoDialog } from "@/components/lp/platform-demo-dialog";
 import { links } from "@/utils/links";
 import { ArrowRight } from "lucide-react";
+import { WhatsappIcon } from "../icons/whatsapp-icon";
 
 export function Hero() {
 	return (
@@ -20,24 +20,23 @@ export function Hero() {
 						<span className="text-lg">💨</span>
 					</small>
 					<h1 className="text-center font-bold text-4xl md:text-5xl xl:text-6xl text-white leading-tight md:leading-tight xl:leading-tight">
-						Gerencie toda sua operação logística em uma única
-						plataforma.
+						Uma plataforma completa para gerenciar sua
+						transportadora com praticidade e eficiência.
 					</h1>
 					<p className="text-center text-sm md:text-base mt-6 text-app-cyan-100 max-w-screen-md">
-						Imagine poder abandonar as dezenas de planilhas e a
-						falta de controle, centralizando toda a gestão da sua
-						transportadora em um só lugar. Temos a solução ideal,
-						oferecendo uma plataforma completa e intuitiva para
-						transformar sua operação logística. Vamos juntos?
+						Transforme a gestão da sua transportadora com nossa
+						plataforma completa. Diga adeus à confusão das planilhas
+						e abrace uma solução que oferece controle total e
+						praticidade. Estamos prontos para crescer junto com você
 					</p>
 					<div className="w-full flex flex-col xl:flex-row items-center justify-center gap-4 mt-8">
 						<Button
 							className="w-full xl:w-fit bg-app-cyan-100 hover:bg-app-cyan-300 text-app-blue-900 gap-2"
 							asChild
 						>
-							<Link href={links["waiting-list"]}>
-								Entrar na lista de espera
-								<ArrowRight className="size-4" />
+							<Link href={links["request-demo"]}>
+								<WhatsappIcon className="size-4 fill-app-blue-900" />
+								Solicitar uma demonstração gratuita
 							</Link>
 						</Button>
 						<Button variant="link" className="text-white" asChild>

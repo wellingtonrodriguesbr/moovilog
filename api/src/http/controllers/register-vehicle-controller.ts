@@ -26,7 +26,6 @@ export class RegisterVehicleController {
 			fullLoadCapacity: z.number(),
 			brand: z.string(),
 			model: z.string(),
-			companyMemberId: z.string().uuid(),
 		});
 
 		const {
@@ -38,8 +37,9 @@ export class RegisterVehicleController {
 			fullLoadCapacity,
 			brand,
 			model,
-			companyMemberId,
 		} = registerVehicleBodySchema.parse(req.body);
+
+		const userId = req.user.sub;
 
 		try {
 			const registerVehicleUseCase = makeRegisterVehicleUseCase();
@@ -52,7 +52,7 @@ export class RegisterVehicleController {
 				fullLoadCapacity,
 				brand,
 				model,
-				companyMemberId,
+				userId,
 			});
 
 			reply.status(201).send({ vehicle });

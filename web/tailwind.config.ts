@@ -24,6 +24,11 @@ const config = {
 			colors: {
 				app: {
 					blue: {
+						50: "#ebf2ff",
+						100: "#dbe6ff",
+						200: "#bed1ff",
+						300: "#97b1ff",
+						400: "#6e84ff",
 						500: "#2222FF",
 						600: "#2820D6",
 						700: "#291DAF",

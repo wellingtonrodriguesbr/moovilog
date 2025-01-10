@@ -60,7 +60,7 @@ describe("Register vehicle use case", () => {
 			fullLoadCapacity: 4500,
 			brand: "Mercedes-Benz",
 			model: "710",
-			companyMemberId: "company-member-id-01",
+			userId: "john-doe-id-01",
 		});
 
 		expect(vehicle.id).toEqual(expect.any(String));
@@ -80,7 +80,7 @@ describe("Register vehicle use case", () => {
 			fullLoadCapacity: 4500,
 			brand: "Mercedes-Benz",
 			model: "710",
-			companyMemberId: "company-member-id-01",
+			userId: "john-doe-id-01",
 		});
 
 		await expect(() =>
@@ -93,7 +93,7 @@ describe("Register vehicle use case", () => {
 				fullLoadCapacity: 4500,
 				brand: "Mercedes-Benz",
 				model: "710",
-				companyMemberId: "company-member-id-01",
+				userId: "john-doe-id-01",
 			})
 		).rejects.toBeInstanceOf(VehicleAlreadyExistsError);
 	});
@@ -105,7 +105,7 @@ describe("Register vehicle use case", () => {
 			password: "12345678",
 		});
 
-		const member = await companyMembersRepository.create({
+		await companyMembersRepository.create({
 			userId: user.id,
 			companyId: "company-id-01",
 			role: "FINANCIAL",
@@ -122,7 +122,7 @@ describe("Register vehicle use case", () => {
 				fullLoadCapacity: 4500,
 				brand: "Mercedes-Benz",
 				model: "710",
-				companyMemberId: member.id,
+				userId: user.id,
 			})
 		).rejects.toBeInstanceOf(NotAllowedError);
 		expect(vehiclesRepository.items).toHaveLength(0);
