@@ -4,10 +4,9 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/lp/header";
 
-import { PlatformDemoDialog } from "@/components/lp/platform-demo-dialog";
 import { links } from "@/utils/links";
-import { ArrowRight } from "lucide-react";
 import { WhatsappIcon } from "../icons/whatsapp-icon";
+import { ArrowUpRight } from "lucide-react";
 
 export function Hero() {
 	return (
@@ -24,19 +23,20 @@ export function Hero() {
 						transportadora com praticidade e eficiência.
 					</h1>
 					<p className="text-center text-sm md:text-base mt-6 text-app-cyan-100 max-w-screen-md">
-						Transforme a gestão da sua transportadora com nossa
-						plataforma completa. Diga adeus à confusão das planilhas
-						e abrace uma solução que oferece controle total e
-						praticidade. Estamos prontos para crescer junto com você
+						Transforme a gestão da sua transportadora com a
+						Moovilog. Diga adeus à confusão das planilhas e a
+						papelada, abrace uma solução que oferece modernidade e
+						total controle do seu negócio na palma da sua mão.
+						Estamos prontos para crescer junto com você!
 					</p>
 					<div className="w-full flex flex-col xl:flex-row items-center justify-center gap-4 mt-8">
 						<Button
 							className="w-full xl:w-fit bg-app-cyan-100 hover:bg-app-cyan-300 text-app-blue-900 gap-2"
 							asChild
 						>
-							<Link href={links["request-demo"]}>
-								<WhatsappIcon className="size-4 fill-app-blue-900" />
-								Solicitar uma demonstração gratuita
+							<Link href={links["waiting-list"]}>
+								Entrar na lista de espera
+								<ArrowUpRight className="size-4" />
 							</Link>
 						</Button>
 						<Button variant="link" className="text-white" asChild>
@@ -45,7 +45,6 @@ export function Hero() {
 								Quero tirar algumas dúvidas
 							</Link>
 						</Button>
-						{/* <PlatformDemoDialog /> */}
 					</div>
 				</div>
 				<div className="flex items-center justify-end bg-white/20 rounded-t-xl mt-auto overflow-hidden p-2 xl:p-3">

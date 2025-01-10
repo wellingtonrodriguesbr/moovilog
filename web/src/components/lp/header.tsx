@@ -17,20 +17,20 @@ export function Header() {
 				priority
 			/>
 			<div className="flex items-center gap-2">
-				<Button variant="link" className="text-white" asChild>
+				{/* <Button variant="link" className="text-white" asChild>
 					<Link href="/entrar">
 						<User className="size-4" />
 						Entrar
 					</Link>
-				</Button>
+				</Button> */}
 
 				<Button
 					variant="outline"
 					className="text-white border-white hover:bg-app-cyan-100 hover:border-transparent font-bold gap-2"
 					asChild
 				>
-					<Link href="/cadastro">
-						Criar uma conta
+					<Link href={links["waiting-list"]}>
+						Lista de espera
 						<ArrowRight className="size-4" />
 					</Link>
 				</Button>
