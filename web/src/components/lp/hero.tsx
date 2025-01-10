@@ -23,13 +23,12 @@ export function Hero() {
 						Uma plataforma completa para gerenciar sua
 						transportadora com praticidade e eficiência.
 					</h1>
-					<p className="text-sm md:text-base mt-6 text-app-cyan-100 max-w-4xl">
+					<p className="text-base md:text-lg mt-6 text-app-cyan-100 max-w-4xl">
 						Diga adeus à confusão das planilhas e à papelada! Nossa
-						solução moderna coloca o controle total do seu negócio
-						na palma da sua mão, fornecendo dados precisos e
-						insights estratégicos para ajudar sua transportadora a
-						tomar decisões mais assertivas e acabar de vez com os
-						achismos.
+						solução te coloca no controle total do seu negócio,
+						fornecendo dados precisos e insights estratégicos
+						ajudando você a tomar as melhores decisões para sua
+						transportadora.
 					</p>
 					<div className="w-full flex flex-col xl:flex-row  gap-4 mt-8">
 						<Button
