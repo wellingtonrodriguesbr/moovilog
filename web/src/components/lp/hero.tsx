@@ -5,31 +5,33 @@ import { Button } from "@/components/ui/button";
 import { Header } from "@/components/lp/header";
 
 import { links } from "@/utils/links";
-import { WhatsappIcon } from "../icons/whatsapp-icon";
-import { ArrowUpRight } from "lucide-react";
+import { WhatsappIcon } from "@/components/icons/whatsapp-icon";
+import { AlertCircle, ArrowUpRight } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 
 export function Hero() {
 	return (
-		<section className="relative w-full min-h-screen flex flex-col bg-app-blue-500">
+		<section className="w-full min-h-screen xl:min-h-[900px] xl:h-[900px] flex flex-col bg-app-blue-500 md:bg-hero-cover bg-bottom bg-no-repeat overflow-hidden pb-12">
 			<Header />
-			<div className="flex-1 w-full h-full max-w-screen-xl mx-auto px-4 mt-14 xl:mt-20 grid grid-cols-1 gap-12 md:gap-24">
-				<div className="flex flex-col items-center">
+			<div className="relative w-full h-full max-w-screen-2xl mx-auto px-4 mt-14 xl:mt-20 grid grid-cols-1 xl:grid-cols-3 gap-12 md:gap-24">
+				<div className="flex flex-col items-start col-span-2">
 					<small className="flex items-center gap-1 text-white mb-2">
 						Esqueça as planilhas e transforme sua gestão
 						<span className="text-lg">💨</span>
 					</small>
-					<h1 className="text-center font-bold text-4xl md:text-5xl xl:text-6xl text-white leading-tight md:leading-tight xl:leading-tight">
+					<h1 className="font-medium text-4xl md:text-5xl xl:text-6xl text-white leading-tight md:leading-tight xl:leading-tight">
 						Uma plataforma completa para gerenciar sua
 						transportadora com praticidade e eficiência.
 					</h1>
-					<p className="text-center text-sm md:text-base mt-6 text-app-cyan-100 max-w-screen-md">
-						Transforme a gestão da sua transportadora com a
-						Moovilog. Diga adeus à confusão das planilhas e a
-						papelada, abrace uma solução que oferece modernidade e
-						total controle do seu negócio na palma da sua mão.
-						Estamos prontos para crescer junto com você!
+					<p className="text-sm md:text-base mt-6 text-app-cyan-100 max-w-4xl">
+						Diga adeus à confusão das planilhas e à papelada! Nossa
+						solução moderna coloca o controle total do seu negócio
+						na palma da sua mão, fornecendo dados precisos e
+						insights estratégicos para ajudar sua transportadora a
+						tomar decisões mais assertivas e acabar de vez com os
+						achismos.
 					</p>
-					<div className="w-full flex flex-col xl:flex-row items-center justify-center gap-4 mt-8">
+					<div className="w-full flex flex-col xl:flex-row  gap-4 mt-8">
 						<Button
 							className="w-full xl:w-fit bg-app-cyan-100 hover:bg-app-cyan-300 text-app-blue-900 gap-2"
 							asChild
@@ -46,17 +48,22 @@ export function Hero() {
 							</Link>
 						</Button>
 					</div>
+					<Separator className="max-w-screen-md h-[1px] my-8 opacity-15" />
+					<h3 className="flex items-start text-app-yellow-500 gap-2 max-w-2xl">
+						<AlertCircle className="size-4 min-w-4 min-h-4" />
+						Plataforma em construção, entre na lista de espera que
+						iremos te manter informado! Os 100 primeiros inscritos
+						testarão por 3 meses na faixa. Não perca essa chance.
+					</h3>
 				</div>
-				<div className="flex items-center justify-end bg-white/20 rounded-t-xl mt-auto overflow-hidden p-2 xl:p-3">
+				<div className="hidden xl:block absolute -bottom-12 right-0">
 					<Image
-						src="/platform-home.svg"
+						src="/hero-man-img.svg"
 						alt=""
-						className="rounded-t-md"
-						width={1920}
-						height={1080}
+						width={650}
+						height={650}
 						priority
 						quality={100}
-						objectFit="cover"
 					/>
 				</div>
 			</div>

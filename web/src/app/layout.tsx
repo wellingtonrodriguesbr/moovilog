@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic";
 
 import type { Metadata } from "next";
-import { DM_Sans } from "next/font/google";
+import { Fira_Sans } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { ReactQueryProvider } from "@/providers/react-query-provider";
 import { Toaster } from "@/components/ui/sonner";
@@ -13,14 +13,14 @@ const SidebarProvider = dynamic(() => import("@/providers/sidebar-provider"), {
 
 import "./globals.css";
 
-const sans = DM_Sans({
+const sans = Fira_Sans({
 	subsets: ["latin"],
 	weight: ["400", "500", "600", "700"],
 	variable: "--font-sans",
 });
 
 export const metadata: Metadata = {
-	title: "Moovilog | Gerencie toda sua operação logística em uma única plataforma.",
+	title: "Moovilog | Organize, gerencie e impulsione sua transportadora.",
 	description: "",
 };
 

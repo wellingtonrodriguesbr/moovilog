@@ -17,13 +17,6 @@ export function Header() {
 				priority
 			/>
 			<div className="flex items-center gap-2">
-				{/* <Button variant="link" className="text-white" asChild>
-					<Link href="/entrar">
-						<User className="size-4" />
-						Entrar
-					</Link>
-				</Button> */}
-
 				<Button
 					variant="outline"
 					className="text-white border-white hover:bg-app-cyan-100 hover:border-transparent gap-2"

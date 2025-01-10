@@ -21,6 +21,9 @@ const config = {
 			fontFamily: {
 				sans: ["var(--font-sans)"],
 			},
+			backgroundImage: {
+				"hero-cover": "url('/hero-cover.svg')",
+			},
 			colors: {
 				app: {
 					blue: {
