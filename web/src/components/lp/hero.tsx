@@ -39,7 +39,13 @@ export function Hero() {
 								Solicitar uma demonstração gratuita
 							</Link>
 						</Button>
-						<PlatformDemoDialog />
+						<Button variant="link" className="text-white" asChild>
+							<Link href={links["whatsapp-doubts"]}>
+								<WhatsappIcon className="size-4" />
+								Quero tirar algumas dúvidas
+							</Link>
+						</Button>
+						{/* <PlatformDemoDialog /> */}
 					</div>
 				</div>
 				<div className="flex items-center justify-end bg-white/20 rounded-t-xl mt-auto overflow-hidden p-2 xl:p-3">
