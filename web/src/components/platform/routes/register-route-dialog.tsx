@@ -11,6 +11,7 @@ import {
 	DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { RegisterRouteForm } from "@/components/platform/routes/register-route-form";
 
 import { Plus } from "lucide-react";
 
@@ -36,7 +37,7 @@ export function RegisterRouteDialog() {
 						Preencha os campos abaixo para cadastrar uma nova rota.
 					</DialogDescription>
 				</DialogHeader>
-				{/* <RegisterRouteForm onCloseDialog={handleCloseDialog} /> */}
+				<RegisterRouteForm onCloseDialog={handleCloseDialog} />
 			</DialogContent>
 		</Dialog>
 	);

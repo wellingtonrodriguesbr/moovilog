@@ -125,6 +125,7 @@ export function RegisterCompanyAddressForm() {
 										className="border-0 rounded-none outline-none focus-visible:ring-0"
 										placeholder="00000-000"
 										autoComplete="off"
+										autoCorrect="off"
 										{...field}
 										onChange={({ currentTarget }) =>
 											form.setValue(

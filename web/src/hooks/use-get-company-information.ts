@@ -1,5 +1,6 @@
 import { api } from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
+import { usePathname } from "next/navigation";
 import { toast } from "sonner";
 
 export interface Company {
@@ -47,10 +48,12 @@ interface CompanyInformationResponse {
 }
 
 export function useGetCompanyInformation() {
+	const pathName = usePathname();
 	const { data: company, isPending: isGetCompanyInformationPending } =
 		useQuery({
 			queryKey: ["company-information"],
 			queryFn: handleGetCompanyInformation,
+			enabled: !pathName.includes("/cadastro/empresa"),
 		});
 
 	async function handleGetCompanyInformation() {
