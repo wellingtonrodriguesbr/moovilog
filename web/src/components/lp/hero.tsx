@@ -51,8 +51,8 @@ export function Hero() {
 					<h3 className="flex items-start text-app-yellow-500 gap-2 max-w-2xl">
 						<AlertCircle className="size-4 min-w-4 min-h-4" />
 						Plataforma em construção, entre na lista de espera que
-						iremos te manter informado! Os 100 primeiros inscritos
-						testarão por 3 meses na faixa. Não perca essa chance.
+						iremos te manter informado! Todos da lista poderão
+						testar a plataforma na faixa. Não perca essa chance.
 					</h3>
 				</div>
 				<div className="hidden xl:block absolute -bottom-12 right-0">
