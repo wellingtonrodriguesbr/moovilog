@@ -6,7 +6,7 @@ import { InMemoryCitiesInRouteRepository } from "@/repositories/in-memory/in-mem
 import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
 import { InMemoryCompaniesRepository } from "@/repositories/in-memory/in-memory-companies-repository";
 
-import { RegisterRoutesUseCase } from "@/use-cases/register-route-use-case";
+import { RegisterRouteUseCase } from "@/use-cases/register-route-use-case";
 import { BadRequestError } from "@/use-cases/errors/bad-request-error";
 import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
 
@@ -16,7 +16,7 @@ let companiesRepository: InMemoryCompaniesRepository;
 let companyMembersRepository: InMemoryCompanyMembersRepository;
 let routesRepository: InMemoryRoutesRepository;
 let citiesInRouteRepository: InMemoryCitiesInRouteRepository;
-let sut: RegisterRoutesUseCase;
+let sut: RegisterRouteUseCase;
 
 describe("Register route use case", () => {
 	beforeEach(async () => {
@@ -26,7 +26,7 @@ describe("Register route use case", () => {
 		citiesInRouteRepository = new InMemoryCitiesInRouteRepository();
 		routesRepository = new InMemoryRoutesRepository();
 
-		sut = new RegisterRoutesUseCase(
+		sut = new RegisterRouteUseCase(
 			companyMembersRepository,
 			routesRepository,
 			citiesInRouteRepository

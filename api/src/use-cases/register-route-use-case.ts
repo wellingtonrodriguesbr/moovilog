@@ -6,17 +6,17 @@ import { RoutesRepository } from "@/repositories/routes-repository";
 import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
 import { BadRequestError } from "@/use-cases/errors/bad-request-error";
 
-interface RegisterRoutesUseCaseRequest {
+interface RegisterRouteUseCaseRequest {
 	name: string;
 	citiesIds: string[];
 	userId: string;
 }
 
-interface RegisterRoutesUseCaseResponse {
+interface RegisterRouteUseCaseResponse {
 	route: IRoute;
 }
 
-export class RegisterRoutesUseCase {
+export class RegisterRouteUseCase {
 	constructor(
 		private companyMembersRepository: CompanyMembersRepository,
 		private routesRepository: RoutesRepository,
@@ -27,7 +27,7 @@ export class RegisterRoutesUseCase {
 		name,
 		citiesIds,
 		userId,
-	}: RegisterRoutesUseCaseRequest): Promise<RegisterRoutesUseCaseResponse> {
+	}: RegisterRouteUseCaseRequest): Promise<RegisterRouteUseCaseResponse> {
 		if (!citiesIds || citiesIds.length === 0) {
 			throw new BadRequestError("At least one city ID must be provided");
 		}
