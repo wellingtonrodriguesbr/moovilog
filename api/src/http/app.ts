@@ -12,6 +12,7 @@ import { companyMembersRoutes } from "@/http/routes/company-members";
 import { authLinksRoutes } from "@/http/routes/auth-links";
 import { routesInCompanyRoutes } from "@/http/routes/routes-in-company";
 import { citiesRoutes } from "@/http/routes/cities";
+import { areasRoutes } from "@/http/routes/areas";
 
 import { env } from "@/env";
 
@@ -49,3 +50,4 @@ app.register(freightsRoutes);
 app.register(authLinksRoutes);
 app.register(routesInCompanyRoutes);
 app.register(citiesRoutes);
+app.register(areasRoutes);

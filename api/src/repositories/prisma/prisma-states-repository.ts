@@ -39,4 +39,14 @@ export class PrismaStatesRepository implements StatesRepository {
 
 		return state;
 	}
+
+	async findByAcronym(acronym: string) {
+		const state = await prisma.state.findUnique({
+			where: {
+				acronym,
+			},
+		});
+
+		return state;
+	}
 }

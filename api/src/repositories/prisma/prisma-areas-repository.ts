@@ -11,4 +11,14 @@ export class PrismaAreasRepository implements AreasRepository {
 
 		return area;
 	}
+
+	async findManyByStateId(stateId: string) {
+		const areas = await prisma.area.findMany({
+			where: {
+				stateId,
+			},
+		});
+
+		return areas;
+	}
 }

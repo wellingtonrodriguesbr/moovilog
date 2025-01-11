@@ -4,6 +4,7 @@ import { CitiesRepository } from "@/repositories/cities-repository";
 import { IAddress } from "@/interfaces/address";
 import { AddressesRepository } from "@/repositories/addresses-repository";
 import { StatesRepository } from "@/repositories/states-repository";
+import { STATES } from "@/utils/mocks/states";
 
 interface RegisterCompanyAddressUseCaseRequest {
 	stateAcronym: string;
@@ -19,36 +20,6 @@ interface RegisterCompanyAddressUseCaseRequest {
 interface RegisterCompanyAddressUseCaseResponse {
 	address: IAddress;
 }
-
-const STATES: Record<string, string> = {
-	AC: "Acre",
-	AL: "Alagoas",
-	AP: "Amapá",
-	AM: "Amazonas",
-	BA: "Bahia",
-	CE: "Ceará",
-	DF: "Distrito Federal",
-	ES: "Espírito Santo",
-	GO: "Goiás",
-	MA: "Maranhão",
-	MT: "Mato Grosso",
-	MS: "Mato Grosso do Sul",
-	MG: "Minas Gerais",
-	PA: "Pará",
-	PB: "Paraíba",
-	PR: "Paraná",
-	PE: "Pernambuco",
-	PI: "Piauí",
-	RJ: "Rio de Janeiro",
-	RN: "Rio Grande do Norte",
-	RS: "Rio Grande do Sul",
-	RO: "Rondônia",
-	RR: "Roraima",
-	SC: "Santa Catarina",
-	SP: "São Paulo",
-	SE: "Sergipe",
-	TO: "Tocantins",
-};
 
 export class RegisterCompanyAddressUseCase {
 	constructor(

@@ -52,13 +52,13 @@ describe("Register company address use case", () => {
 			id: "fake-city-id",
 			name: "São Paulo",
 			stateId: "fake-state-id",
+			areaId: "fake-area-id",
 		});
 	});
 
 	it("should be able to register company address", async () => {
 		const { address } = await sut.execute({
 			userId: "fake-user-id",
-			stateName: "São Paulo",
 			stateAcronym: "SP",
 			cityName: "São Paulo",
 			street: "fake street name",

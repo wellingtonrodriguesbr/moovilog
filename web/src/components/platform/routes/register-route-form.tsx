@@ -23,28 +23,22 @@ import { useForm } from "react-hook-form";
 // import { useRegisterRoute } from "@/hooks/use-register-route";
 import { toast } from "sonner";
 
-import { formatCPF } from "@/utils/format-cpf";
-import { formatPhone } from "@/utils/format-phone";
-
 import { Loader2 } from "lucide-react";
+import { STATES_ARRAY } from "@/utils/mocks/states";
 
 interface RegisterRouteFormProps {
 	onCloseDialog: () => void;
 }
 
 const formSchema = z.object({
-	name: z.string().min(3, { message: "Digite o nome completo" }),
-	documentNumber: z
+	name: z.string().min(3, { message: "Dê um nome para rota" }),
+	stateAcronym: z
 		.string()
-		.min(11, { message: "Digite um CPF válido" })
-		.transform((value) => value.replace(/\D/g, ""))
-		.transform((cpf) => cpf.slice(0, 11)),
-	phone: z
-		.string()
-		.min(11, { message: "Digite um telefone válido" })
-		.transform((value) => value.replace(/\D/g, ""))
-		.transform((phone) => phone.slice(0, 11)),
-	type: z.enum(["AGGREGATE", "INTERNAL", "FREELANCER"]),
+		.min(1, { message: "Selecione um estado" })
+		.transform((value) => value.toLowerCase()),
+	citiesIds: z
+		.array(z.string())
+		.min(1, { message: "Selecione pelo menos uma cidade" }),
 });
 
 export function RegisterRouteForm({ onCloseDialog }: RegisterRouteFormProps) {
@@ -54,9 +48,8 @@ export function RegisterRouteForm({ onCloseDialog }: RegisterRouteFormProps) {
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			name: "",
-			documentNumber: "",
-			phone: "",
-			type: undefined,
+			stateAcronym: "",
+			citiesIds: [],
 		},
 	});
 
@@ -79,50 +72,83 @@ export function RegisterRouteForm({ onCloseDialog }: RegisterRouteFormProps) {
 			>
 				<FormField
 					control={form.control}
-					name="documentNumber"
+					name="stateAcronym"
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel>CPF</FormLabel>
-							<FormControl>
-								<div className="flex items-center rounded-md overflow-hidden border pr-4">
-									<Input
-										className="border-0 rounded-none outline-none focus-visible:ring-0"
-										placeholder="000.000.000-00"
-										autoComplete="off"
-										{...field}
-										value={formatCPF(field.value)}
-									/>
-								</div>
-							</FormControl>
+							<FormLabel>Estado</FormLabel>
+							<Select onValueChange={field.onChange}>
+								<FormControl>
+									<SelectTrigger>
+										<SelectValue placeholder="Selecione um estado" />
+									</SelectTrigger>
+								</FormControl>
+								<SelectContent>
+									{STATES_ARRAY.map((state) => (
+										<SelectItem
+											value={state.acronym}
+											key={state.acronym}
+										>
+											{state.name}
+										</SelectItem>
+									))}
+								</SelectContent>
+							</Select>
 							<FormMessage />
 						</FormItem>
 					)}
 				/>
+
+				<FormField
+					control={form.control}
+					name="citiesIds"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>Região de atendimento</FormLabel>
+							<Select
+								disabled={form.getValues("stateAcronym") === ""}
+								onValueChange={field.onChange}
+							>
+								<FormControl>
+									<SelectTrigger>
+										<SelectValue placeholder="Selecione uma região" />
+									</SelectTrigger>
+								</FormControl>
+								<SelectContent>
+									<SelectItem value="INTERNAL">
+										Interno
+									</SelectItem>
+									<SelectItem value="AGGREGATE">
+										Agregado
+									</SelectItem>
+									<SelectItem value="FREELANCER">
+										Freelancer
+									</SelectItem>
+								</SelectContent>
+							</Select>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+
 				<FormField
 					control={form.control}
 					name="name"
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel>Nome completo</FormLabel>
+							<FormLabel>Nome da rota</FormLabel>
 							<FormControl>
-								<Input placeholder="" {...field} />
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-				<FormField
-					control={form.control}
-					name="phone"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Celular</FormLabel>
-							<FormControl>
-								<Input
-									{...field}
-									placeholder="(00) 00000-0000"
-									value={formatPhone(field.value)}
-								/>
+								<div className="flex items-center rounded-md overflow-hidden border pr-4">
+									<Input
+										className="border-0 rounded-none outline-none focus-visible:ring-0"
+										placeholder=""
+										autoComplete="off"
+										disabled={
+											form.getValues("stateAcronym") ===
+											""
+										}
+										{...field}
+									/>
+								</div>
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -131,17 +157,17 @@ export function RegisterRouteForm({ onCloseDialog }: RegisterRouteFormProps) {
 
 				<FormField
 					control={form.control}
-					name="type"
+					name="citiesIds"
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel>Tipo de motorista</FormLabel>
+							<FormLabel>Cidades</FormLabel>
 							<Select
+								disabled={form.getValues("stateAcronym") === ""}
 								onValueChange={field.onChange}
-								defaultValue={field.value}
 							>
 								<FormControl>
 									<SelectTrigger>
-										<SelectValue placeholder="Selecione uma opção" />
+										<SelectValue placeholder="Selecione as cidades" />
 									</SelectTrigger>
 								</FormControl>
 								<SelectContent>
