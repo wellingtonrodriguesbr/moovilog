@@ -10,6 +10,7 @@ export class InMemoryRoutesRepository implements RoutesRepository {
 			id: data.id ?? randomUUID(),
 			name: data.name,
 			companyId: data.companyId,
+			creatorId: data.creatorId,
 			createdAt: new Date(),
 			updatedAt: new Date(),
 		};
@@ -26,5 +27,17 @@ export class InMemoryRoutesRepository implements RoutesRepository {
 		}
 
 		return state;
+	}
+
+	async findRouteInCompanyWithSameName(name: string, companyId: string) {
+		const route = this.items.find(
+			(item) => item.name === name && item.companyId === companyId
+		);
+
+		if (!route) {
+			return null;
+		}
+
+		return route;
 	}
 }

@@ -24,4 +24,15 @@ export class PrismaRoutesRepository implements RoutesRepository {
 
 		return route;
 	}
+
+	async findRouteInCompanyWithSameName(name: string, companyId: string) {
+		const route = await prisma.route.findFirst({
+			where: {
+				name,
+				companyId,
+			},
+		});
+
+		return route;
+	}
 }

@@ -88,6 +88,7 @@ describe("Register freight use case", () => {
 			id: "fake-route-01",
 			name: "Fake route",
 			companyId: "company-id-01",
+			creatorId: "company-member-id-01",
 		});
 	});
 
