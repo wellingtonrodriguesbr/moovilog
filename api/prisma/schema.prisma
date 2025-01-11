@@ -63,6 +63,7 @@ model CompanyMember {
   drivers  Driver[]
   freights Freight[]
   vehicles Vehicle[]
+  routes   Route[]
 
   @@unique([companyId, userId])
   @@map("company_members")
@@ -157,6 +158,9 @@ model Route {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+  creatorId String        @map("creator_id")
+  creator   CompanyMember @relation(fields: [creatorId], references: [id])
+
   companyId String  @map("company_id")
   company   Company @relation(fields: [companyId], references: [id])
 
@@ -170,7 +174,7 @@ model CityInRoute {
   id String @id @default(uuid())
 
   routeId String @map("route_id")
-  route   Route  @relation(fields: [routeId], references: [id])
+  route   Route  @relation(fields: [routeId], references: [id], onDelete: Cascade)
 
   cityId String @map("city_id")
   city   City   @relation(fields: [cityId], references: [id])
