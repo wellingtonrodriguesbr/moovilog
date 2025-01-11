@@ -1,6 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { CitiesRepository } from "../cities-repository";
-import { City } from "@prisma/client";
+import { CitiesRepository } from "@/repositories/cities-repository";
 
 export class PrismaCitiesRepository implements CitiesRepository {
 	async findByNameAndState(name: string) {
@@ -10,24 +9,26 @@ export class PrismaCitiesRepository implements CitiesRepository {
 			},
 		});
 
-		if (!city) {
-			return null;
-		}
-
 		return city;
 	}
 
-	async findById(id: string): Promise<City | null> {
+	async findById(id: string) {
 		const city = await prisma.city.findUnique({
 			where: {
 				id,
 			},
 		});
 
-		if (!city) {
-			return null;
-		}
-
 		return city;
+	}
+
+	async findManyByAreaId(areaId: string) {
+		const cities = await prisma.city.findMany({
+			where: {
+				areaId,
+			},
+		});
+
+		return cities;
 	}
 }

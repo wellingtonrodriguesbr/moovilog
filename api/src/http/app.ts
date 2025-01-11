@@ -11,6 +11,7 @@ import { freightsRoutes } from "@/http/routes/freights";
 import { companyMembersRoutes } from "@/http/routes/company-members";
 import { authLinksRoutes } from "@/http/routes/auth-links";
 import { routesInCompanyRoutes } from "@/http/routes/routes-in-company";
+import { citiesRoutes } from "@/http/routes/cities";
 
 import { env } from "@/env";
 
@@ -47,3 +48,4 @@ app.register(vehiclesRoutes);
 app.register(freightsRoutes);
 app.register(authLinksRoutes);
 app.register(routesInCompanyRoutes);
+app.register(citiesRoutes);

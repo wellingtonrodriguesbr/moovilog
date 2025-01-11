@@ -10,6 +10,7 @@ export class InMemoryCitiesRepository implements CitiesRepository {
 			id: data.id ?? randomUUID(),
 			name: data.name,
 			stateId: data.stateId,
+			areaId: data.areaId,
 		};
 
 		this.items.push(city);
@@ -32,5 +33,11 @@ export class InMemoryCitiesRepository implements CitiesRepository {
 		if (!city) return null;
 
 		return city;
+	}
+
+	async findManyByAreaId(areaId: string) {
+		const cities = this.items.filter((item) => item.areaId === areaId);
+
+		return cities;
 	}
 }

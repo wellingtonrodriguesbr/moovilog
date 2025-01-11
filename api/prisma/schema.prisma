@@ -162,7 +162,7 @@ model Route {
   creator   CompanyMember @relation(fields: [creatorId], references: [id])
 
   companyId String  @map("company_id")
-  company   Company @relation(fields: [companyId], references: [id])
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
   citiesInRoute CityInRoute[]
   freights      Freight[]
@@ -196,7 +196,7 @@ model State {
 model Area {
   id   String @id @default(uuid())
   name String
-  code String @unique
+  code Int    @unique
 
   stateId String @map("state_id")
   state   State  @relation(fields: [stateId], references: [id], onDelete: Cascade)

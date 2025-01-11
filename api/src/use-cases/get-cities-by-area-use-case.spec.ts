@@ -1,36 +1,39 @@
-import { InMemoryCompaniesRepository } from "@/repositories/in-memory/in-memory-companies-repository";
-import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
 import { beforeEach, describe, expect, it } from "vitest";
-import { GetCompanyInformationUseCase } from "./get-company-information-use-case";
-import { InMemoryAddressesRepository } from "@/repositories/in-memory/in-memory-addresses-repository";
-import { InMemoryCitiesRepository } from "@/repositories/in-memory/in-memory-cities-repository";
+
+import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
+import { InMemoryCompaniesRepository } from "@/repositories/in-memory/in-memory-companies-repository";
 import { InMemoryStatesRepository } from "@/repositories/in-memory/in-memory-states-repository";
+
 import { InMemoryCompanyMembersRepository } from "@/repositories/in-memory/in-memory-company-members-repository";
+import { InMemoryCitiesRepository } from "@/repositories/in-memory/in-memory-cities-repository";
+import { InMemoryAreasRepository } from "@/repositories/in-memory/in-memory-areas-repository";
+
+import { GetCitiesByAreaUseCase } from "@/use-cases/get-cities-by-area-use-case";
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
-let companyMembersRepository: InMemoryCompanyMembersRepository;
-let addressesRepository: InMemoryAddressesRepository;
-let citiesRepository: InMemoryCitiesRepository;
 let statesRepository: InMemoryStatesRepository;
 
-let sut: GetCompanyInformationUseCase;
+let companyMembersRepository: InMemoryCompanyMembersRepository;
+let citiesRepository: InMemoryCitiesRepository;
+let areasRepository: InMemoryAreasRepository;
 
-describe("Get company information use case", () => {
+let sut: GetCitiesByAreaUseCase;
+
+describe("Get cities by area use case", () => {
 	beforeEach(async () => {
 		usersRepository = new InMemoryUsersRepository();
 		companiesRepository = new InMemoryCompaniesRepository();
-		companyMembersRepository = new InMemoryCompanyMembersRepository();
-		addressesRepository = new InMemoryAddressesRepository();
-		citiesRepository = new InMemoryCitiesRepository();
 		statesRepository = new InMemoryStatesRepository();
 
-		sut = new GetCompanyInformationUseCase(
+		companyMembersRepository = new InMemoryCompanyMembersRepository();
+		citiesRepository = new InMemoryCitiesRepository();
+		areasRepository = new InMemoryAreasRepository();
+
+		sut = new GetCitiesByAreaUseCase(
 			companyMembersRepository,
-			companiesRepository,
-			addressesRepository,
 			citiesRepository,
-			statesRepository
+			areasRepository
 		);
 
 		await usersRepository.create({
@@ -62,36 +65,28 @@ describe("Get company information use case", () => {
 			acronym: "SP",
 		});
 
+		await areasRepository.create({
+			id: "fake-area-id",
+			name: "São Paulo",
+			code: 15,
+			stateId: "fake-state-id",
+		});
+
 		await citiesRepository.create({
 			id: "fake-city-id",
 			name: "São Paulo",
 			stateId: "fake-state-id",
 			areaId: "fake-area-id",
 		});
-
-		await addressesRepository.create({
-			id: "fake-address-id",
-			cityId: "fake-city-id",
-			street: "fake street name",
-			neighborhood: "fake neighborhood",
-			number: 200,
-			zipCode: "00000-000",
-		});
-
-		await companiesRepository.setCompanyAddress(
-			"company-id-01",
-			"fake-address-id"
-		);
 	});
 
-	it("should be able to get company information", async () => {
-		const { company, companyAddress } = await sut.execute({
+	it("should be able to get cities by area id", async () => {
+		const { cities } = await sut.execute({
 			userId: "john-doe-id-01",
+			areaId: "fake-area-id",
 		});
 
-		expect(company.id).toEqual("company-id-01");
-		expect(company.size).toEqual("MEDIUM");
-		expect(company.addressId).toEqual("fake-address-id");
-		expect(companyAddress.state.id).toEqual("fake-state-id");
+		expect(cities).toHaveLength(1);
+		expect(citiesRepository.items[0].areaId).toStrictEqual("fake-area-id");
 	});
 });
