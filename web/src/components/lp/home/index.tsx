@@ -5,11 +5,11 @@ import { Benefits } from "@/components/lp/benefits";
 
 export function Home() {
 	return (
-		<div className="space-y-12 pb-12">
+		<div>
 			<Hero />
 			<AboutPlatform />
 			<Benefits />
-			{/* <Footer /> */}
+			<Footer />
 		</div>
 	);
 }

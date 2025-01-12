@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
+import { MisteriousGift } from "@/components/lp/misterious-gift";
 import { links } from "@/utils/links";
 
 import { WhatsappIcon } from "@/components/icons/whatsapp-icon";
@@ -9,7 +10,7 @@ import { ArrowUpRight, Check } from "lucide-react";
 
 export function Benefits() {
 	return (
-		<section className="bg-white">
+		<section className="relative bg-white">
 			<div className="w-full h-full max-w-screen-2xl mx-auto px-4 py-16 flex flex-col xl:flex-row gap-12 xl:gap-8 justify-center">
 				<div className="relative xl:sticky top-4 self-start">
 					<Image
@@ -73,6 +74,8 @@ export function Benefits() {
 					</div>
 				</div>
 			</div>
+
+			<MisteriousGift />
 		</section>
 	);
 }

@@ -24,7 +24,7 @@ import { links } from "@/utils/links";
 
 export function AboutPlatform() {
 	return (
-		<section className="w-full h-full max-w-screen-2xl mx-auto px-4 flex flex-col gap-8 justify-center">
+		<section className="w-full h-full max-w-screen-2xl mx-auto px-4 flex flex-col gap-8 justify-center my-12">
 			<div>
 				<small className="flex items-center gap-1 mb-2 before:w-8 before:h-[1px] before:bg-app-blue-300">
 					Sobre a plataforma
