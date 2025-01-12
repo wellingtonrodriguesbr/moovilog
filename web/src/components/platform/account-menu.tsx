@@ -74,7 +74,7 @@ export function AccountMenu() {
 					<DropdownMenuItem className="hover:bg-zinc-100" asChild>
 						<Link
 							className="gap-2 cursor-pointer"
-							href="/minha-empresa/dados-cadastrais"
+							href="/dados-cadastrais"
 						>
 							<Building className="size-4" />
 							Dados da empresa

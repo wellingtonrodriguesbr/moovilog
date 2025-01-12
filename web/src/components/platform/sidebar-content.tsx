@@ -7,6 +7,8 @@ import { useGetCompanyInformation } from "@/hooks/use-get-company-information";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatCNPJ } from "@/utils/format-cnpj";
 import {
+	BarChart,
+	Group,
 	Handshake,
 	Home,
 	Landmark,
@@ -77,15 +79,15 @@ const ITEMS = [
 		url: "/inicio",
 		icon: <Home className="size-4" />,
 	},
-	// {
-	// 	name: "Comercial",
-	// 	url: "/comercial",
-	// 	icon: <BarChart className="size-4" />,
-	// },
 	{
 		name: "Financeiro",
 		url: "/financeiro",
 		icon: <Landmark className="size-4" />,
+	},
+	{
+		name: "Operacional",
+		url: "/operacional",
+		icon: <Group className="size-4" />,
 	},
 	{
 		name: "Fretes",
@@ -111,5 +113,10 @@ const ITEMS = [
 		name: "Colaboradores",
 		url: "/minha-empresa/colaboradores",
 		icon: <Users className="size-4" />,
+	},
+	{
+		name: "Gestão de desempenho",
+		url: "/gestao-de-desempenho",
+		icon: <BarChart className="size-4" />,
 	},
 ];

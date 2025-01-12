@@ -15,12 +15,14 @@ export const config = {
 	matcher: [
 		"/inicio",
 		"/financeiro",
+		"/operacional/:path*",
 		"/fretes",
 		"/rotas",
 		"/motoristas",
 		"/veiculos",
 		"/meus-dados",
-		"/minha-empresa/colaboradores",
-		"/minha-empresa/dados-cadastrais",
+		"/colaboradores",
+		"/dados-cadastrais",
+		"/gestao-de-desempenho",
 	],
 };

@@ -1,5 +1,7 @@
 "use client";
 
+import React from "react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import {
@@ -10,39 +12,49 @@ import {
 	BreadcrumbPage,
 	BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import Link from "next/link";
-
-const ROUTES_MAP: Record<string, string> = {
-	"/inicio": "Início",
-	"/financeiro": "Financeiro",
-	"/fretes": "Fretes",
-	"/rotas": "Rotas",
-	"/motoristas": "Motoristas",
-	"/veiculos": "Veículos",
-	"/meus-dados": "Meu perfil",
-	"/minha-empresa/colaboradores": "Colaboradores",
-	"/minha-empresa/dados-cadastrais": "Dados da empresa",
-};
+import { ROUTES_MAP } from "@/utils/mocks/routes-mapping";
 
 export function BreadcrumbPlatform() {
 	const path = usePathname();
+	const paths = path.split("/").filter(Boolean);
 
 	return (
 		<Breadcrumb>
 			<BreadcrumbList>
-				<BreadcrumbItem className="ml-1">
-					<BreadcrumbLink asChild>
-						<Link href="/inicio">Início</Link>
-					</BreadcrumbLink>
-				</BreadcrumbItem>
-				{path !== "/inicio" && (
-					<>
-						<BreadcrumbSeparator />
-						<BreadcrumbItem>
-							<BreadcrumbPage>{ROUTES_MAP[path]}</BreadcrumbPage>
-						</BreadcrumbItem>
-					</>
+				{!paths.includes("inicio") && (
+					<BreadcrumbItem className="ml-1">
+						<BreadcrumbLink asChild>
+							<Link href="/inicio">Início</Link>
+						</BreadcrumbLink>
+					</BreadcrumbItem>
 				)}
+
+				{paths.map((segment, index) => {
+					const accumulatedPath = `/${paths.slice(0, index + 1).join("/")}`;
+					const isLast = index === paths.length - 1;
+
+					return (
+						<React.Fragment key={accumulatedPath}>
+							{!path.includes("inicio") && (
+								<BreadcrumbSeparator />
+							)}
+							<BreadcrumbItem>
+								{isLast ? (
+									<BreadcrumbPage>
+										{ROUTES_MAP[accumulatedPath] || segment}
+									</BreadcrumbPage>
+								) : (
+									<BreadcrumbLink asChild>
+										<Link href={accumulatedPath}>
+											{ROUTES_MAP[accumulatedPath] ||
+												segment}
+										</Link>
+									</BreadcrumbLink>
+								)}
+							</BreadcrumbItem>
+						</React.Fragment>
+					);
+				})}
 			</BreadcrumbList>
 		</Breadcrumb>
 	);

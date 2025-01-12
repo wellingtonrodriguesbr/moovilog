@@ -2,11 +2,11 @@ import { Metadata } from "next";
 import { UnderConstruction } from "@/components/under-construction";
 
 export const metadata: Metadata = {
-	title: "Fretes | Moovilog",
+	title: "Suprimentos | Moovilog",
 	description: "",
 };
 
-export default function FreightsPagePlatform() {
+export default function OperationalSuppliesPagePlatform() {
 	return (
 		<main>
 			<UnderConstruction />

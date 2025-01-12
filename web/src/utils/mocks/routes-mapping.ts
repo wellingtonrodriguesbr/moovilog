@@ -1,0 +1,16 @@
+export const ROUTES_MAP: Record<string, string> = {
+	"/inicio": "Início",
+	"/financeiro": "Financeiro",
+	"/operacional": "Operacional",
+	"/operacional/programacao-do-dia": "Programação do dia",
+	"/operacional/suprimentos": "Suprimentos",
+	"/operacional/avisos": "Avisos",
+	"/fretes": "Fretes",
+	"/rotas": "Rotas",
+	"/motoristas": "Motoristas",
+	"/veiculos": "Veículos",
+	"/meus-dados": "Meu perfil",
+	"/colaboradores": "Colaboradores",
+	"/dados-cadastrais": "Dados da empresa",
+	"/gestao-de-desempenho": "Gestão de desempenho",
+};

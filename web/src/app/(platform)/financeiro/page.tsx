@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { UnderConstruction } from "@/components/under-construction";
 
 export const metadata: Metadata = {
 	title: "Financeiro | Moovilog",
@@ -6,5 +7,9 @@ export const metadata: Metadata = {
 };
 
 export default function FinancialPagePlatform() {
-	return <main></main>;
+	return (
+		<main>
+			<UnderConstruction />
+		</main>
+	);
 }
