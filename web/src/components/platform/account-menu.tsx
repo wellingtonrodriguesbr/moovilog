@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 import {
 	DropdownMenu,
@@ -28,6 +28,7 @@ import { links } from "@/utils/links";
 
 export function AccountMenu() {
 	const router = useRouter();
+	const path = usePathname();
 	const { profile } = useGetProfile();
 	const { logout, isPendingLogout } = useLogout();
 
@@ -42,7 +43,8 @@ export function AccountMenu() {
 		<Dialog>
 			<DropdownMenu>
 				<DropdownMenuTrigger
-					className="flex items-center gap-2 cursor-pointer"
+					className="flex items-center gap-2 cursor-pointer group"
+					disabled={path.includes("/cadastro")}
 					asChild
 				>
 					<Avatar>

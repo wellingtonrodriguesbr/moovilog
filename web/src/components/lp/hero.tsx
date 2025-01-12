@@ -6,7 +6,7 @@ import { Header } from "@/components/lp/header";
 
 import { links } from "@/utils/links";
 import { WhatsappIcon } from "@/components/icons/whatsapp-icon";
-import { AlertCircle, ArrowUpRight } from "lucide-react";
+import { AlertCircle, ArrowUpRight, ChevronsDown } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 
 export function Hero() {
@@ -64,6 +64,10 @@ export function Hero() {
 						priority
 						quality={100}
 					/>
+				</div>
+				<div className="hidden md:flex absolute left-4 bottom-2 flex-col items-center justify-center text-app-cyan-500">
+					<ChevronsDown className="size-8 animate-bounce" />
+					<ChevronsDown className="size-8 animate-bounce -mt-14" />
 				</div>
 			</div>
 		</section>

@@ -9,9 +9,12 @@ import {
 } from "@/components/ui/card";
 import {
 	ArrowUpRight,
+	BarChart,
+	Group,
 	Handshake,
 	Landmark,
 	LayoutGrid,
+	Plus,
 	Route,
 	Truck,
 	Users,
@@ -23,7 +26,7 @@ export function AboutPlatform() {
 	return (
 		<section className="w-full h-full max-w-screen-2xl mx-auto px-4 flex flex-col gap-8 justify-center">
 			<div>
-				<small className="flex items-center gap-1 mb-2 before:w-12 before:h-[1px] before:bg-app-blue-400">
+				<small className="flex items-center gap-1 mb-2 before:w-8 before:h-[1px] before:bg-app-blue-300">
 					Sobre a plataforma
 				</small>
 				<div className="flex flex-col md:flex-row gap-4 items-start justify-between">
@@ -33,9 +36,10 @@ export function AboutPlatform() {
 					</h2>
 					<div className="space-y-2 max-w-screen-sm">
 						<p>
-							Com a Moovilog você abandonará de vez as milhares de
-							planilhas e as papeladas. Você terá acesso a uma
-							plataforma completa para impulsionar sua gestão.
+							Com a Moovilog, você deixará para trás as inúmeras
+							planilhas e a papelada. Tenha acesso a uma
+							plataforma completa para transformar e impulsionar a
+							gestão da sua transportadora.
 						</p>
 						<Button
 							variant="link"
@@ -68,6 +72,18 @@ export function AboutPlatform() {
 						<CardContent></CardContent>
 					</Card>
 				))}
+				<Card className="col-span-1 md:col-span-2 xl:col-span-1 bg-app-yellow-200 border">
+					<CardHeader className="gap-2">
+						<div className="w-fit flex items-center justify-center border border-app-blue-900/50 rounded-full p-2 mb-2">
+							<Plus className="size-4 text-app-blue-900" />
+						</div>
+						<CardTitle className="flex items-center gap-2 text-app-blue-900">
+							E Muitos mais...
+						</CardTitle>
+						<CardDescription className="text-zinc-600"></CardDescription>
+					</CardHeader>
+					<CardContent></CardContent>
+				</Card>
 			</div>
 		</section>
 	);
@@ -85,6 +101,12 @@ const ITEMS = [
 		description:
 			"Organize e monitore os fretes de forma eficiente. Planeje, acompanhe e registre informações importantes sobre cada operação, desde o despacho até a entrega, garantindo maior controle e otimização de tempo e custos.",
 		icon: <LayoutGrid className="size-4 text-app-blue-500" />,
+	},
+	{
+		title: "Operacional",
+		description:
+			"Centralize as operações do dia a dia da sua transportadora. Consulte a programação diária com tarefas e entregas, gerencie o estoque de suprimentos essenciais e crie avisos importantes para manter toda a equipe informada e alinhada. Essa seção garante que a operação funcione de maneira organizada e sem contratempos.",
+		icon: <Group className="size-4 text-app-blue-500" />,
 	},
 	{
 		title: "Rotas",
@@ -109,5 +131,11 @@ const ITEMS = [
 		description:
 			"Centralize a gestão da equipe administrativa e operacional. Acompanhe informações de cadastro, cargos, permissões e desempenho, promovendo uma gestão eficiente e integrada de todos os colaboradores da transportadora.",
 		icon: <Users className="size-4 text-app-blue-500" />,
+	},
+	{
+		title: "Gestão de Desempenho",
+		description:
+			"Monitore e avalie o desempenho da sua equipe com métricas e relatórios detalhados. Acompanhe indicadores como pontualidade, produtividade, cumprimento de metas e feedbacks, tanto para motoristas quanto para colaboradores, ajudando a identificar oportunidades de desenvolvimento e a reconhecer resultados positivos.",
+		icon: <BarChart className="size-4 text-app-blue-500" />,
 	},
 ];
