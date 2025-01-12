@@ -12,7 +12,7 @@ export function MisteriousGift() {
 	const [open, setOpen] = useState(false);
 
 	return (
-		<div className="mt-52 overflow-hidden">
+		<div className="mt-32 md:mt-52 overflow-hidden">
 			<div
 				data-open={open}
 				onClick={() => setOpen(!open)}
@@ -21,8 +21,8 @@ export function MisteriousGift() {
 				onMouseDown={() => setOpen(false)}
 				className="w-full absolute left-1/2 -translate-x-1/2 bottom-0 h-20 data-[open=true]:h-72 md:data-[open=true]:h-64 overflow-hidden transition-all max-w-2xl mx-auto bg-app-blue-500"
 			>
-				<header className="flex items-center gap-4 h-20 border-b border-white/15">
-					<div className="w-20 flex items-center justify-center h-full border-r border-white/15">
+				<header className="flex items-center gap-4 h-20 border-b border-white/20">
+					<div className="w-20 flex items-center justify-center h-full border-r border-white/20">
 						<Gift className="size-6 text-app-cyan-500" />
 					</div>
 					<div className="flex flex-col gap-1 text-white">
