@@ -1,9 +1,11 @@
-import { Hero } from "@/components/lp/hero";
+import { Home } from "@/components/lp/home";
+import { FloatingWhatsAppButton } from "@/components/lp/floating-whatsapp-button";
 
-export default function Home() {
+export default function HomePage() {
 	return (
 		<main>
-			<Hero />
+			<Home />
+			<FloatingWhatsAppButton />
 		</main>
 	);
 }
