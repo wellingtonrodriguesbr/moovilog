@@ -1,12 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { links } from "@/utils/links";
 
 import { ArrowUpRight, Gift, Mouse, MousePointerClick } from "lucide-react";
-import { useState } from "react";
 
 export function MisteriousGift() {
 	const [open, setOpen] = useState(false);
@@ -27,7 +27,7 @@ export function MisteriousGift() {
 					</div>
 					<div className="flex flex-col gap-1 text-white">
 						<h6 className="text-base md:text-lg">
-							R$1 real ou um presente misterioso?
+							Temos um presente para você
 						</h6>
 						<span className="hidden md:flex items-center gap-1 text-sm text-app-cyan-100">
 							<Mouse className="size-4" />
@@ -43,22 +43,16 @@ export function MisteriousGift() {
 					<p className="text-sm md:text-base">
 						A nossa plataforma será lançada em breve e você terá
 						acesso gratuito para testar a versão beta por tempo
-						indeterminado. Entre na lista de espera e ganhe seu
-						presente misterioso. Iremos te manter informado(a) por
-						e-mail ou WhatsApp.
+						indeterminado. Entre na lista de espera e garanta seu
+						lugar. Iremos te manter informado(a) por e-mail ou
+						WhatsApp.
 					</p>
 					<Button
 						className="w-full bg-app-cyan-100 hover:bg-app-cyan-300 text-app-blue-900 mt-4"
 						asChild
 					>
 						<Link href={links["waiting-list"]}>
-							<span className="hidden md:block">
-								Entrar na lista de espera e ganhar meu acesso
-								gratuito
-							</span>
-							<span className="block md:hidden">
-								Ganhar meu acesso gratuito
-							</span>
+							Entrar na lista de espera
 							<ArrowUpRight className="size-4" />
 						</Link>
 					</Button>
