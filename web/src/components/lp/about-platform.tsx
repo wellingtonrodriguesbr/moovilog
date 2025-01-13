@@ -47,7 +47,7 @@ export function AboutPlatform() {
 							asChild
 						>
 							<Link href={links["waiting-list"]} target="_blank">
-								Quero entrar a lista de espera
+								Quero entrar na lista de espera
 								<ArrowUpRight className="size-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
 							</Link>
 						</Button>
