@@ -20,7 +20,7 @@ const sans = Fira_Sans({
 });
 
 export const metadata: Metadata = {
-	title: "Moovilog | Organize, gerencie e impulsione sua transportadora.",
+	title: "Moovilog | O movimento que transforma sua gestão.",
 	description: "",
 };
 

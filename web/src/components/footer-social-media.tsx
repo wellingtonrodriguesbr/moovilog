@@ -1,29 +1,33 @@
 import Link from "next/link";
 
-import { WhatsappIcon } from "./icons/whatsapp-icon";
-import { InstagramIcon } from "./icons/instagram-icon";
-import { LinkedinIcon } from "./icons/linkedin-icon";
+import { WhatsappIcon } from "@/components/icons/whatsapp-icon";
+import { InstagramIcon } from "@/components/icons/instagram-icon";
+import { LinkedinIcon } from "@/components/icons/linkedin-icon";
+import { links } from "@/utils/links";
 
 export function FooterSocialMedia() {
 	return (
 		<div className="flex items-center gap-2">
 			<Link
-				href=""
-				className="flex items-center justify-center size-10 rounded-full bg-zinc-100/50 hover:bg-zinc-100"
+				href={links["request-demo"]}
+				target="_blank"
+				className="flex items-center justify-center size-10 rounded-full bg-app-blue-700 hover:bg-app-blue-500"
 			>
-				<WhatsappIcon className="size-4 fill-app-blue-500" />
+				<WhatsappIcon className="size-5 fill-white" />
 			</Link>
 			<Link
-				href="https://www.instagram.com/moovilog"
-				className="flex items-center justify-center size-10 rounded-full bg-zinc-100/50 hover:bg-zinc-100"
+				href={links["instagram"]}
+				target="_blank"
+				className="flex items-center justify-center size-10 rounded-full bg-app-blue-700 hover:bg-app-blue-500"
 			>
-				<InstagramIcon className="size-5 fill-app-blue-500" />
+				<InstagramIcon className="size-6 fill-white" />
 			</Link>
 			<Link
-				href="https://www.linkedin.com/company/moovilog"
-				className="flex items-center justify-center size-10 rounded-full bg-zinc-100/50 hover:bg-zinc-100"
+				href={links["linkedin"]}
+				target="_blank"
+				className="flex items-center justify-center size-10 rounded-full bg-app-blue-700 hover:bg-app-blue-500"
 			>
-				<LinkedinIcon className="size-5 fill-app-blue-500" />
+				<LinkedinIcon className="size-6 fill-white" />
 			</Link>
 		</div>
 	);

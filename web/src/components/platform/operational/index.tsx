@@ -19,8 +19,8 @@ export function Operational() {
 					description="Acompanhe a programação do dia"
 				/>
 				<CardLink
-					title="Suprimentos"
-					link="/operacional/suprimentos"
+					title="Recursos e Suprimentos"
+					link="/operacional/recursos-e-suprimentos"
 					description="Acompanhe os suprimentos"
 				/>
 				<CardLink

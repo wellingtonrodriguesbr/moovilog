@@ -1,12 +1,65 @@
-import { FooterSocialMedia } from "../footer-social-media";
+import Image from "next/image";
+import Link from "next/link";
+
+import { FooterSocialMedia } from "@/components/footer-social-media";
+import { Button } from "@/components/ui/button";
+import { MisteriousGift } from "@/components/lp/misterious-gift";
+import { links } from "@/utils/links";
+import { ArrowUpRight, Scroll, Zap } from "lucide-react";
+import { ScrollToTopButton } from "../scroll-to-top-button";
 
 export function Footer() {
 	return (
-		<footer className="w-full h-full">
-			{/* <div className="h-48 bg-app-blue-500"></div> */}
-			<div className="bg-app-blue-600 py-24">
-				{/* <FooterSocialMedia /> */}
+		<footer className="relative bg-app-blue-600 md:bg-footer-cover md:bg-bottom md:bg-no-repeat pt-12 w-full mt-48">
+			<div className="w-full max-w-screen-2xl mx-auto px-4 flex flex-col-reverse gap-8 md:gap-4 md:flex-row justify-between">
+				<div className="max-w-xl text-white">
+					<small className="flex items-center gap-2 text-app-cyan-100">
+						<Zap className="size-4 fill-app-cyan-100" />
+						Esse é o movimento que transforma sua gestão.
+					</small>
+					<h6 className="text-3xl md:text-5xl leading-normal font-semibold">
+						Organizar, para gerenciar, para impulsionar.
+					</h6>
+					<p className="mt-4 opacity-80">
+						Movimento é vida: assim como o corpo precisa se manter
+						ativo para prosperar, a gestão eficiente de um negócio
+						depende de processos ágeis e dinâmicos, garantindo
+						crescimento e resultados sustentáveis.
+					</p>
+					<Button
+						className="w-full xl:w-fit bg-app-cyan-100 hover:bg-app-cyan-300 text-app-blue-900 gap-2 mt-8"
+						asChild
+					>
+						<Link href={links["waiting-list"]}>
+							Quero transformar minha gestão
+							<ArrowUpRight className="size-4" />
+						</Link>
+					</Button>
+				</div>
+				<div>
+					<Image
+						src="/logo.svg"
+						alt="moovilog"
+						className="w-[170px]"
+						width={250}
+						height={193}
+					/>
+					<cite className="text-xs block mt-4 max-w-[10rem] text-zinc-200">
+						O movimento que transforma sua gestão.
+					</cite>
+				</div>
 			</div>
+			<div className="py-6 mt-12 relative md:absolute bottom-0 left-1/2 -translate-x-1/2 border-t border-white/25 w-full max-w-screen-2xl mx-auto px-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-12">
+				<div className="flex items-center gap-4">
+					<ScrollToTopButton />
+					<span className="text-sm md:text-base flex-1 text-white">
+						© Copyright 2024 - Moovilog - Todos os direitos
+						reservados.
+					</span>
+				</div>
+				<FooterSocialMedia />
+			</div>
+			<MisteriousGift />
 		</footer>
 	);
 }

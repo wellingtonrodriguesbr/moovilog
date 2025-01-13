@@ -9,4 +9,6 @@ export const links = {
 		"https://api.whatsapp.com/send?phone=5511950537096&text=Olá, gostaria de uma demonstração da plataforma",
 	"waiting-list":
 		"https://docs.google.com/forms/d/e/1FAIpQLSc_TtoDSHg46v9qGJR8bC0kRdJbR9p0YS07l-wr0vEHfcKrFA/viewform?usp=dialog",
+	instagram: "https://www.instagram.com/moovilog",
+	linkedin: "https://www.linkedin.com/company/moovilog",
 };

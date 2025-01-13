@@ -19,7 +19,7 @@ export function MisteriousGift() {
 				onMouseEnter={() => setOpen(true)}
 				onMouseLeave={() => setOpen(false)}
 				onMouseDown={() => setOpen(false)}
-				className="w-full absolute left-1/2 -translate-x-1/2 bottom-0 h-20 data-[open=true]:h-72 md:data-[open=true]:h-64 overflow-hidden transition-all max-w-2xl mx-auto bg-app-blue-500"
+				className="w-full md:w-[400px] absolute right-0 md:right-48 -top-20 data-[open=true]:-top-96 md:data-[open=true]:-top-80 h-20 data-[open=true]:h-96 md:data-[open=true]:h-80 overflow-hidden transition-all max-w-2xl mx-auto bg-app-blue-500"
 			>
 				<header className="flex items-center gap-4 h-20 border-b border-white/20">
 					<div className="w-20 flex items-center justify-center h-full border-r border-white/20">

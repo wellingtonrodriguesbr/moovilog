@@ -3,7 +3,7 @@ export const ROUTES_MAP: Record<string, string> = {
 	"/financeiro": "Financeiro",
 	"/operacional": "Operacional",
 	"/operacional/programacao-do-dia": "Programação do dia",
-	"/operacional/suprimentos": "Suprimentos",
+	"/operacional/recursos-e-suprimentos": "Recursos e Suprimentos",
 	"/operacional/avisos": "Avisos",
 	"/fretes": "Fretes",
 	"/rotas": "Rotas",
@@ -13,6 +13,8 @@ export const ROUTES_MAP: Record<string, string> = {
 	"/colaboradores": "Colaboradores",
 	"/dados-cadastrais": "Dados da empresa",
 	"/gestao-de-desempenho": "Gestão de desempenho",
+	"/cadastro": "Cadastro",
 	"/cadastro/empresa": "Empresa",
 	"/cadastro/empresa/endereco": "Endereço",
+	"/cadastro/empresa/atendimento": "Atendimento",
 };

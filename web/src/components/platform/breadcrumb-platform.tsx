@@ -43,7 +43,7 @@ export function BreadcrumbPlatform() {
 					return (
 						<React.Fragment key={accumulatedPath}>
 							<BreadcrumbSeparator />
-							<BreadcrumbItem className="capitalize">
+							<BreadcrumbItem>
 								{isLast ? (
 									<BreadcrumbPage>
 										{ROUTES_MAP[accumulatedPath] || segment}

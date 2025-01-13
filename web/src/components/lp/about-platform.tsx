@@ -38,8 +38,8 @@ export function AboutPlatform() {
 						<p>
 							Com a Moovilog, você deixará para trás as inúmeras
 							planilhas e a papelada. Tenha acesso a uma
-							plataforma completa para transformar e impulsionar a
-							gestão da sua transportadora.
+							plataforma completa para transformar a gestão da sua
+							transportadora.
 						</p>
 						<Button
 							variant="link"

@@ -23,6 +23,7 @@ const config = {
 			},
 			backgroundImage: {
 				"hero-cover": "url('/hero-cover.svg')",
+				"footer-cover": "url('/footer-cover.svg')",
 			},
 			colors: {
 				app: {
