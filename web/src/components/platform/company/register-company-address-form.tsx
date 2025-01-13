@@ -81,7 +81,7 @@ export function RegisterCompanyAddressForm() {
 				complement,
 			});
 			toast.success("Endereço cadastrado com sucesso");
-			router.push("/inicio");
+			router.push("/cadastro/empresa/atendimento");
 		} catch (error) {
 			if (error instanceof AxiosError) {
 				if (

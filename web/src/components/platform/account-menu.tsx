@@ -29,6 +29,7 @@ import { links } from "@/utils/links";
 export function AccountMenu() {
 	const router = useRouter();
 	const path = usePathname();
+
 	const { profile } = useGetProfile();
 	const { logout, isPendingLogout } = useLogout();
 
@@ -36,14 +37,14 @@ export function AccountMenu() {
 
 	async function handleLogout() {
 		await logout();
-		router.push("/entrar");
+		window.location.href = "/entrar";
 	}
 
 	return (
 		<Dialog>
 			<DropdownMenu>
 				<DropdownMenuTrigger
-					className="flex items-center gap-2 cursor-pointer group"
+					className="flex items-center gap-2 data-[disabled=true]:pointer-events-none data-[disabled=false]:cursor-pointer group"
 					disabled={path.includes("/cadastro")}
 					asChild
 				>

@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { RegisterCompany } from "@/components/platform/company/register-company";
 
 export const metadata: Metadata = {
-	title: "Cadastro empresa | Moovilog",
+	title: "Cadastro de Empresa | Moovilog",
 	description: "",
 };
 

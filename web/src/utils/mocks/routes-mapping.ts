@@ -13,4 +13,6 @@ export const ROUTES_MAP: Record<string, string> = {
 	"/colaboradores": "Colaboradores",
 	"/dados-cadastrais": "Dados da empresa",
 	"/gestao-de-desempenho": "Gestão de desempenho",
+	"/cadastro/empresa": "Empresa",
+	"/cadastro/empresa/endereco": "Endereço",
 };

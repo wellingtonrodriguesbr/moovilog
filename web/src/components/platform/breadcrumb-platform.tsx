@@ -18,12 +18,19 @@ export function BreadcrumbPlatform() {
 	const path = usePathname();
 	const paths = path.split("/").filter(Boolean);
 
+	const showBreadCrumbHome =
+		!paths.includes("inicio") && !path.includes("cadastro");
+
 	return (
 		<Breadcrumb>
 			<BreadcrumbList>
-				{!paths.includes("inicio") && (
+				{showBreadCrumbHome && (
 					<BreadcrumbItem className="ml-1">
-						<BreadcrumbLink asChild>
+						<BreadcrumbLink
+							data-disabled={path.includes("/cadastro/empresa")}
+							className="data-[disabled=true]:opacity-50 data-[disabled=true]:pointer-events-none"
+							asChild
+						>
 							<Link href="/inicio">Início</Link>
 						</BreadcrumbLink>
 					</BreadcrumbItem>
@@ -35,16 +42,20 @@ export function BreadcrumbPlatform() {
 
 					return (
 						<React.Fragment key={accumulatedPath}>
-							{!path.includes("inicio") && (
-								<BreadcrumbSeparator />
-							)}
-							<BreadcrumbItem>
+							<BreadcrumbSeparator />
+							<BreadcrumbItem className="capitalize">
 								{isLast ? (
 									<BreadcrumbPage>
 										{ROUTES_MAP[accumulatedPath] || segment}
 									</BreadcrumbPage>
 								) : (
-									<BreadcrumbLink asChild>
+									<BreadcrumbLink
+										data-disabled={path.includes(
+											"/cadastro/empresa"
+										)}
+										className="data-[disabled=true]:opacity-50 data-[disabled=true]:pointer-events-none"
+										asChild
+									>
 										<Link href={accumulatedPath}>
 											{ROUTES_MAP[accumulatedPath] ||
 												segment}
