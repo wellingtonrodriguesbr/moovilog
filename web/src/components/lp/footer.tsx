@@ -17,7 +17,7 @@ export function Footer() {
 						<Zap className="size-4 fill-app-cyan-100" />
 						Esse é o movimento que transforma sua gestão.
 					</small>
-					<h6 className="text-3xl md:text-5xl leading-normal font-semibold">
+					<h6 className="text-3xl md:text-5xl leading-normal md:leading-tight font-semibold">
 						Organizar, para gerenciar, para impulsionar.
 					</h6>
 					<p className="mt-4 opacity-80">
