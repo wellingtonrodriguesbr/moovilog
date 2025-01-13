@@ -18,18 +18,19 @@ model User {
 
   company        Company?        @relation("user_company_owner")
   companyMembers CompanyMember[]
-  authLinks      AuthLink[]
+  tokens         Token[]
 
   @@map("users")
 }
 
 model Company {
-  id             String      @id @default(uuid())
-  name           String
-  documentNumber String      @unique @map("document_number")
-  size           CompanySize
-  createdAt      DateTime    @default(now()) @map("created_at")
-  updatedAt      DateTime    @updatedAt @map("updated_at")
+  id               String      @id @default(uuid())
+  name             String
+  documentNumber   String      @unique @map("document_number")
+  size             CompanySize
+  attendsAllStates Boolean     @default(false) @map("attends_all_states")
+  createdAt        DateTime    @default(now()) @map("created_at")
+  updatedAt        DateTime    @updatedAt @map("updated_at")
 
   ownerId String @unique @map("owner_id")
   owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade, name: "user_company_owner")
@@ -145,8 +146,11 @@ model Freight {
   companyId String  @map("company_id")
   company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
-  routeId String @map("route_id")
-  route   Route  @relation(fields: [routeId], references: [id])
+  routeId String? @map("route_id")
+  route   Route?  @relation(fields: [routeId], references: [id])
+
+  cityId String? @map("city_id")
+  city   City?   @relation(fields: [cityId], references: [id])
 
   @@index([date])
   @@map("freights")
@@ -218,6 +222,7 @@ model City {
 
   addresses     Address[]
   citiesInRoute CityInRoute[]
+  freights      Freight[]
 
   @@map("cities")
 }
@@ -240,15 +245,16 @@ model Address {
   @@map("addresses")
 }
 
-model AuthLink {
-  id        String   @id @default(uuid())
-  code      String   @unique
-  createdAt DateTime @default(now()) @map("created_at")
+model Token {
+  id        String    @id @default(uuid())
+  code      String    @unique
+  type      TokenType
+  createdAt DateTime  @default(now()) @map("created_at")
 
   userId String @map("user_id")
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@map("auth_links")
+  @@map("token")
 }
 
 enum Role {
@@ -292,15 +298,24 @@ enum VehicleType {
 }
 
 enum FreightType {
-  FRACTIONAL
-  DIRECT
-  DEDICATED
+  PARTIAL
+  FULL
+  EXPRESS
+  MULTIMODAL
+  CONSOLIDATED
+  INTERMODAL
 }
 
 enum FreightModality {
   DAILY
   PERCENTAGE
   PRODUCTIVITY
+  FLAT_RATE
+  WEIGHT_BASED
+  DISTANCE_BASED
+  TIME_BASED
+  PER_STOP
+  ZONE_BASED
 }
 
 enum AccountStatus {
@@ -313,4 +328,9 @@ enum DriverType {
   INTERNAL
   FREELANCER
   AGGREGATE
+}
+
+enum TokenType {
+  PASSWORD_RECOVER
+  AUTH_LINK
 }

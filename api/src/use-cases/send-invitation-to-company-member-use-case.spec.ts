@@ -2,7 +2,7 @@ import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-user
 import { beforeEach, describe, expect, it } from "vitest";
 import { InMemoryCompaniesRepository } from "@/repositories/in-memory/in-memory-companies-repository";
 import { InMemoryCompanyMembersRepository } from "@/repositories/in-memory/in-memory-company-members-repository";
-import { InMemoryAuthLinksRepository } from "@/repositories/in-memory/in-memory-auth-links-repository";
+import { InMemoryTokensRepository } from "@/repositories/in-memory/in-memory-tokens-repository";
 import { SendInvitationToCompanyMemberUseCase } from "./send-invitation-to-company-member-use-case";
 import { CompanyMemberAlreadyExistsError } from "./errors/company-member-already-exists-error";
 import { NotAllowedError } from "./errors/not-allowed-error";
@@ -10,7 +10,7 @@ import { NotAllowedError } from "./errors/not-allowed-error";
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
 let companyMembersRepository: InMemoryCompanyMembersRepository;
-let authLinksRepository: InMemoryAuthLinksRepository;
+let tokensRepository: InMemoryTokensRepository;
 let sut: SendInvitationToCompanyMemberUseCase;
 
 describe("Send invitation to company member use case", () => {
@@ -18,11 +18,11 @@ describe("Send invitation to company member use case", () => {
 		usersRepository = new InMemoryUsersRepository();
 		companiesRepository = new InMemoryCompaniesRepository();
 		companyMembersRepository = new InMemoryCompanyMembersRepository();
-		authLinksRepository = new InMemoryAuthLinksRepository();
+		tokensRepository = new InMemoryTokensRepository();
 		sut = new SendInvitationToCompanyMemberUseCase(
 			usersRepository,
 			companyMembersRepository,
-			authLinksRepository
+			tokensRepository
 		);
 
 		await usersRepository.create({
@@ -60,7 +60,7 @@ describe("Send invitation to company member use case", () => {
 
 		expect(companyMember.id).toEqual(expect.any(String));
 		expect(companyMember.status).toEqual("PENDING");
-		expect(authLinksRepository.items.length).toEqual(1);
+		expect(tokensRepository.items.length).toEqual(1);
 	});
 
 	it("should not be possible to send invitation to member if already exists with same email", async () => {

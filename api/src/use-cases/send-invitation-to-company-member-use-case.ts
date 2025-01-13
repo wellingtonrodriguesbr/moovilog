@@ -7,7 +7,7 @@ import {
 } from "@/interfaces/company-member";
 import { NotAllowedError } from "./errors/not-allowed-error";
 import { UsersRepository } from "@/repositories/users-repository";
-import { AuthLinksRepository } from "@/repositories/auth-links-repository";
+import { TokensRepository } from "@/repositories/tokens-repository";
 import { UserAlreadyExistsError } from "./errors/user-already-exists-error";
 import { generateRamdonCode } from "@/utils/generate-random-code";
 import { env } from "@/env";
@@ -31,7 +31,7 @@ export class SendInvitationToCompanyMemberUseCase {
 	constructor(
 		private usersRepository: UsersRepository,
 		private companyMembersRepository: CompanyMembersRepository,
-		private authLinksRepository: AuthLinksRepository
+		private tokensRepository: TokensRepository
 	) {}
 
 	async execute({
@@ -113,8 +113,9 @@ export class SendInvitationToCompanyMemberUseCase {
 
 		emailQueue.enqueue(emailDetails);
 
-		await this.authLinksRepository.create({
+		await this.tokensRepository.create({
 			code,
+			type: "AUTH_LINK",
 			userId: user.id,
 		});
 

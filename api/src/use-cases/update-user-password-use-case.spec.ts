@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
-import { InMemoryAuthLinksRepository } from "@/repositories/in-memory/in-memory-auth-links-repository";
+import { InMemoryTokensRepository } from "@/repositories/in-memory/in-memory-tokens-repository";
 import { InMemoryCompanyMembersRepository } from "@/repositories/in-memory/in-memory-company-members-repository";
 import { UpdateUserPasswordUseCase } from "@/use-cases/update-user-password-use-case";
 import { BadRequestError } from "@/use-cases/errors/bad-request-error";
@@ -8,18 +8,18 @@ import { compare } from "bcryptjs";
 
 let usersRepository: InMemoryUsersRepository;
 let companyMembersRepository: InMemoryCompanyMembersRepository;
-let authLinksRepository: InMemoryAuthLinksRepository;
+let tokensRepository: InMemoryTokensRepository;
 let sut: UpdateUserPasswordUseCase;
 
 describe("Update user password use case", () => {
 	beforeEach(async () => {
 		usersRepository = new InMemoryUsersRepository();
-		authLinksRepository = new InMemoryAuthLinksRepository();
+		tokensRepository = new InMemoryTokensRepository();
 		companyMembersRepository = new InMemoryCompanyMembersRepository();
 		sut = new UpdateUserPasswordUseCase(
 			usersRepository,
 			companyMembersRepository,
-			authLinksRepository
+			tokensRepository
 		);
 
 		await usersRepository.create({
@@ -37,9 +37,10 @@ describe("Update user password use case", () => {
 			role: "ADMIN",
 		});
 
-		await authLinksRepository.create({
+		await tokensRepository.create({
 			userId: "john-doe-id-01",
 			code: "123456",
+			type: "AUTH_LINK",
 		});
 	});
 
@@ -57,7 +58,7 @@ describe("Update user password use case", () => {
 
 		expect(newPassword).toBeTruthy();
 		expect(usersRepository.items[0].password).toEqual(expect.any(String));
-		expect(authLinksRepository.items).toHaveLength(0);
+		expect(tokensRepository.items).toHaveLength(0);
 		expect(companyMembersRepository.items[0].status).toStrictEqual("ACTIVE");
 	});
 

@@ -1,4 +1,4 @@
-import { AuthLinksRepository } from "@/repositories/auth-links-repository";
+import { TokensRepository } from "@/repositories/tokens-repository";
 import { CompanyMembersRepository } from "@/repositories/company-members-repository";
 import { UsersRepository } from "@/repositories/users-repository";
 import { BadRequestError } from "@/use-cases/errors/bad-request-error";
@@ -16,7 +16,7 @@ export class UpdateUserPasswordUseCase {
 	constructor(
 		private usersRepository: UsersRepository,
 		private companyMembersRepository: CompanyMembersRepository,
-		private authLinksRepository: AuthLinksRepository
+		private tokensRepository: TokensRepository
 	) {}
 	async execute({
 		userId,
@@ -36,7 +36,7 @@ export class UpdateUserPasswordUseCase {
 		const passwordHash = await hash(newPassword, 6);
 
 		await this.usersRepository.updatePassword(userId, passwordHash);
-		await this.authLinksRepository.deleteByUserId(userId);
+		await this.tokensRepository.deleteByUserId(userId);
 
 		const member = await this.companyMembersRepository.findByUserId(userId);
 
