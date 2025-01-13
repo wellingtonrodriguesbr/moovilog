@@ -47,12 +47,11 @@ export function Hero() {
 							</Link>
 						</Button>
 					</div>
-					<Separator className="max-w-screen-md h-[1px] my-8 opacity-15" />
-					<h3 className="flex items-start text-app-yellow-500 gap-2 max-w-2xl">
+					<Separator className="max-w-[850px] h-[1px] my-8 opacity-15" />
+					<h3 className="flex items-start text-app-yellow-500 gap-2 max-w-md">
 						<AlertCircle className="size-4 min-w-4 min-h-4" />
 						Plataforma em construção, entre na lista de espera que
-						iremos te manter informado! Todos da lista poderão
-						testar a plataforma na faixa. Não perca essa chance.
+						iremos te manter informado por e-mail ou WhatsApp.
 					</h3>
 				</div>
 				<div className="hidden xl:block absolute -bottom-12 right-0">
