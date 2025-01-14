@@ -16,7 +16,7 @@ export function Hero() {
 			<div className="relative w-full h-full max-w-screen-2xl mx-auto px-4 mt-14 xl:mt-20 grid grid-cols-1 xl:grid-cols-3 gap-12 md:gap-24">
 				<div className="flex flex-col items-start col-span-2">
 					<small className="flex items-center gap-1 text-white mb-2">
-						Esqueça as planilhas e transforme sua gestão
+						Esqueça as planilhas
 						<span className="text-lg">💨</span>
 					</small>
 					<h1 className="font-medium text-4xl md:text-5xl xl:text-6xl text-white leading-tight md:leading-tight xl:leading-tight">

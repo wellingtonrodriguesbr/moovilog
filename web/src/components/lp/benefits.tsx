@@ -42,7 +42,7 @@ export function Benefits() {
 						{BENEFITS.map((benefit, index) => (
 							<li
 								key={index}
-								className="bg-white py-4 border-b border-zinc-200"
+								className="py-4 border-b border-zinc-100"
 							>
 								<strong className="flex items-center gap-2 font-semibold">
 									<Check className="size-4 text-emerald-500" />

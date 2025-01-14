@@ -14,6 +14,9 @@ export function Faq() {
 		<section className="w-full max-w-screen-2xl px-4 mx-auto pt-12 md:pt-36">
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24">
 				<div className="flex flex-col gap-3">
+					<small className="flex items-center gap-1 mb-2 before:w-8 before:h-[1px] before:bg-app-blue-300">
+						FAQ
+					</small>
 					<h4 className="text-2xl md:text-4xl font-semibold">
 						Dúvidas frequentes
 					</h4>
