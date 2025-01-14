@@ -21,7 +21,9 @@ const sans = Fira_Sans({
 
 export const metadata: Metadata = {
 	title: "Moovilog | O movimento que transforma sua gestão.",
-	description: "",
+	description:
+		"Transforme a gestão da sua transportadora com uma plataforma moderna e 100% online. Centralize suas operações, substitua planilhas e otimize processos com segurança e eficiência. Acesse de qualquer lugar e tenha o controle total do seu negócio em suas mãos.",
+	metadataBase: new URL("https://moovilog.com"),
 };
 
 export default function RootLayout({
