@@ -72,7 +72,7 @@ export function AboutPlatform() {
 						<CardContent></CardContent>
 					</Card>
 				))}
-				<Card className="col-span-1 md:col-span-2 xl:col-span-1 bg-app-yellow-200 border">
+				<Card className="col-span-1 md:col-span-2 xl:col-span-1 bg-app-yellow-200">
 					<CardHeader className="gap-2">
 						<div className="w-fit flex items-center justify-center border border-app-blue-900/50 rounded-full p-2 mb-2">
 							<Plus className="size-4 text-app-blue-900" />
