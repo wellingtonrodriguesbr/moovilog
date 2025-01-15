@@ -12,10 +12,12 @@ export class PrismaAreasRepository implements AreasRepository {
 		return area;
 	}
 
-	async findManyByStateId(stateId: string) {
+	async findManyByStateIds(stateIds: string[]) {
 		const areas = await prisma.area.findMany({
 			where: {
-				stateId,
+				stateId: {
+					in: stateIds,
+				},
 			},
 		});
 

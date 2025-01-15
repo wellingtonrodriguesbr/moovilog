@@ -49,4 +49,16 @@ export class PrismaStatesRepository implements StatesRepository {
 
 		return state;
 	}
+
+	async findManyByAcronyms(acronyms: string[]) {
+		const states = await prisma.state.findMany({
+			where: {
+				acronym: {
+					in: acronyms,
+				},
+			},
+		});
+
+		return states;
+	}
 }

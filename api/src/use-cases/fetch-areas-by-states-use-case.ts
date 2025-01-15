@@ -4,16 +4,16 @@ import { StatesRepository } from "@/repositories/states-repository";
 import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
 import { IArea } from "@/interfaces/area";
 
-interface FetchAreasByStateUseCaseRequest {
+interface FetchAreasByStatesUseCaseRequest {
 	userId: string;
-	stateAcronym: string;
+	stateAcronyms: string[];
 }
 
-interface FetchAreasByStateUseCaseResponse {
+interface FetchAreasByStatesUseCaseResponse {
 	areas: IArea[];
 }
 
-export class FetchAreasByStateUseCase {
+export class FetchAreasByStatesUseCase {
 	constructor(
 		private companyMembersRepository: CompanyMembersRepository,
 		private statesRepository: StatesRepository,
@@ -22,24 +22,26 @@ export class FetchAreasByStateUseCase {
 
 	async execute({
 		userId,
-		stateAcronym,
-	}: FetchAreasByStateUseCaseRequest): Promise<FetchAreasByStateUseCaseResponse> {
-		const transformedStateAcronym = stateAcronym.toUpperCase();
-
-		const [member, state] = await Promise.all([
+		stateAcronyms,
+	}: FetchAreasByStatesUseCaseRequest): Promise<FetchAreasByStatesUseCaseResponse> {
+		const [member, states] = await Promise.all([
 			this.companyMembersRepository.findByUserId(userId),
-			this.statesRepository.findByAcronym(transformedStateAcronym),
+			this.statesRepository.findManyByAcronyms(stateAcronyms),
 		]);
-
-		if (!state) {
-			throw new ResourceNotFoundError("State not found");
-		}
 
 		if (!member) {
 			throw new ResourceNotFoundError("Member not found");
 		}
 
-		const areas = await this.areasRepository.findManyByStateId(state.id);
+		if (!states?.length) {
+			throw new ResourceNotFoundError(
+				"No states found for the provided acronyms"
+			);
+		}
+
+		const areas = await this.areasRepository.findManyByStateIds(
+			states.map((state) => state.id)
+		);
 
 		return { areas };
 	}

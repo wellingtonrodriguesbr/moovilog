@@ -111,7 +111,7 @@ const ITEMS = [
 	},
 	{
 		name: "Colaboradores",
-		url: "/minha-empresa/colaboradores",
+		url: "/colaboradores",
 		icon: <Users className="size-4" />,
 	},
 	{

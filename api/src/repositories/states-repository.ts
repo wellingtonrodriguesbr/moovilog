@@ -5,4 +5,5 @@ export interface StatesRepository {
 	findById(id: string): Promise<State | null>;
 	findByNameAndAcronym(name: string, acronym: string): Promise<State | null>;
 	findByAcronym(acronym: string): Promise<State | null>;
+	findManyByAcronyms(acronyms: string[]): Promise<State[] | null>;
 }

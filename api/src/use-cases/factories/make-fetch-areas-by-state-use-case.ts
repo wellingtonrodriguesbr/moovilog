@@ -1,17 +1,17 @@
 import { PrismaAreasRepository } from "@/repositories/prisma/prisma-areas-repository";
 import { PrismaCompanyMembersRepository } from "@/repositories/prisma/prisma-company-members-repository";
 import { PrismaStatesRepository } from "@/repositories/prisma/prisma-states-repository";
-import { FetchAreasByStateUseCase } from "@/use-cases/fetch-areas-by-state-use-case";
+import { FetchAreasByStatesUseCase } from "@/use-cases/fetch-areas-by-states-use-case";
 
-export function makeFetchAreasByStateUseCase() {
+export function makeFetchAreasByStatesUseCase() {
 	const companyMembersRepository = new PrismaCompanyMembersRepository();
 	const statesRepository = new PrismaStatesRepository();
 	const areasRepository = new PrismaAreasRepository();
-	const fetchAreasByStateUseCase = new FetchAreasByStateUseCase(
+	const fetchAreasByStatesUseCase = new FetchAreasByStatesUseCase(
 		companyMembersRepository,
 		statesRepository,
 		areasRepository
 	);
 
-	return fetchAreasByStateUseCase;
+	return fetchAreasByStatesUseCase;
 }

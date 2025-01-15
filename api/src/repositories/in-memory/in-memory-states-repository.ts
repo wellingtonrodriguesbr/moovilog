@@ -50,4 +50,14 @@ export class InMemoryStatesRepository implements StatesRepository {
 
 		return state;
 	}
+
+	async findManyByAcronyms(acronyms: string[]) {
+		const states = this.items.filter((item) => acronyms.includes(item.acronym));
+
+		if (!states) {
+			return null;
+		}
+
+		return states;
+	}
 }

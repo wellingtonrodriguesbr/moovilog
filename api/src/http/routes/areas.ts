@@ -1,9 +1,9 @@
 import { FastifyInstance } from "fastify";
 import { verifyJWT } from "@/http/middlewares/verify-jwt";
-import { FetchAreasByStateController } from "@/http/controllers/fetch-areas-by-state-controller";
+import { FetchAreasByStatesController } from "@/http/controllers/fetch-areas-by-states-controller";
 
 export async function areasRoutes(app: FastifyInstance) {
 	app.addHook("onRequest", verifyJWT);
 
-	app.get("/:stateAcronym/areas", FetchAreasByStateController.handle);
+	app.get("/areas", FetchAreasByStatesController.handle);
 }

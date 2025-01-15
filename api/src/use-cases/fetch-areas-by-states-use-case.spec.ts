@@ -4,7 +4,7 @@ import { InMemoryCompaniesRepository } from "@/repositories/in-memory/in-memory-
 import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
 import { InMemoryStatesRepository } from "@/repositories/in-memory/in-memory-states-repository";
 import { InMemoryAreasRepository } from "@/repositories/in-memory/in-memory-areas-repository";
-import { FetchAreasByStateUseCase } from "@/use-cases/fetch-areas-by-state-use-case";
+import { FetchAreasByStatesUseCase } from "@/use-cases/fetch-areas-by-states-use-case";
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
@@ -12,7 +12,7 @@ let companiesRepository: InMemoryCompaniesRepository;
 let companyMembersRepository: InMemoryCompanyMembersRepository;
 let statesRepository: InMemoryStatesRepository;
 let areasRepository: InMemoryAreasRepository;
-let sut: FetchAreasByStateUseCase;
+let sut: FetchAreasByStatesUseCase;
 
 describe("Fetch areas by state use case", () => {
 	beforeEach(async () => {
@@ -21,7 +21,7 @@ describe("Fetch areas by state use case", () => {
 		companyMembersRepository = new InMemoryCompanyMembersRepository();
 		statesRepository = new InMemoryStatesRepository();
 		areasRepository = new InMemoryAreasRepository();
-		sut = new FetchAreasByStateUseCase(
+		sut = new FetchAreasByStatesUseCase(
 			companyMembersRepository,
 			statesRepository,
 			areasRepository
@@ -66,7 +66,7 @@ describe("Fetch areas by state use case", () => {
 	it("should be able to fetch areas by state", async () => {
 		const { areas } = await sut.execute({
 			userId: "john-doe-01",
-			stateAcronym: "SP",
+			stateAcronyms: ["SP"],
 		});
 
 		expect(areas).toHaveLength(1);
