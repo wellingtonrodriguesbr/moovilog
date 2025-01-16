@@ -42,7 +42,7 @@ export function BreadcrumbPlatform() {
 
 					return (
 						<React.Fragment key={accumulatedPath}>
-							<BreadcrumbSeparator />
+							{segment !== "inicio" && <BreadcrumbSeparator />}
 							<BreadcrumbItem>
 								{isLast ? (
 									<BreadcrumbPage>

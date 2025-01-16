@@ -90,6 +90,12 @@ export function RegisterCompanyStatesAreasServiceForm() {
 							!areas.length ||
 							isFetchAreasByStatesPending
 						}
+						placeholder={
+							isFetchAreasByStatesPending &&
+							form.watch("stateAcronyms").length > 0
+								? "Carregando regiões..."
+								: "Clique para selecionar"
+						}
 						maxCount={3}
 					/>
 				</fieldset>

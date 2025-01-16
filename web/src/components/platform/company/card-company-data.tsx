@@ -34,7 +34,7 @@ export function CardCompanyData() {
 			<CardContent className="space-y-6 mt-2">
 				<div className="grid grid-cols-1 md:grid-cols-4 gap-4">
 					<fieldset className="space-y-2">
-						<Label>Nome:</Label>
+						<Label>Razão social:</Label>
 						<Input readOnly value={company.name} />
 					</fieldset>
 					<fieldset className="space-y-2">

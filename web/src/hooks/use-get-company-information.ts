@@ -53,7 +53,9 @@ export function useGetCompanyInformation() {
 		useQuery({
 			queryKey: ["company-information"],
 			queryFn: handleGetCompanyInformation,
-			// enabled: !pathName.includes("/cadastro/empresa"),
+			enabled:
+				pathName !== "/cadastro/empresa" &&
+				pathName !== "/cadastro/empresa/endereco",
 		});
 
 	async function handleGetCompanyInformation() {

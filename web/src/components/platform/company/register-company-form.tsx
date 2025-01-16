@@ -30,6 +30,7 @@ import { formatCNPJ } from "@/utils/format-cnpj";
 import { useRegisterCompany } from "@/hooks/use-register-company";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
+import { useEffect } from "react";
 
 const formSchema = z.object({
 	documentNumber: z
@@ -56,10 +57,13 @@ export function RegisterCompanyForm() {
 	});
 	const documentNumber = form.watch("documentNumber");
 
-	const { isValidateCompanyDocumentNumberPending, status } =
-		useValidateCompanyDocumentNumber({
-			documentNumber,
-		});
+	const {
+		companyInformation,
+		isValidateCompanyDocumentNumberPending,
+		status,
+	} = useValidateCompanyDocumentNumber({
+		documentNumber,
+	});
 
 	async function onSubmit({
 		name,
@@ -92,6 +96,14 @@ export function RegisterCompanyForm() {
 			}
 		}
 	}
+
+	useEffect(() => {
+		form.setValue("name", companyInformation?.razao_social ?? "");
+
+		if (status === "error") {
+			form.reset();
+		}
+	}, [companyInformation, form, status]);
 
 	return (
 		<Form {...form}>
