@@ -99,16 +99,16 @@ const ITEMS = [
 		content:
 			"É simples! Inscreva-se na nossa lista de espera para ser um dos primeiros a aproveitar todos os benefícios da Moovilog. Assim que a plataforma for lançada, entraremos em contato para você começar a transformar sua gestão.",
 	},
-	{
-		value: "7",
-		trigger: "Quanto custará a plataforma?",
-		content:
-			"O custo da plataforma será de R$ 189,90 por mês. No entanto, no lançamento, teremos um desconto exclusivo para os primeiros clientes por tempo limitado. Não perca essa oportunidade de economizar e revolucionar sua gestão, inscreva-se na lista de espera agora mesmo!",
-	},
-	{
-		value: "8",
-		trigger: "Quais serão as formas de pagamento?",
-		content:
-			"Inicialmente, você poderá pagar com cartões de crédito e débito. Em breve, também aceitaremos PIX e boletos bancários para oferecer ainda mais conveniência e flexibilidade.",
-	},
+	// {
+	// 	value: "7",
+	// 	trigger: "Quanto custará a plataforma?",
+	// 	content:
+	// 		"O custo da plataforma será de R$ 189,90 por mês. No entanto, no lançamento, teremos um desconto exclusivo para os primeiros clientes por tempo limitado. Não perca essa oportunidade de economizar e revolucionar sua gestão, inscreva-se na lista de espera agora mesmo!",
+	// },
+	// {
+	// 	value: "8",
+	// 	trigger: "Quais serão as formas de pagamento?",
+	// 	content:
+	// 		"Inicialmente, você poderá pagar com cartões de crédito e débito. Em breve, também aceitaremos PIX e boletos bancários para oferecer ainda mais conveniência e flexibilidade.",
+	// },
 ];
