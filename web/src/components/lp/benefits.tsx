@@ -11,7 +11,7 @@ export function Benefits() {
 	return (
 		<section className="bg-white">
 			<div className="w-full h-full max-w-screen-2xl mx-auto px-4 py-16 flex flex-col xl:flex-row gap-12 xl:gap-8 justify-center">
-				<div className="relative xl:sticky top-4 self-start">
+				<div className="relative xl:sticky top-4 self-start rounded-lg overflow-hidden">
 					<Image
 						src="/benefits-img.svg"
 						alt="moovilog"
