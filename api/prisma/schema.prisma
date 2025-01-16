@@ -24,13 +24,12 @@ model User {
 }
 
 model Company {
-  id               String      @id @default(uuid())
-  name             String
-  documentNumber   String      @unique @map("document_number")
-  size             CompanySize
-  attendsAllStates Boolean     @default(false) @map("attends_all_states")
-  createdAt        DateTime    @default(now()) @map("created_at")
-  updatedAt        DateTime    @updatedAt @map("updated_at")
+  id             String      @id @default(uuid())
+  name           String
+  documentNumber String      @unique @map("document_number")
+  size           CompanySize
+  createdAt      DateTime    @default(now()) @map("created_at")
+  updatedAt      DateTime    @updatedAt @map("updated_at")
 
   ownerId String @unique @map("owner_id")
   owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade, name: "user_company_owner")
@@ -38,11 +37,12 @@ model Company {
   addressId String?  @unique @map("address_id")
   address   Address? @relation(fields: [addressId], references: [id], onDelete: Cascade)
 
-  companyMembers CompanyMember[]
-  drivers        Driver[]
-  freights       Freight[]
-  routes         Route[]
-  vehicles       Vehicle[]
+  companyMembers     CompanyMember[]
+  drivers            Driver[]
+  freights           Freight[]
+  routes             Route[]
+  vehicles           Vehicle[]
+  companyStatesAreas CompanyStateArea[]
 
   @@map("companies")
 }
@@ -50,12 +50,16 @@ model Company {
 model CompanyStateArea {
   id String @id @default(uuid())
 
+  companyId String  @map("company_id")
+  company   Company @relation(fields: [companyId], references: [id])
+
   stateId String @map("state_id")
   state   State  @relation(fields: [stateId], references: [id])
 
   areaId String @map("area_id")
   area   Area   @relation(fields: [areaId], references: [id])
 
+  @@unique([companyId, stateId, areaId], name: "unique_company_state_area")
   @@map("company_states_areas")
 }
 

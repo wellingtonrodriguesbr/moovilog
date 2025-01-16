@@ -2,9 +2,7 @@
 
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -16,30 +14,18 @@ import { Label } from "@/components/ui/label";
 import { useFetchAreasByStates } from "@/hooks/use-fetch-areas-by-states";
 import { MultiSelectAreas } from "@/components/multi-select-areas";
 
-const formSchema = z.object({
-	stateAcronym: z.string().optional().nullable(),
-});
-
 export function RegisterCompanyAreaServiceForm() {
 	const router = useRouter();
-	const [selectedStates, setSelectedStates] = useState<string[]>([]);
+	const form = useForm();
 
-	console.log(selectedStates);
+	const [selectedStates, setSelectedStates] = useState<string[]>([]);
+	const [selectedAreas, setSelectedAreas] = useState<string[]>([]);
 
 	const { areas, isFetchAreasByStatesPending } = useFetchAreasByStates({
 		states: selectedStates,
 	});
 
-	console.log(areas);
-
-	const form = useForm<z.infer<typeof formSchema>>({
-		resolver: zodResolver(formSchema),
-		defaultValues: {
-			stateAcronym: "",
-		},
-	});
-
-	async function onSubmit(registerData: z.infer<typeof formSchema>) {
+	async function onSubmit(registerData: unknown) {
 		try {
 			toast.success("Cadastro concluído com sucesso");
 			router.push("/inicio");
@@ -78,9 +64,14 @@ export function RegisterCompanyAreaServiceForm() {
 				<fieldset className="space-y-2">
 					<Label>Selecione as regiões de atendimento</Label>
 					<MultiSelectAreas
-						options={STATES_ARRAY}
-						onNameChange={setSelectedStates}
-						defaultValue={selectedStates}
+						options={areas}
+						onAreaChange={setSelectedAreas}
+						defaultValue={selectedAreas}
+						disabled={
+							selectedStates.length === 0 ||
+							!areas.length ||
+							isFetchAreasByStatesPending
+						}
 						maxCount={3}
 					/>
 				</fieldset>
@@ -88,12 +79,13 @@ export function RegisterCompanyAreaServiceForm() {
 				<Button
 					disabled={
 						isFetchAreasByStatesPending ||
-						selectedStates.length === 0
+						selectedStates.length === 0 ||
+						selectedAreas.length === 0
 					}
 					type="submit"
 					className="w-full mt-6 gap-2"
 				>
-					{false ? (
+					{isFetchAreasByStatesPending ? (
 						<Loader2 className="size-4 animate-spin" />
 					) : (
 						<>

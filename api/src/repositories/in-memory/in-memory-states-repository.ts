@@ -60,4 +60,14 @@ export class InMemoryStatesRepository implements StatesRepository {
 
 		return states;
 	}
+
+	async findManyByIds(ids: string[]) {
+		const states = this.items.filter((item) => ids.includes(item.id));
+
+		if (!states) {
+			return null;
+		}
+
+		return states;
+	}
 }

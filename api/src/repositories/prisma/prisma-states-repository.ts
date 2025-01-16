@@ -61,4 +61,16 @@ export class PrismaStatesRepository implements StatesRepository {
 
 		return states;
 	}
+
+	async findManyByIds(ids: string[]) {
+		const states = await prisma.state.findMany({
+			where: {
+				id: {
+					in: ids,
+				},
+			},
+		});
+
+		return states;
+	}
 }

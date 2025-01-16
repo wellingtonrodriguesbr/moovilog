@@ -23,4 +23,16 @@ export class PrismaAreasRepository implements AreasRepository {
 
 		return areas;
 	}
+
+	async findManyByIds(ids: string[]) {
+		const areas = await prisma.area.findMany({
+			where: {
+				id: {
+					in: ids,
+				},
+			},
+		});
+
+		return areas;
+	}
 }

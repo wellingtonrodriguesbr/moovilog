@@ -22,11 +22,8 @@ import {
 	CommandList,
 	CommandSeparator,
 } from "@/components/ui/command";
+import { Area } from "@/hooks/use-fetch-areas-by-states";
 
-/**
- * Variants for the multi-select component to handle different styles.
- * Uses class-variance-authority (cva) to define different styles based on "variant" prop.
- */
 const multiSelectAreasVariants = cva("m-1 text-app-blue-900", {
 	variants: {
 		variant: {
@@ -44,63 +41,16 @@ const multiSelectAreasVariants = cva("m-1 text-app-blue-900", {
 	},
 });
 
-/**
- * Props for MultiSelectAreas component
- */
 interface MultiSelectAreasProps
 	extends React.ButtonHTMLAttributes<HTMLButtonElement>,
 		VariantProps<typeof multiSelectAreasVariants> {
-	/**
-	 * An array of option objects to be displayed in the multi-select component.
-	 * Each option object has a acronym, name, and an optional icon.
-	 */
-	options: {
-		/** The text to display for the option. */
-		acronym: string;
-		/** The unique name associated with the option. */
-		name: string;
-		/** Optional icon component to display alongside the option. */
-		icon?: React.ComponentType<{ className?: string }>;
-	}[];
-
-	/**
-	 * Callback function triggered when the selected names change.
-	 * Receives an array of the new selected names.
-	 */
-	onNameChange: (name: string[]) => void;
-
-	/** The default selected names when the component mounts. */
+	options: Area[];
+	onAreaChange: (id: string[]) => void;
 	defaultName?: string[];
-
-	/**
-	 * Placeholder text to be displayed when no names are selected.
-	 * Optional, defaults to "Select options".
-	 */
 	placeholder?: string;
-
-	/**
-	 * Maximum number of items to display. Extra selected items will be summarized.
-	 * Optional, defaults to 3.
-	 */
 	maxCount?: number;
-
-	/**
-	 * The modality of the popover. When set to true, interaction with outside elements
-	 * will be disabled and only popover content will be visible to screen readers.
-	 * Optional, defaults to false.
-	 */
 	modalPopover?: boolean;
-
-	/**
-	 * If true, renders the multi-select component as a child of another component.
-	 * Optional, defaults to false.
-	 */
 	asChild?: boolean;
-
-	/**
-	 * Additional class names to apply custom styles to the multi-select component.
-	 * Optional, can be used to add custom styles.
-	 */
 	className?: string;
 }
 
@@ -111,7 +61,7 @@ export const MultiSelectAreas = React.forwardRef<
 	(
 		{
 			options,
-			onNameChange,
+			onAreaChange: onNameChange,
 			variant,
 			defaultName = [],
 			placeholder = "Clique para selecionar",
@@ -123,7 +73,7 @@ export const MultiSelectAreas = React.forwardRef<
 		},
 		ref
 	) => {
-		const [selectedNames, setSelectedNames] =
+		const [selectedAreas, setSelectedAreas] =
 			React.useState<string[]>(defaultName);
 		const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
 
@@ -133,25 +83,23 @@ export const MultiSelectAreas = React.forwardRef<
 			if (event.key === "Enter") {
 				setIsPopoverOpen(true);
 			} else if (event.key === "Backspace" && !event.currentTarget.name) {
-				const newSelectedNames = [...selectedNames];
-				newSelectedNames.pop();
-				setSelectedNames(newSelectedNames);
-				onNameChange(newSelectedNames);
+				const newSelectedAreas = [...selectedAreas];
+				newSelectedAreas.pop();
+				setSelectedAreas(newSelectedAreas);
+				onNameChange(newSelectedAreas);
 			}
 		};
 
-		const toggleOption = (acronym: string) => {
-			const newSelectedNames = selectedNames.includes(acronym)
-				? selectedNames.filter(
-						(selectedAcronym) => selectedAcronym !== acronym
-					)
-				: [...selectedNames, acronym];
-			setSelectedNames(newSelectedNames);
-			onNameChange(newSelectedNames);
+		const toggleOption = (id: string) => {
+			const newSelectedAreas = selectedAreas.includes(id)
+				? selectedAreas.filter((selectedId) => selectedId !== id)
+				: [...selectedAreas, id];
+			setSelectedAreas(newSelectedAreas);
+			onNameChange(newSelectedAreas);
 		};
 
 		const handleClear = () => {
-			setSelectedNames([]);
+			setSelectedAreas([]);
 			onNameChange([]);
 		};
 
@@ -160,17 +108,17 @@ export const MultiSelectAreas = React.forwardRef<
 		};
 
 		const clearExtraOptions = () => {
-			const newSelectedNames = selectedNames.slice(0, maxCount);
-			setSelectedNames(newSelectedNames);
+			const newSelectedNames = selectedAreas.slice(0, maxCount);
+			setSelectedAreas(newSelectedNames);
 			onNameChange(newSelectedNames);
 		};
 
 		const toggleAll = () => {
-			if (selectedNames.length === options.length) {
+			if (selectedAreas.length === options.length) {
 				handleClear();
 			} else {
-				const allNames = options.map((option) => option.acronym);
-				setSelectedNames(allNames);
+				const allNames = options.map((option) => option.id);
+				setSelectedAreas(allNames);
 				onNameChange(allNames);
 			}
 		};
@@ -191,19 +139,18 @@ export const MultiSelectAreas = React.forwardRef<
 							className
 						)}
 					>
-						{selectedNames.length > 0 ? (
+						{selectedAreas.length > 0 ? (
 							<div className="flex justify-between items-center w-full">
 								<div className="flex flex-wrap items-center">
-									{selectedNames
+									{selectedAreas
 										.slice(0, maxCount)
-										.map((acronym) => {
+										.map((id) => {
 											const option = options.find(
-												(o) => o.acronym === acronym
+												(o) => o.id === id
 											);
-											const IconComponent = option?.icon;
 											return (
 												<Badge
-													key={acronym}
+													key={id}
 													className={cn(
 														multiSelectAreasVariants(
 															{
@@ -212,23 +159,18 @@ export const MultiSelectAreas = React.forwardRef<
 														)
 													)}
 												>
-													{IconComponent && (
-														<IconComponent className="h-4 w-4 mr-2" />
-													)}
-													{option?.acronym}
+													{option?.name}
 													<XCircle
 														className="ml-2 h-4 w-4 cursor-pointer"
 														onClick={(event) => {
 															event.stopPropagation();
-															toggleOption(
-																acronym
-															);
+															toggleOption(id);
 														}}
 													/>
 												</Badge>
 											);
 										})}
-									{selectedNames.length > maxCount && (
+									{selectedAreas.length > maxCount && (
 										<Badge
 											className={cn(
 												"bg-transparent text-foreground border-foreground/1 hover:bg-transparent",
@@ -237,7 +179,7 @@ export const MultiSelectAreas = React.forwardRef<
 												})
 											)}
 										>
-											{`+ ${selectedNames.length - maxCount} selecionados`}
+											{`+ ${selectedAreas.length - maxCount} selecionados`}
 											<XCircle
 												className="ml-2 h-4 w-4 cursor-pointer"
 												onClick={(event) => {
@@ -296,8 +238,8 @@ export const MultiSelectAreas = React.forwardRef<
 									<div
 										className={cn(
 											"mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
-											selectedNames.length ===
-												options.length
+											selectedAreas.length ===
+												options?.length
 												? "bg-primary text-primary-foreground"
 												: "opacity-50 [&_svg]:invisible"
 										)}
@@ -306,15 +248,15 @@ export const MultiSelectAreas = React.forwardRef<
 									</div>
 									<span>(Selecionar Todos)</span>
 								</CommandItem>
-								{options.map((option) => {
-									const isSelected = selectedNames.includes(
-										option.acronym
+								{options?.map((option) => {
+									const isSelected = selectedAreas.includes(
+										option.id
 									);
 									return (
 										<CommandItem
-											key={option.acronym}
+											key={option.id}
 											onSelect={() =>
-												toggleOption(option.acronym)
+												toggleOption(option.id)
 											}
 											className="cursor-pointer"
 										>
@@ -328,11 +270,8 @@ export const MultiSelectAreas = React.forwardRef<
 											>
 												<CheckIcon className="size-4 text-app-blue-500" />
 											</div>
-											{option.icon && (
-												<option.icon className="mr-2 h-4 w-4 text-muted-foreground" />
-											)}
 											<span>
-												({option.acronym}) {option.name}
+												({option.code}) {option.name}
 											</span>
 										</CommandItem>
 									);
@@ -341,7 +280,7 @@ export const MultiSelectAreas = React.forwardRef<
 							<CommandSeparator />
 							<CommandGroup>
 								<div className="flex items-center justify-between">
-									{selectedNames.length > 0 && (
+									{selectedAreas.length > 0 && (
 										<>
 											<CommandItem
 												onSelect={handleClear}

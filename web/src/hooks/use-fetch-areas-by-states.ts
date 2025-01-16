@@ -14,10 +14,6 @@ export interface Area {
 	stateId: string;
 }
 
-export interface FetchAreasByStatesResponse {
-	areas: Area[];
-}
-
 export function useFetchAreasByStates({ states }: UseFetchAreasByStatesProps) {
 	const [debouncedStates, setDebouncedStates] = useState<string[]>([]);
 	const [isReady] = useDebounce(
@@ -37,7 +33,7 @@ export function useFetchAreasByStates({ states }: UseFetchAreasByStatesProps) {
 	async function handleFetchAreasByStates() {
 		const queryString = states.join(",");
 
-		const { data } = await api.get<{ areas: FetchAreasByStatesResponse[] }>(
+		const { data } = await api.get<{ areas: Area[] }>(
 			`/areas?states=${queryString}`
 		);
 
@@ -45,7 +41,7 @@ export function useFetchAreasByStates({ states }: UseFetchAreasByStatesProps) {
 	}
 
 	return {
-		areas,
+		areas: areas || [],
 		isFetchAreasByStatesPending,
 	};
 }

@@ -31,4 +31,14 @@ export class InMemoryAreasRepository implements AreasRepository {
 
 		return areas;
 	}
+
+	async findManyByIds(ids: string[]) {
+		const areas = this.items.filter((item) => ids.includes(item.id));
+
+		if (!areas) {
+			return null;
+		}
+
+		return areas;
+	}
 }
