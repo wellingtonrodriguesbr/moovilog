@@ -51,7 +51,7 @@ model CompanyStateArea {
   id String @id @default(uuid())
 
   companyId String  @map("company_id")
-  company   Company @relation(fields: [companyId], references: [id])
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
   stateId String @map("state_id")
   state   State  @relation(fields: [stateId], references: [id])

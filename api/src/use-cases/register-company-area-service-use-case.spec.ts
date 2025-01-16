@@ -80,7 +80,7 @@ describe("Register company area service use case", () => {
 	it("should be able to register company area service", async () => {
 		await sut.execute({
 			userId: "john-doe-id-01",
-			stateIds: ["fake-state-id"],
+			stateAcronyms: ["SP"],
 			areaIds: ["fake-area-id", "fake-area-id-2"],
 		});
 
@@ -100,7 +100,7 @@ describe("Register company area service use case", () => {
 		await expect(() =>
 			sut.execute({
 				userId: "non-existent-user-id",
-				stateIds: ["fake-state-id"],
+				stateAcronyms: ["SP"],
 				areaIds: ["fake-area-id"],
 			})
 		).rejects.toBeInstanceOf(ResourceNotFoundError);
@@ -110,7 +110,7 @@ describe("Register company area service use case", () => {
 		await expect(() =>
 			sut.execute({
 				userId: "john-doe-id-01",
-				stateIds: ["non-existent-state-id"],
+				stateAcronyms: ["non-existent-state-id"],
 				areaIds: ["fake-area-id"],
 			})
 		).rejects.toBeInstanceOf(ResourceNotFoundError);
@@ -120,7 +120,7 @@ describe("Register company area service use case", () => {
 		await expect(() =>
 			sut.execute({
 				userId: "john-doe-id-01",
-				stateIds: ["fake-state-id"],
+				stateAcronyms: ["SP"],
 				areaIds: ["non-existent-area-id"],
 			})
 		).rejects.toBeInstanceOf(ResourceNotFoundError);
@@ -129,13 +129,13 @@ describe("Register company area service use case", () => {
 	it("should not insert duplicate entries for the same state and area", async () => {
 		await sut.execute({
 			userId: "john-doe-id-01",
-			stateIds: ["fake-state-id"],
+			stateAcronyms: ["SP"],
 			areaIds: ["fake-area-id"],
 		});
 
 		await sut.execute({
 			userId: "john-doe-id-01",
-			stateIds: ["fake-state-id"],
+			stateAcronyms: ["SP"],
 			areaIds: ["fake-area-id"],
 		});
 

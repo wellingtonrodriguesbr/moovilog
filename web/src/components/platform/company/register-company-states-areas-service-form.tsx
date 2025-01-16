@@ -9,33 +9,47 @@ import { toast } from "sonner";
 import { AxiosError } from "axios";
 import { STATES_ARRAY } from "@/utils/mocks/states";
 import { MultiSelectStates } from "@/components/multi-select-states";
-import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { useFetchAreasByStates } from "@/hooks/use-fetch-areas-by-states";
 import { MultiSelectAreas } from "@/components/multi-select-areas";
+import { useRegisterCompanyStatesAreasService } from "@/hooks/use-register-company-states-areas-service";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
-export function RegisterCompanyAreaServiceForm() {
+const formSchema = z.object({
+	stateAcronyms: z.array(z.string()),
+	areaIds: z.array(z.string()),
+});
+
+export function RegisterCompanyStatesAreasServiceForm() {
 	const router = useRouter();
-	const form = useForm();
-
-	const [selectedStates, setSelectedStates] = useState<string[]>([]);
-	const [selectedAreas, setSelectedAreas] = useState<string[]>([]);
-
-	const { areas, isFetchAreasByStatesPending } = useFetchAreasByStates({
-		states: selectedStates,
+	const form = useForm<z.infer<typeof formSchema>>({
+		resolver: zodResolver(formSchema),
+		defaultValues: {
+			stateAcronyms: [],
+			areaIds: [],
+		},
 	});
 
-	async function onSubmit(registerData: unknown) {
+	const { areas, isFetchAreasByStatesPending } = useFetchAreasByStates({
+		states: form.watch("stateAcronyms"),
+	});
+	const {
+		registerCompanyStatesAreasService,
+		isPendingRegisterCompanyStatesAreasService,
+	} = useRegisterCompanyStatesAreasService();
+
+	async function onSubmit(registerData: z.infer<typeof formSchema>) {
 		try {
+			await registerCompanyStatesAreasService(registerData);
 			toast.success("Cadastro concluído com sucesso");
 			router.push("/inicio");
 		} catch (error) {
 			if (error instanceof AxiosError) {
-				if (
-					error.response?.status === 404 &&
-					error.response.data.message === "City not found"
-				) {
-					toast.error("Cidade não encontrada, fale com o suporte.");
+				if (error.response?.status === 404) {
+					toast.error(
+						"Estado ou área não encontrada, tente novamente."
+					);
 				} else {
 					toast.error("Erro desconhecido, fale com o suporte.");
 				}
@@ -55,8 +69,10 @@ export function RegisterCompanyAreaServiceForm() {
 					</Label>
 					<MultiSelectStates
 						options={STATES_ARRAY}
-						onNameChange={setSelectedStates}
-						defaultValue={selectedStates}
+						onNameChange={(selectedStates) =>
+							form.setValue("stateAcronyms", selectedStates)
+						}
+						defaultValue={form.watch("stateAcronyms")}
 						maxCount={3}
 					/>
 				</fieldset>
@@ -65,10 +81,12 @@ export function RegisterCompanyAreaServiceForm() {
 					<Label>Selecione as regiões de atendimento</Label>
 					<MultiSelectAreas
 						options={areas}
-						onAreaChange={setSelectedAreas}
-						defaultValue={selectedAreas}
+						onAreaChange={(selectedAreas) =>
+							form.setValue("areaIds", selectedAreas)
+						}
+						defaultValue={form.watch("areaIds")}
 						disabled={
-							selectedStates.length === 0 ||
+							form.watch("stateAcronyms").length === 0 ||
 							!areas.length ||
 							isFetchAreasByStatesPending
 						}
@@ -79,13 +97,14 @@ export function RegisterCompanyAreaServiceForm() {
 				<Button
 					disabled={
 						isFetchAreasByStatesPending ||
-						selectedStates.length === 0 ||
-						selectedAreas.length === 0
+						isPendingRegisterCompanyStatesAreasService ||
+						form.watch("stateAcronyms").length === 0 ||
+						form.watch("areaIds").length === 0
 					}
 					type="submit"
 					className="w-full mt-6 gap-2"
 				>
-					{isFetchAreasByStatesPending ? (
+					{isPendingRegisterCompanyStatesAreasService ? (
 						<Loader2 className="size-4 animate-spin" />
 					) : (
 						<>

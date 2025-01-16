@@ -5,7 +5,7 @@ import { AreasRepository } from "@/repositories/areas-repository";
 import { CompanyStatesAreasRepository } from "@/repositories/company-states-areas-repository";
 
 interface RegisterCompanyAreaServiceUseCaseRequest {
-	stateIds: string[];
+	stateAcronyms: string[];
 	areaIds: string[];
 	userId: string;
 }
@@ -21,7 +21,7 @@ export class RegisterCompanyAreaServiceUseCase {
 	) {}
 
 	async execute({
-		stateIds,
+		stateAcronyms,
 		areaIds,
 		userId,
 	}: RegisterCompanyAreaServiceUseCaseRequest): Promise<RegisterCompanyAreaServiceUseCaseResponse> {
@@ -32,7 +32,7 @@ export class RegisterCompanyAreaServiceUseCase {
 		}
 
 		const [states, areas] = await Promise.all([
-			this.statesRepository.findManyByIds(stateIds),
+			this.statesRepository.findManyByAcronyms(stateAcronyms),
 			this.areasRepository.findManyByIds(areaIds),
 		]);
 
@@ -48,10 +48,10 @@ export class RegisterCompanyAreaServiceUseCase {
 			throw new ResourceNotFoundError("No areas found for the provided ids");
 		}
 
-		const entries = stateIds.flatMap((stateId) =>
+		const entries = states.flatMap((state) =>
 			areaIds.map((areaId) => ({
 				companyId: member.companyId,
-				stateId,
+				stateId: state.id,
 				areaId,
 			}))
 		);

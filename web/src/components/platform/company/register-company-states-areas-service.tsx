@@ -1,6 +1,6 @@
-import { RegisterCompanyAreaServiceForm } from "@/components/platform/company/register-company-area-service-form";
+import { RegisterCompanyStatesAreasServiceForm } from "@/components/platform/company/register-company-states-areas-service-form";
 
-export function RegisterCompanyAreaService() {
+export function RegisterCompanyStatesAreasService() {
 	return (
 		<section>
 			<header className="w-full flex flex-col md:flex-row gap-4 item-start md:items-center justify-between">
@@ -11,7 +11,7 @@ export function RegisterCompanyAreaService() {
 			</header>
 
 			<div className="mt-10 md:mt-16">
-				<RegisterCompanyAreaServiceForm />
+				<RegisterCompanyStatesAreasServiceForm />
 			</div>
 		</section>
 	);

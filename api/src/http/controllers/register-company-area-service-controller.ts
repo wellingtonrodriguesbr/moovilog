@@ -7,13 +7,12 @@ import z from "zod";
 export class RegisterCompanyAreaServiceController {
 	static async handle(req: FastifyRequest, reply: FastifyReply) {
 		const registerCompanyAreaServiceBodySchema = z.object({
-			stateIds: z.array(z.string()),
+			stateAcronyms: z.array(z.string()),
 			areaIds: z.array(z.string()),
 		});
 
-		const { stateIds, areaIds } = registerCompanyAreaServiceBodySchema.parse(
-			req.body
-		);
+		const { stateAcronyms, areaIds } =
+			registerCompanyAreaServiceBodySchema.parse(req.body);
 
 		const userId = req.user.sub;
 
@@ -21,7 +20,7 @@ export class RegisterCompanyAreaServiceController {
 			const registerCompanyAreaServiceUseCase =
 				makeRegisterCompanyAreaServiceUseCase();
 			await registerCompanyAreaServiceUseCase.execute({
-				stateIds,
+				stateAcronyms,
 				areaIds,
 				userId,
 			});
