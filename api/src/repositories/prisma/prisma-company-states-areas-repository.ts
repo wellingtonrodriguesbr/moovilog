@@ -11,4 +11,22 @@ export class PrismaCompanyStatesAreasRepository
 			skipDuplicates: true,
 		});
 	}
+
+	async create(data: Prisma.CompanyStateAreaUncheckedCreateInput) {
+		const companyStateArea = await prisma.companyStateArea.create({
+			data,
+		});
+
+		return companyStateArea;
+	}
+
+	async findManyByCompanyId(companyId: string) {
+		const companyStatesAreas = await prisma.companyStateArea.findMany({
+			where: {
+				companyId,
+			},
+		});
+
+		return companyStatesAreas;
+	}
 }

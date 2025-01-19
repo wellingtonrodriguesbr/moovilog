@@ -26,6 +26,7 @@ import { formatCPF } from "@/utils/format-cpf";
 import { formatPhone } from "@/utils/format-phone";
 
 import { Loader2 } from "lucide-react";
+import { AxiosError } from "axios";
 
 interface RegisterDriverFormProps {
 	onCloseDialog: () => void;
@@ -65,8 +66,15 @@ export function RegisterDriverForm({ onCloseDialog }: RegisterDriverFormProps) {
 			onCloseDialog();
 			toast.success("Motorista cadastrado com sucesso");
 		} catch (error) {
-			console.log(error);
-			toast.error("Erro ao cadastrar motorista");
+			if (error instanceof AxiosError) {
+				if (error.response?.status === 409) {
+					toast.error(
+						"Já existe um motorista com este CPF ou telefone"
+					);
+				}
+			} else {
+				toast.error("Erro ao cadastrar motorista");
+			}
 		}
 	}
 

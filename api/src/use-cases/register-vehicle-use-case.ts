@@ -55,9 +55,11 @@ export class RegisterVehicleUseCase {
 			);
 		}
 
+		const transformedPlate = plate.toUpperCase();
+
 		const vehicleAlreadyExistsInCompany =
 			await this.vehiclesRepository.findVehicleInCompany(
-				plate,
+				transformedPlate,
 				member.companyId
 			);
 
@@ -68,7 +70,7 @@ export class RegisterVehicleUseCase {
 		}
 
 		const vehicle = await this.vehiclesRepository.create({
-			plate,
+			plate: transformedPlate,
 			year,
 			body,
 			category,

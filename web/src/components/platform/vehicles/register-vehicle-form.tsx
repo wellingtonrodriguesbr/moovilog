@@ -26,6 +26,7 @@ import { Loader2 } from "lucide-react";
 import { formatPlate } from "@/utils/format-plate";
 import { useRegisterVehicle } from "@/hooks/use-register-vehicle";
 import { formatWeight } from "@/utils/format-weight";
+import { AxiosError } from "axios";
 
 interface RegisterDriverFormProps {
 	onCloseDialog: () => void;
@@ -82,8 +83,13 @@ export function RegisterVehicleForm({
 			onCloseDialog();
 			toast.success("Veículo cadastrado com sucesso");
 		} catch (error) {
-			console.log(error);
-			toast.error("Erro ao cadastrar veículo");
+			if (error instanceof AxiosError) {
+				if (error.response?.status === 409) {
+					toast.error("Já existe um veículo com esta placa");
+				}
+			} else {
+				toast.error("Erro ao cadastrar veículo");
+			}
 		}
 	}
 

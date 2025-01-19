@@ -27,4 +27,25 @@ export class InMemoryCompanyStatesAreasRepository
 
 		this.items.push(...uniqueEntries);
 	}
+
+	async create(data: Prisma.CompanyStateAreaUncheckedCreateInput) {
+		const companyStateArea = {
+			id: data.id ?? randomUUID(),
+			stateId: data.stateId,
+			areaId: data.areaId,
+			companyId: data.companyId,
+		};
+
+		this.items.push(companyStateArea);
+
+		return companyStateArea;
+	}
+
+	async findManyByCompanyId(companyId: string) {
+		const companyStatesAreas = this.items.filter(
+			(item) => item.companyId === companyId
+		);
+
+		return companyStatesAreas;
+	}
 }

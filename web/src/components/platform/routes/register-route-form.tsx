@@ -2,6 +2,7 @@
 import {
 	Form,
 	FormControl,
+	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
@@ -94,6 +95,11 @@ export function RegisterRouteForm({ onCloseDialog }: RegisterRouteFormProps) {
 								</SelectContent>
 							</Select>
 							<FormMessage />
+							<FormDescription>
+								Os estados listados aqui são com base na sua
+								escolha no momento da criação de conta na etapa
+								de cadastro de área atendida.
+							</FormDescription>
 						</FormItem>
 					)}
 				/>
@@ -126,6 +132,11 @@ export function RegisterRouteForm({ onCloseDialog }: RegisterRouteFormProps) {
 								</SelectContent>
 							</Select>
 							<FormMessage />
+							<FormDescription>
+								As regiões listadas aqui são com base na sua
+								escolha no momento da criação de conta na etapa
+								de cadastro de área atendida.
+							</FormDescription>
 						</FormItem>
 					)}
 				/>
