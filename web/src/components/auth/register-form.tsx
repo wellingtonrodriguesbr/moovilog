@@ -65,7 +65,13 @@ export function RegisterForm() {
 		} catch (error) {
 			if (error instanceof AxiosError) {
 				if (error.response?.status === 409) {
-					toast.error("Já existe uma conta com este e-mail");
+					toast.error(
+						"Já existe uma conta com este e-mail ou número de celular"
+					);
+				} else {
+					toast.error(
+						"Falha ao cadastrar conta, entre em contato com o suporte."
+					);
 				}
 			}
 		}
