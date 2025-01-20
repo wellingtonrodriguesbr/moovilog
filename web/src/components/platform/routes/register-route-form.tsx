@@ -24,6 +24,9 @@ import { toast } from "sonner";
 
 import { Loader2 } from "lucide-react";
 import { useFetchAreasStatesFromCompany } from "@/hooks/use-fetch-areas-states-from-company";
+import { useFetchCitiesByArea } from "@/hooks/use-fetch-cities-by-area";
+import { Label } from "@/components/ui/label";
+import { MultiSelectCities } from "@/components/multi-select-cities";
 
 interface RegisterRouteFormProps {
 	onCloseDialog: () => void;
@@ -35,21 +38,31 @@ const formSchema = z.object({
 		.string()
 		.min(1, { message: "Selecione um estado" })
 		.transform((value) => value.toLowerCase()),
-	areaId: z.string().min(1, { message: "Selecione pelo menos uma cidade" }),
+	areaCode: z
+		.string()
+		.min(1, { message: "Selecione pelo menos uma cidade" })
+		.transform((value) => Number(value)),
+	citiesIds: z.array(z.string()),
 });
 
 export function RegisterRouteForm({ onCloseDialog }: RegisterRouteFormProps) {
-	const { states, areas, isFetchAreasStatesFromCompanyPending } =
-		useFetchAreasStatesFromCompany();
-
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			name: "",
 			stateAcronym: "",
-			areaId: "",
+			areaCode: undefined,
+			citiesIds: [],
 		},
 	});
+
+	const { states, areas, isFetchAreasStatesFromCompanyPending } =
+		useFetchAreasStatesFromCompany();
+	const { cities, isFetchCitiesByAreaPending } = useFetchCitiesByArea({
+		areaCode: form.watch("areaCode"),
+	});
+
+	console.log(form.watch("citiesIds"));
 
 	async function onSubmit(registerData: z.infer<typeof formSchema>) {
 		try {
@@ -112,7 +125,7 @@ export function RegisterRouteForm({ onCloseDialog }: RegisterRouteFormProps) {
 
 				<FormField
 					control={form.control}
-					name="areaId"
+					name="areaCode"
 					render={({ field }) => (
 						<FormItem>
 							<FormLabel>Região de atendimento</FormLabel>
@@ -135,7 +148,7 @@ export function RegisterRouteForm({ onCloseDialog }: RegisterRouteFormProps) {
 									{areas.map((area) => (
 										<SelectItem
 											key={area.id}
-											value={area.id}
+											value={area.code.toString()}
 										>
 											DDD {area.code} - {area.name}
 										</SelectItem>
@@ -177,37 +190,26 @@ export function RegisterRouteForm({ onCloseDialog }: RegisterRouteFormProps) {
 					)}
 				/>
 
-				{/* <FormField
-					control={form.control}
-					name="citiesIds"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Cidades</FormLabel>
-							<Select
-								disabled={form.getValues("stateAcronym") === ""}
-								onValueChange={field.onChange}
-							>
-								<FormControl>
-									<SelectTrigger>
-										<SelectValue placeholder="Selecione as cidades" />
-									</SelectTrigger>
-								</FormControl>
-								<SelectContent>
-									<SelectItem value="INTERNAL">
-										Interno
-									</SelectItem>
-									<SelectItem value="AGGREGATE">
-										Agregado
-									</SelectItem>
-									<SelectItem value="FREELANCER">
-										Freelancer
-									</SelectItem>
-								</SelectContent>
-							</Select>
-							<FormMessage />
-						</FormItem>
-					)}
-				/> */}
+				<fieldset className="space-y-2">
+					<Label>Selecione as cidades</Label>
+					<MultiSelectCities
+						modalPopover
+						options={cities}
+						onCitiesChange={(selectedCities) =>
+							form.setValue("citiesIds", selectedCities)
+						}
+						defaultValue={form.watch("citiesIds")}
+						disabled={
+							isFetchCitiesByAreaPending || cities.length === 0
+						}
+						placeholder={
+							isFetchCitiesByAreaPending
+								? "Carregando cidades..."
+								: "Clique para selecionar"
+						}
+						maxCount={3}
+					/>
+				</fieldset>
 
 				<Button
 					disabled={false}

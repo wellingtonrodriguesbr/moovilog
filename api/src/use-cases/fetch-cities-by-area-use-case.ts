@@ -1,19 +1,19 @@
 import { CompanyMembersRepository } from "@/repositories/company-members-repository";
+import { AreasRepository } from "@/repositories/areas-repository";
 import { CitiesRepository } from "@/repositories/cities-repository";
 import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
 import { ICity } from "@/interfaces/city";
-import { AreasRepository } from "@/repositories/areas-repository";
 
-interface GetCitiesByAreaUseCaseRequest {
+interface FetchCitiesByAreaUseCaseRequest {
 	userId: string;
-	areaId: string;
+	areaCode: number;
 }
 
-interface GetCitiesByAreaUseCaseResponse {
+interface FetchCitiesByAreaUseCaseResponse {
 	cities: ICity[];
 }
 
-export class GetCitiesByAreaUseCase {
+export class FetchCitiesByAreaUseCase {
 	constructor(
 		private companyMembersRepository: CompanyMembersRepository,
 		private citiesRepository: CitiesRepository,
@@ -22,12 +22,11 @@ export class GetCitiesByAreaUseCase {
 
 	async execute({
 		userId,
-		areaId,
-	}: GetCitiesByAreaUseCaseRequest): Promise<GetCitiesByAreaUseCaseResponse> {
-		const [member, cities, area] = await Promise.all([
-			await this.companyMembersRepository.findByUserId(userId),
-			await this.citiesRepository.findManyByAreaId(areaId),
-			await this.areasRepository.findById(areaId),
+		areaCode,
+	}: FetchCitiesByAreaUseCaseRequest): Promise<FetchCitiesByAreaUseCaseResponse> {
+		const [member, area] = await Promise.all([
+			this.companyMembersRepository.findByUserId(userId),
+			this.areasRepository.findByCode(areaCode),
 		]);
 
 		if (!member) {
@@ -37,6 +36,8 @@ export class GetCitiesByAreaUseCase {
 		if (!area) {
 			throw new ResourceNotFoundError("Area not found");
 		}
+
+		const cities = await this.citiesRepository.findManyByAreaId(area.id);
 
 		return { cities };
 	}

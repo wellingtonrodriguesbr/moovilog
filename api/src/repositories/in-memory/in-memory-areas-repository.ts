@@ -26,6 +26,14 @@ export class InMemoryAreasRepository implements AreasRepository {
 		return area;
 	}
 
+	async findByCode(code: number) {
+		const area = this.items.find((item) => item.code === code);
+
+		if (!area) return null;
+
+		return area;
+	}
+
 	async findManyByStateIds(stateIds: string[]) {
 		const areas = this.items.filter((item) => stateIds.includes(item.stateId));
 

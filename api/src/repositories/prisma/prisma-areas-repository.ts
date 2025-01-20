@@ -12,6 +12,16 @@ export class PrismaAreasRepository implements AreasRepository {
 		return area;
 	}
 
+	async findByCode(code: number) {
+		const area = await prisma.area.findUnique({
+			where: {
+				code,
+			},
+		});
+
+		return area;
+	}
+
 	async findManyByStateIds(stateIds: string[]) {
 		const areas = await prisma.area.findMany({
 			where: {

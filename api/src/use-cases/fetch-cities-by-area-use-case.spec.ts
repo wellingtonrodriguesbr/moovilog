@@ -8,7 +8,7 @@ import { InMemoryCompanyMembersRepository } from "@/repositories/in-memory/in-me
 import { InMemoryCitiesRepository } from "@/repositories/in-memory/in-memory-cities-repository";
 import { InMemoryAreasRepository } from "@/repositories/in-memory/in-memory-areas-repository";
 
-import { GetCitiesByAreaUseCase } from "@/use-cases/get-cities-by-area-use-case";
+import { FetchCitiesByAreaUseCase } from "@/use-cases/fetch-cities-by-area-use-case";
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
@@ -18,9 +18,9 @@ let companyMembersRepository: InMemoryCompanyMembersRepository;
 let citiesRepository: InMemoryCitiesRepository;
 let areasRepository: InMemoryAreasRepository;
 
-let sut: GetCitiesByAreaUseCase;
+let sut: FetchCitiesByAreaUseCase;
 
-describe("Get cities by area use case", () => {
+describe("Fetch cities by area use case", () => {
 	beforeEach(async () => {
 		usersRepository = new InMemoryUsersRepository();
 		companiesRepository = new InMemoryCompaniesRepository();
@@ -30,7 +30,7 @@ describe("Get cities by area use case", () => {
 		citiesRepository = new InMemoryCitiesRepository();
 		areasRepository = new InMemoryAreasRepository();
 
-		sut = new GetCitiesByAreaUseCase(
+		sut = new FetchCitiesByAreaUseCase(
 			companyMembersRepository,
 			citiesRepository,
 			areasRepository
@@ -80,10 +80,10 @@ describe("Get cities by area use case", () => {
 		});
 	});
 
-	it("should be able to get cities by area id", async () => {
+	it("should be able to fetch cities by area code", async () => {
 		const { cities } = await sut.execute({
 			userId: "john-doe-id-01",
-			areaId: "fake-area-id",
+			areaCode: 15,
 		});
 
 		expect(cities).toHaveLength(1);

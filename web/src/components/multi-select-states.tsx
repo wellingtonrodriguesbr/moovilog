@@ -55,8 +55,8 @@ interface MultiSelectStatesProps
 		name: string;
 		icon?: React.ComponentType<{ className?: string }>;
 	}[];
-	onNameChange: (name: string[]) => void;
-	defaultName?: string[];
+	onStatesChange: (name: string[]) => void;
+	defaultValues?: string[];
 	placeholder?: string;
 	maxCount?: number;
 	modalPopover?: boolean;
@@ -71,9 +71,9 @@ export const MultiSelectStates = React.forwardRef<
 	(
 		{
 			options,
-			onNameChange,
+			onStatesChange,
 			variant,
-			defaultName = [],
+			defaultValues = [],
 			placeholder = "Clique para selecionar",
 			maxCount = 3,
 			modalPopover = false,
@@ -83,8 +83,8 @@ export const MultiSelectStates = React.forwardRef<
 		},
 		ref
 	) => {
-		const [selectedNames, setSelectedNames] =
-			React.useState<string[]>(defaultName);
+		const [selectedValues, setSelectedValues] =
+			React.useState<string[]>(defaultValues);
 		const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
 
 		const handleInputKeyDown = (
@@ -93,26 +93,26 @@ export const MultiSelectStates = React.forwardRef<
 			if (event.key === "Enter") {
 				setIsPopoverOpen(true);
 			} else if (event.key === "Backspace" && !event.currentTarget.name) {
-				const newSelectedNames = [...selectedNames];
-				newSelectedNames.pop();
-				setSelectedNames(newSelectedNames);
-				onNameChange(newSelectedNames);
+				const newSelectedValues = [...selectedValues];
+				newSelectedValues.pop();
+				setSelectedValues(newSelectedValues);
+				onStatesChange(newSelectedValues);
 			}
 		};
 
 		const toggleOption = (acronym: string) => {
-			const newSelectedNames = selectedNames.includes(acronym)
-				? selectedNames.filter(
+			const newSelectedValues = selectedValues.includes(acronym)
+				? selectedValues.filter(
 						(selectedAcronym) => selectedAcronym !== acronym
 					)
-				: [...selectedNames, acronym];
-			setSelectedNames(newSelectedNames);
-			onNameChange(newSelectedNames);
+				: [...selectedValues, acronym];
+			setSelectedValues(newSelectedValues);
+			onStatesChange(newSelectedValues);
 		};
 
 		const handleClear = () => {
-			setSelectedNames([]);
-			onNameChange([]);
+			setSelectedValues([]);
+			onStatesChange([]);
 		};
 
 		const handleTogglePopover = () => {
@@ -120,18 +120,18 @@ export const MultiSelectStates = React.forwardRef<
 		};
 
 		const clearExtraOptions = () => {
-			const newSelectedNames = selectedNames.slice(0, maxCount);
-			setSelectedNames(newSelectedNames);
-			onNameChange(newSelectedNames);
+			const newSelectedValues = selectedValues.slice(0, maxCount);
+			setSelectedValues(newSelectedValues);
+			onStatesChange(newSelectedValues);
 		};
 
 		const toggleAll = () => {
-			if (selectedNames.length === options.length) {
+			if (selectedValues.length === options.length) {
 				handleClear();
 			} else {
 				const allNames = options.map((option) => option.acronym);
-				setSelectedNames(allNames);
-				onNameChange(allNames);
+				setSelectedValues(allNames);
+				onStatesChange(allNames);
 			}
 		};
 
@@ -151,10 +151,10 @@ export const MultiSelectStates = React.forwardRef<
 							className
 						)}
 					>
-						{selectedNames.length > 0 ? (
+						{selectedValues.length > 0 ? (
 							<div className="flex justify-between items-center w-full">
 								<div className="flex flex-wrap items-center">
-									{selectedNames
+									{selectedValues
 										.slice(0, maxCount)
 										.map((acronym) => {
 											const option = options.find(
@@ -188,7 +188,7 @@ export const MultiSelectStates = React.forwardRef<
 												</Badge>
 											);
 										})}
-									{selectedNames.length > maxCount && (
+									{selectedValues.length > maxCount && (
 										<Badge
 											className={cn(
 												"bg-transparent text-foreground border-foreground/1 hover:bg-transparent",
@@ -197,7 +197,7 @@ export const MultiSelectStates = React.forwardRef<
 												})
 											)}
 										>
-											{`+ ${selectedNames.length - maxCount} selecionados`}
+											{`+ ${selectedValues.length - maxCount} selecionados`}
 											<XCircle
 												className="ml-2 h-4 w-4 cursor-pointer"
 												onClick={(event) => {
@@ -256,7 +256,7 @@ export const MultiSelectStates = React.forwardRef<
 									<div
 										className={cn(
 											"mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
-											selectedNames.length ===
+											selectedValues.length ===
 												options.length
 												? "bg-primary text-primary-foreground"
 												: "opacity-50 [&_svg]:invisible"
@@ -267,7 +267,7 @@ export const MultiSelectStates = React.forwardRef<
 									<span>(Selecionar Todos)</span>
 								</CommandItem>
 								{options.map((option) => {
-									const isSelected = selectedNames.includes(
+									const isSelected = selectedValues.includes(
 										option.acronym
 									);
 									return (
@@ -301,7 +301,7 @@ export const MultiSelectStates = React.forwardRef<
 							<CommandSeparator />
 							<CommandGroup>
 								<div className="flex items-center justify-between">
-									{selectedNames.length > 0 && (
+									{selectedValues.length > 0 && (
 										<>
 											<CommandItem
 												onSelect={handleClear}

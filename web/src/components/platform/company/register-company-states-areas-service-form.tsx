@@ -69,7 +69,7 @@ export function RegisterCompanyStatesAreasServiceForm() {
 					</Label>
 					<MultiSelectStates
 						options={STATES_ARRAY}
-						onNameChange={(selectedStates) =>
+						onStatesChange={(selectedStates) =>
 							form.setValue("stateAcronyms", selectedStates)
 						}
 						defaultValue={form.watch("stateAcronyms")}
@@ -81,7 +81,7 @@ export function RegisterCompanyStatesAreasServiceForm() {
 					<Label>Selecione as regiões de atendimento</Label>
 					<MultiSelectAreas
 						options={areas}
-						onAreaChange={(selectedAreas) =>
+						onAreasChange={(selectedAreas) =>
 							form.setValue("areaIds", selectedAreas)
 						}
 						defaultValue={form.watch("areaIds")}

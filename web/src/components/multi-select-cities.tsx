@@ -1,5 +1,3 @@
-// src/components/multi-select.tsx
-
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { CheckIcon, XCircle, ChevronDown, XIcon } from "lucide-react";
@@ -22,9 +20,13 @@ import {
 	CommandList,
 	CommandSeparator,
 } from "@/components/ui/command";
-import { Area } from "@/hooks/use-fetch-areas-by-states";
+import { z } from "zod";
 
-const multiSelectAreasVariants = cva("m-1 text-app-blue-900", {
+/**
+ * Variants for the multi-select component to handle different styles.
+ * Uses class-variance-authority (cva) to define different styles based on "variant" prop.
+ */
+const multiSelectCitiesVariants = cva("m-1 text-app-blue-900", {
 	variants: {
 		variant: {
 			default:
@@ -41,11 +43,19 @@ const multiSelectAreasVariants = cva("m-1 text-app-blue-900", {
 	},
 });
 
-interface MultiSelectAreasProps
+/**
+ * Props for MultiSelectCities component
+ */
+interface MultiSelectCitiesProps
 	extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-		VariantProps<typeof multiSelectAreasVariants> {
-	options: Area[];
-	onAreasChange: (id: string[]) => void;
+		VariantProps<typeof multiSelectCitiesVariants> {
+	options: {
+		id: string;
+		name: string;
+		stateId: string;
+		areaId: string;
+	}[];
+	onCitiesChange: (name: string[]) => void;
 	defaultValues?: string[];
 	placeholder?: string;
 	maxCount?: number;
@@ -54,14 +64,14 @@ interface MultiSelectAreasProps
 	className?: string;
 }
 
-export const MultiSelectAreas = React.forwardRef<
+export const MultiSelectCities = React.forwardRef<
 	HTMLButtonElement,
-	MultiSelectAreasProps
+	MultiSelectCitiesProps
 >(
 	(
 		{
 			options,
-			onAreasChange,
+			onCitiesChange,
 			variant,
 			defaultValues = [],
 			placeholder = "Clique para selecionar",
@@ -83,24 +93,24 @@ export const MultiSelectAreas = React.forwardRef<
 			if (event.key === "Enter") {
 				setIsPopoverOpen(true);
 			} else if (event.key === "Backspace" && !event.currentTarget.name) {
-				const newSelectedAreas = [...selectedValues];
-				newSelectedAreas.pop();
-				setSelectedValues(newSelectedAreas);
-				onAreasChange(newSelectedAreas);
+				const newSelectedValues = [...selectedValues];
+				newSelectedValues.pop();
+				setSelectedValues(newSelectedValues);
+				onCitiesChange(newSelectedValues);
 			}
 		};
 
 		const toggleOption = (id: string) => {
-			const newSelectedAreas = selectedValues.includes(id)
+			const newSelectedValues = selectedValues.includes(id)
 				? selectedValues.filter((selectedId) => selectedId !== id)
 				: [...selectedValues, id];
-			setSelectedValues(newSelectedAreas);
-			onAreasChange(newSelectedAreas);
+			setSelectedValues(newSelectedValues);
+			onCitiesChange(newSelectedValues);
 		};
 
 		const handleClear = () => {
 			setSelectedValues([]);
-			onAreasChange([]);
+			onCitiesChange([]);
 		};
 
 		const handleTogglePopover = () => {
@@ -108,9 +118,9 @@ export const MultiSelectAreas = React.forwardRef<
 		};
 
 		const clearExtraOptions = () => {
-			const newSelectedNames = selectedValues.slice(0, maxCount);
-			setSelectedValues(newSelectedNames);
-			onAreasChange(newSelectedNames);
+			const newSelectedValues = selectedValues.slice(0, maxCount);
+			setSelectedValues(newSelectedValues);
+			onCitiesChange(newSelectedValues);
 		};
 
 		const toggleAll = () => {
@@ -119,7 +129,7 @@ export const MultiSelectAreas = React.forwardRef<
 			} else {
 				const allNames = options.map((option) => option.id);
 				setSelectedValues(allNames);
-				onAreasChange(allNames);
+				onCitiesChange(allNames);
 			}
 		};
 
@@ -152,7 +162,7 @@ export const MultiSelectAreas = React.forwardRef<
 												<Badge
 													key={id}
 													className={cn(
-														multiSelectAreasVariants(
+														multiSelectCitiesVariants(
 															{
 																variant,
 															}
@@ -174,7 +184,7 @@ export const MultiSelectAreas = React.forwardRef<
 										<Badge
 											className={cn(
 												"bg-transparent text-foreground border-foreground/1 hover:bg-transparent",
-												multiSelectAreasVariants({
+												multiSelectCitiesVariants({
 													variant,
 												})
 											)}
@@ -216,7 +226,7 @@ export const MultiSelectAreas = React.forwardRef<
 					</Button>
 				</PopoverTrigger>
 				<PopoverContent
-					className="w-auto md:min-w-[400px] p-0"
+					className="z-[1050] w-auto md:min-w-[400px] p-0"
 					align="start"
 					onEscapeKeyDown={() => setIsPopoverOpen(false)}
 				>
@@ -239,7 +249,7 @@ export const MultiSelectAreas = React.forwardRef<
 										className={cn(
 											"mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
 											selectedValues.length ===
-												options?.length
+												options.length
 												? "bg-primary text-primary-foreground"
 												: "opacity-50 [&_svg]:invisible"
 										)}
@@ -248,7 +258,7 @@ export const MultiSelectAreas = React.forwardRef<
 									</div>
 									<span>(Selecionar Todos)</span>
 								</CommandItem>
-								{options?.map((option) => {
+								{options.map((option) => {
 									const isSelected = selectedValues.includes(
 										option.id
 									);
@@ -270,9 +280,7 @@ export const MultiSelectAreas = React.forwardRef<
 											>
 												<CheckIcon className="size-4 text-app-blue-500" />
 											</div>
-											<span>
-												({option.code}) {option.name}
-											</span>
+											<span>{option.name}</span>
 										</CommandItem>
 									);
 								})}
@@ -310,4 +318,4 @@ export const MultiSelectAreas = React.forwardRef<
 	}
 );
 
-MultiSelectAreas.displayName = "MultiSelectAreas";
+MultiSelectCities.displayName = "MultiSelectCities";
