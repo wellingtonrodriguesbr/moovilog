@@ -4,7 +4,7 @@ import { RegisterCompanyController } from "@/http/controllers/register-company-c
 import { RegisterCompanyAddressController } from "@/http/controllers/register-company-address-controller";
 import { GetCompanyInformationController } from "@/http/controllers/get-company-information-controller";
 import { RegisterCompanyAreaServiceController } from "@/http/controllers/register-company-area-service-controller";
-import { FetchStatesFromCompanyController } from "@/http/controllers/fetch-states-from-company-controller";
+import { FetchAreasStatesFromCompanyController } from "@/http/controllers/fetch-areas-states-from-company-controller";
 
 export async function companiesRoutes(app: FastifyInstance) {
 	app.addHook("onRequest", verifyJWT);
@@ -16,8 +16,8 @@ export async function companiesRoutes(app: FastifyInstance) {
 		RegisterCompanyAreaServiceController.handle
 	);
 	app.get(
-		"/companies/:companyId/states",
-		FetchStatesFromCompanyController.handle
+		"/companies/:companyId/areas-states",
+		FetchAreasStatesFromCompanyController.handle
 	);
 	app.get("/companies/information", GetCompanyInformationController.handle);
 }

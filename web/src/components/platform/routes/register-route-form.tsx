@@ -23,8 +23,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { Loader2 } from "lucide-react";
-import { useFetchStatesFromCompany } from "@/hooks/use-fetch-states-from-company";
-import { useFetchAreasByStates } from "@/hooks/use-fetch-areas-by-states";
+import { useFetchAreasStatesFromCompany } from "@/hooks/use-fetch-areas-states-from-company";
 
 interface RegisterRouteFormProps {
 	onCloseDialog: () => void;
@@ -40,11 +39,8 @@ const formSchema = z.object({
 });
 
 export function RegisterRouteForm({ onCloseDialog }: RegisterRouteFormProps) {
-	const { states, isFetchStatesFromCompanyPending } =
-		useFetchStatesFromCompany();
-	const { areas, isFetchAreasByStatesPending } = useFetchAreasByStates({
-		stateAcronyms: states.map((state) => state.acronym),
-	});
+	const { states, areas, isFetchAreasStatesFromCompanyPending } =
+		useFetchAreasStatesFromCompany();
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -79,14 +75,14 @@ export function RegisterRouteForm({ onCloseDialog }: RegisterRouteFormProps) {
 						<FormItem>
 							<FormLabel>Estado</FormLabel>
 							<Select
-								disabled={isFetchStatesFromCompanyPending}
+								disabled={isFetchAreasStatesFromCompanyPending}
 								onValueChange={field.onChange}
 							>
 								<FormControl>
 									<SelectTrigger>
 										<SelectValue
 											placeholder={
-												isFetchStatesFromCompanyPending
+												isFetchAreasStatesFromCompanyPending
 													? "Carregando..."
 													: "Selecione um estado"
 											}
@@ -121,16 +117,18 @@ export function RegisterRouteForm({ onCloseDialog }: RegisterRouteFormProps) {
 						<FormItem>
 							<FormLabel>Região de atendimento</FormLabel>
 							<Select
-								disabled={
-									form.getValues("stateAcronym") === "" ||
-									isFetchAreasByStatesPending ||
-									isFetchStatesFromCompanyPending
-								}
+								disabled={isFetchAreasStatesFromCompanyPending}
 								onValueChange={field.onChange}
 							>
 								<FormControl>
 									<SelectTrigger>
-										<SelectValue placeholder="Selecione uma região" />
+										<SelectValue
+											placeholder={
+												isFetchAreasStatesFromCompanyPending
+													? "Carregando..."
+													: "Selecione uma região"
+											}
+										/>
 									</SelectTrigger>
 								</FormControl>
 								<SelectContent>
@@ -216,8 +214,7 @@ export function RegisterRouteForm({ onCloseDialog }: RegisterRouteFormProps) {
 					type="submit"
 					className="w-full mt-6 gap-2"
 				>
-					{isFetchAreasByStatesPending ||
-					isFetchStatesFromCompanyPending ? (
+					{isFetchAreasStatesFromCompanyPending ? (
 						<Loader2 className="size-4 animate-spin" />
 					) : (
 						"Concluir cadastro"

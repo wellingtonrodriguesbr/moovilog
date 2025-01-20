@@ -3,48 +3,60 @@ import { CompanyStatesAreasRepository } from "@/repositories/company-states-area
 import { StatesRepository } from "@/repositories/states-repository";
 import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
 import { IState } from "@/interfaces/state";
+import { IArea } from "@/interfaces/area";
+import { AreasRepository } from "@/repositories/areas-repository";
 
-interface FetchStatesFromCompanyUseCaseRequest {
+interface FetchAreasStatesFromCompanyUseCaseRequest {
 	userId: string;
 }
 
-interface FetchStatesFromCompanyUseCaseResponse {
+interface FetchAreasStatesFromCompanyUseCaseResponse {
 	states: IState[];
+	areas: IArea[];
 }
 
-export class FetchStatesFromCompanyUseCase {
+export class FetchAreasStatesFromCompanyUseCase {
 	constructor(
 		private companyMembersRepository: CompanyMembersRepository,
 		private statesRepository: StatesRepository,
+		private areasRepository: AreasRepository,
 		private companyStatesAreasRepository: CompanyStatesAreasRepository
 	) {}
 
 	async execute({
 		userId,
-	}: FetchStatesFromCompanyUseCaseRequest): Promise<FetchStatesFromCompanyUseCaseResponse> {
+	}: FetchAreasStatesFromCompanyUseCaseRequest): Promise<FetchAreasStatesFromCompanyUseCaseResponse> {
 		const member = await this.companyMembersRepository.findByUserId(userId);
 
 		if (!member) {
 			throw new ResourceNotFoundError("Member not found");
 		}
 
-		const companyStates =
+		const companyAreasStates =
 			await this.companyStatesAreasRepository.findManyByCompanyId(
 				member.companyId
 			);
 
-		if (!companyStates?.length) {
+		if (!companyAreasStates?.length) {
 			throw new ResourceNotFoundError("No states found for the company");
 		}
 
 		const states = await this.statesRepository.findManyByIds(
-			companyStates.map((state) => state.stateId)
+			companyAreasStates.map((state) => state.stateId)
 		);
 
 		if (!states?.length) {
 			throw new ResourceNotFoundError("No states found for the company");
 		}
 
-		return { states };
+		const areas = await this.areasRepository.findManyByIds(
+			companyAreasStates.map((area) => area.areaId)
+		);
+
+		if (!areas?.length) {
+			throw new ResourceNotFoundError("No areas found for the company");
+		}
+
+		return { states, areas };
 	}
 }

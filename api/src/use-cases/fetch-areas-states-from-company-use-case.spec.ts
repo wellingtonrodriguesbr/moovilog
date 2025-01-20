@@ -5,7 +5,7 @@ import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-user
 import { InMemoryStatesRepository } from "@/repositories/in-memory/in-memory-states-repository";
 import { InMemoryAreasRepository } from "@/repositories/in-memory/in-memory-areas-repository";
 import { InMemoryCompanyStatesAreasRepository } from "@/repositories/in-memory/in-memory-company-states-areas-repository";
-import { FetchStatesFromCompanyUseCase } from "@/use-cases/fetch-states-from-company-use-case";
+import { FetchAreasStatesFromCompanyUseCase } from "@/use-cases/fetch-areas-states-from-company-use-case";
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
@@ -14,20 +14,21 @@ let areasRepository: InMemoryAreasRepository;
 let companyMembersRepository: InMemoryCompanyMembersRepository;
 let statesRepository: InMemoryStatesRepository;
 let companyStatesAreasRepository: InMemoryCompanyStatesAreasRepository;
-let sut: FetchStatesFromCompanyUseCase;
+let sut: FetchAreasStatesFromCompanyUseCase;
 
-describe("Fetch states from company use case", () => {
+describe("Fetch areas states from company use case", () => {
 	beforeEach(async () => {
 		usersRepository = new InMemoryUsersRepository();
 		companiesRepository = new InMemoryCompaniesRepository();
-		areasRepository = new InMemoryAreasRepository();
 
 		companyMembersRepository = new InMemoryCompanyMembersRepository();
 		statesRepository = new InMemoryStatesRepository();
+		areasRepository = new InMemoryAreasRepository();
 		companyStatesAreasRepository = new InMemoryCompanyStatesAreasRepository();
-		sut = new FetchStatesFromCompanyUseCase(
+		sut = new FetchAreasStatesFromCompanyUseCase(
 			companyMembersRepository,
 			statesRepository,
+			areasRepository,
 			companyStatesAreasRepository
 		);
 
@@ -79,6 +80,11 @@ describe("Fetch states from company use case", () => {
 		});
 
 		expect(states).toHaveLength(1);
-		expect(areasRepository.items[0].stateId).toStrictEqual("fake-state-id");
+		expect(companyStatesAreasRepository.items[0].stateId).toStrictEqual(
+			"fake-state-id"
+		);
+		expect(companyStatesAreasRepository.items[0].areaId).toStrictEqual(
+			"fake-area-id"
+		);
 	});
 });
