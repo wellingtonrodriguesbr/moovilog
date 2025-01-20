@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useDebounce } from "react-use";
 
 export interface UseFetchAreasByStatesProps {
-	states: string[];
+	stateAcronyms: string[];
 }
 
 export interface Area {
@@ -14,14 +14,16 @@ export interface Area {
 	stateId: string;
 }
 
-export function useFetchAreasByStates({ states }: UseFetchAreasByStatesProps) {
+export function useFetchAreasByStates({
+	stateAcronyms,
+}: UseFetchAreasByStatesProps) {
 	const [debouncedStates, setDebouncedStates] = useState<string[]>([]);
 	const [isReady] = useDebounce(
 		() => {
-			setDebouncedStates(states);
+			setDebouncedStates(stateAcronyms);
 		},
 		2000,
-		[states]
+		[stateAcronyms]
 	);
 
 	const { data: areas, isPending: isFetchAreasByStatesPending } = useQuery({
@@ -31,7 +33,7 @@ export function useFetchAreasByStates({ states }: UseFetchAreasByStatesProps) {
 	});
 
 	async function handleFetchAreasByStates() {
-		const queryString = states.join(",");
+		const queryString = stateAcronyms.join(",");
 
 		const { data } = await api.get<{ areas: Area[] }>(
 			`/areas?states=${queryString}`

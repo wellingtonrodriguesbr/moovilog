@@ -32,7 +32,7 @@ export function RegisterCompanyStatesAreasServiceForm() {
 	});
 
 	const { areas, isFetchAreasByStatesPending } = useFetchAreasByStates({
-		states: form.watch("stateAcronyms"),
+		stateAcronyms: form.watch("stateAcronyms"),
 	});
 	const {
 		registerCompanyStatesAreasService,

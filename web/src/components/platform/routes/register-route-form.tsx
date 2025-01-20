@@ -1,4 +1,3 @@
-/* eslint-disable no-constant-condition */
 import {
 	Form,
 	FormControl,
@@ -21,11 +20,11 @@ import { Button } from "@/components/ui/button";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-// import { useRegisterRoute } from "@/hooks/use-register-route";
 import { toast } from "sonner";
 
 import { Loader2 } from "lucide-react";
-import { STATES_ARRAY } from "@/utils/mocks/states";
+import { useFetchStatesFromCompany } from "@/hooks/use-fetch-states-from-company";
+import { useFetchAreasByStates } from "@/hooks/use-fetch-areas-by-states";
 
 interface RegisterRouteFormProps {
 	onCloseDialog: () => void;
@@ -37,20 +36,22 @@ const formSchema = z.object({
 		.string()
 		.min(1, { message: "Selecione um estado" })
 		.transform((value) => value.toLowerCase()),
-	citiesIds: z
-		.array(z.string())
-		.min(1, { message: "Selecione pelo menos uma cidade" }),
+	areaId: z.string().min(1, { message: "Selecione pelo menos uma cidade" }),
 });
 
 export function RegisterRouteForm({ onCloseDialog }: RegisterRouteFormProps) {
-	// const { registerRoute, isPendingRegisterRoute } = useRegisterRoute();
+	const { states, isFetchStatesFromCompanyPending } =
+		useFetchStatesFromCompany();
+	const { areas, isFetchAreasByStatesPending } = useFetchAreasByStates({
+		stateAcronyms: states.map((state) => state.acronym),
+	});
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			name: "",
 			stateAcronym: "",
-			citiesIds: [],
+			areaId: "",
 		},
 	});
 
@@ -77,14 +78,23 @@ export function RegisterRouteForm({ onCloseDialog }: RegisterRouteFormProps) {
 					render={({ field }) => (
 						<FormItem>
 							<FormLabel>Estado</FormLabel>
-							<Select onValueChange={field.onChange}>
+							<Select
+								disabled={isFetchStatesFromCompanyPending}
+								onValueChange={field.onChange}
+							>
 								<FormControl>
 									<SelectTrigger>
-										<SelectValue placeholder="Selecione um estado" />
+										<SelectValue
+											placeholder={
+												isFetchStatesFromCompanyPending
+													? "Carregando..."
+													: "Selecione um estado"
+											}
+										/>
 									</SelectTrigger>
 								</FormControl>
 								<SelectContent>
-									{STATES_ARRAY.map((state) => (
+									{states.map((state) => (
 										<SelectItem
 											value={state.acronym}
 											key={state.acronym}
@@ -106,12 +116,16 @@ export function RegisterRouteForm({ onCloseDialog }: RegisterRouteFormProps) {
 
 				<FormField
 					control={form.control}
-					name="citiesIds"
+					name="areaId"
 					render={({ field }) => (
 						<FormItem>
 							<FormLabel>Região de atendimento</FormLabel>
 							<Select
-								disabled={form.getValues("stateAcronym") === ""}
+								disabled={
+									form.getValues("stateAcronym") === "" ||
+									isFetchAreasByStatesPending ||
+									isFetchStatesFromCompanyPending
+								}
 								onValueChange={field.onChange}
 							>
 								<FormControl>
@@ -120,15 +134,14 @@ export function RegisterRouteForm({ onCloseDialog }: RegisterRouteFormProps) {
 									</SelectTrigger>
 								</FormControl>
 								<SelectContent>
-									<SelectItem value="INTERNAL">
-										Interno
-									</SelectItem>
-									<SelectItem value="AGGREGATE">
-										Agregado
-									</SelectItem>
-									<SelectItem value="FREELANCER">
-										Freelancer
-									</SelectItem>
+									{areas.map((area) => (
+										<SelectItem
+											key={area.id}
+											value={area.id}
+										>
+											DDD {area.code} - {area.name}
+										</SelectItem>
+									))}
 								</SelectContent>
 							</Select>
 							<FormMessage />
@@ -166,7 +179,7 @@ export function RegisterRouteForm({ onCloseDialog }: RegisterRouteFormProps) {
 					)}
 				/>
 
-				<FormField
+				{/* <FormField
 					control={form.control}
 					name="citiesIds"
 					render={({ field }) => (
@@ -196,14 +209,15 @@ export function RegisterRouteForm({ onCloseDialog }: RegisterRouteFormProps) {
 							<FormMessage />
 						</FormItem>
 					)}
-				/>
+				/> */}
 
 				<Button
 					disabled={false}
 					type="submit"
 					className="w-full mt-6 gap-2"
 				>
-					{false ? (
+					{isFetchAreasByStatesPending ||
+					isFetchStatesFromCompanyPending ? (
 						<Loader2 className="size-4 animate-spin" />
 					) : (
 						"Concluir cadastro"
