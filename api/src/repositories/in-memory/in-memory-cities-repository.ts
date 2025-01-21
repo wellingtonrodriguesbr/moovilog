@@ -40,4 +40,10 @@ export class InMemoryCitiesRepository implements CitiesRepository {
 
 		return cities;
 	}
+
+	async findManyByIds(ids: string[]) {
+		const cities = this.items.filter((item) => ids.includes(item.id));
+
+		return cities;
+	}
 }

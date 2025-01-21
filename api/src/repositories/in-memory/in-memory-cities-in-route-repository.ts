@@ -16,4 +16,12 @@ export class InMemoryCitiesInRouteRepository
 
 		this.items.push(cityInRoute);
 	}
+
+	async findManyByRouteIds(routeIds: string[]) {
+		return this.items.filter((item) => routeIds.includes(item.routeId));
+	}
+
+	async findManyByRouteId(routeId: string) {
+		return this.items.filter((item) => item.routeId === routeId);
+	}
 }

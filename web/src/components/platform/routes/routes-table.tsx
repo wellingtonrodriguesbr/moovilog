@@ -1,24 +1,24 @@
 "use client";
 
 import { Table, TableBody } from "@/components/ui/table";
-import { useFetchDriversByCompany } from "@/hooks/use-fetch-drivers-by-company";
 import { SkeletonDriversTable } from "@/components/platform/drivers/skeleton-drivers-table";
-import { DriversTableRow } from "@/components/platform/drivers/drivers-table-row";
-import { DriversTableHeader } from "@/components/platform/drivers/drivers-table-header";
+import { RoutesTableHeader } from "./routes-table-header";
+import { RoutesTableRow } from "./routes-table-row";
+import { useFetchCompanyRoutes } from "@/hooks/use-fetch-company-routes";
 
 export function RoutesTable() {
-	const { driversByCompany, isFetchDriversByCompanyPending } =
-		useFetchDriversByCompany();
+	const { routes, isFetchCompanyRoutesPending } = useFetchCompanyRoutes();
+
 	return (
 		<>
-			{isFetchDriversByCompanyPending ? (
+			{isFetchCompanyRoutesPending ? (
 				<SkeletonDriversTable />
 			) : (
 				<Table>
-					<DriversTableHeader />
+					<RoutesTableHeader />
 					<TableBody>
-						{driversByCompany?.map((item) => (
-							<DriversTableRow key={item.id} driver={item} />
+						{routes?.map((item) => (
+							<RoutesTableRow key={item.id} route={item} />
 						))}
 					</TableBody>
 				</Table>

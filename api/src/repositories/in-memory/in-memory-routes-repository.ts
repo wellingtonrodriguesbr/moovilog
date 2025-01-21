@@ -1,5 +1,5 @@
 import { Prisma, Route } from "@prisma/client";
-import { RoutesRepository } from "../routes-repository";
+import { RoutesRepository } from "@/repositories/routes-repository";
 import { randomUUID } from "crypto";
 
 export class InMemoryRoutesRepository implements RoutesRepository {
@@ -39,5 +39,11 @@ export class InMemoryRoutesRepository implements RoutesRepository {
 		}
 
 		return route;
+	}
+
+	async findManyByCompanyId(companyId: string) {
+		const routes = this.items.filter((item) => item.companyId === companyId);
+
+		return routes;
 	}
 }

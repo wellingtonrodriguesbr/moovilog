@@ -7,4 +7,5 @@ export interface RoutesRepository {
 		name: string,
 		companyId: string
 	): Promise<Route | null>;
+	findManyByCompanyId(companyId: string): Promise<Route[]>;
 }

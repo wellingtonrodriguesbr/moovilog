@@ -31,4 +31,16 @@ export class PrismaCitiesRepository implements CitiesRepository {
 
 		return cities;
 	}
+
+	async findManyByIds(ids: string[]) {
+		const cities = await prisma.city.findMany({
+			where: {
+				id: {
+					in: ids,
+				},
+			},
+		});
+
+		return cities;
+	}
 }

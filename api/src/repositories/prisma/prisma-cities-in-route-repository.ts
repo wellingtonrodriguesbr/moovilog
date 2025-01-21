@@ -8,4 +8,26 @@ export class PrismaCitiesInRouteRepository implements CitiesInRouteRepository {
 			data,
 		});
 	}
+
+	async findManyByRouteIds(routeIds: string[]) {
+		const citiesInRoute = await prisma.cityInRoute.findMany({
+			where: {
+				routeId: {
+					in: routeIds,
+				},
+			},
+		});
+
+		return citiesInRoute;
+	}
+
+	async findManyByRouteId(routeId: string) {
+		const citiesInRoute = await prisma.cityInRoute.findMany({
+			where: {
+				routeId,
+			},
+		});
+
+		return citiesInRoute;
+	}
 }

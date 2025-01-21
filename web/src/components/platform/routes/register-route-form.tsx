@@ -27,6 +27,7 @@ import { useFetchAreasStatesFromCompany } from "@/hooks/use-fetch-areas-states-f
 import { useFetchCitiesByArea } from "@/hooks/use-fetch-cities-by-area";
 import { Label } from "@/components/ui/label";
 import { MultiSelectCities } from "@/components/multi-select-cities";
+import { useRegisterNewRoute } from "@/hooks/use-register-new-route";
 
 interface RegisterRouteFormProps {
 	onCloseDialog: () => void;
@@ -61,12 +62,12 @@ export function RegisterRouteForm({ onCloseDialog }: RegisterRouteFormProps) {
 	const { cities, isFetchCitiesByAreaPending } = useFetchCitiesByArea({
 		areaCode: form.watch("areaCode"),
 	});
-
-	console.log(form.watch("citiesIds"));
+	const { registerNewRoute, isPendingRegisterNewRoute } =
+		useRegisterNewRoute();
 
 	async function onSubmit(registerData: z.infer<typeof formSchema>) {
 		try {
-			// await registerRoute({ ...registerData });
+			await registerNewRoute({ ...registerData });
 			onCloseDialog();
 			toast.success("Rota cadastrada com sucesso");
 		} catch (error) {
@@ -177,10 +178,6 @@ export function RegisterRouteForm({ onCloseDialog }: RegisterRouteFormProps) {
 										className="border-0 rounded-none outline-none focus-visible:ring-0"
 										placeholder=""
 										autoComplete="off"
-										disabled={
-											form.getValues("stateAcronym") ===
-											""
-										}
 										{...field}
 									/>
 								</div>
@@ -200,7 +197,8 @@ export function RegisterRouteForm({ onCloseDialog }: RegisterRouteFormProps) {
 						}
 						defaultValue={form.watch("citiesIds")}
 						disabled={
-							isFetchCitiesByAreaPending || cities.length === 0
+							isFetchCitiesByAreaPending &&
+							!form.watch("areaCode")
 						}
 						placeholder={
 							isFetchCitiesByAreaPending
@@ -212,11 +210,16 @@ export function RegisterRouteForm({ onCloseDialog }: RegisterRouteFormProps) {
 				</fieldset>
 
 				<Button
-					disabled={false}
+					disabled={
+						isFetchAreasStatesFromCompanyPending ||
+						isFetchCitiesByAreaPending ||
+						!form.watch("citiesIds").length ||
+						isPendingRegisterNewRoute
+					}
 					type="submit"
 					className="w-full mt-6 gap-2"
 				>
-					{isFetchAreasStatesFromCompanyPending ? (
+					{isPendingRegisterNewRoute ? (
 						<Loader2 className="size-4 animate-spin" />
 					) : (
 						"Concluir cadastro"

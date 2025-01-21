@@ -35,4 +35,14 @@ export class PrismaRoutesRepository implements RoutesRepository {
 
 		return route;
 	}
+
+	async findManyByCompanyId(companyId: string) {
+		const routes = await prisma.route.findMany({
+			where: {
+				companyId,
+			},
+		});
+
+		return routes;
+	}
 }
