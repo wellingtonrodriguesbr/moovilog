@@ -3,16 +3,18 @@ import fastifyJwt from "@fastify/jwt";
 import fastifyCookie from "@fastify/cookie";
 import fastifyCors from "@fastify/cors";
 
-import { usersRoutes } from "@/http/routes/users";
 import { companiesRoutes } from "@/http/routes/companies";
 import { driversRoutes } from "@/http/routes/drivers";
 import { vehiclesRoutes } from "@/http/routes/vehicles";
 import { freightsRoutes } from "@/http/routes/freights";
 import { companyMembersRoutes } from "@/http/routes/company-members";
-import { authLinksRoutes } from "@/http/routes/auth-links";
 import { routesInCompanyRoutes } from "@/http/routes/routes-in-company";
 import { citiesRoutes } from "@/http/routes/cities";
 import { areasRoutes } from "@/http/routes/areas";
+
+import { authModuleRoutes } from "@/modules/auth/http/routes/auth-module-routes";
+import { userModuleRoutes } from "@/modules/user/http/routes/user-module-routes";
+import { sharedModuleRoutes } from "@/modules/shared/http/routes/shared-module-routes";
 
 import { env } from "@/env";
 
@@ -41,13 +43,15 @@ app.register(fastifyCors, {
 	credentials: true,
 });
 
-app.register(usersRoutes);
 app.register(companiesRoutes);
 app.register(companyMembersRoutes);
 app.register(driversRoutes);
 app.register(vehiclesRoutes);
 app.register(freightsRoutes);
-app.register(authLinksRoutes);
 app.register(routesInCompanyRoutes);
 app.register(citiesRoutes);
 app.register(areasRoutes);
+
+app.register(authModuleRoutes);
+app.register(userModuleRoutes);
+app.register(sharedModuleRoutes);

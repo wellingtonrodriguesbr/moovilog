@@ -1,0 +1,54 @@
+import { Prisma, User } from "@prisma/client";
+import { UsersRepository } from "@/modules/user/repositories/users-repository";
+import { randomUUID } from "node:crypto";
+
+export class InMemoryUsersRepository implements UsersRepository {
+	public items: User[] = [];
+
+	async create(data: Prisma.UserCreateInput) {
+		const user = {
+			id: data.id ?? randomUUID(),
+			name: data.name,
+			email: data.email,
+			password: data.password || null,
+			phone: data.phone || null,
+			createdAt: new Date(),
+			updatedAt: new Date(),
+		};
+
+		this.items.push(user);
+		return user;
+	}
+
+	async findById(id: string) {
+		const user = this.items.find((item) => item.id === id);
+
+		if (!user) return null;
+
+		return user;
+	}
+
+	async findByPhone(phone: string) {
+		const user = this.items.find((item) => item.phone === phone);
+
+		if (!user) return null;
+
+		return user;
+	}
+
+	async findByEmail(email: string) {
+		const user = this.items.find((item) => item.email === email);
+
+		if (!user) return null;
+
+		return user;
+	}
+
+	async updatePassword(id: string, password: string) {
+		const user = this.items.find((item) => item.id === id);
+
+		if (!user) throw new Error("User not found");
+
+		user.password = password;
+	}
+}

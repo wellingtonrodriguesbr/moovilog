@@ -28,7 +28,7 @@ export function useValidateAuthLink() {
 	async function handleValidateAuthLink() {
 		try {
 			const { data } = await api.get<AuthLinkResponse>(
-				`/auth-link/${code}/validate`
+				`/token/${code}/validate`
 			);
 
 			router.push(

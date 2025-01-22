@@ -9,7 +9,7 @@ export function useLogout() {
 	});
 
 	async function handleLogout() {
-		const { data } = await api.post("/logout");
+		const { data } = await api.post("/sessions/logout");
 
 		remove();
 		return data;
