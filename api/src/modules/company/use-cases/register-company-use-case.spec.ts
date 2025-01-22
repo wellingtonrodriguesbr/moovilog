@@ -1,17 +1,17 @@
-import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
 import { beforeEach, describe, expect, it } from "vitest";
-import { InMemoryCompaniesRepository } from "@/repositories/in-memory/in-memory-companies-repository";
-import { RegisterCompanyUseCase } from "./register-company-use-case";
-import { CompanyAlreadyExistsError } from "./errors/company-already-exists-error";
-import { UserAlreadyHasACompanyError } from "./errors/user-already-has-a-company-error";
-import { InMemoryCompanyMembersRepository } from "@/repositories/in-memory/in-memory-company-members-repository";
+import { InMemoryUsersRepository } from "@/modules/user/repositories/in-memory/in-memory-users-repository";
+import { InMemoryCompaniesRepository } from "@/modules/company/repositories/in-memory/in-memory-companies-repository";
+import { InMemoryCompanyMembersRepository } from "@/modules/company-member/repositories/in-memory/in-memory-company-members-repository";
+import { CompanyAlreadyExistsError } from "@/modules/company/use-cases/errors/company-already-exists-error";
+import { OwnerAlreadyHasACompanyError } from "@/modules/company/use-cases/errors/owner-already-has-a-company-error";
+import { RegisterCompanyUseCase } from "@/modules/company/use-cases/register-company-use-case";
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
 let companyMembersRepository: InMemoryCompanyMembersRepository;
 let sut: RegisterCompanyUseCase;
 
-describe("Register company use case", () => {
+describe("[MODULE]: Register company use case", () => {
 	beforeEach(async () => {
 		usersRepository = new InMemoryUsersRepository();
 		companiesRepository = new InMemoryCompaniesRepository();
@@ -44,7 +44,7 @@ describe("Register company use case", () => {
 		expect(company.size).toEqual("MEDIUM");
 	});
 
-	it("should not be possible to register company with an existing document number", async () => {
+	it("should not be able to register company with an existing document number", async () => {
 		await sut.execute({
 			name: "Company name",
 			documentNumber: "12312312389899",
@@ -64,7 +64,7 @@ describe("Register company use case", () => {
 		).rejects.toBeInstanceOf(CompanyAlreadyExistsError);
 	});
 
-	it("should not be possible to register company if user already owns another company", async () => {
+	it("should not be able to register company if user already owns another company", async () => {
 		await sut.execute({
 			name: "Company name",
 			documentNumber: "12312312389899",
@@ -81,6 +81,6 @@ describe("Register company use case", () => {
 				ownerId: "john-doe-01",
 				ownerSector: "Diretoria",
 			})
-		).rejects.toBeInstanceOf(UserAlreadyHasACompanyError);
+		).rejects.toBeInstanceOf(OwnerAlreadyHasACompanyError);
 	});
 });

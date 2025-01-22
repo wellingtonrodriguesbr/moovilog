@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { CompanyAlreadyExistsError } from "@/use-cases/errors/company-already-exists-error";
-import { UserAlreadyHasACompanyError } from "@/use-cases/errors/user-already-has-a-company-error";
-import { makeRegisterCompanyUseCase } from "@/use-cases/factories/make-register-company-use-case";
+import { CompanyAlreadyExistsError } from "@/modules/company/use-cases/errors/company-already-exists-error";
+import { OwnerAlreadyHasACompanyError } from "@/modules/company/use-cases/errors/owner-already-has-a-company-error";
+import { makeRegisterCompanyUseCase } from "@/modules/company/use-cases/factories/make-register-company-use-case";
 
 import z from "zod";
 
@@ -31,7 +31,7 @@ export class RegisterCompanyController {
 
 			reply.status(201).send({ company });
 		} catch (error) {
-			if (error instanceof UserAlreadyHasACompanyError) {
+			if (error instanceof OwnerAlreadyHasACompanyError) {
 				reply.status(409).send({ message: error.message });
 			}
 			if (error instanceof CompanyAlreadyExistsError) {

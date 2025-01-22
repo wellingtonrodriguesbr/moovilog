@@ -1,10 +1,11 @@
-import { CompanyAlreadyExistsError } from "./errors/company-already-exists-error";
-import { CompaniesRepository } from "@/repositories/companies-repository";
-import { UsersRepository } from "@/repositories/users-repository";
-import { ResourceNotFoundError } from "./errors/resource-not-found-error";
-import { ICompany, ICompanySizes } from "@/interfaces/company";
-import { CompanyMembersRepository } from "@/repositories/company-members-repository";
-import { UserAlreadyHasACompanyError } from "./errors/user-already-has-a-company-error";
+import { CompaniesRepository } from "@/modules/company/repositories/companies-repository";
+import { UsersRepository } from "@/modules/user/repositories/users-repository";
+import { CompanyMembersRepository } from "@/modules/company-member/repositories/company-members-repository";
+import { ICompany, ICompanySizes } from "@/modules/shared/interfaces/company";
+
+import { CompanyAlreadyExistsError } from "@/modules/company/use-cases/errors/company-already-exists-error";
+import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
+import { OwnerAlreadyHasACompanyError } from "@/modules/company/use-cases/errors/owner-already-has-a-company-error";
 
 interface RegisterCompanyUseCaseRequest {
 	ownerId: string;
@@ -45,11 +46,11 @@ export class RegisterCompanyUseCase {
 			throw new CompanyAlreadyExistsError();
 		}
 
-		const userAlreadyOwnsAnotherCompany =
+		const ownerAlreadyOwnsAnotherCompany =
 			await this.companiesRepository.findByOwnerId(ownerId);
 
-		if (userAlreadyOwnsAnotherCompany) {
-			throw new UserAlreadyHasACompanyError();
+		if (ownerAlreadyOwnsAnotherCompany) {
+			throw new OwnerAlreadyHasACompanyError();
 		}
 
 		const company = await this.companiesRepository.create({
