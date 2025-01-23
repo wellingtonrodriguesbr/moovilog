@@ -1,31 +1,22 @@
-import { ResourceNotFoundError } from "./errors/resource-not-found-error";
-import { CompanyMembersRepository } from "@/repositories/company-members-repository";
-import { CompaniesRepository } from "@/repositories/companies-repository";
-import { CitiesRepository } from "@/repositories/cities-repository";
-import { StatesRepository } from "@/repositories/states-repository";
-import { ICompany } from "@/interfaces/company";
-import { ICity } from "@/interfaces/city";
-import { IState } from "@/interfaces/state";
-import { AddressesRepository } from "@/repositories/addresses-repository";
+import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
+import { CompanyMembersRepository } from "@/modules/company-member/repositories/company-members-repository";
+import { CompaniesRepository } from "@/modules/company/repositories/companies-repository";
+import { CitiesRepository } from "@/modules/shared/repositories/cities-repository";
+import { StatesRepository } from "@/modules/shared/repositories/states-repository";
+import { AddressesRepository } from "@/modules/shared/repositories/addresses-repository";
+import { ICompany } from "@/modules/shared/interfaces/company";
+import { ICity } from "@/modules/shared/interfaces/city";
+import { IState } from "@/modules/shared/interfaces/state";
+import { IAddress } from "@/modules/shared/interfaces/address";
 
 interface GetCompanyInformationUseCaseRequest {
 	userId: string;
 }
 
-export interface Address {
-	id: string;
-	zipCode: string;
-	street: string;
-	neighborhood: string;
-	number: number;
-	complement: string | null;
-	cityId: string;
-}
-
 interface GetCompanyInformationUseCaseResponse {
 	company: ICompany;
 	companyAddress: {
-		address: Address;
+		address: IAddress;
 		city: ICity;
 		state: IState;
 	};
@@ -61,13 +52,13 @@ export class GetCompanyInformationUseCase {
 			throw new ResourceNotFoundError("Address not found");
 		}
 
-		const cityAddress = await this.citiesRepository.findById(address.cityId);
+		const city = await this.citiesRepository.findById(address.cityId);
 
-		if (!cityAddress) {
+		if (!city) {
 			throw new ResourceNotFoundError("City not found");
 		}
 
-		const state = await this.statesRepository.findById(cityAddress.stateId);
+		const state = await this.statesRepository.findById(city.stateId);
 
 		if (!state) {
 			throw new ResourceNotFoundError("State not found");
@@ -77,7 +68,7 @@ export class GetCompanyInformationUseCase {
 			company,
 			companyAddress: {
 				address,
-				city: cityAddress,
+				city,
 				state,
 			},
 		};

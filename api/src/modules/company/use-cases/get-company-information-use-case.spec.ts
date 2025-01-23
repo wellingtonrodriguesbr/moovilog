@@ -1,11 +1,11 @@
-import { InMemoryCompaniesRepository } from "@/repositories/in-memory/in-memory-companies-repository";
-import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
 import { beforeEach, describe, expect, it } from "vitest";
-import { GetCompanyInformationUseCase } from "./get-company-information-use-case";
-import { InMemoryAddressesRepository } from "@/repositories/in-memory/in-memory-addresses-repository";
-import { InMemoryCitiesRepository } from "@/repositories/in-memory/in-memory-cities-repository";
-import { InMemoryStatesRepository } from "@/repositories/in-memory/in-memory-states-repository";
-import { InMemoryCompanyMembersRepository } from "@/repositories/in-memory/in-memory-company-members-repository";
+import { InMemoryCompaniesRepository } from "@/modules/company/repositories/in-memory/in-memory-companies-repository";
+import { InMemoryUsersRepository } from "@/modules/user/repositories/in-memory/in-memory-users-repository";
+import { InMemoryAddressesRepository } from "@/modules/shared/repositories/in-memory/in-memory-addresses-repository";
+import { InMemoryCitiesRepository } from "@/modules/shared/repositories/in-memory/in-memory-cities-repository";
+import { InMemoryStatesRepository } from "@/modules/shared/repositories/in-memory/in-memory-states-repository";
+import { InMemoryCompanyMembersRepository } from "@/modules/company-member/repositories/in-memory/in-memory-company-members-repository";
+import { GetCompanyInformationUseCase } from "@/modules/company/use-cases/get-company-information-use-case";
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
@@ -16,7 +16,7 @@ let statesRepository: InMemoryStatesRepository;
 
 let sut: GetCompanyInformationUseCase;
 
-describe("Get company information use case", () => {
+describe("[MODULE]: Get company information use case", () => {
 	beforeEach(async () => {
 		usersRepository = new InMemoryUsersRepository();
 		companiesRepository = new InMemoryCompaniesRepository();

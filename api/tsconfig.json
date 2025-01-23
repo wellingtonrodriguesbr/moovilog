@@ -12,9 +12,9 @@
     "skipLibCheck": true,
     "jsx": "react-jsx", // support JSX
     "moduleResolution": "node16",
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
     }
   },
   "include": ["src"],

@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
-import { makeGetCompanyInformationUseCase } from "@/use-cases/factories/make-get-company-information-use-case";
+import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
+import { makeGetCompanyInformationUseCase } from "@/modules/company/use-cases/factories/make-get-company-information-use-case";
 
 export class GetCompanyInformationController {
 	static async handle(req: FastifyRequest, reply: FastifyReply) {

@@ -1,10 +1,10 @@
-import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
 import { beforeEach, describe, expect, it } from "vitest";
-import { InMemoryCompaniesRepository } from "@/repositories/in-memory/in-memory-companies-repository";
-import { RegisterCompanyAddressUseCase } from "./register-company-address-use-case";
-import { InMemoryCitiesRepository } from "@/repositories/in-memory/in-memory-cities-repository";
-import { InMemoryAddressesRepository } from "@/repositories/in-memory/in-memory-addresses-repository";
-import { InMemoryStatesRepository } from "@/repositories/in-memory/in-memory-states-repository";
+import { InMemoryUsersRepository } from "@/modules/user/repositories/in-memory/in-memory-users-repository";
+import { InMemoryCompaniesRepository } from "@/modules/company/repositories/in-memory/in-memory-companies-repository";
+import { InMemoryCitiesRepository } from "@/modules/shared/repositories/in-memory/in-memory-cities-repository";
+import { InMemoryAddressesRepository } from "@/modules/shared/repositories/in-memory/in-memory-addresses-repository";
+import { InMemoryStatesRepository } from "@/modules/shared/repositories/in-memory/in-memory-states-repository";
+import { RegisterCompanyAddressUseCase } from "@/modules/company/use-cases/register-company-address-use-case";
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
@@ -13,7 +13,7 @@ let statesRepository: InMemoryStatesRepository;
 let addressesRepository: InMemoryAddressesRepository;
 let sut: RegisterCompanyAddressUseCase;
 
-describe("Register company address use case", () => {
+describe("[MODULE]: Register company address use case", () => {
 	beforeEach(async () => {
 		usersRepository = new InMemoryUsersRepository();
 		companiesRepository = new InMemoryCompaniesRepository();

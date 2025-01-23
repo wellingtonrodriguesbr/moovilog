@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
-import { makeRegisterCompanyAddressUseCase } from "@/use-cases/factories/make-register-company-address-use-case";
+import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
+import { makeRegisterCompanyAddressUseCase } from "@/modules/company/use-cases/factories/make-register-company-address-use-case";
 
 import z from "zod";
 

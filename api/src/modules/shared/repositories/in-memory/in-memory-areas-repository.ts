@@ -1,0 +1,52 @@
+import { Area, Prisma } from "@prisma/client";
+import { AreasRepository } from "@/modules/shared/repositories/areas-repository";
+import { randomUUID } from "node:crypto";
+
+export class InMemoryAreasRepository implements AreasRepository {
+	public items: Area[] = [];
+
+	async create(data: Prisma.AreaUncheckedCreateInput) {
+		const area = {
+			id: data.id ?? randomUUID(),
+			name: data.name,
+			code: data.code,
+			stateId: data.stateId,
+		};
+
+		this.items.push(area);
+
+		return area;
+	}
+
+	async findById(id: string) {
+		const area = this.items.find((item) => item.id === id);
+
+		if (!area) return null;
+
+		return area;
+	}
+
+	async findByCode(code: number) {
+		const area = this.items.find((item) => item.code === code);
+
+		if (!area) return null;
+
+		return area;
+	}
+
+	async findManyByStateIds(stateIds: string[]) {
+		const areas = this.items.filter((item) => stateIds.includes(item.stateId));
+
+		return areas;
+	}
+
+	async findManyByIds(ids: string[]) {
+		const areas = this.items.filter((item) => ids.includes(item.id));
+
+		if (!areas) {
+			return null;
+		}
+
+		return areas;
+	}
+}

@@ -1,12 +1,12 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
-import { InMemoryStatesRepository } from "@/repositories/in-memory/in-memory-states-repository";
-import { InMemoryCompanyMembersRepository } from "@/repositories/in-memory/in-memory-company-members-repository";
-import { InMemoryAreasRepository } from "@/repositories/in-memory/in-memory-areas-repository";
-import { RegisterCompanyAreaServiceUseCase } from "./register-company-area-service-use-case";
-import { InMemoryCompanyStatesAreasRepository } from "@/repositories/in-memory/in-memory-company-states-areas-repository";
-import { InMemoryCompaniesRepository } from "@/repositories/in-memory/in-memory-companies-repository";
-import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
+import { InMemoryUsersRepository } from "@/modules/user/repositories/in-memory/in-memory-users-repository";
+import { InMemoryStatesRepository } from "@/modules/shared/repositories/in-memory/in-memory-states-repository";
+import { InMemoryAreasRepository } from "@/modules/shared/repositories/in-memory/in-memory-areas-repository";
+import { InMemoryCompanyMembersRepository } from "@/modules/company-member/repositories/in-memory/in-memory-company-members-repository";
+import { InMemoryCompaniesRepository } from "@/modules/company/repositories/in-memory/in-memory-companies-repository";
+import { InMemoryCompanyStatesAreasRepository } from "@/modules/company/repositories/in-memory/in-memory-company-states-areas-repository";
+import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
+import { RegisterCompanyStatesAreasUseCase } from "@/modules/company/use-cases/register-company-states-areas-use-case";
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
@@ -15,9 +15,9 @@ let companyMembersRepository: InMemoryCompanyMembersRepository;
 let companyStatesAreasRepository: InMemoryCompanyStatesAreasRepository;
 let statesRepository: InMemoryStatesRepository;
 let areasRepository: InMemoryAreasRepository;
-let sut: RegisterCompanyAreaServiceUseCase;
+let sut: RegisterCompanyStatesAreasUseCase;
 
-describe("Register company area service use case", () => {
+describe("[MODULE]: Register company states areas use case", () => {
 	beforeEach(async () => {
 		usersRepository = new InMemoryUsersRepository();
 		companiesRepository = new InMemoryCompaniesRepository();
@@ -27,7 +27,7 @@ describe("Register company area service use case", () => {
 		statesRepository = new InMemoryStatesRepository();
 		areasRepository = new InMemoryAreasRepository();
 
-		sut = new RegisterCompanyAreaServiceUseCase(
+		sut = new RegisterCompanyStatesAreasUseCase(
 			companyMembersRepository,
 			statesRepository,
 			areasRepository,
@@ -39,6 +39,21 @@ describe("Register company area service use case", () => {
 			name: "John Doe",
 			email: "johndoe@example.com",
 			password: "12345678",
+		});
+
+		await companiesRepository.create({
+			name: "Company name",
+			documentNumber: "12312312389899",
+			size: "MEDIUM",
+			ownerId: "john-doe-id-01",
+		});
+
+		await companyMembersRepository.create({
+			id: "company-member-id-01",
+			companyId: "company-id-01",
+			userId: "john-doe-id-01",
+			sector: "Diretoria",
+			role: "ADMIN",
 		});
 
 		await statesRepository.create({
@@ -60,24 +75,9 @@ describe("Register company area service use case", () => {
 			code: 19,
 			stateId: "fake-state-id",
 		});
-
-		await companiesRepository.create({
-			name: "Company name",
-			documentNumber: "12312312389899",
-			size: "MEDIUM",
-			ownerId: "john-doe-id-01",
-		});
-
-		await companyMembersRepository.create({
-			id: "company-member-id-01",
-			companyId: "company-id-01",
-			userId: "john-doe-id-01",
-			sector: "Diretoria",
-			role: "ADMIN",
-		});
 	});
 
-	it("should be able to register company area service", async () => {
+	it("should be able to register company state area", async () => {
 		await sut.execute({
 			userId: "john-doe-id-01",
 			stateAcronyms: ["SP"],

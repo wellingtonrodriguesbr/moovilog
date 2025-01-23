@@ -1,9 +1,9 @@
-import { ResourceNotFoundError } from "./errors/resource-not-found-error";
-import { CompaniesRepository } from "@/repositories/companies-repository";
-import { CitiesRepository } from "@/repositories/cities-repository";
-import { IAddress } from "@/interfaces/address";
-import { AddressesRepository } from "@/repositories/addresses-repository";
-import { StatesRepository } from "@/repositories/states-repository";
+import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
+import { CompaniesRepository } from "@/modules/company/repositories/companies-repository";
+import { CitiesRepository } from "@/modules/shared/repositories/cities-repository";
+import { AddressesRepository } from "@/modules/shared/repositories/addresses-repository";
+import { StatesRepository } from "@/modules/shared/repositories/states-repository";
+import { IAddress } from "@/modules/shared/interfaces/address";
 import { STATES } from "@/utils/mocks/states";
 
 interface RegisterCompanyAddressUseCaseRequest {
