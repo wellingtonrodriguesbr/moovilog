@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { RegisterVehicleUseCase } from "./register-vehicle-use-case";
-import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
-import { InMemoryVehiclesRepository } from "@/repositories/in-memory/in-memory-vehicles-repository";
-import { VehicleAlreadyExistsError } from "./errors/vehicle-already-exists-error";
-import { NotAllowedError } from "./errors/not-allowed-error";
-import { InMemoryCompanyMembersRepository } from "@/repositories/in-memory/in-memory-company-members-repository";
-import { InMemoryCompaniesRepository } from "@/repositories/in-memory/in-memory-companies-repository";
+import { InMemoryUsersRepository } from "@/modules/user/repositories/in-memory/in-memory-users-repository";
+import { InMemoryVehiclesRepository } from "@/modules/vehicle/repositories/in-memory/in-memory-vehicles-repository";
+import { InMemoryCompaniesRepository } from "@/modules/company/repositories/in-memory/in-memory-companies-repository";
+import { InMemoryCompanyMembersRepository } from "@/modules/company-member/repositories/in-memory/in-memory-company-members-repository";
+import { VehicleAlreadyExistsInCompanyError } from "@/modules/vehicle/use-cases/errors/vehicle-already-exists-in-company-error";
+import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
+import { RegisterVehicleUseCase } from "@/modules/vehicle/use-cases/register-vehicle-use-case";
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
@@ -14,7 +14,7 @@ let companyMembersRepository: InMemoryCompanyMembersRepository;
 let vehiclesRepository: InMemoryVehiclesRepository;
 let sut: RegisterVehicleUseCase;
 
-describe("Register vehicle use case", () => {
+describe("[MODULE]: Register vehicle use case", () => {
 	beforeEach(async () => {
 		usersRepository = new InMemoryUsersRepository();
 		companiesRepository = new InMemoryCompaniesRepository();
@@ -95,7 +95,7 @@ describe("Register vehicle use case", () => {
 				model: "710",
 				userId: "john-doe-id-01",
 			})
-		).rejects.toBeInstanceOf(VehicleAlreadyExistsError);
+		).rejects.toBeInstanceOf(VehicleAlreadyExistsInCompanyError);
 	});
 
 	it("not should be able to register a vehicle with the a creator role that is different between manager or admin", async () => {

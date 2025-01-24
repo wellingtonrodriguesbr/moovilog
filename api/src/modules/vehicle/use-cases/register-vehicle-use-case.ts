@@ -1,14 +1,14 @@
-import { VehicleAlreadyExistsError } from "./errors/vehicle-already-exists-error";
-import { NotAllowedError } from "./errors/not-allowed-error";
-import { ResourceNotFoundError } from "./errors/resource-not-found-error";
-import { VehiclesRepository } from "@/repositories/vehicles-repository";
-import { CompanyMembersRepository } from "@/repositories/company-members-repository";
+import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
+import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
+import { VehiclesRepository } from "@/modules/vehicle/repositories/vehicles-repository";
+import { CompanyMembersRepository } from "@/modules/company-member/repositories/company-members-repository";
+import { VehicleAlreadyExistsInCompanyError } from "@/modules/vehicle/use-cases/errors/vehicle-already-exists-in-company-error";
 import {
 	IVehicle,
 	IVehicleBody,
 	IVehicleCategory,
 	IVehicleType,
-} from "@/interfaces/vehicle";
+} from "@/modules/shared/interfaces/vehicle";
 
 interface RegisterVehicleUseCaseRequest {
 	plate: string;
@@ -25,6 +25,8 @@ interface RegisterVehicleUseCaseRequest {
 interface RegisterVehicleUseCaseResponse {
 	vehicle: IVehicle;
 }
+
+const ROLE_PERMISSIONS = ["ADMIN", "MANAGER"];
 
 export class RegisterVehicleUseCase {
 	constructor(
@@ -49,7 +51,7 @@ export class RegisterVehicleUseCase {
 			throw new ResourceNotFoundError("Member not found");
 		}
 
-		if (member.role !== "ADMIN" && member.role !== "MANAGER") {
+		if (!ROLE_PERMISSIONS.includes(member.role)) {
 			throw new NotAllowedError(
 				"You do not have permission to perform this action, please ask your administrator for access"
 			);
@@ -64,7 +66,7 @@ export class RegisterVehicleUseCase {
 			);
 
 		if (vehicleAlreadyExistsInCompany) {
-			throw new VehicleAlreadyExistsError(
+			throw new VehicleAlreadyExistsInCompanyError(
 				"There is already a vehicle registered with this plate"
 			);
 		}

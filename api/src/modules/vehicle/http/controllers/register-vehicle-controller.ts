@@ -1,8 +1,8 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { VehicleAlreadyExistsError } from "@/use-cases/errors/vehicle-already-exists-error";
-import { NotAllowedError } from "@/use-cases/errors/not-allowed-error";
-import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
-import { makeRegisterVehicleUseCase } from "@/use-cases/factories/make-register-vehicle-use-case";
+import { VehicleAlreadyExistsInCompanyError } from "@/modules/vehicle/use-cases/errors/vehicle-already-exists-in-company-error";
+import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
+import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
+import { makeRegisterVehicleUseCase } from "@/modules/vehicle/use-cases/factories/make-register-vehicle-use-case";
 
 import z from "zod";
 
@@ -57,7 +57,7 @@ export class RegisterVehicleController {
 
 			reply.status(201).send({ vehicle });
 		} catch (error) {
-			if (error instanceof VehicleAlreadyExistsError) {
+			if (error instanceof VehicleAlreadyExistsInCompanyError) {
 				reply.status(409).send({ message: error.message });
 			}
 			if (error instanceof NotAllowedError) {

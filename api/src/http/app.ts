@@ -15,6 +15,7 @@ import { areasRoutes } from "@/http/routes/areas";
 import { authModuleRoutes } from "@/modules/auth/http/routes/auth-module-routes";
 import { userModuleRoutes } from "@/modules/user/http/routes/user-module-routes";
 import { companyModuleRoutes } from "@/modules/company/http/routes/company-module-routes";
+import { vehicleModuleRoutes } from "@/modules/vehicle/http/routes/vehicle-module-routes";
 import { sharedModuleRoutes } from "@/modules/shared/http/routes/shared-module-routes";
 
 import { env } from "@/env";
@@ -56,4 +57,5 @@ app.register(areasRoutes);
 app.register(authModuleRoutes);
 app.register(userModuleRoutes);
 app.register(companyModuleRoutes);
+app.register(vehicleModuleRoutes);
 app.register(sharedModuleRoutes);
