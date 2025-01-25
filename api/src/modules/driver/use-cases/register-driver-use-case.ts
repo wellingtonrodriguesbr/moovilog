@@ -1,9 +1,9 @@
-import { DriverAlreadyExistsError } from "./errors/driver-already-exists-error";
-import { ResourceNotFoundError } from "./errors/resource-not-found-error";
-import { DriversRepository } from "@/repositories/drivers-repository";
-import { CompanyMembersRepository } from "@/repositories/company-members-repository";
-import { IDriver, IDriverType } from "@/interfaces/driver";
-import { NotAllowedError } from "./errors/not-allowed-error";
+import { DriversRepository } from "@/modules/driver/repositories/drivers-repository";
+import { CompanyMembersRepository } from "@/modules/company-member/repositories/company-members-repository";
+import { IDriver, IDriverType } from "@/modules/shared/interfaces/driver";
+import { DriverAlreadyExistsError } from "@/modules/driver/use-cases/errors/driver-already-exists-error";
+import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
+import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
 
 interface RegisterDriverUseCaseRequest {
 	name: string;
@@ -12,6 +12,7 @@ interface RegisterDriverUseCaseRequest {
 	type: IDriverType;
 	creatorId: string;
 }
+
 interface RegisterDriverUseCaseResponse {
 	driver: IDriver;
 }

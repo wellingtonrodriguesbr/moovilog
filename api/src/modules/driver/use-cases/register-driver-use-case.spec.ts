@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { RegisterDriverUseCase } from "./register-driver-use-case";
-import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
-import { InMemoryDriversRepository } from "@/repositories/in-memory/in-memory-drivers-repository";
-import { InMemoryCompaniesRepository } from "@/repositories/in-memory/in-memory-companies-repository";
-import { InMemoryCompanyMembersRepository } from "@/repositories/in-memory/in-memory-company-members-repository";
-import { DriverAlreadyExistsError } from "./errors/driver-already-exists-error";
-import { NotAllowedError } from "./errors/not-allowed-error";
+import { InMemoryUsersRepository } from "@/modules/user/repositories/in-memory/in-memory-users-repository";
+import { InMemoryDriversRepository } from "@/modules/driver/repositories/in-memory/in-memory-drivers-repository";
+import { InMemoryCompaniesRepository } from "@/modules/company/repositories/in-memory/in-memory-companies-repository";
+import { InMemoryCompanyMembersRepository } from "@/modules/company-member/repositories/in-memory/in-memory-company-members-repository";
+import { DriverAlreadyExistsError } from "@/modules/driver/use-cases/errors/driver-already-exists-error";
+import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
+import { RegisterDriverUseCase } from "@/modules/driver/use-cases/register-driver-use-case";
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
@@ -14,7 +14,7 @@ let companyMembersRepository: InMemoryCompanyMembersRepository;
 let driversRepository: InMemoryDriversRepository;
 let sut: RegisterDriverUseCase;
 
-describe("Register driver use case", () => {
+describe("[MODULE]: Register driver use case", () => {
 	beforeEach(async () => {
 		usersRepository = new InMemoryUsersRepository();
 		companiesRepository = new InMemoryCompaniesRepository();

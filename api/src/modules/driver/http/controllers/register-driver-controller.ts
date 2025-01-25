@@ -1,8 +1,8 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { DriverAlreadyExistsError } from "@/use-cases/errors/driver-already-exists-error";
-import { NotAllowedError } from "@/use-cases/errors/not-allowed-error";
-import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
-import { makeRegisterDriverUseCase } from "@/use-cases/factories/make-register-driver-use-case";
+import { DriverAlreadyExistsError } from "@/modules/driver/use-cases/errors/driver-already-exists-error";
+import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
+import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
+import { makeRegisterDriverUseCase } from "@/modules/driver/use-cases/factories/make-register-driver-use-case";
 
 import z from "zod";
 
