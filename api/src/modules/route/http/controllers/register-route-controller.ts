@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { makeRegisterRouteUseCase } from "@/use-cases/factories/make-register-route-use-case";
-import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
-import { BadRequestError } from "@/use-cases/errors/bad-request-error";
+import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
+import { BadRequestError } from "@/modules/shared/errors/bad-request-error";
+import { makeRegisterRouteUseCase } from "@/modules/route/use-cases/factories/make-register-route-use-case";
 
 import z from "zod";
 
@@ -9,7 +9,7 @@ export class RegisterRouteController {
 	static async handle(req: FastifyRequest, reply: FastifyReply) {
 		const registerRouteBodySchema = z.object({
 			name: z.string(),
-			citiesIds: z.array(z.string()),
+			citiesIds: z.array(z.string().uuid()),
 		});
 
 		const userId = req.user.sub;

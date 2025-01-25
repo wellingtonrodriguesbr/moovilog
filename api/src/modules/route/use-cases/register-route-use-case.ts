@@ -1,10 +1,9 @@
-import { IRoute } from "@/interfaces/route";
-import { CitiesInRouteRepository } from "@/repositories/cities-in-route-repository";
-import { CompanyMembersRepository } from "@/repositories/company-members-repository";
-import { RoutesRepository } from "@/repositories/routes-repository";
-
-import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
-import { BadRequestError } from "@/use-cases/errors/bad-request-error";
+import { CompanyMembersRepository } from "@/modules/company-member/repositories/company-members-repository";
+import { CitiesInRouteRepository } from "@/modules/route/repositories/cities-in-route-repository";
+import { RoutesRepository } from "@/modules/route/repositories/routes-repository";
+import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
+import { BadRequestError } from "@/modules/shared/errors/bad-request-error";
+import { IRoute } from "@/modules/shared/interfaces/route";
 
 interface RegisterRouteUseCaseRequest {
 	name: string;

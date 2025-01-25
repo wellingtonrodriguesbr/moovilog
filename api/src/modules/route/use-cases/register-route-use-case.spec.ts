@@ -1,14 +1,12 @@
 import { beforeEach, describe, expect, it } from "vitest";
-
-import { InMemoryCompanyMembersRepository } from "@/repositories/in-memory/in-memory-company-members-repository";
-import { InMemoryRoutesRepository } from "@/repositories/in-memory/in-memory-routes-repository";
-import { InMemoryCitiesInRouteRepository } from "@/repositories/in-memory/in-memory-cities-in-route-repository";
-import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
-import { InMemoryCompaniesRepository } from "@/repositories/in-memory/in-memory-companies-repository";
-
-import { RegisterRouteUseCase } from "@/use-cases/register-route-use-case";
-import { BadRequestError } from "@/use-cases/errors/bad-request-error";
-import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
+import { InMemoryUsersRepository } from "@/modules/user/repositories/in-memory/in-memory-users-repository";
+import { InMemoryCompanyMembersRepository } from "@/modules/company-member/repositories/in-memory/in-memory-company-members-repository";
+import { InMemoryRoutesRepository } from "@/modules/route/repositories/in-memory/in-memory-routes-repository";
+import { InMemoryCitiesInRouteRepository } from "@/modules/route/repositories/in-memory/in-memory-cities-in-route-repository";
+import { InMemoryCompaniesRepository } from "@/modules/company/repositories/in-memory/in-memory-companies-repository";
+import { BadRequestError } from "@/modules/shared/errors/bad-request-error";
+import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
+import { RegisterRouteUseCase } from "@/modules/route/use-cases/register-route-use-case";
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
@@ -18,7 +16,7 @@ let routesRepository: InMemoryRoutesRepository;
 let citiesInRouteRepository: InMemoryCitiesInRouteRepository;
 let sut: RegisterRouteUseCase;
 
-describe("Register route use case", () => {
+describe("[MODULE]: Register route use case", () => {
 	beforeEach(async () => {
 		usersRepository = new InMemoryUsersRepository();
 		companiesRepository = new InMemoryCompaniesRepository();
