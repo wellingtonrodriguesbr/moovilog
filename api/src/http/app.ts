@@ -5,7 +5,6 @@ import fastifyCors from "@fastify/cors";
 
 import { vehiclesRoutes } from "@/http/routes/vehicles";
 import { freightsRoutes } from "@/http/routes/freights";
-import { companyMembersRoutes } from "@/http/routes/company-members";
 import { routesInCompanyRoutes } from "@/http/routes/routes-in-company";
 import { citiesRoutes } from "@/http/routes/cities";
 import { areasRoutes } from "@/http/routes/areas";
@@ -13,6 +12,7 @@ import { areasRoutes } from "@/http/routes/areas";
 import { authModuleRoutes } from "@/modules/auth/http/routes/auth-module-routes";
 import { userModuleRoutes } from "@/modules/user/http/routes/user-module-routes";
 import { companyModuleRoutes } from "@/modules/company/http/routes/company-module-routes";
+import { companyMemberModuleRoutes } from "@/modules/company-member/http/routes/company-member-module-routes";
 import { vehicleModuleRoutes } from "@/modules/vehicle/http/routes/vehicle-module-routes";
 import { driverModuleRoutes } from "@/modules/driver/http/routes/driver-module-routes";
 import { routeModuleRoutes } from "@/modules/route/http/routes/route-module-routes";
@@ -45,7 +45,6 @@ app.register(fastifyCors, {
 	credentials: true,
 });
 
-app.register(companyMembersRoutes);
 app.register(vehiclesRoutes);
 app.register(freightsRoutes);
 app.register(routesInCompanyRoutes);
@@ -55,6 +54,7 @@ app.register(areasRoutes);
 app.register(authModuleRoutes);
 app.register(userModuleRoutes);
 app.register(companyModuleRoutes);
+app.register(companyMemberModuleRoutes);
 app.register(vehicleModuleRoutes);
 app.register(driverModuleRoutes);
 app.register(routeModuleRoutes);

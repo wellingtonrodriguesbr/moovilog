@@ -1,11 +1,12 @@
 import { FastifyInstance } from "fastify";
 import { verifyJWT } from "@/modules/shared/http/middlewares/verify-jwt";
 import { RegisterRouteController } from "@/modules/route/http/controllers/register-route-controller";
+import { FetchRoutesFromCompanyController } from "@/modules/route/http/controllers/fetch-routes-from-company-controller";
 
 export async function routeModuleRoutes(app: FastifyInstance) {
 	app.addHook("onRequest", verifyJWT);
 
 	app.post("/routes", RegisterRouteController.handle);
-	// app.get("/company/routes", FetchCompanyRoutesController.handle);
+	app.get("/:companyId/routes", FetchRoutesFromCompanyController.handle);
 	// app.get("/routes/:routeId/cities", FetchCitiesInRouteController.handle);
 }
