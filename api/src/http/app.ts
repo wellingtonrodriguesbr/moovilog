@@ -3,8 +3,6 @@ import fastifyJwt from "@fastify/jwt";
 import fastifyCookie from "@fastify/cookie";
 import fastifyCors from "@fastify/cors";
 
-import { companiesRoutes } from "@/http/routes/companies";
-import { driversRoutes } from "@/http/routes/drivers";
 import { vehiclesRoutes } from "@/http/routes/vehicles";
 import { freightsRoutes } from "@/http/routes/freights";
 import { companyMembersRoutes } from "@/http/routes/company-members";
@@ -47,9 +45,7 @@ app.register(fastifyCors, {
 	credentials: true,
 });
 
-app.register(companiesRoutes);
 app.register(companyMembersRoutes);
-app.register(driversRoutes);
 app.register(vehiclesRoutes);
 app.register(freightsRoutes);
 app.register(routesInCompanyRoutes);

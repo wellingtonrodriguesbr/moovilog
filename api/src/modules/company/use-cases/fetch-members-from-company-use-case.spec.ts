@@ -1,20 +1,24 @@
-import { InMemoryCompanyMembersRepository } from "@/repositories/in-memory/in-memory-company-members-repository";
 import { beforeEach, describe, expect, it } from "vitest";
-import { FetchCompanyMembersUseCase } from "./fetch-company-members-use-case";
-import { InMemoryCompaniesRepository } from "@/repositories/in-memory/in-memory-companies-repository";
-import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
+import { InMemoryCompanyMembersRepository } from "@/modules/company-member/repositories/in-memory/in-memory-company-members-repository";
+import { InMemoryCompaniesRepository } from "@/modules/company/repositories/in-memory/in-memory-companies-repository";
+import { InMemoryUsersRepository } from "@/modules/user/repositories/in-memory/in-memory-users-repository";
+import { FetchMembersFromCompanyUseCase } from "@/modules/company/use-cases/fetch-members-from-company-use-case";
+import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
 let companyMembersRepository: InMemoryCompanyMembersRepository;
-let sut: FetchCompanyMembersUseCase;
+let sut: FetchMembersFromCompanyUseCase;
 
-describe("Fetch company members use case", () => {
+describe("[MODULE]: Fetch members from company use case", () => {
 	beforeEach(async () => {
 		usersRepository = new InMemoryUsersRepository();
 		companiesRepository = new InMemoryCompaniesRepository();
 		companyMembersRepository = new InMemoryCompanyMembersRepository();
-		sut = new FetchCompanyMembersUseCase(companyMembersRepository);
+		sut = new FetchMembersFromCompanyUseCase(
+			companyMembersRepository,
+			companiesRepository
+		);
 
 		await usersRepository.create({
 			id: "john-doe-01",
@@ -42,9 +46,19 @@ describe("Fetch company members use case", () => {
 	it("should be able to fetch company members", async () => {
 		const { companyMembers } = await sut.execute({
 			userId: "john-doe-01",
+			companyId: "company-id-01",
 		});
 
 		expect(companyMembersRepository.items).toHaveLength(1);
 		expect(companyMembers[0].role).toEqual("ADMIN");
+	});
+
+	it("should not be able to fetch company members if user is not a company member", async () => {
+		await expect(() =>
+			sut.execute({
+				userId: "john-doe-02",
+				companyId: "company-id-01",
+			})
+		).rejects.toBeInstanceOf(ResourceNotFoundError);
 	});
 });

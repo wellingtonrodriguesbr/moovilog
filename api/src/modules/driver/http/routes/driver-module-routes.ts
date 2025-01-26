@@ -7,5 +7,4 @@ export async function driverModuleRoutes(app: FastifyInstance) {
 	app.addHook("onRequest", verifyJWT);
 
 	app.post("/drivers", RegisterDriverController.handle);
-	// app.get("/:companyId/drivers", FetchDriversByCompanyController.handle);
 }

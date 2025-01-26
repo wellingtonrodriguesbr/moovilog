@@ -5,6 +5,9 @@ import { RegisterCompanyController } from "@/modules/company/http/controllers/re
 import { RegisterCompanyAddressController } from "@/modules/company/http/controllers/register-company-address-controller";
 import { GetCompanyInformationController } from "@/modules/company/http/controllers/get-company-information-controller";
 import { RegisterCompanyStatesAreasController } from "@/modules/company/http/controllers/register-company-states-areas-controller";
+import { FetchDriversFromCompanyController } from "@/modules/company/http/controllers/fetch-drivers-from-company-controller";
+import { FetchMembersFromCompanyController } from "@/modules/company/http/controllers/fetch-members-from-company-controller";
+import { FetchStatesAreasFromCompanyController } from "@/modules/company/http/controllers/fetch-states-areas-from-company-controller";
 
 export async function companyModuleRoutes(app: FastifyInstance) {
 	app.addHook("onRequest", verifyJWT);
@@ -15,9 +18,11 @@ export async function companyModuleRoutes(app: FastifyInstance) {
 		"/companies/:companyId/states-areas",
 		RegisterCompanyStatesAreasController.handle
 	);
-	// app.get(
-	// 	"/companies/:companyId/areas-states",
-	// 	FetchAreasStatesFromCompanyController.handle
-	// );
+	app.get("/:companyId/drivers", FetchDriversFromCompanyController.handle);
+	app.get("/:companyId/members", FetchMembersFromCompanyController.handle);
 	app.get("/companies/information", GetCompanyInformationController.handle);
+	app.get(
+		"/companies/:companyId/states-areas",
+		FetchStatesAreasFromCompanyController.handle
+	);
 }

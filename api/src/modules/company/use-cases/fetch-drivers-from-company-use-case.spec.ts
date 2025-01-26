@@ -1,24 +1,24 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { InMemoryCompanyMembersRepository } from "@/repositories/in-memory/in-memory-company-members-repository";
-import { InMemoryCompaniesRepository } from "@/repositories/in-memory/in-memory-companies-repository";
-import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
-import { InMemoryDriversRepository } from "@/repositories/in-memory/in-memory-drivers-repository";
-import { FetchDriversByCompanyUseCase } from "@/use-cases/fetch-drivers-by-company-use-case";
-import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
+import { InMemoryCompanyMembersRepository } from "@/modules/company-member/repositories/in-memory/in-memory-company-members-repository";
+import { InMemoryCompaniesRepository } from "@/modules/company/repositories/in-memory/in-memory-companies-repository";
+import { InMemoryUsersRepository } from "@/modules/user/repositories/in-memory/in-memory-users-repository";
+import { InMemoryDriversRepository } from "@/modules/driver/repositories/in-memory/in-memory-drivers-repository";
+import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
+import { FetchDriversFromCompanyUseCase } from "@/modules/company/use-cases/fetch-drivers-from-company-use-case";
 
 let usersRepository: InMemoryUsersRepository;
 let driversRepository: InMemoryDriversRepository;
 let companiesRepository: InMemoryCompaniesRepository;
 let companyMembersRepository: InMemoryCompanyMembersRepository;
-let sut: FetchDriversByCompanyUseCase;
+let sut: FetchDriversFromCompanyUseCase;
 
-describe("Fetch drivers by company use case", () => {
+describe("[MODULE]: Fetch drivers from company use case", () => {
 	beforeEach(async () => {
 		usersRepository = new InMemoryUsersRepository();
 		driversRepository = new InMemoryDriversRepository();
 		companiesRepository = new InMemoryCompaniesRepository();
 		companyMembersRepository = new InMemoryCompanyMembersRepository();
-		sut = new FetchDriversByCompanyUseCase(
+		sut = new FetchDriversFromCompanyUseCase(
 			driversRepository,
 			companiesRepository,
 			companyMembersRepository
@@ -56,7 +56,7 @@ describe("Fetch drivers by company use case", () => {
 		});
 	});
 
-	it("should be able to fetch drivers by company", async () => {
+	it("should be able to fetch drivers in company", async () => {
 		const { drivers } = await sut.execute({
 			companyId: "company-id-01",
 			userId: "john-doe-01",
