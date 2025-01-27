@@ -1,9 +1,10 @@
-import { InMemoryCompanyMembersRepository } from "@/repositories/in-memory/in-memory-company-members-repository";
 import { beforeEach, describe, expect, it } from "vitest";
-import { InMemoryCompaniesRepository } from "@/repositories/in-memory/in-memory-companies-repository";
-import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
-import { InMemoryFreightsRepository } from "@/repositories/in-memory/in-memory-freights-repository";
-import { FetchFreightsFromCompanyUseCase } from "./fetch-freights-from-company-use-case";
+import { InMemoryCompanyMembersRepository } from "@/modules/company-member/repositories/in-memory/in-memory-company-members-repository";
+import { InMemoryCompaniesRepository } from "@/modules/company/repositories/in-memory/in-memory-companies-repository";
+import { InMemoryUsersRepository } from "@/modules/user/repositories/in-memory/in-memory-users-repository";
+import { InMemoryFreightsRepository } from "@/modules/freight/repositories/in-memory/in-memory-freights-repository";
+import { FetchFreightsFromCompanyUseCase } from "@/modules/freight/use-cases/fetch-freights-from-company-use-case";
+import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
@@ -20,6 +21,7 @@ describe("Fetch freights from company use case", () => {
 		freightsRepository = new InMemoryFreightsRepository();
 		sut = new FetchFreightsFromCompanyUseCase(
 			companyMembersRepository,
+			companiesRepository,
 			freightsRepository
 		);
 
@@ -48,7 +50,7 @@ describe("Fetch freights from company use case", () => {
 
 		await freightsRepository.create({
 			date: new Date(),
-			type: "FRACTIONAL",
+			type: "PARTIAL",
 			deliveriesQuantity: 12,
 			pickupsQuantity: 5,
 			totalWeightOfDeliveries: 2400,
@@ -66,9 +68,28 @@ describe("Fetch freights from company use case", () => {
 	it("should be able to fetch freights", async () => {
 		const { freights } = await sut.execute({
 			userId: "john-doe-id-01",
+			companyId: "company-id-01",
 		});
 
 		expect(freightsRepository.items).toHaveLength(1);
 		expect(freights[0].id).toEqual(expect.any(String));
+	});
+
+	it("should not be able to fetch freights if the company member is not found", async () => {
+		await expect(() =>
+			sut.execute({
+				userId: "non-existent-user-id",
+				companyId: "company-id-01",
+			})
+		).rejects.toBeInstanceOf(ResourceNotFoundError);
+	});
+
+	it("should not be able to fetch freights if the company is not found", async () => {
+		await expect(() =>
+			sut.execute({
+				userId: "john-doe-id-01",
+				companyId: "non-existent-company-id",
+			})
+		).rejects.toBeInstanceOf(ResourceNotFoundError);
 	});
 });

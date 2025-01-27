@@ -1,6 +1,6 @@
-import { prisma } from "@/lib/prisma";
-import { FreightsRepository } from "../../modules/freight/repositories/freights-repository";
 import { Prisma } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
+import { FreightsRepository } from "@/modules/freight/repositories/freights-repository";
 
 export class PrismaFreightsRepository implements FreightsRepository {
 	async create(data: Prisma.FreightUncheckedCreateInput) {

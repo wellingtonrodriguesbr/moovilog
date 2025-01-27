@@ -1,20 +1,20 @@
-import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
-import { CompanyMembersRepository } from "@/repositories/company-members-repository";
-import { RoutesRepository } from "@/repositories/routes-repository";
-import { CitiesInRouteRepository } from "@/repositories/cities-in-route-repository";
-import { ICity } from "@/interfaces/city";
-import { CitiesRepository } from "@/repositories/cities-repository";
+import { CompanyMembersRepository } from "@/modules/company-member/repositories/company-members-repository";
+import { RoutesRepository } from "@/modules/route/repositories/routes-repository";
+import { CitiesInRouteRepository } from "@/modules/route/repositories/cities-in-route-repository";
+import { CitiesRepository } from "@/modules/shared/repositories/cities-repository";
+import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
+import { ICity } from "@/modules/shared/interfaces/city";
 
-interface FetchCitiesInRouteUseCaseRequest {
+interface FetchCitiesFromRouteUseCaseRequest {
 	userId: string;
 	routeId: string;
 }
 
-interface FetchCitiesInRouteUseCaseResponse {
+interface FetchCitiesFromRouteUseCaseResponse {
 	cities: ICity[];
 }
 
-export class FetchCitiesInRouteUseCase {
+export class FetchCitiesFromRouteUseCase {
 	constructor(
 		private companyMembersRepository: CompanyMembersRepository,
 		private routesRepository: RoutesRepository,
@@ -25,15 +25,15 @@ export class FetchCitiesInRouteUseCase {
 	async execute({
 		userId,
 		routeId,
-	}: FetchCitiesInRouteUseCaseRequest): Promise<FetchCitiesInRouteUseCaseResponse> {
-		const companyMember =
-			await this.companyMembersRepository.findByUserId(userId);
+	}: FetchCitiesFromRouteUseCaseRequest): Promise<FetchCitiesFromRouteUseCaseResponse> {
+		const [companyMember, route] = await Promise.all([
+			this.companyMembersRepository.findByUserId(userId),
+			this.routesRepository.findById(routeId),
+		]);
 
 		if (!companyMember) {
 			throw new ResourceNotFoundError("Company member not found");
 		}
-
-		const route = await this.routesRepository.findById(routeId);
 
 		if (!route) {
 			throw new ResourceNotFoundError("Route not found");

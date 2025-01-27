@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { NotAllowedError } from "@/use-cases/errors/not-allowed-error";
-import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
+import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
+import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
 import { makeRegisterfreightUseCase } from "@/modules/freight/use-cases/factories/make-register-freight-use-case";
 
 import z from "zod";
@@ -8,16 +8,32 @@ import z from "zod";
 export class RegisterFreightController {
 	static async handle(req: FastifyRequest, reply: FastifyReply) {
 		const registerFreightBodySchema = z.object({
-			type: z.enum(["FRACTIONAL", "DIRECT", "DEDICATED"]),
+			type: z.enum([
+				"PARTIAL",
+				"FULL",
+				"EXPRESS",
+				"MULTIMODAL",
+				"CONSOLIDATED",
+				"INTERMODAL",
+			]),
 			date: z.coerce.date(),
-			modality: z.enum(["DAILY", "PERCENTAGE", "PRODUCTIVITY"]),
+			modality: z.enum([
+				"DAILY",
+				"PERCENTAGE",
+				"PRODUCTIVITY",
+				"FLAT_RATE",
+				"WEIGHT_BASED",
+				"DISTANCE_BASED",
+				"TIME_BASED",
+				"PER_STOP",
+				"ZONE_BASED",
+			]),
 			observation: z.string().optional().nullable(),
 			pickupsQuantity: z.number().optional(),
 			deliveriesQuantity: z.number(),
 			totalWeightOfPickups: z.number().optional(),
 			totalWeightOfDeliveries: z.number(),
 			freightAmountInCents: z.number(),
-			companyMemberId: z.string().uuid(),
 			driverId: z.string().uuid(),
 			vehicleId: z.string().uuid(),
 			routeId: z.string().uuid(),
@@ -33,11 +49,12 @@ export class RegisterFreightController {
 			totalWeightOfPickups,
 			totalWeightOfDeliveries,
 			freightAmountInCents,
-			companyMemberId,
 			driverId,
 			vehicleId,
 			routeId,
 		} = registerFreightBodySchema.parse(req.body);
+
+		const userId = req.user.sub;
 
 		try {
 			const registerFreightUseCase = makeRegisterfreightUseCase();
@@ -51,7 +68,7 @@ export class RegisterFreightController {
 				totalWeightOfPickups,
 				totalWeightOfDeliveries,
 				freightAmountInCents,
-				companyMemberId,
+				userId,
 				driverId,
 				vehicleId,
 				routeId,

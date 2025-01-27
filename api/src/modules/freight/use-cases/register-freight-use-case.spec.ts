@@ -1,14 +1,14 @@
-import { InMemoryCompaniesRepository } from "@/repositories/in-memory/in-memory-companies-repository";
-import { InMemoryCompanyMembersRepository } from "@/repositories/in-memory/in-memory-company-members-repository";
-import { InMemoryDriversRepository } from "@/repositories/in-memory/in-memory-drivers-repository";
-import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
-import { InMemoryFreightsRepository } from "@/repositories/in-memory/in-memory-freights-repository";
-import { InMemoryVehiclesRepository } from "@/repositories/in-memory/in-memory-vehicles-repository";
-import { InMemoryRoutesRepository } from "@/repositories/in-memory/in-memory-routes-repository";
 import { beforeEach, describe, expect, it } from "vitest";
-import { RegisterFreightUseCase } from "./register-freight-use-case";
-import { NotAllowedError } from "../../../use-cases/errors/not-allowed-error";
-import { BadRequestError } from "../../../use-cases/errors/bad-request-error";
+import { InMemoryCompaniesRepository } from "@/modules/company/repositories/in-memory/in-memory-companies-repository";
+import { InMemoryCompanyMembersRepository } from "@/modules/company-member/repositories/in-memory/in-memory-company-members-repository";
+import { InMemoryDriversRepository } from "@/modules/driver/repositories/in-memory/in-memory-drivers-repository";
+import { InMemoryUsersRepository } from "@/modules/user/repositories/in-memory/in-memory-users-repository";
+import { InMemoryFreightsRepository } from "@/modules/freight/repositories/in-memory/in-memory-freights-repository";
+import { InMemoryVehiclesRepository } from "@/modules/vehicle/repositories/in-memory/in-memory-vehicles-repository";
+import { InMemoryRoutesRepository } from "@/modules/route/repositories/in-memory/in-memory-routes-repository";
+import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
+import { BadRequestError } from "@/modules/shared/errors/bad-request-error";
+import { RegisterFreightUseCase } from "@/modules/freight/use-cases/register-freight-use-case";
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
@@ -19,7 +19,7 @@ let freightsRepository: InMemoryFreightsRepository;
 let routesRepository: InMemoryRoutesRepository;
 let sut: RegisterFreightUseCase;
 
-describe("Register freight use case", () => {
+describe("[MODULE]: Register freight use case", () => {
 	beforeEach(async () => {
 		usersRepository = new InMemoryUsersRepository();
 		companiesRepository = new InMemoryCompaniesRepository();
@@ -95,14 +95,14 @@ describe("Register freight use case", () => {
 	it("should be able to register a freight", async () => {
 		const { freight } = await sut.execute({
 			date: new Date(),
-			type: "FRACTIONAL",
+			type: "PARTIAL",
 			deliveriesQuantity: 12,
 			pickupsQuantity: 5,
 			totalWeightOfDeliveries: 2400,
 			totalWeightOfPickups: 1000,
 			freightAmountInCents: 600,
 			modality: "DAILY",
-			companyMemberId: "company-member-id-01",
+			userId: "john-doe-id-01",
 			driverId: "fake-driver-id-01",
 			routeId: "fake-route-01",
 			vehicleId: "fake-vehicle-id-01",
@@ -120,7 +120,7 @@ describe("Register freight use case", () => {
 			password: "12345678",
 		});
 
-		const member = await companyMembersRepository.create({
+		await companyMembersRepository.create({
 			companyId: "company-id-01",
 			userId: user.id,
 			sector: "Diretoria",
@@ -130,14 +130,14 @@ describe("Register freight use case", () => {
 		expect(() =>
 			sut.execute({
 				date: new Date(),
-				type: "FRACTIONAL",
+				type: "PARTIAL",
 				deliveriesQuantity: 12,
 				pickupsQuantity: 5,
 				totalWeightOfDeliveries: 2400,
 				totalWeightOfPickups: 1000,
 				freightAmountInCents: 450,
 				modality: "DAILY",
-				companyMemberId: member.id,
+				userId: user.id,
 				driverId: "fake-driver-id-01",
 				routeId: "fake-route-01",
 				vehicleId: "fake-vehicle-id-01",
@@ -149,14 +149,14 @@ describe("Register freight use case", () => {
 		expect(() =>
 			sut.execute({
 				date: new Date("2024-07-15 09:00:00"),
-				type: "FRACTIONAL",
+				type: "PARTIAL",
 				deliveriesQuantity: 12,
 				pickupsQuantity: 5,
 				totalWeightOfDeliveries: 2400,
 				totalWeightOfPickups: 1000,
 				freightAmountInCents: 580,
 				modality: "DAILY",
-				companyMemberId: "company-member-id-01",
+				userId: "john-doe-id-01",
 				driverId: "fake-driver-id-01",
 				routeId: "fake-route-01",
 				vehicleId: "fake-vehicle-id-01",

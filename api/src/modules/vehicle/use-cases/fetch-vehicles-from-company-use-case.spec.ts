@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { InMemoryCompanyMembersRepository } from "@/repositories/in-memory/in-memory-company-members-repository";
-import { InMemoryCompaniesRepository } from "@/repositories/in-memory/in-memory-companies-repository";
-import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
-import { InMemoryVehiclesRepository } from "@/repositories/in-memory/in-memory-vehicles-repository";
+import { InMemoryCompanyMembersRepository } from "@/modules/company-member/repositories/in-memory/in-memory-company-members-repository";
+import { InMemoryCompaniesRepository } from "@/modules/company/repositories/in-memory/in-memory-companies-repository";
+import { InMemoryUsersRepository } from "@/modules/user/repositories/in-memory/in-memory-users-repository";
+import { InMemoryVehiclesRepository } from "@/modules/vehicle/repositories/in-memory/in-memory-vehicles-repository";
+import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
 import { FetchVehiclesFromCompanyUseCase } from "@/modules/vehicle/use-cases/fetch-vehicles-from-company-use-case";
-import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
 
 let usersRepository: InMemoryUsersRepository;
 let vehiclesRepository: InMemoryVehiclesRepository;

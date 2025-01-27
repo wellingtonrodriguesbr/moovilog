@@ -1,14 +1,14 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { InMemoryCompanyMembersRepository } from "@/repositories/in-memory/in-memory-company-members-repository";
-import { InMemoryRoutesRepository } from "@/repositories/in-memory/in-memory-routes-repository";
-import { InMemoryCitiesInRouteRepository } from "@/repositories/in-memory/in-memory-cities-in-route-repository";
-import { InMemoryCitiesRepository } from "@/repositories/in-memory/in-memory-cities-repository";
-import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
-import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
-import { InMemoryCompaniesRepository } from "@/repositories/in-memory/in-memory-companies-repository";
-import { InMemoryAreasRepository } from "@/repositories/in-memory/in-memory-areas-repository";
-import { InMemoryStatesRepository } from "@/repositories/in-memory/in-memory-states-repository";
-import { FetchCitiesInRouteUseCase } from "./fetch-cities-in-route-use-case";
+import { InMemoryCompanyMembersRepository } from "@/modules/company-member/repositories/in-memory/in-memory-company-members-repository";
+import { InMemoryRoutesRepository } from "@/modules/route/repositories/in-memory/in-memory-routes-repository";
+import { InMemoryCitiesInRouteRepository } from "@/modules/route/repositories/in-memory/in-memory-cities-in-route-repository";
+import { InMemoryCitiesRepository } from "@/modules/shared/repositories/in-memory/in-memory-cities-repository";
+import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
+import { InMemoryUsersRepository } from "@/modules/user/repositories/in-memory/in-memory-users-repository";
+import { InMemoryCompaniesRepository } from "@/modules/company/repositories/in-memory/in-memory-companies-repository";
+import { InMemoryAreasRepository } from "@/modules/shared/repositories/in-memory/in-memory-areas-repository";
+import { InMemoryStatesRepository } from "@/modules/shared/repositories/in-memory/in-memory-states-repository";
+import { FetchCitiesFromRouteUseCase } from "@/modules/route/use-cases/fetch-cities-from-route-use-case";
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
@@ -19,9 +19,9 @@ let companyMembersRepository: InMemoryCompanyMembersRepository;
 let routesRepository: InMemoryRoutesRepository;
 let citiesInRouteRepository: InMemoryCitiesInRouteRepository;
 let citiesRepository: InMemoryCitiesRepository;
-let sut: FetchCitiesInRouteUseCase;
+let sut: FetchCitiesFromRouteUseCase;
 
-describe("Fetch Company Cities in Route Use Case", () => {
+describe("[MODULE]: Fetch cities from route use case", () => {
 	beforeEach(async () => {
 		usersRepository = new InMemoryUsersRepository();
 		companiesRepository = new InMemoryCompaniesRepository();
@@ -32,7 +32,7 @@ describe("Fetch Company Cities in Route Use Case", () => {
 		routesRepository = new InMemoryRoutesRepository();
 		citiesInRouteRepository = new InMemoryCitiesInRouteRepository();
 		citiesRepository = new InMemoryCitiesRepository();
-		sut = new FetchCitiesInRouteUseCase(
+		sut = new FetchCitiesFromRouteUseCase(
 			companyMembersRepository,
 			routesRepository,
 			citiesInRouteRepository,
@@ -96,7 +96,7 @@ describe("Fetch Company Cities in Route Use Case", () => {
 		});
 	});
 
-	it("should be able to fetch routes and cities for a company member", async () => {
+	it("should be able to fetch cities from route", async () => {
 		const { cities } = await sut.execute({
 			userId: "john-doe-01",
 			routeId: "route-01",
@@ -113,13 +113,13 @@ describe("Fetch Company Cities in Route Use Case", () => {
 		);
 	});
 
-	it("should throw an error if company member is not found", async () => {
+	it("should not be able to fetch cities if company member is not found", async () => {
 		await expect(() =>
 			sut.execute({ userId: "non-existent-user", routeId: "route-01" })
 		).rejects.toBeInstanceOf(ResourceNotFoundError);
 	});
 
-	it("should throw an error if no cities in route are found", async () => {
+	it("should not be able to fetch cities if no cities in route are found", async () => {
 		await citiesInRouteRepository.items.pop();
 
 		await expect(() =>
@@ -127,7 +127,7 @@ describe("Fetch Company Cities in Route Use Case", () => {
 		).rejects.toBeInstanceOf(ResourceNotFoundError);
 	});
 
-	it("should throw an error if no cities are found", async () => {
+	it("should not be able to fetch cities if no cities are found", async () => {
 		await citiesRepository.items.pop();
 
 		await expect(() =>

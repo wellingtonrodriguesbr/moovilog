@@ -25,7 +25,7 @@ interface RegisterFreightUseCaseRequest {
 	totalWeightOfPickups?: number;
 	totalWeightOfDeliveries: number;
 	freightAmountInCents: number;
-	companyMemberId: string;
+	userId: string;
 	driverId: string;
 	vehicleId: string;
 	routeId: string;
@@ -56,16 +56,16 @@ export class RegisterFreightUseCase {
 		totalWeightOfPickups,
 		totalWeightOfDeliveries,
 		freightAmountInCents,
-		companyMemberId,
+		userId,
 		driverId,
 		vehicleId,
 		routeId,
 	}: RegisterFreightUseCaseRequest): Promise<RegisterFreightUseCaseResponse> {
 		const [member, driver, vehicle, route] = await Promise.all([
-			await this.companyMembersRepository.findById(companyMemberId),
-			await this.driversRepository.findById(driverId),
-			await this.vehiclesRepository.findById(vehicleId),
-			await this.routesRepository.findById(routeId),
+			this.companyMembersRepository.findByUserId(userId),
+			this.driversRepository.findById(driverId),
+			this.vehiclesRepository.findById(vehicleId),
+			this.routesRepository.findById(routeId),
 		]);
 
 		if (!member) {

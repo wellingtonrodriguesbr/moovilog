@@ -1,7 +1,7 @@
 import { Freight, Prisma } from "@prisma/client";
-import { FreightsRepository } from "../../modules/freight/repositories/freights-repository";
-import { randomUUID } from "crypto";
 import { Decimal } from "@prisma/client/runtime/library";
+import { FreightsRepository } from "@/modules/freight/repositories/freights-repository";
+import { randomUUID } from "node:crypto";
 
 export class InMemoryFreightsRepository implements FreightsRepository {
 	public items: Freight[] = [];
@@ -25,7 +25,8 @@ export class InMemoryFreightsRepository implements FreightsRepository {
 			creatorId: data.creatorId,
 			driverId: data.driverId,
 			companyId: data.companyId,
-			routeId: data.routeId,
+			routeId: data.routeId || null,
+			cityId: data.cityId || null,
 			vehicleId: data.vehicleId,
 			createdAt: new Date(),
 			updatedAt: new Date(),
