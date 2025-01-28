@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
+import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
 import { makeFetchAreasByStatesUseCase } from "@/modules/shared/use-cases/factories/make-fetch-areas-by-state-use-case";
 
 import z from "zod";
@@ -16,13 +16,10 @@ export class FetchAreasByStatesController {
 
 		const { states } = fetchAreasByStatesParamsSchema.parse(req.query);
 
-		const userId = req.user.sub;
-
 		try {
 			const fetchAreasByStatesUseCase = makeFetchAreasByStatesUseCase();
 			const { areas } = await fetchAreasByStatesUseCase.execute({
 				stateAcronyms: states,
-				userId,
 			});
 
 			reply.status(200).send({ areas });

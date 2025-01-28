@@ -1,11 +1,9 @@
-import { CompanyMembersRepository } from "@/repositories/company-members-repository";
-import { AreasRepository } from "@/repositories/areas-repository";
-import { StatesRepository } from "@/repositories/states-repository";
-import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
-import { IArea } from "@/interfaces/area";
+import { AreasRepository } from "@/modules/shared/repositories/areas-repository";
+import { StatesRepository } from "@/modules/shared/repositories/states-repository";
+import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
+import { IArea } from "@/modules/shared/interfaces/area";
 
 interface FetchAreasByStatesUseCaseRequest {
-	userId: string;
 	stateAcronyms: string[];
 }
 
@@ -15,23 +13,15 @@ interface FetchAreasByStatesUseCaseResponse {
 
 export class FetchAreasByStatesUseCase {
 	constructor(
-		private companyMembersRepository: CompanyMembersRepository,
 		private statesRepository: StatesRepository,
 		private areasRepository: AreasRepository
 	) {}
 
 	async execute({
-		userId,
 		stateAcronyms,
 	}: FetchAreasByStatesUseCaseRequest): Promise<FetchAreasByStatesUseCaseResponse> {
-		const [member, states] = await Promise.all([
-			this.companyMembersRepository.findByUserId(userId),
-			this.statesRepository.findManyByAcronyms(stateAcronyms),
-		]);
-
-		if (!member) {
-			throw new ResourceNotFoundError("Member not found");
-		}
+		const states =
+			await this.statesRepository.findManyByAcronyms(stateAcronyms);
 
 		if (!states?.length) {
 			throw new ResourceNotFoundError(

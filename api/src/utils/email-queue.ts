@@ -41,10 +41,10 @@ export class EmailQueue {
 		try {
 			await resend.emails
 				.send(emailDetails)
-				.then((res: any) => {
+				.then((res: unknown) => {
 					console.log("Success: ", res);
 				})
-				.catch((error: any) => {
+				.catch((error: unknown) => {
 					console.log("Error: ", error);
 				});
 		} catch (error) {

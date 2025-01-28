@@ -3,9 +3,6 @@ import fastifyJwt from "@fastify/jwt";
 import fastifyCookie from "@fastify/cookie";
 import fastifyCors from "@fastify/cors";
 
-import { citiesRoutes } from "@/http/routes/cities";
-import { areasRoutes } from "@/http/routes/areas";
-
 import { authModuleRoutes } from "@/modules/auth/http/routes/auth-module-routes";
 import { userModuleRoutes } from "@/modules/user/http/routes/user-module-routes";
 import { companyModuleRoutes } from "@/modules/company/http/routes/company-module-routes";
@@ -41,9 +38,6 @@ app.register(fastifyCors, {
 	origin: process.env.CORS_ORIGIN_URL,
 	credentials: true,
 });
-
-app.register(citiesRoutes);
-app.register(areasRoutes);
 
 app.register(authModuleRoutes);
 app.register(userModuleRoutes);

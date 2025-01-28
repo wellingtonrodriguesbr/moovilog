@@ -1,53 +1,18 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { InMemoryCompanyMembersRepository } from "@/repositories/in-memory/in-memory-company-members-repository";
-import { InMemoryCompaniesRepository } from "@/repositories/in-memory/in-memory-companies-repository";
-import { InMemoryUsersRepository } from "@/repositories/in-memory/in-memory-users-repository";
-import { InMemoryStatesRepository } from "@/repositories/in-memory/in-memory-states-repository";
-import { InMemoryAreasRepository } from "@/repositories/in-memory/in-memory-areas-repository";
+import { InMemoryStatesRepository } from "@/modules/shared/repositories/in-memory/in-memory-states-repository";
+import { InMemoryAreasRepository } from "@/modules/shared/repositories/in-memory/in-memory-areas-repository";
 import { FetchAreasByStatesUseCase } from "@/modules/shared/use-cases/fetch-areas-by-states-use-case";
+import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
 
-let usersRepository: InMemoryUsersRepository;
-let companiesRepository: InMemoryCompaniesRepository;
-
-let companyMembersRepository: InMemoryCompanyMembersRepository;
 let statesRepository: InMemoryStatesRepository;
 let areasRepository: InMemoryAreasRepository;
 let sut: FetchAreasByStatesUseCase;
 
-describe("Fetch areas by state use case", () => {
+describe("[MODULE]: Fetch areas by states use case", () => {
 	beforeEach(async () => {
-		usersRepository = new InMemoryUsersRepository();
-		companiesRepository = new InMemoryCompaniesRepository();
-		companyMembersRepository = new InMemoryCompanyMembersRepository();
 		statesRepository = new InMemoryStatesRepository();
 		areasRepository = new InMemoryAreasRepository();
-		sut = new FetchAreasByStatesUseCase(
-			companyMembersRepository,
-			statesRepository,
-			areasRepository
-		);
-
-		await usersRepository.create({
-			id: "john-doe-01",
-			name: "John Doe",
-			email: "johndoe@example.com",
-			password: "12345678",
-		});
-
-		await companiesRepository.create({
-			id: "company-id-01",
-			name: "Company name",
-			documentNumber: "12312312389899",
-			size: "MEDIUM",
-			ownerId: "john-doe-01",
-		});
-
-		await companyMembersRepository.create({
-			companyId: "company-id-01",
-			userId: "john-doe-01",
-			sector: "Gerência",
-			role: "ADMIN",
-		});
+		sut = new FetchAreasByStatesUseCase(statesRepository, areasRepository);
 
 		await statesRepository.create({
 			id: "fake-state-id",
@@ -63,13 +28,20 @@ describe("Fetch areas by state use case", () => {
 		});
 	});
 
-	it("should be able to fetch areas by state", async () => {
+	it("should be able to fetch areas by states", async () => {
 		const { areas } = await sut.execute({
-			userId: "john-doe-01",
 			stateAcronyms: ["SP"],
 		});
 
 		expect(areas).toHaveLength(1);
 		expect(areasRepository.items[0].stateId).toStrictEqual("fake-state-id");
+	});
+
+	it("should not be able to fetch areas by states if the state is not found", async () => {
+		await expect(() =>
+			sut.execute({
+				stateAcronyms: ["RJ"],
+			})
+		).rejects.toBeInstanceOf(ResourceNotFoundError);
 	});
 });

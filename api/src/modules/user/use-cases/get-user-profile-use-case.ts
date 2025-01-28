@@ -30,7 +30,7 @@ export class GetUserProfileUseCase {
 			user.id
 		);
 
-    if (!companyMember) {
+		if (!companyMember) {
 			throw new ResourceNotFoundError("Company member not found");
 		}
 

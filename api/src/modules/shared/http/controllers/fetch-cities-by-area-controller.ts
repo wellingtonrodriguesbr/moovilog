@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
+import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
 import { makeFetchCitiesByAreaUseCase } from "@/modules/shared/use-cases/factories/make-fetch-cities-by-area-use-case";
+
 import z from "zod";
 
 export class FetchCitiesByAreaController {
@@ -13,12 +14,9 @@ export class FetchCitiesByAreaController {
 			req.params
 		);
 
-		const userId = req.user.sub;
-
 		try {
 			const fetchCitiesByAreaUseCase = makeFetchCitiesByAreaUseCase();
 			const { cities } = await fetchCitiesByAreaUseCase.execute({
-				userId,
 				areaCode,
 			});
 
