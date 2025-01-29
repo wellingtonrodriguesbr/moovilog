@@ -2,7 +2,7 @@ import dynamic from "next/dynamic";
 
 import type { Metadata } from "next";
 import { Fira_Sans } from "next/font/google";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/cn";
 import { ReactQueryProvider } from "@/providers/react-query-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";

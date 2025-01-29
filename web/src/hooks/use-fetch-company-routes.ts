@@ -1,5 +1,6 @@
 import { api } from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
+import { useCompanyStore } from "@/stores/company-store";
 
 export interface Route {
 	id: string;
@@ -11,13 +12,17 @@ export interface Route {
 }
 
 export function useFetchCompanyRoutes() {
+	const { companyId } = useCompanyStore();
 	const { data: routes, isPending: isFetchCompanyRoutesPending } = useQuery({
 		queryKey: ["routes"],
 		queryFn: handleFetchCompanyRoutes,
+		enabled: !!companyId,
 	});
 
 	async function handleFetchCompanyRoutes() {
-		const { data } = await api.get<{ routes: Route[] }>("/company/routes");
+		const { data } = await api.get<{ routes: Route[] }>(
+			`/${companyId}/routes`
+		);
 
 		return data.routes;
 	}

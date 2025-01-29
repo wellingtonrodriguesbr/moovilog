@@ -1,6 +1,6 @@
 import { api } from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
-import { useGetCompanyInformation } from "./use-get-company-information";
+import { useCompanyStore } from "@/stores/company-store";
 
 export interface Area {
 	id: string;
@@ -21,29 +21,26 @@ export interface CompanyStates {
 }
 
 export function useFetchAreasStatesFromCompany() {
-	const { company, isGetCompanyInformationPending } =
-		useGetCompanyInformation();
+	const { companyId } = useCompanyStore();
 
 	const { data, isPending: isFetchAreasStatesFromCompanyPending } = useQuery({
-		queryKey: ["states-from-company"],
+		queryKey: ["states-areas-from-company"],
 		queryFn: handleFetchAreasStatesFromCompany,
+		enabled: !!companyId,
 	});
 
 	async function handleFetchAreasStatesFromCompany() {
-		if (company && !isGetCompanyInformationPending) {
-			const { data } = await api.get<CompanyStates>(
-				`/companies/${company.id}/areas-states`
-			);
+		const { data } = await api.get<CompanyStates>(
+			`/companies/${companyId}/states-areas`
+		);
 
-			return data;
-		}
+		return data;
 	}
 
 	return {
 		states: data?.states || [],
 		areas: data?.areas || [],
 		isFetchAreasStatesFromCompanyPending:
-			isFetchAreasStatesFromCompanyPending ||
-			isGetCompanyInformationPending,
+			isFetchAreasStatesFromCompanyPending,
 	};
 }

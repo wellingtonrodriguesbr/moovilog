@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { UnderConstruction } from "@/components/under-construction";
+import { UnderConstruction } from "@/components/platform/under-construction";
 
 export const metadata: Metadata = {
 	title: "Avisos | Moovilog",

@@ -1,4 +1,5 @@
 import { api } from "@/lib/axios";
+import { useCompanyStore } from "@/stores/company-store";
 import { useQuery } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
 import { toast } from "sonner";
@@ -49,13 +50,15 @@ interface CompanyInformationResponse {
 
 export function useGetCompanyInformation() {
 	const pathName = usePathname();
+	const enabledQuery = pathName !== "/cadastro/empresa" && pathName !== "/";
+
+	const { setCompanyId } = useCompanyStore();
+
 	const { data: company, isPending: isGetCompanyInformationPending } =
 		useQuery({
 			queryKey: ["company-information"],
 			queryFn: handleGetCompanyInformation,
-			enabled:
-				pathName !== "/cadastro/empresa" &&
-				pathName !== "/cadastro/empresa/endereco",
+			enabled: enabledQuery,
 		});
 
 	async function handleGetCompanyInformation() {
@@ -64,6 +67,7 @@ export function useGetCompanyInformation() {
 				"/companies/information"
 			);
 
+			setCompanyId(data.company.id);
 			return data;
 		} catch (error) {
 			toast.error("Falha ao encontrar informações da empresa");

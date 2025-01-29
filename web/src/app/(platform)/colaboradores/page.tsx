@@ -1,4 +1,4 @@
-import { Collaborators } from "@/components/platform/collaborators";
+import { Collaborators } from "@/pages/platform/collaborators";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

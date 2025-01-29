@@ -1,4 +1,4 @@
-import { HeaderPlatform } from "@/components/platform/header";
+import { HeaderPlatform } from "@/components/platform/header-platform";
 import { Sidebar } from "@/components/platform/sidebar";
 
 export default function PlattformLayout({

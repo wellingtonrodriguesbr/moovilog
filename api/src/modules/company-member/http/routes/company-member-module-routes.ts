@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify";
-import { verifyJWT } from "@/http/middlewares/verify-jwt";
+import { verifyJWT } from "@/modules/shared/http/middlewares/verify-jwt";
 import { FetchMembersFromCompanyController } from "@/modules/company-member/http/controllers/fetch-members-from-company-controller";
 import { SendInvitationToCompanyMemberController } from "@/modules/company-member/http/controllers/send-invitation-to-company-member-controller";
 

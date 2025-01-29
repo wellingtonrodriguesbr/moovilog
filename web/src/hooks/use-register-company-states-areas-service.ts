@@ -23,7 +23,7 @@ export function useRegisterCompanyStatesAreasService() {
 	) {
 		if (company && !isGetCompanyInformationPending) {
 			const { data } = await api.post(
-				`/companies/${company.id}/areas-states`,
+				`/companies/${company.id}/states-areas`,
 				{
 					...registerData,
 				}
