@@ -1,13 +1,9 @@
+import { User } from "@/interfaces";
 import { api } from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 
 interface ProfileResponse {
-	user: {
-		id: string;
-		name: string;
-		email: string;
-		role: string;
-	};
+	user: User;
 }
 
 export function useGetProfile() {

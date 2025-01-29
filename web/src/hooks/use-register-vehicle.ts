@@ -1,3 +1,4 @@
+import { Vehicle } from "@/interfaces";
 import { api } from "@/lib/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
@@ -19,23 +20,6 @@ interface RegisterVehicleData {
 	brand: string;
 	model: string;
 }
-
-export interface Vehicle {
-	id: string;
-	plate: string;
-	year: number;
-	brand: string;
-	model: string;
-	category: string;
-	type: string;
-	body: string;
-	fullLoadCapacity: number;
-	createdAt: string;
-	updatedAt: string;
-	companyId: string;
-	creatorId: string;
-}
-
 export function useRegisterVehicle() {
 	const queryClient = useQueryClient();
 	const {

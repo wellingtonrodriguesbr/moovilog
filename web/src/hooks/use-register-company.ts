@@ -1,3 +1,4 @@
+import { Company } from "@/interfaces";
 import { api } from "@/lib/axios";
 import { useMutation } from "@tanstack/react-query";
 
@@ -7,17 +8,8 @@ interface RegisterCompanyData {
 	size: "MICRO" | "SMALL" | "MEDIUM" | "BIG";
 }
 
-interface Response {
-	company: {
-		id: string;
-		name: string;
-		documentNumber: string;
-		type: string;
-		size: string;
-		createdAt: Date;
-		updatedAt: Date;
-		ownerId: string;
-	};
+interface CompanyResponse {
+	company: Company;
 }
 
 export function useRegisterCompany() {
@@ -33,7 +25,7 @@ export function useRegisterCompany() {
 		documentNumber,
 		size,
 	}: RegisterCompanyData) {
-		const { data } = await api.post<{ company: Response }>("/companies", {
+		const { data } = await api.post<CompanyResponse>("/companies", {
 			name,
 			documentNumber,
 			size,

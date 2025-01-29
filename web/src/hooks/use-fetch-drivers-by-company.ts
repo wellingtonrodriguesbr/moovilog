@@ -1,19 +1,10 @@
 import { api } from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 import { useGetCompanyInformation } from "@/hooks/use-get-company-information";
+import { Driver } from "@/interfaces";
 
-export interface Driver {
-	id: string;
-	name: string;
-	documentNumber: string;
-	phone: string;
-	status: "ACTIVE" | "INACTIVE" | "PENDING";
-	type: "AGGREGATE" | "FREELANCER" | "INTERNAL";
-	createdAt: string;
-	updatedAt: string;
-	creatorId: string;
-	companyId: string;
-	addressId: string | null;
+interface DriverResponse {
+	drivers: Driver[];
 }
 
 export function useFetchDriversByCompany() {
@@ -29,7 +20,7 @@ export function useFetchDriversByCompany() {
 	});
 
 	async function handleFetchDriversByCompany() {
-		const { data } = await api.get<{ drivers: Driver[] }>(
+		const { data } = await api.get<DriverResponse>(
 			`/${company?.id}/drivers`
 		);
 

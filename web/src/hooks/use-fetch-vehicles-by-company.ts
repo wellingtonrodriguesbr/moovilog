@@ -1,21 +1,10 @@
 import { api } from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 import { useGetCompanyInformation } from "@/hooks/use-get-company-information";
+import { Vehicle } from "@/interfaces/vehicle";
 
-export interface Vehicle {
-	id: string;
-	plate: string;
-	year: number;
-	brand: string;
-	model: string;
-	category: string;
-	type: string;
-	body: string;
-	fullLoadCapacity: number;
-	createdAt: string;
-	updatedAt: string;
-	companyId: string;
-	creatorId: string;
+interface VehicleResponse {
+	vehicles: Vehicle[];
 }
 
 export function useFetchVehiclesByCompany() {
@@ -31,7 +20,7 @@ export function useFetchVehiclesByCompany() {
 	});
 
 	async function handleFetchVehiclesByCompany() {
-		const { data } = await api.get<{ vehicles: Vehicle[] }>(
+		const { data } = await api.get<VehicleResponse>(
 			`/${company?.id}/vehicles`
 		);
 
