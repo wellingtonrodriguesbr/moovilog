@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { RegisterCompanyAddress } from "@/components/platform/company/register-company-address";
+import { RegisterCompanyAddressForm } from "@/pages/platform/company/components/register-company-address-form";
 
 export const metadata: Metadata = {
 	title: "Cadastro de Empresa | Moovilog",
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function RegisterCompanyAddressPage() {
 	return (
 		<main className="w-full max-w-screen-sm mx-auto p-4 md:p-12">
-			<RegisterCompanyAddress />
+			<RegisterCompanyAddressForm />
 		</main>
 	);
 }

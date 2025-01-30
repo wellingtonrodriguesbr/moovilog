@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { CompanyInformation } from "@/components/platform/company/company-information";
+import { CompanyInformation } from "@/pages/platform/company/components/company-information";
 
 export const metadata: Metadata = {
 	title: "Dados cadastrais | Moovilog",
