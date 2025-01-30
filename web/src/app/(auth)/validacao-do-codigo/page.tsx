@@ -1,4 +1,4 @@
-import { ValidateAuthLink } from "@/pages/auth/validate-auth-link";
+import { ValidateAuthLink } from "@/modules/auth/validate-auth-link";
 
 export default function ValidationCodePage() {
 	return (

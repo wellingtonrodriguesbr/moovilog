@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { Login } from "@/pages/auth/login";
+import { Login } from "@/modules/auth/login";
 
 export const metadata: Metadata = {
 	title: "Entrar | Moovilog",

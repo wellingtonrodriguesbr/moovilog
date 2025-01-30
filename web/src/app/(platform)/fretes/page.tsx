@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { Freights } from "@/pages/platform/freights";
+import { Freights } from "@/modules/platform/freights";
 import { UnderConstruction } from "@/components/platform/under-construction";
 
 export const metadata: Metadata = {
