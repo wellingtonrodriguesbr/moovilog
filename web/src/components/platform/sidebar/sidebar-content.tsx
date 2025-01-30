@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { usePathname } from "next/navigation";
 
 import { SidebarItem } from "@/components/platform/sidebar/sidebar-item";
 import { useOpenCloseSidebar } from "@/providers/sidebar-provider";
@@ -19,8 +18,6 @@ import {
 } from "lucide-react";
 
 export function SidebarContent() {
-	const path = usePathname();
-
 	const { isOpen } = useOpenCloseSidebar();
 	const { company, isGetCompanyInformationPending } =
 		useGetCompanyInformation();
@@ -61,12 +58,7 @@ export function SidebarContent() {
 
 			<ul className="flex flex-col mt-6">
 				{ITEMS.map((item) => (
-					<SidebarItem
-						key={item.name}
-						item={item}
-						isOpen={isOpen}
-						path={path}
-					/>
+					<SidebarItem key={item.name} item={item} isOpen={isOpen} />
 				))}
 			</ul>
 		</div>

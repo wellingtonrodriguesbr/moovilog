@@ -3,7 +3,6 @@ import { SidebarbarLink } from "@/components/platform/sidebar/sidebar-link";
 
 interface SidebarItemProps {
 	isOpen: boolean;
-	path: string;
 	item: {
 		name: string;
 		url: string;
@@ -11,12 +10,11 @@ interface SidebarItemProps {
 	};
 }
 
-export function SidebarItem({ item, path, isOpen }: SidebarItemProps) {
+export function SidebarItem({ item, isOpen }: SidebarItemProps) {
 	return (
 		<li className="w-full">
 			<SidebarbarLink
 				isOpen={isOpen}
-				path={path}
 				url={item.url}
 				text={item.name}
 				iconLeft={item.icon}
