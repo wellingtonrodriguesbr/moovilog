@@ -16,10 +16,10 @@ import { ROUTES_MAP } from "@/utils/mocks/routes-mapping";
 
 export function BreadcrumbPlatform() {
 	const path = usePathname();
-	const paths = path.split("/").filter(Boolean);
+	const paths = path?.split("/").filter(Boolean);
 
 	const showBreadCrumbHome =
-		!paths.includes("inicio") && !path.includes("cadastro");
+		!paths?.includes("inicio") && !path?.includes("cadastro");
 
 	return (
 		<Breadcrumb>
@@ -27,7 +27,7 @@ export function BreadcrumbPlatform() {
 				{showBreadCrumbHome && (
 					<BreadcrumbItem className="ml-1">
 						<BreadcrumbLink
-							data-disabled={path.includes("/cadastro/empresa")}
+							data-disabled={path?.includes("/cadastro/empresa")}
 							className="data-[disabled=true]:opacity-50 data-[disabled=true]:pointer-events-none"
 							asChild
 						>
@@ -36,9 +36,9 @@ export function BreadcrumbPlatform() {
 					</BreadcrumbItem>
 				)}
 
-				{paths.map((segment, index) => {
-					const accumulatedPath = `/${paths.slice(0, index + 1).join("/")}`;
-					const isLast = index === paths.length - 1;
+				{paths?.map((segment, index) => {
+					const accumulatedPath = `/${paths?.slice(0, index + 1).join("/")}`;
+					const isLast = index === paths?.length - 1;
 
 					return (
 						<React.Fragment key={accumulatedPath}>
@@ -52,7 +52,7 @@ export function BreadcrumbPlatform() {
 									</BreadcrumbPage>
 								) : (
 									<BreadcrumbLink
-										data-disabled={path.includes(
+										data-disabled={path?.includes(
 											"/cadastro/empresa"
 										)}
 										className="data-[disabled=true]:opacity-50 data-[disabled=true]:pointer-events-none"
