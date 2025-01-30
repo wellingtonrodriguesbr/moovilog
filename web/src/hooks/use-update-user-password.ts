@@ -9,7 +9,7 @@ interface UpdateUserPasswordData {
 
 export function useUpdateUserPassword() {
 	const searchParams = useSearchParams();
-	const userId = searchParams.get("id");
+	const userId = searchParams?.get("id");
 
 	const {
 		mutateAsync: updateUserPassword,
