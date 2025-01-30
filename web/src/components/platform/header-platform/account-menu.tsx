@@ -45,7 +45,7 @@ export function AccountMenu() {
 			<DropdownMenu>
 				<DropdownMenuTrigger
 					className="flex items-center gap-2 data-[disabled=true]:pointer-events-none data-[disabled=false]:cursor-pointer group"
-					disabled={path.includes("/cadastro")}
+					disabled={path?.includes("/cadastro")}
 					asChild
 				>
 					<Avatar>
