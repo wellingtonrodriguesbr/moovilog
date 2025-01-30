@@ -9,6 +9,7 @@ export class InMemoryVehiclesRepository implements VehiclesRepository {
 		const vehicle = {
 			id: data.id ?? randomUUID(),
 			plate: data.plate,
+			trailerPlate: data.trailerPlate ?? null,
 			year: data.year,
 			category: data.category,
 			type: data.type,
@@ -26,9 +27,25 @@ export class InMemoryVehiclesRepository implements VehiclesRepository {
 		return vehicle;
 	}
 
-	async findVehicleInCompany(plate: string, companyId: string) {
+	async findVehicleInCompanyByPlate(plate: string, companyId: string) {
 		const vehicle = this.items.find(
 			(item) => item.plate === plate && item.companyId === companyId
+		);
+
+		if (!vehicle) {
+			return null;
+		}
+
+		return vehicle;
+	}
+
+	async findVehicleInCompanyByTrailerPlate(
+		trailerPlate: string,
+		companyId: string
+	) {
+		const vehicle = this.items.find(
+			(item) =>
+				item.trailerPlate === trailerPlate && item.companyId === companyId
 		);
 
 		if (!vehicle) {

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Ellipsis } from "lucide-react";
 import { Route } from "@/hooks/use-fetch-company-routes";
 import { formatBrazilianDate } from "@/utils/format-brazilian-date";
-import { ListCitiesInRouteDropdown } from "@/components/platform/routes/list-cities-in-route-dropdown";
+import { ListCitiesInRouteDropdown } from "@/pages/platform/routes/components/list-cities-in-route-dropdown";
 
 interface DriversTableRowProps {
 	route: Route;

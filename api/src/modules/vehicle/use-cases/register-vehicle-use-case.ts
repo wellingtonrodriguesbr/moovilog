@@ -8,10 +8,11 @@ import {
 	IVehicleBody,
 	IVehicleCategory,
 	IVehicleType,
-} from "@/modules/shared/interfaces/vehicle";
+} from "@/modules/vehicle/interfaces/vehicle";
 
 interface RegisterVehicleUseCaseRequest {
 	plate: string;
+	trailerPlate?: string | null;
 	year: number;
 	category: IVehicleCategory;
 	type: IVehicleType;
@@ -36,6 +37,7 @@ export class RegisterVehicleUseCase {
 
 	async execute({
 		plate,
+		trailerPlate,
 		year,
 		category,
 		type,
@@ -58,21 +60,37 @@ export class RegisterVehicleUseCase {
 		}
 
 		const transformedPlate = plate.toUpperCase();
+		const transformedTrailerPlate = trailerPlate?.toUpperCase();
 
-		const vehicleAlreadyExistsInCompany =
-			await this.vehiclesRepository.findVehicleInCompany(
+		const vehicleAlreadyExistsInCompanyWithPlate =
+			await this.vehiclesRepository.findVehicleInCompanyByPlate(
 				transformedPlate,
 				member.companyId
 			);
 
-		if (vehicleAlreadyExistsInCompany) {
+		if (vehicleAlreadyExistsInCompanyWithPlate) {
 			throw new VehicleAlreadyExistsInCompanyError(
 				"There is already a vehicle registered with this plate"
 			);
 		}
 
+		if (transformedTrailerPlate) {
+			const vehicleAlreadyExistsInCompanyWithTrailerPlate =
+				await this.vehiclesRepository.findVehicleInCompanyByTrailerPlate(
+					transformedTrailerPlate,
+					member.companyId
+				);
+
+			if (vehicleAlreadyExistsInCompanyWithTrailerPlate) {
+				throw new VehicleAlreadyExistsInCompanyError(
+					"There is already a vehicle registered with this trailer plate"
+				);
+			}
+		}
+
 		const vehicle = await this.vehiclesRepository.create({
 			plate: transformedPlate,
+			trailerPlate: transformedTrailerPlate ? transformedTrailerPlate : null,
 			year,
 			body,
 			category,

@@ -98,6 +98,36 @@ describe("[MODULE]: Register vehicle use case", () => {
 		).rejects.toBeInstanceOf(VehicleAlreadyExistsInCompanyError);
 	});
 
+	it("not should be able to register a vehicle with same trailer plate", async () => {
+		await sut.execute({
+			plate: "ABC-142",
+			trailerPlate: "ABC-143",
+			year: 1996,
+			body: "CLOSED",
+			category: "STRAIGHT_TRUCKS",
+			type: "OUTSOURCED",
+			fullLoadCapacity: 4500,
+			brand: "Mercedes-Benz",
+			model: "710",
+			userId: "john-doe-id-01",
+		});
+
+		await expect(() =>
+			sut.execute({
+				plate: "ABC-141",
+				trailerPlate: "ABC-143",
+				year: 1996,
+				body: "OPEN",
+				category: "STRAIGHT_TRUCKS",
+				type: "OUTSOURCED",
+				fullLoadCapacity: 4500,
+				brand: "Mercedes-Benz",
+				model: "710",
+				userId: "john-doe-id-01",
+			})
+		).rejects.toBeInstanceOf(VehicleAlreadyExistsInCompanyError);
+	});
+
 	it("not should be able to register a vehicle with the a creator role that is different between manager or admin", async () => {
 		const user = await usersRepository.create({
 			name: "John Doe",

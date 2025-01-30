@@ -1,6 +1,7 @@
 export interface Vehicle {
 	id: string;
 	plate: string;
+	trailerPlate: string | null;
 	year: number;
 	brand: string;
 	model: string;

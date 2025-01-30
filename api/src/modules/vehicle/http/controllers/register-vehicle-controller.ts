@@ -10,6 +10,7 @@ export class RegisterVehicleController {
 	static async handle(req: FastifyRequest, reply: FastifyReply) {
 		const registerVehicleBodySchema = z.object({
 			plate: z.string(),
+			trailerPlate: z.string().optional().nullable(),
 			year: z.number(),
 			category: z.enum([
 				"UTILITY",
@@ -19,10 +20,24 @@ export class RegisterVehicleController {
 				"TRUCKS",
 				"QUAD_AXLE_TRUCKS",
 				"SEMI_TRAILER",
-				"TANDEM_AXLE_TRUCK",
+				"B_TRAIN",
+				"ROAD_TRAIN",
 			]),
 			type: z.enum(["OWN", "OUTSOURCED", "RENTED"]),
-			body: z.enum(["CLOSED", "OPEN", "SIDER", "REFRIGERATED", "BUCKET"]),
+			body: z.enum([
+				"CLOSED",
+				"OPEN",
+				"SIDER",
+				"REFRIGERATED",
+				"BUCKET",
+				"TANK",
+				"BULK_CARRIER",
+				"LIVESTOCK",
+				"FLATBED",
+				"CONTAINER",
+				"WOOD",
+				"CAR_CARRIER",
+			]),
 			fullLoadCapacity: z.number(),
 			brand: z.string(),
 			model: z.string(),
@@ -30,6 +45,7 @@ export class RegisterVehicleController {
 
 		const {
 			plate,
+			trailerPlate,
 			year,
 			category,
 			type,
@@ -45,6 +61,7 @@ export class RegisterVehicleController {
 			const registerVehicleUseCase = makeRegisterVehicleUseCase();
 			const { vehicle } = await registerVehicleUseCase.execute({
 				plate,
+				trailerPlate,
 				year,
 				category,
 				type,

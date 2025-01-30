@@ -11,7 +11,7 @@ import {
 	DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { RegisterRouteForm } from "@/components/platform/routes/register-route-form";
+import { RegisterRouteForm } from "@/pages/platform/routes/components/register-route-form";
 
 import { Plus } from "lucide-react";
 

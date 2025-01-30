@@ -1,10 +1,10 @@
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { formatPlate } from "@/utils/format-plate";
-import { Vehicle } from "@/hooks/use-fetch-vehicles-by-company";
 import { Ellipsis } from "lucide-react";
 import { formatBrazilianDate } from "@/utils/format-brazilian-date";
 import { formatWeight } from "@/utils/format-weight";
+import { Vehicle } from "@/interfaces";
 
 interface VehcilesTableRowProps {
 	vehicle: Vehicle;
@@ -22,6 +22,13 @@ const VEHICLE_BODIES: Record<string, string> = {
 	SIDER: "Sider",
 	REFRIGERATED: "Refrigerado",
 	BUCKET: "Caçamba",
+	TANK: "Tanque",
+	BULK_CARRIER: "Graneleiro",
+	LIVESTOCK: "Gaiola (Transporte de Animais)",
+	FLATBED: "Plataforma",
+	CONTAINER: "Porta-Contêiner",
+	WOOD: "Transporte de Madeira",
+	CAR_CARRIER: "Cegonheira",
 };
 
 const VEHICLE_CATEGORIES: Record<string, string> = {
@@ -32,7 +39,8 @@ const VEHICLE_CATEGORIES: Record<string, string> = {
 	TRUCKS: "Truck",
 	QUAD_AXLE_TRUCKS: "Quarto Eixo",
 	SEMI_TRAILER: "Carreta",
-	TANDEM_AXLE_TRUCK: "Caminhão Caçamba",
+	B_TRAIN: "Bitrem",
+	ROAD_TRAIN: "Rodotrem",
 };
 
 export function VehiclesTableRow({ vehicle }: VehcilesTableRowProps) {
@@ -40,6 +48,9 @@ export function VehiclesTableRow({ vehicle }: VehcilesTableRowProps) {
 		<TableRow className="hover:bg-transparent">
 			<TableCell className="text-nowrap">
 				{formatPlate(vehicle.plate)}
+			</TableCell>
+			<TableCell className="text-nowrap">
+				{vehicle.trailerPlate ? formatPlate(vehicle.trailerPlate) : "-"}
 			</TableCell>
 			<TableCell className="text-nowrap">{vehicle.brand}</TableCell>
 			<TableCell className="text-nowrap">{vehicle.model}</TableCell>
@@ -56,7 +67,7 @@ export function VehiclesTableRow({ vehicle }: VehcilesTableRowProps) {
 				{formatWeight(vehicle.fullLoadCapacity)}kg
 			</TableCell>
 			<TableCell className="text-nowrap">
-				{formatBrazilianDate(vehicle.createdAt)}
+				{formatBrazilianDate(vehicle.createdAt.toString())}
 			</TableCell>
 			<TableCell className="text-right">
 				<Button variant="ghost">

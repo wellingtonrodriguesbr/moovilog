@@ -114,6 +114,7 @@ model Driver {
 model Vehicle {
   id               String          @id @default(uuid())
   plate            String          @unique
+  trailerPlate     String?         @unique @map("trailer_plate")
   year             Int
   brand            String
   model            String
@@ -133,6 +134,7 @@ model Vehicle {
   freights Freight[]
 
   @@unique([plate, companyId])
+  @@unique([trailerPlate, companyId])
   @@map("vehicles")
 }
 
@@ -298,7 +300,8 @@ enum VehicleCategory {
   TRUCKS
   QUAD_AXLE_TRUCKS
   SEMI_TRAILER
-  TANDEM_AXLE_TRUCK
+  B_TRAIN
+  ROAD_TRAIN
 }
 
 enum VehicleBody {
@@ -307,6 +310,13 @@ enum VehicleBody {
   SIDER
   REFRIGERATED
   BUCKET
+  TANK
+  BULK_CARRIER
+  LIVESTOCK
+  FLATBED
+  CONTAINER
+  WOOD
+  CAR_CARRIER
 }
 
 enum VehicleType {

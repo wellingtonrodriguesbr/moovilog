@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface RegisterVehicleData {
 	plate: string;
+	trailerPlate?: string | null;
 	year: number;
 	category:
 		| "UTILITY"
@@ -13,9 +14,22 @@ interface RegisterVehicleData {
 		| "TRUCKS"
 		| "QUAD_AXLE_TRUCKS"
 		| "SEMI_TRAILER"
-		| "TANDEM_AXLE_TRUCK";
+		| "B_TRAIN"
+		| "ROAD_TRAIN";
 	type: "OWN" | "OUTSOURCED" | "RENTED";
-	body: "CLOSED" | "OPEN" | "SIDER" | "REFRIGERATED" | "BUCKET";
+	body:
+		| "CLOSED"
+		| "OPEN"
+		| "SIDER"
+		| "REFRIGERATED"
+		| "BUCKET"
+		| "TANK"
+		| "BULK_CARRIER"
+		| "LIVESTOCK"
+		| "FLATBED"
+		| "CONTAINER"
+		| "WOOD"
+		| "CAR_CARRIER";
 	fullLoadCapacity: number;
 	brand: string;
 	model: string;

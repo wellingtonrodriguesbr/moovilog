@@ -201,7 +201,7 @@ export function RegisterRouteForm({ onCloseDialog }: RegisterRouteFormProps) {
 							!form.watch("areaCode")
 						}
 						placeholder={
-							isFetchCitiesByAreaPending
+							isFetchCitiesByAreaPending && form.watch("areaCode")
 								? "Carregando cidades..."
 								: "Clique para selecionar"
 						}

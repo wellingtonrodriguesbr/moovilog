@@ -4,8 +4,7 @@ export function middleware(request: NextRequest) {
 	const token = request.cookies.get("refreshToken");
 
 	if (!token) {
-		// return NextResponse.redirect(new URL("/entrar", request.url));
-		return NextResponse.next();
+		return NextResponse.redirect(new URL("/entrar", request.url));
 	}
 
 	return NextResponse.next();
@@ -16,7 +15,7 @@ export const config = {
 		"/inicio",
 		"/financeiro",
 		"/operacional/:path*",
-		"/fretes",
+		"/fretes/:path*",
 		"/rotas",
 		"/motoristas",
 		"/veiculos",

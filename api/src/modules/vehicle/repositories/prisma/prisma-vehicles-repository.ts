@@ -11,8 +11,8 @@ export class PrismaVehiclesRepository implements VehiclesRepository {
 		return vehicle;
 	}
 
-	async findVehicleInCompany(plate: string, companyId: string) {
-		const member = await prisma.vehicle.findUnique({
+	async findVehicleInCompanyByPlate(plate: string, companyId: string) {
+		const vehicle = await prisma.vehicle.findUnique({
 			where: {
 				plate_companyId: {
 					plate,
@@ -21,11 +21,31 @@ export class PrismaVehiclesRepository implements VehiclesRepository {
 			},
 		});
 
-		if (!member) {
+		if (!vehicle) {
 			return null;
 		}
 
-		return member;
+		return vehicle;
+	}
+
+	async findVehicleInCompanyByTrailerPlate(
+		trailerPlate: string,
+		companyId: string
+	) {
+		const vehicle = await prisma.vehicle.findUnique({
+			where: {
+				trailerPlate_companyId: {
+					trailerPlate,
+					companyId,
+				},
+			},
+		});
+
+		if (!vehicle) {
+			return null;
+		}
+
+		return vehicle;
 	}
 
 	async findByPlate(plate: string) {

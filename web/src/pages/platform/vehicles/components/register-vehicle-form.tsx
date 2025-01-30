@@ -19,12 +19,11 @@ import { Button } from "@/components/ui/button";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useRegisterDriver } from "@/hooks/use-register-driver";
 import { toast } from "sonner";
 
 import { Loader2 } from "lucide-react";
 import { formatPlate } from "@/utils/format-plate";
-import { useRegisterVehicle } from "@/hooks/use-register-vehicle";
+import { useRegisterVehicle } from "@/hooks/vehicle/use-register-vehicle";
 import { formatWeight } from "@/utils/format-weight";
 import { AxiosError } from "axios";
 
@@ -34,6 +33,7 @@ interface RegisterDriverFormProps {
 
 const formSchema = z.object({
 	plate: z.string(),
+	trailerPlate: z.string().optional().nullable(),
 	year: z
 		.string()
 		.transform((value) => value.replace(/\D/g, ""))
@@ -47,10 +47,24 @@ const formSchema = z.object({
 		"TRUCKS",
 		"QUAD_AXLE_TRUCKS",
 		"SEMI_TRAILER",
-		"TANDEM_AXLE_TRUCK",
+		"B_TRAIN",
+		"ROAD_TRAIN",
 	]),
 	type: z.enum(["OWN", "OUTSOURCED", "RENTED"]),
-	body: z.enum(["CLOSED", "OPEN", "SIDER", "REFRIGERATED", "BUCKET"]),
+	body: z.enum([
+		"CLOSED",
+		"OPEN",
+		"SIDER",
+		"REFRIGERATED",
+		"BUCKET",
+		"TANK",
+		"BULK_CARRIER",
+		"LIVESTOCK",
+		"FLATBED",
+		"CONTAINER",
+		"WOOD",
+		"CAR_CARRIER",
+	]),
 	fullLoadCapacity: z
 		.string()
 		.transform((value) => value.replace(/\D/g, ""))
@@ -58,6 +72,8 @@ const formSchema = z.object({
 	brand: z.string(),
 	model: z.string(),
 });
+
+const typesThatRequireTrailerPlate = ["SEMI_TRAILER", "B_TRAIN", "ROAD_TRAIN"];
 
 export function RegisterVehicleForm({
 	onCloseDialog,
@@ -68,6 +84,7 @@ export function RegisterVehicleForm({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			plate: "",
+			trailerPlate: "",
 			year: undefined,
 			fullLoadCapacity: undefined,
 			brand: "",
@@ -76,6 +93,10 @@ export function RegisterVehicleForm({
 			category: undefined,
 		},
 	});
+
+	const shouldIncludeTrailerPlate = typesThatRequireTrailerPlate.includes(
+		form.watch("category")
+	);
 
 	async function onSubmit(registerData: z.infer<typeof formSchema>) {
 		try {
@@ -99,47 +120,6 @@ export function RegisterVehicleForm({
 				onSubmit={form.handleSubmit(onSubmit)}
 				className="flex flex-col gap-4 w-full"
 			>
-				<FormField
-					control={form.control}
-					name="plate"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Placa</FormLabel>
-							<FormControl>
-								<div className="flex items-center rounded-md overflow-hidden border pr-4">
-									<Input
-										className="border-0 rounded-none outline-none focus-visible:ring-0 uppercase"
-										placeholder="XXX-XXXX"
-										autoComplete="off"
-										maxLength={8}
-										{...field}
-										value={formatPlate(field.value)}
-									/>
-								</div>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-
-				<FormField
-					control={form.control}
-					name="year"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Ano de fabricação</FormLabel>
-							<FormControl>
-								<Input
-									maxLength={4}
-									placeholder="Ex: 1996"
-									{...field}
-								/>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-
 				<FormField
 					control={form.control}
 					name="brand"
@@ -167,24 +147,6 @@ export function RegisterVehicleForm({
 								<Input
 									placeholder="Ex: ATEGO 1419"
 									{...field}
-								/>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-
-				<FormField
-					control={form.control}
-					name="fullLoadCapacity"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Capacidade máxima de peso</FormLabel>
-							<FormControl>
-								<Input
-									placeholder="Ex: 4.000kg"
-									{...field}
-									value={formatWeight(field.value)}
 								/>
 							</FormControl>
 							<FormMessage />
@@ -285,6 +247,98 @@ export function RegisterVehicleForm({
 					)}
 				/>
 
+				<FormField
+					control={form.control}
+					name="plate"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>
+								{shouldIncludeTrailerPlate
+									? "Placa do cavalo"
+									: "Placa"}
+							</FormLabel>
+							<FormControl>
+								<div className="flex items-center rounded-md overflow-hidden border pr-4">
+									<Input
+										className="border-0 rounded-none outline-none focus-visible:ring-0 uppercase"
+										placeholder="XXX-XXXX"
+										autoComplete="off"
+										maxLength={8}
+										{...field}
+										value={formatPlate(field.value)}
+									/>
+								</div>
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+
+				{shouldIncludeTrailerPlate ? (
+					<FormField
+						control={form.control}
+						name="trailerPlate"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Placa do reboque</FormLabel>
+								<FormControl>
+									<div className="flex items-center rounded-md overflow-hidden border pr-4">
+										<Input
+											className="border-0 rounded-none outline-none focus-visible:ring-0 uppercase"
+											placeholder="XXX-XXXX"
+											autoComplete="off"
+											maxLength={8}
+											{...field}
+											value={formatPlate(
+												field.value ?? ""
+											)}
+										/>
+									</div>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+				) : null}
+
+				<FormField
+					control={form.control}
+					name="year"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>Ano de fabricação</FormLabel>
+							<FormControl>
+								<Input
+									maxLength={4}
+									placeholder="Ex: 1996"
+									{...field}
+								/>
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+
+				<FormField
+					control={form.control}
+					name="fullLoadCapacity"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>
+								Capacidade máxima de peso (Tara)
+							</FormLabel>
+							<FormControl>
+								<Input
+									placeholder="Ex: 4.000kg"
+									{...field}
+									value={formatWeight(field.value)}
+								/>
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+
 				<Button
 					disabled={isPendingRegisterVehicle}
 					type="submit"
@@ -337,6 +391,34 @@ const VEHICLE_BODIES = [
 		label: "Caçamba",
 		value: "BUCKET",
 	},
+	{
+		label: "Tanque",
+		value: "TANK",
+	},
+	{
+		label: "Graneleiro",
+		value: "BULK_CARRIER",
+	},
+	{
+		label: "Gaiola (Transporte de Animais)",
+		value: "LIVESTOCK",
+	},
+	{
+		label: "Plataforma",
+		value: "FLATBED",
+	},
+	{
+		label: "Porta-Contêiner",
+		value: "CONTAINER",
+	},
+	{
+		label: "Transporte de Madeira",
+		value: "WOOD",
+	},
+	{
+		label: "Cegonha",
+		value: "CAR_CARRIER",
+	},
 ];
 
 const VEHICLE_CATEGORIES = [
@@ -369,7 +451,11 @@ const VEHICLE_CATEGORIES = [
 		value: "SEMI_TRAILER",
 	},
 	{
-		label: "Caçamba",
-		value: "TANDEM_AXLE_TRUCK",
+		label: "Bitrem",
+		value: "B_TRAIN",
+	},
+	{
+		label: "Rodotrem",
+		value: "ROAD_TRAIN",
 	},
 ];

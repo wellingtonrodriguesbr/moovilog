@@ -1,6 +1,6 @@
-import { RegisterRouteDialog } from "@/components/platform/routes/register-route-dialog";
-import { RoutesMetrics } from "@/components/platform/routes/routes-metrics";
-import { RoutesTable } from "@/components/platform/routes/routes-table";
+import { RegisterRouteDialog } from "@/pages/platform/routes/components/register-route-dialog";
+import { RoutesMetrics } from "@/pages/platform/routes/components/routes-metrics";
+import { RoutesTable } from "@/pages/platform/routes/components/routes-table";
 
 export function Routes() {
 	return (

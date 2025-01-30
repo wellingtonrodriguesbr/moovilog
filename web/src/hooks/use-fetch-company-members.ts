@@ -1,4 +1,5 @@
 import { api } from "@/lib/axios";
+import { useCompanyStore } from "@/stores/company-store";
 import { useQuery } from "@tanstack/react-query";
 
 export interface CompanyMember {
@@ -22,6 +23,7 @@ export interface User {
 }
 
 export function useFetchCompanyMembers() {
+	const { companyId } = useCompanyStore();
 	const { data: companyMembers, isPending: isFetchCompanyMembersPending } =
 		useQuery({
 			queryKey: ["company-members"],
@@ -30,7 +32,7 @@ export function useFetchCompanyMembers() {
 
 	async function handleFetchCompanyMembers() {
 		const { data } = await api.get<{ companyMembers: CompanyMember[] }>(
-			"/companies/members"
+			`${companyId}/members`
 		);
 
 		return data.companyMembers;
