@@ -28,7 +28,7 @@ export default function SidebarProvider({ children }: { children: ReactNode }) {
 	}
 
 	useEffect(() => {
-		if (width >= 720 && !path.includes("/cadastro")) {
+		if (width >= 720 && !path?.includes("/cadastro")) {
 			setIsOpen(true);
 		} else {
 			setIsOpen(false);

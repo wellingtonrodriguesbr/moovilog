@@ -6,9 +6,9 @@ import { formatCPF } from "@/utils/format-cpf";
 import { formatPhone } from "@/utils/format-phone";
 
 import { Ellipsis } from "lucide-react";
-import { Driver } from "@/hooks/use-fetch-drivers-by-company";
 import { formatBrazilianDate } from "@/utils/format-brazilian-date";
 import { Badge } from "@/components/ui/badge";
+import { Driver } from "@/interfaces";
 
 const DRIVER_TYPE: Record<string, string> = {
 	AGGREGATE: "Agregado",
@@ -52,7 +52,7 @@ export function DriversTableRow({ driver }: DriversTableRowProps) {
 				</Badge>
 			</TableCell>
 			<TableCell className="text-nowrap">
-				{formatBrazilianDate(driver.createdAt)}
+				{formatBrazilianDate(driver.createdAt.toString())}
 			</TableCell>
 			<TableCell className="text-right">
 				<Button variant="ghost">

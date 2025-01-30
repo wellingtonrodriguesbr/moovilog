@@ -10,8 +10,8 @@ interface AuthLinkResponse {
 
 export function useValidateAuthLink() {
 	const searchParams = useSearchParams();
-	const code = searchParams.get("codigo");
-	const redirectLink = searchParams.get("redirect");
+	const code = searchParams?.get("codigo");
+	const redirectLink = searchParams?.get("redirect");
 
 	const router = useRouter();
 
