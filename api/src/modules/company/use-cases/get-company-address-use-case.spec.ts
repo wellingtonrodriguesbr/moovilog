@@ -1,26 +1,38 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { InMemoryCompaniesRepository } from "@/modules/company/repositories/in-memory/in-memory-companies-repository";
 import { InMemoryUsersRepository } from "@/modules/user/repositories/in-memory/in-memory-users-repository";
+import { InMemoryAddressesRepository } from "@/modules/shared/repositories/in-memory/in-memory-addresses-repository";
+import { InMemoryCitiesRepository } from "@/modules/shared/repositories/in-memory/in-memory-cities-repository";
+import { InMemoryStatesRepository } from "@/modules/shared/repositories/in-memory/in-memory-states-repository";
 import { InMemoryCompanyMembersRepository } from "@/modules/company-member/repositories/in-memory/in-memory-company-members-repository";
-import { GetCompanyInformationUseCase } from "@/modules/company/use-cases/get-company-information-use-case";
 import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
 import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
+import { GetCompanyAddressUseCase } from "@/modules/company/use-cases/get-company-address-use-case";
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
 let companyMembersRepository: InMemoryCompanyMembersRepository;
+let addressesRepository: InMemoryAddressesRepository;
+let citiesRepository: InMemoryCitiesRepository;
+let statesRepository: InMemoryStatesRepository;
 
-let sut: GetCompanyInformationUseCase;
+let sut: GetCompanyAddressUseCase;
 
-describe("[MODULE]: Get company information use case", () => {
+describe("[MODULE]: Get company address use case", () => {
 	beforeEach(async () => {
 		usersRepository = new InMemoryUsersRepository();
 		companiesRepository = new InMemoryCompaniesRepository();
 		companyMembersRepository = new InMemoryCompanyMembersRepository();
+		addressesRepository = new InMemoryAddressesRepository();
+		citiesRepository = new InMemoryCitiesRepository();
+		statesRepository = new InMemoryStatesRepository();
 
-		sut = new GetCompanyInformationUseCase(
+		sut = new GetCompanyAddressUseCase(
 			companyMembersRepository,
-			companiesRepository
+			companiesRepository,
+			addressesRepository,
+			citiesRepository,
+			statesRepository
 		);
 
 		await usersRepository.create({
@@ -45,16 +57,43 @@ describe("[MODULE]: Get company information use case", () => {
 			sector: "Diretoria",
 			role: "ADMIN",
 		});
+
+		await statesRepository.create({
+			id: "fake-state-id",
+			name: "São Paulo",
+			acronym: "SP",
+		});
+
+		await citiesRepository.create({
+			id: "fake-city-id",
+			name: "São Paulo",
+			stateId: "fake-state-id",
+			areaId: "fake-area-id",
+		});
+
+		await addressesRepository.create({
+			id: "fake-address-id",
+			cityId: "fake-city-id",
+			street: "fake street name",
+			neighborhood: "fake neighborhood",
+			number: 200,
+			zipCode: "00000-000",
+		});
+
+		await companiesRepository.setCompanyAddress(
+			"company-id-01",
+			"fake-address-id"
+		);
 	});
 
 	it("should be able to get company information", async () => {
-		const { company } = await sut.execute({
+		const { companyAddress } = await sut.execute({
 			userId: "john-doe-id-01",
 			companyId: "company-id-01",
 		});
 
-		expect(company.id).toEqual("company-id-01");
-		expect(company.size).toEqual("MEDIUM");
+		expect(companyAddress.address.id).toEqual("fake-address-id");
+		expect(companyAddress.state.id).toEqual("fake-state-id");
 	});
 
 	it("not should be able to get company information if the company is not found", async () => {

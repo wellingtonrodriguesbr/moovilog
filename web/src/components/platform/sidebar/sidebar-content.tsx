@@ -19,7 +19,7 @@ import {
 
 export function SidebarContent() {
 	const { isOpen } = useOpenCloseSidebar();
-	const { company, isGetCompanyInformationPending } =
+	const { companyInformation, isGetCompanyInformationPending } =
 		useGetCompanyInformation();
 
 	return (
@@ -46,10 +46,12 @@ export function SidebarContent() {
 					) : (
 						<>
 							<p className="text-base font-medium md:group-data-[state=closed]:w-0 md:group-data-[state=closed]:opacity-0 text-nowrap transition-all ease-in-out duration-300 md:text-ellipsis md:max-w-[9rem] md:overflow-hidden">
-								{company?.name}
+								{companyInformation?.name}
 							</p>
 							<p className="text-zinc-700 text-xs md:group-data-[state=closed]:w-0 md:group-data-[state=closed]:opacity-0 text-nowrap transition-all ease-in-out duration-300">
-								{formatCNPJ(company?.documentNumber ?? "")}
+								{formatCNPJ(
+									companyInformation?.documentNumber ?? ""
+								)}
 							</p>
 						</>
 					)}

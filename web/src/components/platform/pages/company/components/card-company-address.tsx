@@ -3,12 +3,12 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useGetCompanyInformation } from "@/hooks/company/use-get-company-information";
+import { useGetCompanyAddress } from "@/hooks/company/use-get-company-address";
 import { formatCEP } from "@/utils/format-cep";
 import { MapPinned } from "lucide-react";
 
 export function CardCompanyAddress() {
-	const { companyAddress } = useGetCompanyInformation();
+	const { companyAddress } = useGetCompanyAddress();
 
 	if (!companyAddress) {
 		return null;

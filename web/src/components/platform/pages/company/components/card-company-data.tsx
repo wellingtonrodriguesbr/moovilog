@@ -17,9 +17,9 @@ const COMPANY_SIZE: Record<string, string> = {
 };
 
 export function CardCompanyData() {
-	const { company } = useGetCompanyInformation();
+	const { companyInformation } = useGetCompanyInformation();
 
-	if (!company) {
+	if (!companyInformation) {
 		return null;
 	}
 
@@ -35,24 +35,29 @@ export function CardCompanyData() {
 				<div className="grid grid-cols-1 md:grid-cols-4 gap-4">
 					<fieldset className="space-y-2">
 						<Label>Razão social:</Label>
-						<Input readOnly value={company.name} />
+						<Input readOnly value={companyInformation.name} />
 					</fieldset>
 					<fieldset className="space-y-2">
 						<Label>CNPJ:</Label>
 						<Input
 							readOnly
-							value={formatCNPJ(company.documentNumber)}
+							value={formatCNPJ(
+								companyInformation.documentNumber
+							)}
 						/>
 					</fieldset>
 					<fieldset className="space-y-2">
 						<Label>Tamanho:</Label>
-						<Input readOnly value={COMPANY_SIZE[company.size]} />
+						<Input
+							readOnly
+							value={COMPANY_SIZE[companyInformation.size]}
+						/>
 					</fieldset>
 					<fieldset className="space-y-2">
 						<Label>Cadastrada em:</Label>
 						<Input
 							readOnly
-							value={dayjs(company.createdAt).format(
+							value={dayjs(companyInformation.createdAt).format(
 								"DD/MM/YYYY"
 							)}
 						/>

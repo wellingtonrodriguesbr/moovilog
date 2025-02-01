@@ -1,4 +1,4 @@
-import { Company, CompanyAddress } from "@/interfaces";
+import { Company } from "@/interfaces";
 import { api } from "@/lib/axios";
 import { useCompanyStore } from "@/stores/company-store";
 import { useQuery } from "@tanstack/react-query";
@@ -7,14 +7,13 @@ import { toast } from "sonner";
 
 interface CompanyInformationResponse {
 	company: Company;
-	companyAddress: CompanyAddress;
 }
 
 export function useGetCompanyInformation() {
 	const pathName = usePathname();
 	const enabledQuery = pathName !== "/cadastro/empresa" && pathName !== "/";
 
-	const { company } = useCompanyStore();
+	const { company, setCompany } = useCompanyStore();
 
 	const {
 		data: companyInformation,
@@ -31,15 +30,15 @@ export function useGetCompanyInformation() {
 			const { data } = await api.get<CompanyInformationResponse>(
 				`/companies/${company.id}/information`
 			);
-			return data;
+			setCompany(data.company);
+			return data.company;
 		} catch (error) {
 			toast.error("Falha ao encontrar informações da empresa");
 		}
 	}
 
 	return {
-		...companyInformation,
-		companyAddress: companyInformation?.companyAddress,
+		companyInformation,
 		isGetCompanyInformationPending,
 	};
 }
