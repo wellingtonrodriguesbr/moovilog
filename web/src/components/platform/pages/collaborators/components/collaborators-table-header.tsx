@@ -22,7 +22,7 @@ export function CollaboratorsTableHeader() {
 				<TableHead className="text-app-blue-900 font-medium text-nowrap">
 					Setor
 				</TableHead>
-				<TableHead className="flex items-center gap-2 text-app-blue-900 font-medium text-nowrap">
+				<TableHead className="flex items-center gap-2 text-app-blue-900 font-medium">
 					Cargo
 					<Tooltip defaultOpen>
 						<TooltipTrigger className="mt-1">

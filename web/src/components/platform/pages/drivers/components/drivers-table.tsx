@@ -5,24 +5,28 @@ import { useFetchDriversFromCompany } from "@/hooks/driver/use-fetch-drivers-fro
 import { SkeletonDriversTable } from "@/components/platform/pages/drivers/components/skeleton-drivers-table";
 import { DriversTableRow } from "@/components/platform/pages/drivers/components/drivers-table-row";
 import { DriversTableHeader } from "@/components/platform/pages/drivers/components/drivers-table-header";
+import { Empty } from "@/components/platform/empty";
 
 export function DriversTable() {
 	const { driversFromCompany, isFetchDriversFromCompanyPending } =
 		useFetchDriversFromCompany();
-	return (
-		<>
-			{isFetchDriversFromCompanyPending ? (
-				<SkeletonDriversTable />
-			) : (
-				<Table>
-					<DriversTableHeader />
-					<TableBody>
-						{driversFromCompany?.map((item) => (
-							<DriversTableRow key={item.id} driver={item} />
-						))}
-					</TableBody>
-				</Table>
-			)}
-		</>
-	);
+
+	if (isFetchDriversFromCompanyPending) {
+		return <SkeletonDriversTable />;
+	}
+
+	if (driversFromCompany.length > 0) {
+		return (
+			<Table>
+				<DriversTableHeader />
+				<TableBody>
+					{driversFromCompany.map((driver) => (
+						<DriversTableRow key={driver.id} driver={driver} />
+					))}
+				</TableBody>
+			</Table>
+		);
+	}
+
+	return <Empty context="driver" />;
 }

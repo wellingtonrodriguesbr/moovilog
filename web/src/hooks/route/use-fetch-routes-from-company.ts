@@ -24,7 +24,7 @@ export function useFetchRoutesFromCompany() {
 	}
 
 	return {
-		routes,
+		routes: routes ?? [],
 		isFetchRoutesFromCompanyPending,
 	};
 }

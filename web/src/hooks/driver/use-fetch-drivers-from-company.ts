@@ -27,7 +27,7 @@ export function useFetchDriversFromCompany() {
 	}
 
 	return {
-		driversFromCompany,
+		driversFromCompany: driversFromCompany ?? [],
 		isFetchDriversFromCompanyPending,
 	};
 }

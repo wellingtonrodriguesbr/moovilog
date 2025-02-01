@@ -27,7 +27,7 @@ export function useFetchVehiclesFromCompany() {
 	}
 
 	return {
-		vehiclesFromCompany,
+		vehiclesFromCompany: vehiclesFromCompany ?? [],
 		isFetchVehiclesFromCompanyPending,
 	};
 }

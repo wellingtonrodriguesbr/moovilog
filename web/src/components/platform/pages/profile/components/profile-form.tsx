@@ -75,7 +75,11 @@ export function ProfileForm() {
 							<FormItem>
 								<FormLabel>Nome</FormLabel>
 								<FormControl>
-									<Input disabled placeholder="" {...field} />
+									<Input
+										className="pointer-events-none"
+										placeholder=""
+										{...field}
+									/>
 								</FormControl>
 								<FormMessage />
 							</FormItem>
@@ -89,7 +93,7 @@ export function ProfileForm() {
 								<FormLabel>E-mail</FormLabel>
 								<FormControl>
 									<Input
-										disabled
+										className="pointer-events-none"
 										type="email"
 										placeholder="Seu e-mail"
 										{...field}
@@ -108,7 +112,7 @@ export function ProfileForm() {
 								<FormLabel>Celular</FormLabel>
 								<FormControl>
 									<Input
-										disabled
+										className="pointer-events-none"
 										placeholder="(00) 00000-0000"
 										{...field}
 										value={formatPhone(field.value)}
