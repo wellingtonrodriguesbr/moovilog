@@ -28,8 +28,8 @@
       "@/components/*": [
         "./src/components/*",
       ],
-      "@/modules/*": [
-        "./src/modules/*",
+      "@/assets/*": [
+        "./src/assets/*",
       ],
       "@/interfaces/*": [
         "./src/interfaces/*",
