@@ -6,7 +6,10 @@ import { SendInvitationToCompanyMemberController } from "@/modules/company-membe
 export async function companyMemberModuleRoutes(app: FastifyInstance) {
 	app.addHook("onRequest", verifyJWT);
 
-	app.get("/:companyId/members", FetchMembersFromCompanyController.handle);
+	app.get(
+		"/companies/:companyId/members",
+		FetchMembersFromCompanyController.handle
+	);
 	app.post(
 		"/:companyId/members/invite",
 		SendInvitationToCompanyMemberController.handle

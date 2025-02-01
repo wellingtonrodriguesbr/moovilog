@@ -2,7 +2,7 @@ import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CopyButton } from "@/components/platform/copy-button";
-import { CompanyMember } from "@/hooks/use-fetch-company-members";
+import { CompanyMember } from "@/interfaces";
 
 import { formatBrazilianDate } from "@/utils/format-brazilian-date";
 

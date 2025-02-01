@@ -1,18 +1,14 @@
 import { api } from "@/lib/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Route } from "@/interfaces";
 
 interface RegisterNewRouteData {
 	name: string;
 	citiesIds: string[];
 }
 
-export interface Route {
-	id: string;
-	name: string;
-	createdAt: string;
-	updatedAt: string;
-	creatorId: string;
-	companyId: string;
+interface RegisterNewRouteResponse {
+	route: Route;
 }
 
 export function useRegisterNewRoute() {
@@ -25,12 +21,12 @@ export function useRegisterNewRoute() {
 		mutationFn: handleRegisterNewRoute,
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["routes"] });
-			queryClient.invalidateQueries({ queryKey: ["cities-in-route"] });
+			queryClient.invalidateQueries({ queryKey: ["cities-from-route"] });
 		},
 	});
 
 	async function handleRegisterNewRoute(registerData: RegisterNewRouteData) {
-		const { data } = await api.post<{ route: Route }>("/routes", {
+		const { data } = await api.post<RegisterNewRouteResponse>("/routes", {
 			...registerData,
 		});
 

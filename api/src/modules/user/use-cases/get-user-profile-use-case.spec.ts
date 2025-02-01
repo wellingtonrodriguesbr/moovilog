@@ -2,31 +2,20 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { GetUserProfileUseCase } from "@/modules/user/use-cases/get-user-profile-use-case";
 import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
 import { InMemoryUsersRepository } from "@/modules/user/repositories/in-memory/in-memory-users-repository";
-import { InMemoryCompanyMembersRepository } from "@/modules/company-member/repositories/in-memory/in-memory-company-members-repository";
 
 let usersRepository: InMemoryUsersRepository;
-let companyMembersRepository: InMemoryCompanyMembersRepository;
 let sut: GetUserProfileUseCase;
 
 describe("[MODULE]: Get user profile use case", () => {
 	beforeEach(async () => {
 		usersRepository = new InMemoryUsersRepository();
-		companyMembersRepository = new InMemoryCompanyMembersRepository();
-		sut = new GetUserProfileUseCase(usersRepository, companyMembersRepository);
+		sut = new GetUserProfileUseCase(usersRepository);
 
 		await usersRepository.create({
 			id: "john-doe-id-01",
 			name: "John Doe",
 			email: "johndoe@example.com",
 			password: "12345678",
-		});
-
-		await companyMembersRepository.create({
-			id: "company-member-id-01",
-			companyId: "company-id-01",
-			userId: "john-doe-id-01",
-			sector: "Diretoria",
-			role: "ADMIN",
 		});
 	});
 

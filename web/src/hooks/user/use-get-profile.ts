@@ -10,6 +10,7 @@ export function useGetProfile() {
 	const { data: profile, isPending: isGetProfilePending } = useQuery({
 		queryKey: ["user-profile"],
 		queryFn: handleGetProfile,
+		staleTime: 1000 * 60 * 5, // 5 minutes
 	});
 
 	async function handleGetProfile() {

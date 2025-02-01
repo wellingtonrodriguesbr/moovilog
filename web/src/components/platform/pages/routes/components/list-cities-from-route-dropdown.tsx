@@ -7,17 +7,17 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useFetchCitiesInRoute } from "@/hooks/use-fetch-cities-in-route";
+import { useFetchCitiesFromRoute } from "@/hooks/route/use-fetch-cities-from-route";
 import { Eye } from "lucide-react";
 
-interface ListCitiesInRouteDropdownProps {
+interface ListCitiesFromRouteDropdownProps {
 	routeId: string;
 }
 
-export function ListCitiesInRouteDropdown({
+export function ListCitiesFromRouteDropdown({
 	routeId,
-}: ListCitiesInRouteDropdownProps) {
-	const { cities, isFetchCitiesInRoutePending } = useFetchCitiesInRoute({
+}: ListCitiesFromRouteDropdownProps) {
+	const { cities } = useFetchCitiesFromRoute({
 		routeId,
 	});
 

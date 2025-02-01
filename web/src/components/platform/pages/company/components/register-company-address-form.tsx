@@ -18,7 +18,7 @@ import { useRouter } from "next/navigation";
 import { ArrowRight, Check, Loader2, X } from "lucide-react";
 import { formatCEP } from "@/utils/format-cep";
 import { useEffect } from "react";
-import { useRegisterCompanyAddress } from "@/hooks/use-register-company-address";
+import { useRegisterCompanyAddress } from "@/hooks/company/use-register-company-address";
 import { useGetCompanyAddressByZipCode } from "@/hooks/use-get-company-address-by-zip-code";
 import { toast } from "sonner";
 import { AxiosError } from "axios";

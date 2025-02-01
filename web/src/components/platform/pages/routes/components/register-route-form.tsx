@@ -23,11 +23,11 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { Loader2 } from "lucide-react";
-import { useFetchAreasStatesFromCompany } from "@/hooks/use-fetch-areas-states-from-company";
+import { useFetchStatesAreasFromCompany } from "@/hooks/company/use-fetch-states-areas-from-company";
 import { useFetchCitiesByArea } from "@/hooks/use-fetch-cities-by-area";
 import { Label } from "@/components/ui/label";
 import { MultiSelectCities } from "@/components/platform/multi-select-cities";
-import { useRegisterNewRoute } from "@/hooks/use-register-new-route";
+import { useRegisterNewRoute } from "@/hooks/route/use-register-new-route";
 
 interface RegisterRouteFormProps {
 	onCloseDialog: () => void;
@@ -57,8 +57,8 @@ export function RegisterRouteForm({ onCloseDialog }: RegisterRouteFormProps) {
 		},
 	});
 
-	const { states, areas, isFetchAreasStatesFromCompanyPending } =
-		useFetchAreasStatesFromCompany();
+	const { states, areas, isFetchStatesAreasFromCompanyPending } =
+		useFetchStatesAreasFromCompany();
 	const { cities, isFetchCitiesByAreaPending } = useFetchCitiesByArea({
 		areaCode: form.watch("areaCode"),
 	});
@@ -89,14 +89,14 @@ export function RegisterRouteForm({ onCloseDialog }: RegisterRouteFormProps) {
 						<FormItem>
 							<FormLabel>Estado</FormLabel>
 							<Select
-								disabled={isFetchAreasStatesFromCompanyPending}
+								disabled={isFetchStatesAreasFromCompanyPending}
 								onValueChange={field.onChange}
 							>
 								<FormControl>
 									<SelectTrigger>
 										<SelectValue
 											placeholder={
-												isFetchAreasStatesFromCompanyPending
+												isFetchStatesAreasFromCompanyPending
 													? "Carregando..."
 													: "Selecione um estado"
 											}
@@ -131,14 +131,14 @@ export function RegisterRouteForm({ onCloseDialog }: RegisterRouteFormProps) {
 						<FormItem>
 							<FormLabel>Região de atendimento</FormLabel>
 							<Select
-								disabled={isFetchAreasStatesFromCompanyPending}
+								disabled={isFetchStatesAreasFromCompanyPending}
 								onValueChange={field.onChange}
 							>
 								<FormControl>
 									<SelectTrigger>
 										<SelectValue
 											placeholder={
-												isFetchAreasStatesFromCompanyPending
+												isFetchStatesAreasFromCompanyPending
 													? "Carregando..."
 													: "Selecione uma região"
 											}
@@ -211,7 +211,7 @@ export function RegisterRouteForm({ onCloseDialog }: RegisterRouteFormProps) {
 
 				<Button
 					disabled={
-						isFetchAreasStatesFromCompanyPending ||
+						isFetchStatesAreasFromCompanyPending ||
 						isFetchCitiesByAreaPending ||
 						!form.watch("citiesIds").length ||
 						isPendingRegisterNewRoute

@@ -1,6 +1,6 @@
 import { api } from "@/lib/axios";
+import { useCompanyStore } from "@/stores/company-store";
 import { useMutation } from "@tanstack/react-query";
-import { useGetCompanyInformation } from "./use-get-company-information";
 
 interface RegisterCompanyStatesAreasServiceData {
 	stateAcronyms: string[];
@@ -8,8 +8,7 @@ interface RegisterCompanyStatesAreasServiceData {
 }
 
 export function useRegisterCompanyStatesAreasService() {
-	const { company, isGetCompanyInformationPending } =
-		useGetCompanyInformation();
+	const { company } = useCompanyStore();
 
 	const {
 		mutateAsync: registerCompanyStatesAreasService,
@@ -21,21 +20,18 @@ export function useRegisterCompanyStatesAreasService() {
 	async function handleRegisterCompanyStatesAreasService(
 		registerData: RegisterCompanyStatesAreasServiceData
 	) {
-		if (company && !isGetCompanyInformationPending) {
-			const { data } = await api.post(
-				`/companies/${company.id}/states-areas`,
-				{
-					...registerData,
-				}
-			);
-			return data;
-		}
+		const { data } = await api.post(
+			`/companies/${company.id}/states-areas`,
+			{
+				...registerData,
+			}
+		);
+		return data;
 	}
 
 	return {
 		registerCompanyStatesAreasService,
 		isPendingRegisterCompanyStatesAreasService:
-			isPendingRegisterCompanyStatesAreasService ||
-			isGetCompanyInformationPending,
+			isPendingRegisterCompanyStatesAreasService,
 	};
 }

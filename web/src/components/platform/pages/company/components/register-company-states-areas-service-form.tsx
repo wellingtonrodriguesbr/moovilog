@@ -12,7 +12,7 @@ import { MultiSelectStates } from "@/components/platform/multi-select-states";
 import { Label } from "@/components/ui/label";
 import { useFetchAreasByStates } from "@/hooks/use-fetch-areas-by-states";
 import { MultiSelectAreas } from "@/components/platform/multi-select-areas";
-import { useRegisterCompanyStatesAreasService } from "@/hooks/use-register-company-states-areas-service";
+import { useRegisterCompanyStatesAreasService } from "@/hooks/company/use-register-company-states-areas-service";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 

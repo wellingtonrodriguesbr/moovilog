@@ -8,6 +8,9 @@ export async function routeModuleRoutes(app: FastifyInstance) {
 	app.addHook("onRequest", verifyJWT);
 
 	app.post("/routes", RegisterRouteController.handle);
-	app.get("/:companyId/routes", FetchRoutesFromCompanyController.handle);
+	app.get(
+		"/companies/:companyId/routes",
+		FetchRoutesFromCompanyController.handle
+	);
 	app.get("/routes/:routeId/cities", FetchCitiesFromRouteController.handle);
 }

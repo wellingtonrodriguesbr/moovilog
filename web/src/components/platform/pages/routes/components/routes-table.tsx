@@ -4,10 +4,10 @@ import { Table, TableBody } from "@/components/ui/table";
 import { SkeletonDriversTable } from "@/components/platform/pages/drivers/components/skeleton-drivers-table";
 import { RoutesTableHeader } from "./routes-table-header";
 import { RoutesTableRow } from "./routes-table-row";
-import { useFetchCompanyRoutes } from "@/hooks/use-fetch-company-routes";
+import { useFetchRoutesFromCompany } from "@/hooks/route/use-fetch-routes-from-company";
 
 export function RoutesTable() {
-	const { routes, isFetchCompanyRoutesPending } = useFetchCompanyRoutes();
+	const { routes, isFetchCompanyRoutesPending } = useFetchRoutesFromCompany();
 
 	return (
 		<>

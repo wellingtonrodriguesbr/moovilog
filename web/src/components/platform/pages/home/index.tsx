@@ -1,7 +1,7 @@
 "use client";
 
 import { Skeleton } from "@/components/ui/skeleton";
-import { useGetProfile } from "@/hooks/use-get-profile";
+import { useGetProfile } from "@/hooks/user/use-get-profile";
 import { QuickAccess } from "@/components/platform/pages/home/components/quick-access";
 import { BarChartComponent } from "@/components/platform/pages/home/components/home-metrics/bar-chart";
 import { PieChartComponent } from "@/components/platform/pages/home/components/home-metrics/pie-chart";

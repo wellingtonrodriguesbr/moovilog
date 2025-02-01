@@ -1,7 +1,7 @@
 import { CompanyMembersRepository } from "@/modules/company-member/repositories/company-members-repository";
 import { CompaniesRepository } from "@/modules/company/repositories/companies-repository";
 import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
-import { ICompanyMember } from "@/modules/shared/interfaces/company-member";
+import { ICompanyMember } from "@/modules/company-member/interfaces/company-member";
 
 interface FetchMembersFromCompanyUseCaseRequest {
 	userId: string;

@@ -7,5 +7,8 @@ export async function vehicleModuleRoutes(app: FastifyInstance) {
 	app.addHook("onRequest", verifyJWT);
 
 	app.post("/vehicles", RegisterVehicleController.handle);
-	app.get("/:companyId/vehicles", FetchVehiclesFromCompanyController.handle);
+	app.get(
+		"/companies/:companyId/vehicles",
+		FetchVehiclesFromCompanyController.handle
+	);
 }

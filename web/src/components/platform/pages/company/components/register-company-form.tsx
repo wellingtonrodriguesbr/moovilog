@@ -27,7 +27,7 @@ import { useRouter } from "next/navigation";
 import { ArrowRight, Check, Loader2, X } from "lucide-react";
 import { useValidateCompanyDocumentNumber } from "@/hooks/use-validate-company-document-number";
 import { formatCNPJ } from "@/utils/format-cnpj";
-import { useRegisterCompany } from "@/hooks/use-register-company";
+import { useRegisterCompany } from "@/hooks/company/use-register-company";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 import { useEffect } from "react";

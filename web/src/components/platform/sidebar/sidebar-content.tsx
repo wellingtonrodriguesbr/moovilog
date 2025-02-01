@@ -2,7 +2,7 @@ import Image from "next/image";
 
 import { SidebarItem } from "@/components/platform/sidebar/sidebar-item";
 import { useOpenCloseSidebar } from "@/providers/sidebar-provider";
-import { useGetCompanyInformation } from "@/hooks/use-get-company-information";
+import { useGetCompanyInformation } from "@/hooks/company/use-get-company-information";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatCNPJ } from "@/utils/format-cnpj";
 import {

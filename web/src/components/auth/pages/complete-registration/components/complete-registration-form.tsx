@@ -19,7 +19,7 @@ import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
-import { useUpdateUserPassword } from "@/hooks/use-update-user-password";
+import { useUpdateUserPassword } from "@/hooks/auth/use-update-user-password";
 
 const formSchema = z
 	.object({

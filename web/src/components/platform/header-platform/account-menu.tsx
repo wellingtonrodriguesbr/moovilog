@@ -13,8 +13,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useGetProfile } from "@/hooks/use-get-profile";
-import { useLogout } from "@/hooks/use-logout";
+import { useGetProfile } from "@/hooks/user/use-get-profile";
+import { useLogout } from "@/hooks/auth/use-logout";
 
 import {
 	Building,

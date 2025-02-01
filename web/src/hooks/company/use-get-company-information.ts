@@ -14,7 +14,7 @@ export function useGetCompanyInformation() {
 	const pathName = usePathname();
 	const enabledQuery = pathName !== "/cadastro/empresa" && pathName !== "/";
 
-	const { setCompanyId } = useCompanyStore();
+	const { setCompany } = useCompanyStore();
 
 	const { data: company, isPending: isGetCompanyInformationPending } =
 		useQuery({
@@ -29,7 +29,7 @@ export function useGetCompanyInformation() {
 				"/companies/information"
 			);
 
-			setCompanyId(data.company.id);
+			setCompany(data.company);
 			return data;
 		} catch (error) {
 			toast.error("Falha ao encontrar informações da empresa");

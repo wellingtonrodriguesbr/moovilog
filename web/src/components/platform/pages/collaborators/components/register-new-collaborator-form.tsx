@@ -27,7 +27,7 @@ import {
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Info, Loader2 } from "lucide-react";
-import { useSendInvitationToCompanyMember } from "@/hooks/use-send-invitation-to-company-member";
+import { useSendInvitationToCompanyMember } from "@/hooks/company-member/use-send-invitation-to-company-member";
 
 interface RegisterNewCollaboratorFormProps {
 	onCloseDialog: () => void;

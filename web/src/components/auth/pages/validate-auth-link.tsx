@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 
-import { useValidateAuthLink } from "@/hooks/use-validate-auth-link";
+import { useValidateAuthLink } from "@/hooks/auth/use-validate-auth-link";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, CircleCheckBig, Loader2, X } from "lucide-react";
 
