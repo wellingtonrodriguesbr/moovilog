@@ -1,4 +1,4 @@
-import { Routes } from "@/modules/platform/routes";
+import { Routes } from "@/components/platform/pages/routes";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

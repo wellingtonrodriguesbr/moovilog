@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { Register } from "@/modules/auth/register";
+import { Register } from "@/components/auth/pages/register";
 
 export const metadata: Metadata = {
 	title: "Cadastro | Moovilog",

@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { Operational } from "@/modules/platform/operational";
+import { Operational } from "@/components/platform/pages/operational";
 
 export const metadata: Metadata = {
 	title: "Operacional | Moovilog",

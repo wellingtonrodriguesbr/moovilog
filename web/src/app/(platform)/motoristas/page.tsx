@@ -1,4 +1,4 @@
-import { Drivers } from "@/modules/platform/drivers";
+import { Drivers } from "@/components/platform/pages/drivers";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

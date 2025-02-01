@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { Home } from "@/modules/platform/home";
+import { Home } from "@/components/platform/pages/home";
 
 export const metadata: Metadata = {
 	title: "Início | Moovilog",

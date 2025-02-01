@@ -1,8 +1,8 @@
 import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
 import { UsersRepository } from "@/modules/user/repositories/users-repository";
 import { CompanyMembersRepository } from "@/modules/company-member/repositories/company-members-repository";
-import { IUser } from "@/modules/shared/interfaces/user";
-import { ICompanyMember } from "@/modules/shared/interfaces/company-member";
+import { IUser } from "@/modules/user/interfaces/user";
+import { ICompanyMember } from "@/modules/company-member/interfaces/company-member";
 
 interface GetUserProfileUseCaseRequest {
 	userId: string;

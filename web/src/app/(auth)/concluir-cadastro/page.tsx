@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { CompleteRegistration } from "@/modules/auth/complete-registration";
+import { CompleteRegistration } from "@/components/auth/pages/complete-registration";
 
 export const metadata: Metadata = {
 	title: "Concluir cadastro | Moovilog",

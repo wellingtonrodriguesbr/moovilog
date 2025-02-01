@@ -1,4 +1,4 @@
-import { Vehicles } from "@/modules/platform/vehicles";
+import { Vehicles } from "@/components/platform/pages/vehicles";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
