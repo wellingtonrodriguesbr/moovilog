@@ -4,8 +4,10 @@ import { PrismaAddressesRepository } from "@/modules/shared/repositories/prisma/
 import { PrismaCitiesRepository } from "@/modules/shared/repositories/prisma/prisma-cities-repository";
 import { PrismaStatesRepository } from "@/modules/shared/repositories/prisma/prisma-states-repository";
 import { GetCompanyInformationUseCase } from "@/modules/company/use-cases/get-company-information-use-case";
+import { PrismaUsersRepository } from "@/modules/user/repositories/prisma/prisma-users-repository";
 
 export function makeGetCompanyInformationUseCase() {
+	const usersRepository = new PrismaUsersRepository();
 	const companyMembersRepository = new PrismaCompanyMembersRepository();
 	const addressesRepository = new PrismaAddressesRepository();
 	const companiesRepository = new PrismaCompaniesRepository();
@@ -13,6 +15,7 @@ export function makeGetCompanyInformationUseCase() {
 	const statesRepository = new PrismaStatesRepository();
 
 	const getCompanyInformationUseCase = new GetCompanyInformationUseCase(
+		usersRepository,
 		companyMembersRepository,
 		companiesRepository,
 		addressesRepository,

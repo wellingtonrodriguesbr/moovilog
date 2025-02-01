@@ -17,7 +17,10 @@ export async function companyModuleRoutes(app: FastifyInstance) {
 		RegisterCompanyStatesAreasController.handle
 	);
 
-	app.get("/companies/information", GetCompanyInformationController.handle);
+	app.get(
+		"/companies/:companyId/information",
+		GetCompanyInformationController.handle
+	);
 	app.get(
 		"/companies/:companyId/states-areas",
 		FetchStatesAreasFromCompanyController.handle

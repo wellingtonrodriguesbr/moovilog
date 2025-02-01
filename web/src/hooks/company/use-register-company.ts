@@ -1,5 +1,6 @@
 import { Company } from "@/interfaces";
 import { api } from "@/lib/axios";
+import { useCompanyStore } from "@/stores/company-store";
 import { useMutation } from "@tanstack/react-query";
 
 interface RegisterCompanyData {
@@ -13,6 +14,8 @@ interface CompanyResponse {
 }
 
 export function useRegisterCompany() {
+	const { setCompany } = useCompanyStore();
+
 	const {
 		mutateAsync: registerCompany,
 		isPending: isPendingRegisterCompany,
@@ -31,6 +34,7 @@ export function useRegisterCompany() {
 			size,
 			ownerSector: "Diretoria",
 		});
+		setCompany(data.company);
 		return data.company;
 	}
 

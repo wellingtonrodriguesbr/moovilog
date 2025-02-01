@@ -4,13 +4,16 @@ import { CompaniesRepository } from "@/modules/company/repositories/companies-re
 import { CitiesRepository } from "@/modules/shared/repositories/cities-repository";
 import { StatesRepository } from "@/modules/shared/repositories/states-repository";
 import { AddressesRepository } from "@/modules/shared/repositories/addresses-repository";
-import { ICompany } from "@/modules/shared/interfaces/company";
+import { ICompany } from "@/modules/company/interfaces/company";
 import { ICity } from "@/modules/shared/interfaces/city";
 import { IState } from "@/modules/shared/interfaces/state";
 import { IAddress } from "@/modules/shared/interfaces/address";
+import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
+import { UsersRepository } from "@/modules/user/repositories/users-repository";
 
 interface GetCompanyInformationUseCaseRequest {
 	userId: string;
+	companyId: string;
 }
 
 interface GetCompanyInformationUseCaseResponse {
@@ -24,6 +27,7 @@ interface GetCompanyInformationUseCaseResponse {
 
 export class GetCompanyInformationUseCase {
 	constructor(
+		private usersRepository: UsersRepository,
 		private companyMembersRepository: CompanyMembersRepository,
 		private companiesRepository: CompaniesRepository,
 		private addressesRepository: AddressesRepository,
@@ -33,17 +37,31 @@ export class GetCompanyInformationUseCase {
 
 	async execute({
 		userId,
+		companyId,
 	}: GetCompanyInformationUseCaseRequest): Promise<GetCompanyInformationUseCaseResponse> {
-		const member = await this.companyMembersRepository.findByUserId(userId);
+		const [user, company] = await Promise.all([
+			this.usersRepository.findById(userId),
+			this.companiesRepository.findById(companyId),
+		]);
 
-		if (!member) {
-			throw new ResourceNotFoundError("Member not found");
+		if (!user) {
+			throw new ResourceNotFoundError("User not found");
 		}
-
-		const company = await this.companiesRepository.findById(member.companyId);
 
 		if (!company) {
 			throw new ResourceNotFoundError("Company not found");
+		}
+
+		const memberInCompany =
+			await this.companyMembersRepository.findMemberInCompany(
+				userId,
+				companyId
+			);
+
+		if (!memberInCompany) {
+			throw new NotAllowedError(
+				"You do not have permission to perform this action"
+			);
 		}
 
 		const address = await this.addressesRepository.findById(company.addressId!);

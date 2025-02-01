@@ -6,6 +6,8 @@ import { InMemoryCitiesRepository } from "@/modules/shared/repositories/in-memor
 import { InMemoryStatesRepository } from "@/modules/shared/repositories/in-memory/in-memory-states-repository";
 import { InMemoryCompanyMembersRepository } from "@/modules/company-member/repositories/in-memory/in-memory-company-members-repository";
 import { GetCompanyInformationUseCase } from "@/modules/company/use-cases/get-company-information-use-case";
+import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
+import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
@@ -26,6 +28,7 @@ describe("[MODULE]: Get company information use case", () => {
 		statesRepository = new InMemoryStatesRepository();
 
 		sut = new GetCompanyInformationUseCase(
+			usersRepository,
 			companyMembersRepository,
 			companiesRepository,
 			addressesRepository,
@@ -87,11 +90,46 @@ describe("[MODULE]: Get company information use case", () => {
 	it("should be able to get company information", async () => {
 		const { company, companyAddress } = await sut.execute({
 			userId: "john-doe-id-01",
+			companyId: "company-id-01",
 		});
 
 		expect(company.id).toEqual("company-id-01");
 		expect(company.size).toEqual("MEDIUM");
 		expect(company.addressId).toEqual("fake-address-id");
 		expect(companyAddress.state.id).toEqual("fake-state-id");
+	});
+
+	it("not should be able to get company information if the company member is not found", async () => {
+		await expect(() =>
+			sut.execute({
+				userId: "non-existent-user-id",
+				companyId: "company-id-01",
+			})
+		).rejects.toBeInstanceOf(ResourceNotFoundError);
+	});
+
+	it("not should be able to get company information if the company is not found", async () => {
+		await expect(() =>
+			sut.execute({
+				userId: "john-doe-id-01",
+				companyId: "non-existent-company-id",
+			})
+		).rejects.toBeInstanceOf(ResourceNotFoundError);
+	});
+
+	it("not should be able to get company information if user is not member of the company", async () => {
+		await usersRepository.create({
+			id: "john-doe-id-03",
+			name: "John Doe",
+			email: "johndoe3@example.com",
+			password: "12345678",
+		});
+
+		await expect(() =>
+			sut.execute({
+				userId: "john-doe-id-03",
+				companyId: "company-id-01",
+			})
+		).rejects.toBeInstanceOf(NotAllowedError);
 	});
 });

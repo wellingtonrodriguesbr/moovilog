@@ -2,7 +2,7 @@ import { User } from "@/interfaces";
 import { api } from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 
-interface ProfileResponse {
+interface GetProfileResponse {
 	user: User;
 }
 
@@ -14,7 +14,7 @@ export function useGetProfile() {
 	});
 
 	async function handleGetProfile() {
-		const { data } = await api.get<ProfileResponse>("/me");
+		const { data } = await api.get<GetProfileResponse>("/me");
 
 		return data.user;
 	}

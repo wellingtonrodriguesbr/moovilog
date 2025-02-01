@@ -10,7 +10,7 @@ export const ROUTES_MAP: Record<string, string> = {
 	"/rotas": "Rotas",
 	"/motoristas": "Motoristas",
 	"/veiculos": "Veículos",
-	"/meus-dados": "Meu perfil",
+	"/meu-perfil": "Meu perfil",
 	"/colaboradores": "Colaboradores",
 	"/dados-cadastrais": "Dados da empresa",
 	"/gestao-de-desempenho": "Gestão de desempenho",

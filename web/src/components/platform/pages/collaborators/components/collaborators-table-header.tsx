@@ -10,19 +10,19 @@ export function CollaboratorsTableHeader() {
 	return (
 		<TableHeader className="bg-zinc-100 hover:bg-zinc-100">
 			<TableRow className="hover:bg-zinc-100">
-				<TableHead className="text-app-blue-900 font-medium rounded-tl-lg">
+				<TableHead className="text-app-blue-900 font-medium text-nowrap rounded-tl-lg">
 					Nome
 				</TableHead>
-				<TableHead className="text-app-blue-900 font-medium">
+				<TableHead className="text-app-blue-900 font-medium text-nowrap">
 					E-mail
 				</TableHead>
-				<TableHead className="text-app-blue-900 font-medium">
+				<TableHead className="text-app-blue-900 font-medium text-nowrap">
 					Status da conta
 				</TableHead>
-				<TableHead className="text-app-blue-900 font-medium">
+				<TableHead className="text-app-blue-900 font-medium text-nowrap">
 					Setor
 				</TableHead>
-				<TableHead className="flex items-center gap-2 text-app-blue-900 font-medium">
+				<TableHead className="flex items-center gap-2 text-app-blue-900 font-medium text-nowrap">
 					Cargo
 					<Tooltip defaultOpen>
 						<TooltipTrigger className="mt-1">
@@ -37,7 +37,7 @@ export function CollaboratorsTableHeader() {
 						</TooltipContent>
 					</Tooltip>
 				</TableHead>
-				<TableHead className="text-app-blue-900 font-medium">
+				<TableHead className="text-app-blue-900 font-medium text-nowrap">
 					Cadastrado em
 				</TableHead>
 				<TableHead className="text-app-blue-900 font-medium rounded-tr-lg"></TableHead>

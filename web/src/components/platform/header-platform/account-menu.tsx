@@ -44,7 +44,7 @@ export function AccountMenu() {
 		<Dialog>
 			<DropdownMenu>
 				<DropdownMenuTrigger
-					className="flex items-center gap-2 data-[disabled=true]:pointer-events-none data-[disabled=false]:cursor-pointer group"
+					className="flex items-center gap-2 data-[disabled=true]:pointer-events-none cursor-pointer group"
 					disabled={path?.includes("/cadastro")}
 					asChild
 				>
@@ -68,10 +68,10 @@ export function AccountMenu() {
 					<DropdownMenuItem className="hover:bg-zinc-100" asChild>
 						<Link
 							className="gap-2 cursor-pointer"
-							href="/meus-dados"
+							href="/meu-perfil"
 						>
 							<User className="size-4" />
-							Meus dados
+							Meu perfil
 						</Link>
 					</DropdownMenuItem>
 					<DropdownMenuItem className="hover:bg-zinc-100" asChild>

@@ -14,22 +14,23 @@ export function useGetCompanyInformation() {
 	const pathName = usePathname();
 	const enabledQuery = pathName !== "/cadastro/empresa" && pathName !== "/";
 
-	const { setCompany } = useCompanyStore();
+	const { company } = useCompanyStore();
 
-	const { data: company, isPending: isGetCompanyInformationPending } =
-		useQuery({
-			queryKey: ["company-information"],
-			queryFn: handleGetCompanyInformation,
-			enabled: enabledQuery,
-		});
+	const {
+		data: companyInformation,
+		isPending: isGetCompanyInformationPending,
+	} = useQuery({
+		queryKey: ["company-information"],
+		queryFn: handleGetCompanyInformation,
+		enabled: enabledQuery,
+		staleTime: 1000 * 60 * 5, // 5 minutes
+	});
 
 	async function handleGetCompanyInformation() {
 		try {
 			const { data } = await api.get<CompanyInformationResponse>(
-				"/companies/information"
+				`/companies/${company.id}/information`
 			);
-
-			setCompany(data.company);
 			return data;
 		} catch (error) {
 			toast.error("Falha ao encontrar informações da empresa");
@@ -37,8 +38,8 @@ export function useGetCompanyInformation() {
 	}
 
 	return {
-		...company,
-		companyAddress: company?.companyAddress,
+		...companyInformation,
+		companyAddress: companyInformation?.companyAddress,
 		isGetCompanyInformationPending,
 	};
 }
