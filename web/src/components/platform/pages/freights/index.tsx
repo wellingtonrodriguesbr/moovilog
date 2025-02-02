@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
+import { Empty } from "@/components/platform/empty";
 import { Plus } from "lucide-react";
 
 export function Freights() {
@@ -15,6 +16,9 @@ export function Freights() {
 					</Link>
 				</Button>
 			</header>
+			<div className="mt-12">
+				<Empty context="freight" />
+			</div>
 		</section>
 	);
 }

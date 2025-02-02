@@ -8,14 +8,7 @@ import z from "zod";
 export class RegisterFreightController {
 	static async handle(req: FastifyRequest, reply: FastifyReply) {
 		const registerFreightBodySchema = z.object({
-			type: z.enum([
-				"PARTIAL",
-				"FULL",
-				"EXPRESS",
-				"MULTIMODAL",
-				"CONSOLIDATED",
-				"INTERMODAL",
-			]),
+			type: z.enum(["FRACTIONAL", "DEDICATED", "EXPRESS", "TRANSFER"]),
 			date: z.coerce.date(),
 			modality: z.enum([
 				"DAILY",

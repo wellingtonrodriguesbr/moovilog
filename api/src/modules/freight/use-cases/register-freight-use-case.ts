@@ -2,7 +2,7 @@ import {
 	IFreight,
 	IFreightModality,
 	IFreightTypes,
-} from "@/modules/shared/interfaces/freight";
+} from "@/modules/freight/interfaces/freight";
 import { FreightsRepository } from "@/modules/freight/repositories/freights-repository";
 import { DriversRepository } from "@/modules/driver/repositories/drivers-repository";
 import { VehiclesRepository } from "@/modules/vehicle/repositories/vehicles-repository";

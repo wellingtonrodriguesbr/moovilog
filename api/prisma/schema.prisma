@@ -326,12 +326,10 @@ enum VehicleType {
 }
 
 enum FreightType {
-  PARTIAL
-  FULL
+  FRACTIONAL
+  DEDICATED
   EXPRESS
-  MULTIMODAL
-  CONSOLIDATED
-  INTERMODAL
+  TRANSFER
 }
 
 enum FreightModality {

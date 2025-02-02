@@ -1,5 +1,5 @@
+import { RegisterFreight } from "@/components/platform/pages/freights/register-freight";
 import { Metadata } from "next";
-import { UnderConstruction } from "@/components/platform/under-construction";
 
 export const metadata: Metadata = {
 	title: "Novo frete | Moovilog",
@@ -8,8 +8,8 @@ export const metadata: Metadata = {
 
 export default function RegisterNewFreightPagePlatform() {
 	return (
-		<main>
-			<UnderConstruction />
+		<main className="w-full max-w-screen-sm mx-auto p-4 md:p-12">
+			<RegisterFreight />
 		</main>
 	);
 }
