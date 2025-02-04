@@ -168,17 +168,23 @@ export function RegisterDriverForm({ onCloseDialog }: RegisterDriverFormProps) {
 					)}
 				/>
 
-				<Button
-					disabled={isPendingRegisterDriver}
-					type="submit"
-					className="w-full mt-6 gap-2"
-				>
-					{isPendingRegisterDriver ? (
-						<Loader2 className="size-4 animate-spin" />
-					) : (
-						"Concluir cadastro"
-					)}
-				</Button>
+				<fieldset className="flex justify-end gap-4 mt-6">
+					<Button
+						disabled={isPendingRegisterDriver}
+						onClick={onCloseDialog}
+						type="button"
+						variant="destructive-outline"
+					>
+						Cancelar
+					</Button>
+					<Button disabled={isPendingRegisterDriver} type="submit">
+						{isPendingRegisterDriver ? (
+							<Loader2 className="size-4 animate-spin" />
+						) : (
+							"Concluir cadastro"
+						)}
+					</Button>
+				</fieldset>
 			</form>
 		</Form>
 	);

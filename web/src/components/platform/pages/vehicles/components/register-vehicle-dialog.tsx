@@ -27,7 +27,7 @@ export function RegisterVehicleDialog() {
 			<DialogTrigger asChild>
 				<Button>
 					<Plus className="size-4" />
-					Adicionar novo
+					Cadastrar veículo
 				</Button>
 			</DialogTrigger>
 			<DialogContent className="rounded-md max-w-[350px] overflow-auto max-h-[95vh] md:max-h-auto md:max-w-[600px]">

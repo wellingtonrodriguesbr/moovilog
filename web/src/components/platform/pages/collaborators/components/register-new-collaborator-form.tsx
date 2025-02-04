@@ -26,7 +26,7 @@ import {
 	TooltipContent,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Info, Loader2 } from "lucide-react";
+import { Info, Loader2, Send } from "lucide-react";
 import { useSendInvitationToCompanyMember } from "@/hooks/company-member/use-send-invitation-to-company-member";
 
 interface RegisterNewCollaboratorFormProps {
@@ -191,17 +191,29 @@ export function RegisterNewCollaboratorForm({
 					)}
 				/>
 
-				<Button
-					disabled={isPendingSendInvitationToCompanyMember}
-					type="submit"
-					className="w-full mt-6 gap-2"
-				>
-					{isPendingSendInvitationToCompanyMember ? (
-						<Loader2 className="size-4 animate-spin" />
-					) : (
-						"Enviar convite"
-					)}
-				</Button>
+				<fieldset className="flex justify-end gap-4 mt-6">
+					<Button
+						disabled={isPendingSendInvitationToCompanyMember}
+						onClick={onCloseDialog}
+						type="button"
+						variant="destructive-outline"
+					>
+						Cancelar
+					</Button>
+					<Button
+						disabled={isPendingSendInvitationToCompanyMember}
+						type="submit"
+					>
+						{isPendingSendInvitationToCompanyMember ? (
+							<Loader2 className="size-4 animate-spin" />
+						) : (
+							<>
+								Enviar convite
+								<Send className="size-4" />
+							</>
+						)}
+					</Button>
+				</fieldset>
 			</form>
 		</Form>
 	);

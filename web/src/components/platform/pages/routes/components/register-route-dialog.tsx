@@ -27,7 +27,7 @@ export function RegisterRouteDialog() {
 			<DialogTrigger asChild>
 				<Button>
 					<Plus className="size-4" />
-					Criar nova rota
+					Cadastrar rota
 				</Button>
 			</DialogTrigger>
 			<DialogContent className="rounded-md max-w-[350px] md:max-w-[600px]">

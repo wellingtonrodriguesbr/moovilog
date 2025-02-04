@@ -16,49 +16,51 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
+import { Textarea } from "@/components/ui/textarea";
+import { DatePicker } from "@/components/ui/date-picker";
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
-import { CalendarIcon } from "lucide-react";
-
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
-import { Textarea } from "@/components/ui/textarea";
+import { SelectDriver } from "@/components/platform/select-driver";
+import { SelectVehicle } from "@/components/platform/select-vehicle";
 
 const formSchema = z.object({
 	observation: z.string().optional().nullable(),
-	pickupsQuantity: z.number().optional().nullable(),
-	deliveriesQuantity: z.number(),
+	pickupsQuantity: z.string().optional().nullable(),
+	deliveriesQuantity: z.number({
+		message: "Digite a quantidade de entregas",
+	}),
 	totalWeightOfPickups: z.number().optional().nullable(),
-	totalWeightOfDeliveries: z.number(),
+	totalWeightOfDeliveries: z.number({
+		message: "Digite o total de peso",
+	}),
 	freightAmountInCents: z.number(),
-	driverId: z.string().uuid(),
-	vehicleId: z.string().uuid(),
-	routeId: z.string(),
+	driverId: z.string().uuid({ message: "Selecione um motorista" }),
+	vehicleId: z.string().uuid({ message: "Selecione um veículo" }),
+	routeId: z.string().uuid({ message: "Selecione uma rota" }),
 	date: z.coerce.date(),
-	modality: z.enum([
-		"DAILY",
-		"PERCENTAGE",
-		"PRODUCTIVITY",
-		"FLAT_RATE",
-		"WEIGHT_BASED",
-		"DISTANCE_BASED",
-		"TIME_BASED",
-		"PER_STOP",
-		"ZONE_BASED",
-	]),
-	type: z.enum(["FRACTIONAL", "DEDICATED", "EXPRESS", "TRANSFER"]),
+	modality: z.enum(
+		[
+			"DAILY",
+			"PERCENTAGE",
+			"PRODUCTIVITY",
+			"FLAT_RATE",
+			"WEIGHT_BASED",
+			"DISTANCE_BASED",
+			"TIME_BASED",
+			"PER_STOP",
+			"ZONE_BASED",
+		],
+		{ message: "Selecione uma modalidade" }
+	),
+	type: z.enum(["FRACTIONAL", "DEDICATED", "EXPRESS", "TRANSFER"], {
+		message: "Selecione um tipo",
+	}),
 });
 
 export function RegisterFreightForm() {
@@ -68,9 +70,9 @@ export function RegisterFreightForm() {
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			observation: null,
-			pickupsQuantity: null,
+			pickupsQuantity: undefined,
 			deliveriesQuantity: undefined,
-			totalWeightOfPickups: null,
+			totalWeightOfPickups: undefined,
 			totalWeightOfDeliveries: undefined,
 			freightAmountInCents: undefined,
 			driverId: "",
@@ -81,6 +83,8 @@ export function RegisterFreightForm() {
 			type: undefined,
 		},
 	});
+
+	console.log(form.watch("driverId"));
 
 	async function onSubmit(registerData: z.infer<typeof formSchema>) {
 		try {
@@ -136,14 +140,18 @@ export function RegisterFreightForm() {
 
 					<FormField
 						control={form.control}
-						name="deliveriesQuantity"
+						name="pickupsQuantity"
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel>
 									Quantidade de coletas (Opcional)
 								</FormLabel>
 								<FormControl>
-									<Input type="number" {...field} />
+									<Input
+										type="number"
+										{...field}
+										value={field.value ?? undefined}
+									/>
 								</FormControl>
 								<FormMessage />
 							</FormItem>
@@ -152,14 +160,18 @@ export function RegisterFreightForm() {
 
 					<FormField
 						control={form.control}
-						name="totalWeightOfDeliveries"
+						name="totalWeightOfPickups"
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel>
 									Peso total de coletas (Opcional)
 								</FormLabel>
 								<FormControl>
-									<Input type="number" {...field} />
+									<Input
+										type="number"
+										{...field}
+										value={field.value ?? undefined}
+									/>
 								</FormControl>
 								<FormMessage />
 							</FormItem>
@@ -174,34 +186,10 @@ export function RegisterFreightForm() {
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel>Motorista</FormLabel>
-								<Select
-									onValueChange={field.onChange}
-									defaultValue={field.value}
-								>
-									<FormControl>
-										<SelectTrigger>
-											<SelectValue placeholder="Selecione o motorista" />
-										</SelectTrigger>
-									</FormControl>
-									<SelectContent>
-										<SelectItem value="MICRO">
-											Microempresa (Faturamento anual de
-											até R$ 360mil)
-										</SelectItem>
-										<SelectItem value="SMALL">
-											Pequena empresa (Faturamento anual
-											de até R$ 4.8 milhões)
-										</SelectItem>
-										<SelectItem value="MEDIUM">
-											Média empresa (Faturamento anual de
-											até R$ 300 milhões)
-										</SelectItem>
-										<SelectItem value="BIG">
-											Grande empresa (Faturamento anual
-											ultrapassa R$ 300 milhões)
-										</SelectItem>
-									</SelectContent>
-								</Select>
+								<SelectDriver
+									selectedDriver={field.value}
+									onChangeSelectedDriver={field.onChange}
+								/>
 								<FormMessage />
 							</FormItem>
 						)}
@@ -213,34 +201,10 @@ export function RegisterFreightForm() {
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel>Veículo</FormLabel>
-								<Select
-									onValueChange={field.onChange}
-									defaultValue={field.value}
-								>
-									<FormControl>
-										<SelectTrigger>
-											<SelectValue placeholder="Selecione o veículo" />
-										</SelectTrigger>
-									</FormControl>
-									<SelectContent>
-										<SelectItem value="MICRO">
-											Microempresa (Faturamento anual de
-											até R$ 360mil)
-										</SelectItem>
-										<SelectItem value="SMALL">
-											Pequena empresa (Faturamento anual
-											de até R$ 4.8 milhões)
-										</SelectItem>
-										<SelectItem value="MEDIUM">
-											Média empresa (Faturamento anual de
-											até R$ 300 milhões)
-										</SelectItem>
-										<SelectItem value="BIG">
-											Grande empresa (Faturamento anual
-											ultrapassa R$ 300 milhões)
-										</SelectItem>
-									</SelectContent>
-								</Select>
+								<SelectVehicle
+									selectedVehicle={field.value}
+									onChangeSelectedVehicle={field.onChange}
+								/>
 								<FormMessage />
 							</FormItem>
 						)}
@@ -253,35 +217,10 @@ export function RegisterFreightForm() {
 					render={({ field }) => (
 						<FormItem className="flex flex-col">
 							<FormLabel>Data do frete</FormLabel>
-							<Popover>
-								<PopoverTrigger asChild>
-									<FormControl>
-										<Button variant="outline">
-											{field.value ? (
-												format(
-													field.value,
-													"dd/MM/yyyy",
-													{ locale: ptBR }
-												)
-											) : (
-												<span>Selecione uma data</span>
-											)}
-											<CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-										</Button>
-									</FormControl>
-								</PopoverTrigger>
-								<PopoverContent
-									className="w-auto p-0"
-									align="start"
-								>
-									<Calendar
-										mode="single"
-										selected={field.value}
-										onSelect={field.onChange}
-										disabled={(date) => date < new Date()}
-									/>
-								</PopoverContent>
-							</Popover>
+							<DatePicker
+								selectedDate={field.value}
+								onChangeSelectedDate={field.onChange}
+							/>
 							<FormMessage />
 						</FormItem>
 					)}
@@ -417,20 +356,11 @@ export function RegisterFreightForm() {
 					)}
 				/>
 
-				<fieldset className="flex gap-4 justify-end">
-					<Button
-						type="button"
-						className="mt-6 gap-2 border-rose-200 text-rose-400 hover:text-rose-500 hover:bg-rose-50"
-						variant="outline"
-						asChild
-					>
+				<fieldset className="flex gap-4 justify-end mt-6">
+					<Button type="button" variant="destructive-outline" asChild>
 						<Link href="/fretes">Cancelar</Link>
 					</Button>
-					<Button
-						disabled={false}
-						type="submit"
-						className="w-full max-w-[200px] mt-6 gap-2"
-					>
+					<Button disabled={false} type="submit">
 						Cadastrar
 						{/* {false ? (
 						<Loader2 className="size-4 animate-spin" />

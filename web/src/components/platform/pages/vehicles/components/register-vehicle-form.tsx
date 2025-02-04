@@ -339,17 +339,23 @@ export function RegisterVehicleForm({
 					)}
 				/>
 
-				<Button
-					disabled={isPendingRegisterVehicle}
-					type="submit"
-					className="w-full mt-6 gap-2"
-				>
-					{isPendingRegisterVehicle ? (
-						<Loader2 className="size-4 animate-spin" />
-					) : (
-						"Concluir cadastro"
-					)}
-				</Button>
+				<fieldset className="flex justify-end gap-4 mt-6">
+					<Button
+						disabled={isPendingRegisterVehicle}
+						onClick={onCloseDialog}
+						type="button"
+						variant="destructive-outline"
+					>
+						Cancelar
+					</Button>
+					<Button disabled={isPendingRegisterVehicle} type="submit">
+						{isPendingRegisterVehicle ? (
+							<Loader2 className="size-4 animate-spin" />
+						) : (
+							"Concluir cadastro"
+						)}
+					</Button>
+				</fieldset>
 			</form>
 		</Form>
 	);

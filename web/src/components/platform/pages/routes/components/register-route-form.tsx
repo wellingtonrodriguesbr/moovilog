@@ -209,22 +209,36 @@ export function RegisterRouteForm({ onCloseDialog }: RegisterRouteFormProps) {
 					/>
 				</fieldset>
 
-				<Button
-					disabled={
-						isFetchStatesAreasFromCompanyPending ||
-						isFetchCitiesByAreaPending ||
-						!form.watch("citiesIds").length ||
-						isPendingRegisterNewRoute
-					}
-					type="submit"
-					className="w-full mt-6 gap-2"
-				>
-					{isPendingRegisterNewRoute ? (
-						<Loader2 className="size-4 animate-spin" />
-					) : (
-						"Concluir cadastro"
-					)}
-				</Button>
+				<fieldset className="flex justify-end gap-4 mt-6">
+					<Button
+						disabled={
+							isFetchStatesAreasFromCompanyPending ||
+							isFetchCitiesByAreaPending ||
+							!form.watch("citiesIds").length ||
+							isPendingRegisterNewRoute
+						}
+						onClick={onCloseDialog}
+						type="button"
+						variant="destructive-outline"
+					>
+						Cancelar
+					</Button>
+					<Button
+						disabled={
+							isFetchStatesAreasFromCompanyPending ||
+							isFetchCitiesByAreaPending ||
+							!form.watch("citiesIds").length ||
+							isPendingRegisterNewRoute
+						}
+						type="submit"
+					>
+						{isPendingRegisterNewRoute ? (
+							<Loader2 className="size-4 animate-spin" />
+						) : (
+							"Concluir cadastro"
+						)}
+					</Button>
+				</fieldset>
 			</form>
 		</Form>
 	);

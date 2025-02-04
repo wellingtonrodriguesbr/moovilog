@@ -12,7 +12,7 @@ export function Freights() {
 				<Button asChild>
 					<Link href="/fretes/novo">
 						<Plus className="size-4" />
-						Cadastrar novo
+						Cadastrar frete
 					</Link>
 				</Button>
 			</header>
