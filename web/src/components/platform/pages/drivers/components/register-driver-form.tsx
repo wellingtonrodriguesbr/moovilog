@@ -37,6 +37,7 @@ const formSchema = z.object({
 	documentNumber: z
 		.string()
 		.min(11, { message: "Digite um CPF válido" })
+		.max(11, { message: "Digite um CPF válido" })
 		.transform((value) => value.replace(/\D/g, ""))
 		.transform((cpf) => cpf.slice(0, 11)),
 	phone: z
@@ -59,6 +60,8 @@ export function RegisterDriverForm({ onCloseDialog }: RegisterDriverFormProps) {
 			type: undefined,
 		},
 	});
+
+	console.log(form.watch("documentNumber"));
 
 	async function onSubmit(registerData: z.infer<typeof formSchema>) {
 		try {

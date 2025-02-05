@@ -10,6 +10,7 @@ import { companyMemberModuleRoutes } from "@/modules/company-member/http/routes/
 import { vehicleModuleRoutes } from "@/modules/vehicle/http/routes/vehicle-module-routes";
 import { driverModuleRoutes } from "@/modules/driver/http/routes/driver-module-routes";
 import { routeModuleRoutes } from "@/modules/route/http/routes/route-module-routes";
+import { freightModuleRoutes } from "@/modules/freight/http/routes/freight-module-routes";
 import { sharedModuleRoutes } from "@/modules/shared/http/routes/shared-module-routes";
 
 import { env } from "@/env";
@@ -46,4 +47,5 @@ app.register(companyMemberModuleRoutes);
 app.register(vehicleModuleRoutes);
 app.register(driverModuleRoutes);
 app.register(routeModuleRoutes);
+app.register(freightModuleRoutes);
 app.register(sharedModuleRoutes);

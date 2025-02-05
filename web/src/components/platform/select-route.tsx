@@ -16,34 +16,32 @@ import {
 	PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { useFetchVehiclesFromCompany } from "@/hooks/vehicle/use-fetch-vehicles-from-company";
-import { RegisterVehicleDialog } from "@/components/platform/pages/vehicles/components/register-vehicle-dialog";
+import { useFetchRoutesFromCompany } from "@/hooks/route/use-fetch-routes-from-company";
+import { RegisterRouteDialog } from "@/components/platform/pages/routes/components/register-route-dialog";
 import { cn } from "@/lib/cn";
 import { Check, ChevronsUpDown } from "lucide-react";
 
-interface SelectVehicleProps {
-	selectedVehicle: string;
-	onChangeSelectedVehicle: (vehicle: string) => void;
+interface SelectRouteProps {
+	selectedRoute: string;
+	onChangeSelectedRoute: (route: string) => void;
 }
 
-export function SelectVehicle({
-	selectedVehicle,
-	onChangeSelectedVehicle,
-}: SelectVehicleProps) {
+export function SelectRoute({
+	selectedRoute,
+	onChangeSelectedRoute,
+}: SelectRouteProps) {
 	const [open, setOpen] = useState(false);
-	const { vehiclesFromCompany, isFetchVehiclesFromCompanyPending } =
-		useFetchVehiclesFromCompany();
+	const { routes, isFetchRoutesFromCompanyPending } =
+		useFetchRoutesFromCompany();
 
-	function handleSelectVehicle(currentValue: string) {
-		const selectedVehicleObj = vehiclesFromCompany.find(
-			(vehicle) => vehicle.plate === currentValue
+	function handleSelectRoute(currentValue: string) {
+		const selectedRouteObj = routes.find(
+			(route) => route.name === currentValue
 		);
 
-		if (selectedVehicleObj) {
-			onChangeSelectedVehicle(
-				selectedVehicleObj.id === selectedVehicle
-					? ""
-					: selectedVehicleObj.id
+		if (selectedRouteObj) {
+			onChangeSelectedRoute(
+				selectedRouteObj.id === selectedRoute ? "" : selectedRouteObj.id
 			);
 		}
 
@@ -57,43 +55,42 @@ export function SelectVehicle({
 					variant="outline"
 					role="combobox"
 					aria-expanded={open}
-					disabled={isFetchVehiclesFromCompanyPending}
+					disabled={isFetchRoutesFromCompanyPending}
 					className="w-full bg-white justify-between font-normal"
 				>
-					{selectedVehicle
-						? vehiclesFromCompany.find(
-								(vehicle) => vehicle.id === selectedVehicle
-							)?.plate
-						: "Selecione o veículo"}
+					{selectedRoute
+						? routes.find((route) => route.id === selectedRoute)
+								?.name
+						: "Selecione a rota"}
 					<ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
 				</Button>
 			</PopoverTrigger>
 			<PopoverContent className="w-[400px] p-0" align="start">
 				<Command>
-					<CommandInput placeholder="Pesquise um veículo.." />
+					<CommandInput placeholder="Pesquise uma rota.." />
 					<CommandList>
 						<CommandEmpty className="flex flex-col gap-4 p-4 items-center">
-							Nenhum veículo encontrado.
-							<RegisterVehicleDialog />
+							Nenhuma rota encontrada.
+							<RegisterRouteDialog />
 						</CommandEmpty>
 						<CommandGroup>
-							{vehiclesFromCompany.map((vehicle) => (
+							{routes.map((route) => (
 								<CommandItem
-									key={vehicle.id}
-									value={vehicle.plate}
+									key={route.id}
+									value={route.name}
 									onSelect={(currentValue) =>
-										handleSelectVehicle(currentValue)
+										handleSelectRoute(currentValue)
 									}
 								>
 									<Check
 										className={cn(
 											"mr-2 h-4 w-4 text-app-blue-500",
-											selectedVehicle === vehicle.id
+											selectedRoute === route.id
 												? "opacity-100"
 												: "opacity-0"
 										)}
 									/>
-									{vehicle.plate}
+									{route.name}
 								</CommandItem>
 							))}
 						</CommandGroup>

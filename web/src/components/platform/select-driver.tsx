@@ -1,10 +1,7 @@
 "use client";
 
-import * as React from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { useState } from "react";
 
-import { cn } from "@/lib/cn";
-import { Button } from "@/components/ui/button";
 import {
 	Command,
 	CommandEmpty,
@@ -18,8 +15,11 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 } from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
 import { useFetchDriversFromCompany } from "@/hooks/driver/use-fetch-drivers-from-company";
 import { RegisterDriverDialog } from "@/components/platform/pages/drivers/components/register-driver-dialog";
+import { cn } from "@/lib/cn";
+import { Check, ChevronsUpDown } from "lucide-react";
 
 interface SelectDriverProps {
 	selectedDriver: string;
@@ -30,9 +30,25 @@ export function SelectDriver({
 	selectedDriver,
 	onChangeSelectedDriver,
 }: SelectDriverProps) {
+	const [open, setOpen] = useState(false);
 	const { driversFromCompany, isFetchDriversFromCompanyPending } =
 		useFetchDriversFromCompany();
-	const [open, setOpen] = React.useState(false);
+
+	function handleSelectDriver(currentValue: string) {
+		const selectedDriverObj = driversFromCompany.find(
+			(driver) => driver.name === currentValue
+		);
+
+		if (selectedDriverObj) {
+			onChangeSelectedDriver(
+				selectedDriverObj.id === selectedDriver
+					? ""
+					: selectedDriverObj.id
+			);
+		}
+
+		setOpen(false);
+	}
 
 	return (
 		<Popover open={open} onOpenChange={setOpen}>
@@ -41,6 +57,7 @@ export function SelectDriver({
 					variant="outline"
 					role="combobox"
 					aria-expanded={open}
+					disabled={isFetchDriversFromCompanyPending}
 					className="w-full bg-white justify-between font-normal"
 				>
 					{selectedDriver
@@ -63,15 +80,10 @@ export function SelectDriver({
 							{driversFromCompany.map((driver) => (
 								<CommandItem
 									key={driver.id}
-									value={driver.id}
-									onSelect={(currentValue) => {
-										onChangeSelectedDriver(
-											currentValue === selectedDriver
-												? ""
-												: currentValue
-										);
-										setOpen(false);
-									}}
+									value={driver.name}
+									onSelect={(currentValue) =>
+										handleSelectDriver(currentValue)
+									}
 								>
 									<Check
 										className={cn(

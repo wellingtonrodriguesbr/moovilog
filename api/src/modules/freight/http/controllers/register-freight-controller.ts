@@ -22,11 +22,11 @@ export class RegisterFreightController {
 				"ZONE_BASED",
 			]),
 			observation: z.string().optional().nullable(),
-			pickupsQuantity: z.number().optional(),
-			deliveriesQuantity: z.number(),
-			totalWeightOfPickups: z.number().optional(),
-			totalWeightOfDeliveries: z.number(),
-			freightAmountInCents: z.number(),
+			pickupsQuantity: z.coerce.number().optional(),
+			deliveriesQuantity: z.coerce.number(),
+			totalWeightOfPickups: z.coerce.number().optional(),
+			totalWeightOfDeliveries: z.coerce.number(),
+			freightAmountInCents: z.coerce.number(),
 			driverId: z.string().uuid(),
 			vehicleId: z.string().uuid(),
 			routeId: z.string().uuid(),
@@ -46,6 +46,8 @@ export class RegisterFreightController {
 			vehicleId,
 			routeId,
 		} = registerFreightBodySchema.parse(req.body);
+
+		console.log(date);
 
 		const userId = req.user.sub;
 
