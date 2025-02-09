@@ -43,7 +43,9 @@ const formSchema = z.object({
 	totalWeightOfDeliveries: z.coerce.number({
 		message: "Digite o total de peso",
 	}),
-	freightAmountInCents: z.coerce.number(),
+	freightAmountInCents: z.coerce.number({
+		message: "Digite o valor do frete",
+	}),
 	driverId: z.string().uuid({ message: "Selecione um motorista" }),
 	vehicleId: z.string().uuid({ message: "Selecione um veículo" }),
 	routeId: z.string().uuid({ message: "Selecione uma rota" }),
@@ -338,7 +340,11 @@ export function RegisterFreightForm() {
 						<FormItem>
 							<FormLabel>Valor do frete</FormLabel>
 							<FormControl>
-								<Input placeholder="R$" {...field} />
+								<Input
+									type="number"
+									placeholder="R$"
+									{...field}
+								/>
 							</FormControl>
 							<FormMessage />
 						</FormItem>

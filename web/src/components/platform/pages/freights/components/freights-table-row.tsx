@@ -1,12 +1,10 @@
-import Link from "next/link";
 import { TableCell, TableRow } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
 
 import { Freight } from "@/interfaces";
 import { formatBrazilianDate } from "@/utils/format-brazilian-date";
 import { formatWeight } from "@/utils/format-weight";
 
-import { ArrowRight } from "lucide-react";
+import { FreightDropdownOptions } from "./freight-dropdown-options";
 
 const FREIGHT_MODALITY: Record<string, string> = {
 	DAILY: "Diário",
@@ -61,16 +59,7 @@ export function FreightsTableRow({ freight }: FreightsTableRowProps) {
 				{formatBrazilianDate(freight.createdAt.toString())}
 			</TableCell>
 			<TableCell className="text-right">
-				<Button
-					variant="ghost"
-					className="text-app-blue-700 text-sm"
-					asChild
-				>
-					<Link href={`/fretes/${freight.id}`}>
-						Ver detalhes
-						<ArrowRight className="size-4" />
-					</Link>
-				</Button>
+				<FreightDropdownOptions freightId={freight.id} />
 			</TableCell>
 		</TableRow>
 	);
