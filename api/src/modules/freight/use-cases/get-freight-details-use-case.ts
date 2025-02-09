@@ -4,16 +4,17 @@ import { FreightsRepository } from "@/modules/freight/repositories/freights-repo
 import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
 import { IFreight } from "@/modules/freight/interfaces/freight";
 
-interface FetchFreightsFromCompanyUseCaseRequest {
+interface GetFreightDetailsUseCaseRequest {
 	userId: string;
 	companyId: string;
+	freightId: string;
 }
 
-interface FetchFreightsFromCompanyUseCaseResponse {
-	freights: IFreight[];
+interface GetFreightDetailsUseCaseResponse {
+	freight: IFreight;
 }
 
-export class FetchFreightsFromCompanyUseCase {
+export class GetFreightDetailsUseCase {
 	constructor(
 		private companyMembersRepository: CompanyMembersRepository,
 		private companiesRepository: CompaniesRepository,
@@ -23,7 +24,8 @@ export class FetchFreightsFromCompanyUseCase {
 	async execute({
 		userId,
 		companyId,
-	}: FetchFreightsFromCompanyUseCaseRequest): Promise<FetchFreightsFromCompanyUseCaseResponse> {
+		freightId,
+	}: GetFreightDetailsUseCaseRequest): Promise<GetFreightDetailsUseCaseResponse> {
 		const [company, memberInCompany] = await Promise.all([
 			this.companiesRepository.findById(companyId),
 			this.companyMembersRepository.findMemberInCompany(userId, companyId),
@@ -37,9 +39,12 @@ export class FetchFreightsFromCompanyUseCase {
 			throw new ResourceNotFoundError("Member not found in company");
 		}
 
-		const freights =
-			await this.freightsRepository.findManyByCompanyId(companyId);
+		const freight = await this.freightsRepository.findById(freightId);
 
-		return { freights };
+		if (!freight) {
+			throw new ResourceNotFoundError("Freight not found");
+		}
+
+		return { freight };
 	}
 }

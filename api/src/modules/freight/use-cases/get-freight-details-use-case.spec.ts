@@ -3,23 +3,23 @@ import { InMemoryCompanyMembersRepository } from "@/modules/company-member/repos
 import { InMemoryCompaniesRepository } from "@/modules/company/repositories/in-memory/in-memory-companies-repository";
 import { InMemoryUsersRepository } from "@/modules/user/repositories/in-memory/in-memory-users-repository";
 import { InMemoryFreightsRepository } from "@/modules/freight/repositories/in-memory/in-memory-freights-repository";
-import { FetchFreightsFromCompanyUseCase } from "@/modules/freight/use-cases/fetch-freights-from-company-use-case";
 import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
+import { GetFreightDetailsUseCase } from "@/modules/freight/use-cases/get-freight-details-use-case";
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
 
 let companyMembersRepository: InMemoryCompanyMembersRepository;
 let freightsRepository: InMemoryFreightsRepository;
-let sut: FetchFreightsFromCompanyUseCase;
+let sut: GetFreightDetailsUseCase;
 
-describe("[MODULE]: Fetch freights from company use case", () => {
+describe("[MODULE]: Get freight details use case", () => {
 	beforeEach(async () => {
 		usersRepository = new InMemoryUsersRepository();
 		companiesRepository = new InMemoryCompaniesRepository();
 		companyMembersRepository = new InMemoryCompanyMembersRepository();
 		freightsRepository = new InMemoryFreightsRepository();
-		sut = new FetchFreightsFromCompanyUseCase(
+		sut = new GetFreightDetailsUseCase(
 			companyMembersRepository,
 			companiesRepository,
 			freightsRepository
@@ -65,14 +65,16 @@ describe("[MODULE]: Fetch freights from company use case", () => {
 		});
 	});
 
-	it("should be able to fetch freights", async () => {
-		const { freights } = await sut.execute({
+	it("should be able to get freight details", async () => {
+		const { freight } = await sut.execute({
 			userId: "john-doe-id-01",
 			companyId: "company-id-01",
+			freightId: freightsRepository.items[0].id,
 		});
 
-		expect(freightsRepository.items).toHaveLength(1);
-		expect(freights[0].id).toEqual(expect.any(String));
+		expect(freight.modality).toStrictEqual("DAILY");
+		expect(freight.type).toStrictEqual("FRACTIONAL");
+		expect(freight.freightAmountInCents).toEqual(600);
 	});
 
 	it("should not be able to fetch freights if the company member is not found", async () => {
@@ -80,6 +82,7 @@ describe("[MODULE]: Fetch freights from company use case", () => {
 			sut.execute({
 				userId: "non-existent-user-id",
 				companyId: "company-id-01",
+				freightId: freightsRepository.items[0].id,
 			})
 		).rejects.toBeInstanceOf(ResourceNotFoundError);
 	});
@@ -89,6 +92,7 @@ describe("[MODULE]: Fetch freights from company use case", () => {
 			sut.execute({
 				userId: "john-doe-id-01",
 				companyId: "non-existent-company-id",
+				freightId: freightsRepository.items[0].id,
 			})
 		).rejects.toBeInstanceOf(ResourceNotFoundError);
 	});

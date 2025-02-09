@@ -4,7 +4,7 @@ import Lottie from "react-lottie";
 import * as emptyAnimation from "@/assets/lotties/empty-animation.json";
 
 interface EmptyProps {
-	context: "vehicle" | "driver" | "route" | "freight";
+	context: "vehicle" | "driver" | "route" | "freight" | "pickup";
 }
 
 const DEFAULT_OPTIONS = {
@@ -21,6 +21,7 @@ const EMPTY_CONTEXTS = {
 	driver: "Nenhum motorista cadastrado",
 	route: "Nenhuma rota cadastrada",
 	freight: "Nenhum frete cadastrado",
+	pickup: "Nenhuma coleta cadastrada",
 };
 
 export function Empty({ context }: EmptyProps) {

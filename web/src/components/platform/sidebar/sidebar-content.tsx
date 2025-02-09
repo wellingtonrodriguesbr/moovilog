@@ -7,6 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { formatCNPJ } from "@/utils/format-cnpj";
 import {
 	BarChart,
+	Box,
 	Group,
 	Handshake,
 	Home,
@@ -87,6 +88,11 @@ const ITEMS = [
 		name: "Fretes",
 		url: "/fretes",
 		icon: <LayoutGrid className="size-4" />,
+	},
+	{
+		name: "Coletas",
+		url: "/coletas",
+		icon: <Box className="size-4" />,
 	},
 	{
 		name: "Rotas",

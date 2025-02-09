@@ -1,23 +1,23 @@
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
-import { FreightsTable } from "@/components/platform/pages/freights/components/freights-table";
+import { Empty } from "@/components/platform/empty";
 import { Plus } from "lucide-react";
 
-export function Freights() {
+export function Pickups() {
 	return (
 		<section>
 			<header className="flex gap-4 items-start md:items-center justify-between">
-				<h1 className="text-2xl md:text-3xl font-medium">Fretes</h1>
+				<h1 className="text-2xl md:text-3xl font-medium">Coletas</h1>
 				<Button asChild>
 					<Link href="/fretes/novo">
 						<Plus className="size-4" />
-						Cadastrar frete
+						Cadastrar coleta
 					</Link>
 				</Button>
 			</header>
 			<div className="mt-12">
-				<FreightsTable />
+				<Empty context="pickup" />
 			</div>
 		</section>
 	);

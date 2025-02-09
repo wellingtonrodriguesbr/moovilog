@@ -16,6 +16,40 @@ export class PrismaFreightsRepository implements FreightsRepository {
 			where: {
 				id: freightId,
 			},
+			include: {
+				creator: {
+					select: {
+						id: true,
+						role: true,
+						user: {
+							select: {
+								id: true,
+								name: true,
+								email: true,
+							},
+						},
+					},
+				},
+				vehicle: {
+					select: {
+						id: true,
+						plate: true,
+					},
+				},
+				driver: {
+					select: {
+						id: true,
+						name: true,
+						documentNumber: true,
+					},
+				},
+				route: {
+					select: {
+						id: true,
+						name: true,
+					},
+				},
+			},
 		});
 
 		if (!freight) {

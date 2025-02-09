@@ -9,3 +9,4 @@ export * from "@/interfaces/route";
 export * from "@/interfaces/user";
 export * from "@/interfaces/driver";
 export * from "@/interfaces/vehicle";
+export * from "@/interfaces/freight";

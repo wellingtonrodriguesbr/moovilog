@@ -39,6 +39,11 @@ export function BreadcrumbPlatform() {
 				{paths?.map((segment, index) => {
 					const accumulatedPath = `/${paths?.slice(0, index + 1).join("/")}`;
 					const isLast = index === paths?.length - 1;
+					const breadcrumbLabel =
+						accumulatedPath.startsWith("/fretes/") &&
+						!ROUTES_MAP[accumulatedPath]
+							? "Detalhes do frete"
+							: ROUTES_MAP[accumulatedPath] || segment;
 
 					return (
 						<React.Fragment key={accumulatedPath}>
@@ -48,7 +53,7 @@ export function BreadcrumbPlatform() {
 							<BreadcrumbItem>
 								{isLast ? (
 									<BreadcrumbPage>
-										{ROUTES_MAP[accumulatedPath] || segment}
+										{breadcrumbLabel}
 									</BreadcrumbPage>
 								) : (
 									<BreadcrumbLink
@@ -59,8 +64,7 @@ export function BreadcrumbPlatform() {
 										asChild
 									>
 										<Link href={accumulatedPath}>
-											{ROUTES_MAP[accumulatedPath] ||
-												segment}
+											{breadcrumbLabel}
 										</Link>
 									</BreadcrumbLink>
 								)}

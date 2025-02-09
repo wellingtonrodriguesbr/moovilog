@@ -6,6 +6,7 @@ export const ROUTES_MAP: Record<string, string> = {
 	"/operacional/recursos-e-suprimentos": "Recursos e Suprimentos",
 	"/operacional/avisos": "Avisos",
 	"/fretes": "Fretes",
+	"/coletas": "Coletas",
 	"/fretes/novo": "Novo Frete",
 	"/rotas": "Rotas",
 	"/motoristas": "Motoristas",

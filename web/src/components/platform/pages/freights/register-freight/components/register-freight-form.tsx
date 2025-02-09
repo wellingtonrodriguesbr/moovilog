@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
 	Form,
 	FormControl,
@@ -67,6 +68,7 @@ const formSchema = z.object({
 });
 
 export function RegisterFreightForm() {
+	const router = useRouter();
 	const { registerFreight, isPendingRegisterFreight } = useRegisterFreight();
 
 	const form = useForm<z.infer<typeof formSchema>>({
@@ -91,6 +93,7 @@ export function RegisterFreightForm() {
 		console.log(registerData);
 		try {
 			await registerFreight({ ...registerData });
+			router.push("/fretes");
 			toast.success("Frete cadastrado com sucesso");
 		} catch (error) {
 			if (error instanceof AxiosError) {

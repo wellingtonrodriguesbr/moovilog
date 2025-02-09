@@ -26,6 +26,7 @@ import { formatPlate } from "@/utils/format-plate";
 import { useRegisterVehicle } from "@/hooks/vehicle/use-register-vehicle";
 import { formatWeight } from "@/utils/format-weight";
 import { AxiosError } from "axios";
+import { TRUCK_BRANDS } from "@/utils/mocks/truck-brands";
 
 interface RegisterDriverFormProps {
 	onCloseDialog: () => void;
@@ -126,12 +127,23 @@ export function RegisterVehicleForm({
 					render={({ field }) => (
 						<FormItem>
 							<FormLabel>Marca</FormLabel>
-							<FormControl>
-								<Input
-									placeholder="Ex: Mercedes-Benz"
-									{...field}
-								/>
-							</FormControl>
+							<Select
+								onValueChange={field.onChange}
+								defaultValue={field.value}
+							>
+								<FormControl>
+									<SelectTrigger>
+										<SelectValue placeholder="Selecione uma opção" />
+									</SelectTrigger>
+								</FormControl>
+								<SelectContent>
+									{TRUCK_BRANDS.map((brand) => (
+										<SelectItem key={brand} value={brand}>
+											{brand}
+										</SelectItem>
+									))}
+								</SelectContent>
+							</Select>
 							<FormMessage />
 						</FormItem>
 					)}
