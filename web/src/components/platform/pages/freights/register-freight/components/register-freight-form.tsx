@@ -92,7 +92,6 @@ export function RegisterFreightForm() {
 	});
 
 	async function onSubmit(registerData: z.infer<typeof formSchema>) {
-		console.log(registerData);
 		try {
 			await registerFreight({ ...registerData });
 			router.push("/fretes");
@@ -244,7 +243,7 @@ export function RegisterFreightForm() {
 								>
 									<FormControl>
 										<SelectTrigger>
-											<SelectValue placeholder="Selecione o tipo deste frete" />
+											<SelectValue placeholder="Selecione uma opção" />
 										</SelectTrigger>
 									</FormControl>
 									<SelectContent>
@@ -272,14 +271,14 @@ export function RegisterFreightForm() {
 						name="modality"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Modalidade</FormLabel>
+								<FormLabel>Modalidade de pagamento</FormLabel>
 								<Select
 									onValueChange={field.onChange}
 									defaultValue={field.value}
 								>
 									<FormControl>
 										<SelectTrigger>
-											<SelectValue placeholder="Selecione a modalidade de pagamento deste frete" />
+											<SelectValue placeholder="Selecione uma opção" />
 										</SelectTrigger>
 									</FormControl>
 									<SelectContent>

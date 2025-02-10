@@ -23,7 +23,7 @@ export function FreightsTableHeader() {
 					Tipo
 				</TableHead>
 				<TableHead className="text-app-blue-900 font-medium text-nowrap">
-					Modalidade
+					Modalidade de pagamento
 				</TableHead>
 				<TableHead className="text-app-blue-900 font-medium text-nowrap">
 					Cadastrado em

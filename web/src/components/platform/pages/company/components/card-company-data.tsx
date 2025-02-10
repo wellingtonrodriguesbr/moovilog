@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Building } from "lucide-react";
 
-import dayjs from "dayjs";
+import { formatBrazilianDate } from "@/utils/format-brazilian-date";
 
 const COMPANY_SIZE: Record<string, string> = {
 	MICRO: "Microempresa (Faturamento anual de até R$ 360mil)",
@@ -57,8 +57,8 @@ export function CardCompanyData() {
 						<Label>Cadastrada em:</Label>
 						<Input
 							readOnly
-							value={dayjs(companyInformation.createdAt).format(
-								"DD/MM/YYYY"
+							value={formatBrazilianDate(
+								companyInformation.createdAt
 							)}
 						/>
 					</fieldset>

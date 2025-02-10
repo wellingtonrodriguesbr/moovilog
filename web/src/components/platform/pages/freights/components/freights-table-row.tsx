@@ -7,7 +7,7 @@ import { formatWeight } from "@/utils/format-weight";
 import { FreightDropdownOptions } from "./freight-dropdown-options";
 
 const FREIGHT_MODALITY: Record<string, string> = {
-	DAILY: "Diário",
+	DAILY: "Diária",
 	PERCENTAGE: "Porcentagem",
 	PRODUCTIVITY: "Produtividade",
 	FLAT_RATE: "Taxa fixa",

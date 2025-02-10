@@ -10,7 +10,7 @@ export async function freightModuleRoutes(app: FastifyInstance) {
 	app.post("/freights", RegisterFreightController.handle);
 	app.get("/:companyId/freights", FetchFreightsFromCompanyController.handle);
 	app.get(
-		"/:companyId/freight/:freightId/details",
+		"/:companyId/freights/:freightId/details",
 		GetFreightDetailsController.handle
 	);
 }

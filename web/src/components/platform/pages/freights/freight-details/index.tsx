@@ -1,7 +1,7 @@
 import Link from "next/link";
 
-import { UnderConstruction } from "@/components/platform/under-construction";
 import { ArrowLeft } from "lucide-react";
+import { FreightDetailsForm } from "@/components/platform/pages/freights/freight-details/components/freight-details-form";
 
 export function FreightDetails() {
 	return (
@@ -19,7 +19,7 @@ export function FreightDetails() {
 				</h1>
 			</header>
 			<div className="mt-12">
-				<UnderConstruction />
+				<FreightDetailsForm />
 			</div>
 		</section>
 	);
