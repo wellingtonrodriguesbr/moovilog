@@ -6,7 +6,7 @@ import { randomUUID } from "node:crypto";
 export class InMemoryFreightsRepository implements FreightsRepository {
 	public items: Freight[] = [];
 
-	async create(data: Prisma.FreightUncheckedCreateInput): Promise<Freight> {
+	async create(data: Prisma.FreightUncheckedCreateInput) {
 		const freight = {
 			id: data.id ?? randomUUID(),
 			type: data.type,

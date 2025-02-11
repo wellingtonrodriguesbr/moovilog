@@ -14,6 +14,8 @@ import { BadRequestError } from "@/modules/shared/errors/bad-request-error";
 import { transformToCents } from "@/utils/transform-to-cents";
 
 import dayjs from "dayjs";
+import { FinanceTransactionsRepository } from "@/modules/financial/repositories/finance-transactions-repository";
+import { FinanceCategoriesRepository } from "@/modules/financial/repositories/finance-categories-repository";
 
 interface RegisterFreightUseCaseRequest {
 	type: IFreightTypes;
@@ -43,7 +45,9 @@ export class RegisterFreightUseCase {
 		private driversRepository: DriversRepository,
 		private vehiclesRepository: VehiclesRepository,
 		private freightsRepository: FreightsRepository,
-		private routesRepository: RoutesRepository
+		private routesRepository: RoutesRepository,
+		private financeTransactionsRepository: FinanceTransactionsRepository,
+		private financeCategoriesRepository: FinanceCategoriesRepository
 	) {}
 
 	async execute({
@@ -112,6 +116,25 @@ export class RegisterFreightUseCase {
 			companyId: member.companyId,
 			routeId: route.id,
 			vehicleId: vehicle.id,
+		});
+
+		const financeCategory =
+			await this.financeCategoriesRepository.findByName("Frete");
+
+		if (!financeCategory) {
+			throw new ResourceNotFoundError("Finance category not found");
+		}
+
+		await this.financeTransactionsRepository.create({
+			amountInCents: transformedFreightAmountInCents,
+			description: `Freight ${freight.id}`,
+			creatorId: member.id,
+			categoryId: financeCategory.id,
+			companyId: member.companyId,
+			date: new Date(),
+			status: "PENDING",
+			type: "EXPENSE",
+			paymentMethod: "BANK_TRANSFER",
 		});
 
 		return { freight };

@@ -37,12 +37,13 @@ model Company {
   addressId String?  @unique @map("address_id")
   address   Address? @relation(fields: [addressId], references: [id], onDelete: Cascade)
 
-  companyMembers     CompanyMember[]
-  drivers            Driver[]
-  freights           Freight[]
-  routes             Route[]
-  vehicles           Vehicle[]
-  companyStatesAreas CompanyStateArea[]
+  companyMembers      CompanyMember[]
+  drivers             Driver[]
+  freights            Freight[]
+  routes              Route[]
+  vehicles            Vehicle[]
+  companyStatesAreas  CompanyStateArea[]
+  financeTransactions FinanceTransaction[]
 
   @@map("companies")
 }
@@ -77,10 +78,11 @@ model CompanyMember {
   companyId String  @map("company_id")
   company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
-  drivers  Driver[]
-  freights Freight[]
-  vehicles Vehicle[]
-  routes   Route[]
+  drivers             Driver[]
+  freights            Freight[]
+  vehicles            Vehicle[]
+  routes              Route[]
+  financeTransactions FinanceTransaction[]
 
   @@unique([companyId, userId])
   @@map("company_members")
@@ -277,6 +279,39 @@ model Token {
   @@map("token")
 }
 
+model FinanceTransaction {
+  id            String                   @id @default(uuid())
+  description   String?
+  amountInCents Int                      @map("amount_in_cents")
+  date          DateTime
+  dueDate       DateTime?                @map("due_date")
+  type          FinanceTransactionType
+  status        FinanceTransactionStatus
+  paymentMethod PaymentMethod?           @map("payment_method")
+  createdAt     DateTime                 @default(now()) @map("created_at")
+  updatedAt     DateTime                 @updatedAt @map("updated_at")
+
+  categoryId String          @map("category_id")
+  category   FinanceCategory @relation(fields: [categoryId], references: [id])
+  companyId  String          @map("company_id")
+  company    Company         @relation(fields: [companyId], references: [id])
+  creatorId  String          @map("creator_id")
+  creator    CompanyMember   @relation(fields: [creatorId], references: [id])
+
+  @@map("finance_transactions")
+}
+
+model FinanceCategory {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  financeTransactions FinanceTransaction[]
+
+  @@map("finance_categories")
+}
+
 enum Role {
   ADMIN
   MANAGER
@@ -359,4 +394,24 @@ enum DriverType {
 enum TokenType {
   PASSWORD_RECOVER
   AUTH_LINK
+}
+
+enum FinanceTransactionType {
+  INCOME
+  EXPENSE
+}
+
+enum FinanceTransactionStatus {
+  PENDING
+  PAID
+  OVERDUE
+}
+
+enum PaymentMethod {
+  CASH
+  CREDIT_CARD
+  DEBIT_CARD
+  BANK_TRANSFER
+  PIX
+  OTHER
 }
