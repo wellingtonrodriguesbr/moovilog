@@ -9,6 +9,8 @@ import { InMemoryRoutesRepository } from "@/modules/route/repositories/in-memory
 import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
 import { BadRequestError } from "@/modules/shared/errors/bad-request-error";
 import { RegisterFreightUseCase } from "@/modules/freight/use-cases/register-freight-use-case";
+import { InMemoryFinanceTransactionsRepository } from "@/modules/financial/repositories/in-memory/in-memory-finance-transactions-repository";
+import { InMemoryFinanceCategoriesRepository } from "@/modules/financial/repositories/in-memory/in-memory-finance-categories-repository";
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
@@ -17,6 +19,8 @@ let driversRepository: InMemoryDriversRepository;
 let vehiclesRepository: InMemoryVehiclesRepository;
 let freightsRepository: InMemoryFreightsRepository;
 let routesRepository: InMemoryRoutesRepository;
+let financeTransactionsRepository: InMemoryFinanceTransactionsRepository;
+let financeCategoriesRepository: InMemoryFinanceCategoriesRepository;
 let sut: RegisterFreightUseCase;
 
 describe("[MODULE]: Register freight use case", () => {
@@ -28,13 +32,17 @@ describe("[MODULE]: Register freight use case", () => {
 		driversRepository = new InMemoryDriversRepository();
 		freightsRepository = new InMemoryFreightsRepository();
 		routesRepository = new InMemoryRoutesRepository();
+		financeTransactionsRepository = new InMemoryFinanceTransactionsRepository();
+		financeCategoriesRepository = new InMemoryFinanceCategoriesRepository();
 
 		sut = new RegisterFreightUseCase(
 			companyMembersRepository,
 			driversRepository,
 			vehiclesRepository,
 			freightsRepository,
-			routesRepository
+			routesRepository,
+			financeTransactionsRepository,
+			financeCategoriesRepository
 		);
 
 		await usersRepository.create({
@@ -90,12 +98,17 @@ describe("[MODULE]: Register freight use case", () => {
 			companyId: "company-id-01",
 			creatorId: "company-member-id-01",
 		});
+
+		await financeCategoriesRepository.create({
+			id: "fake-finance-category-id-01",
+			name: "Frete",
+		});
 	});
 
 	it("should be able to register a freight", async () => {
 		const { freight } = await sut.execute({
 			date: new Date(),
-			type: "PARTIAL",
+			type: "FRACTIONAL",
 			deliveriesQuantity: 12,
 			pickupsQuantity: 5,
 			totalWeightOfDeliveries: 2400,
@@ -111,6 +124,10 @@ describe("[MODULE]: Register freight use case", () => {
 		expect(freight.id).toEqual(expect.any(String));
 		expect(freightsRepository.items[0].companyId).toEqual("company-id-01");
 		expect(freightsRepository.items[0].freightAmountInCents).toEqual(60000);
+		expect(financeTransactionsRepository.items[0].amountInCents).toEqual(60000);
+		expect(financeTransactionsRepository.items[0].paymentMethod).toStrictEqual(
+			"PIX"
+		);
 	});
 
 	it("not should be able to register a freight with the a creator role that is different between operational, manager or admin", async () => {
@@ -130,7 +147,7 @@ describe("[MODULE]: Register freight use case", () => {
 		expect(() =>
 			sut.execute({
 				date: new Date(),
-				type: "PARTIAL",
+				type: "FRACTIONAL",
 				deliveriesQuantity: 12,
 				pickupsQuantity: 5,
 				totalWeightOfDeliveries: 2400,
@@ -143,13 +160,14 @@ describe("[MODULE]: Register freight use case", () => {
 				vehicleId: "fake-vehicle-id-01",
 			})
 		).rejects.toBeInstanceOf(NotAllowedError);
+		expect(financeTransactionsRepository.items).toHaveLength(0);
 	});
 
 	it("not should be able to register a freight with a date less than the current date", async () => {
 		expect(() =>
 			sut.execute({
 				date: new Date("2024-07-15 09:00:00"),
-				type: "PARTIAL",
+				type: "FRACTIONAL",
 				deliveriesQuantity: 12,
 				pickupsQuantity: 5,
 				totalWeightOfDeliveries: 2400,
@@ -162,5 +180,6 @@ describe("[MODULE]: Register freight use case", () => {
 				vehicleId: "fake-vehicle-id-01",
 			})
 		).rejects.toBeInstanceOf(BadRequestError);
+		expect(financeTransactionsRepository.items).toHaveLength(0);
 	});
 });

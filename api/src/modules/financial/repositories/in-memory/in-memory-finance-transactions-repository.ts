@@ -1,6 +1,6 @@
 import { FinanceTransaction, Prisma } from "@prisma/client";
-import { randomUUID } from "node:crypto";
 import { FinanceTransactionsRepository } from "@/modules/financial/repositories/finance-transactions-repository";
+import { randomUUID } from "node:crypto";
 
 export class InMemoryFinanceTransactionsRepository
 	implements FinanceTransactionsRepository
@@ -28,5 +28,13 @@ export class InMemoryFinanceTransactionsRepository
 
 		this.items.push(transaction);
 		return transaction;
+	}
+
+	async findManyByCompanyId(companyId: string) {
+		const transactions = this.items.filter(
+			(transaction) => transaction.companyId === companyId
+		);
+
+		return transactions;
 	}
 }

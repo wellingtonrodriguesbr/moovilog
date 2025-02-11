@@ -11,6 +11,7 @@ import { vehicleModuleRoutes } from "@/modules/vehicle/http/routes/vehicle-modul
 import { driverModuleRoutes } from "@/modules/driver/http/routes/driver-module-routes";
 import { routeModuleRoutes } from "@/modules/route/http/routes/route-module-routes";
 import { freightModuleRoutes } from "@/modules/freight/http/routes/freight-module-routes";
+import { financialModuleRoutes } from "@/modules/financial/http/routes/financial-module-routes";
 import { sharedModuleRoutes } from "@/modules/shared/http/routes/shared-module-routes";
 
 import { env } from "@/env";
@@ -48,4 +49,5 @@ app.register(vehicleModuleRoutes);
 app.register(driverModuleRoutes);
 app.register(routeModuleRoutes);
 app.register(freightModuleRoutes);
+app.register(financialModuleRoutes);
 app.register(sharedModuleRoutes);

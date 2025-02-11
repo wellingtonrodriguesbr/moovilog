@@ -12,4 +12,17 @@ export class PrismaFinanceTransactionsRepository
 
 		return transaction;
 	}
+
+	async findManyByCompanyId(companyId: string) {
+		const transactions = await prisma.financeTransaction.findMany({
+			where: {
+				companyId,
+			},
+			include: {
+				category: true,
+			},
+		});
+
+		return transactions;
+	}
 }

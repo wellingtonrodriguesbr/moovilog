@@ -37,7 +37,7 @@ interface RegisterFreightUseCaseResponse {
 	freight: IFreight;
 }
 
-const ALLOWED_ROLES_TO_REGISTER_FREIGHT = ["OPERATIONAL", "MANAGER", "ADMIN"];
+const ROLE_PERMISSIONS = ["OPERATIONAL", "MANAGER", "ADMIN"];
 
 export class RegisterFreightUseCase {
 	constructor(
@@ -76,7 +76,7 @@ export class RegisterFreightUseCase {
 			throw new ResourceNotFoundError("Member not found");
 		}
 
-		if (!ALLOWED_ROLES_TO_REGISTER_FREIGHT.includes(member.role)) {
+		if (!ROLE_PERMISSIONS.includes(member.role)) {
 			throw new NotAllowedError(
 				"You do not have permission to perform this action, please ask your administrator for access"
 			);
@@ -127,14 +127,14 @@ export class RegisterFreightUseCase {
 
 		await this.financeTransactionsRepository.create({
 			amountInCents: transformedFreightAmountInCents,
-			description: `Freight ${freight.id}`,
+			description: `Referente ao frete com o id: ${freight.id}`,
 			creatorId: member.id,
 			categoryId: financeCategory.id,
 			companyId: member.companyId,
 			date: new Date(),
 			status: "PENDING",
 			type: "EXPENSE",
-			paymentMethod: "BANK_TRANSFER",
+			paymentMethod: "PIX",
 		});
 
 		return { freight };

@@ -8,7 +8,6 @@ import { GetFreightDetailsUseCase } from "@/modules/freight/use-cases/get-freigh
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
-
 let companyMembersRepository: InMemoryCompanyMembersRepository;
 let freightsRepository: InMemoryFreightsRepository;
 let sut: GetFreightDetailsUseCase;

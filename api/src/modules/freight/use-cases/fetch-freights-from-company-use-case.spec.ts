@@ -8,7 +8,6 @@ import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-foun
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
-
 let companyMembersRepository: InMemoryCompanyMembersRepository;
 let freightsRepository: InMemoryFreightsRepository;
 let sut: FetchFreightsFromCompanyUseCase;
