@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { FreightsTable } from "@/components/platform/pages/freights/components/freights-table";
+import { FreightsMetrics } from "@/components/platform/pages/freights/components/freights-metrics";
 import { Plus } from "lucide-react";
 
 export function Freights() {
@@ -16,7 +17,8 @@ export function Freights() {
 					</Link>
 				</Button>
 			</header>
-			<div className="mt-12">
+			<div className="flex flex-col gap-12 mt-12">
+				<FreightsMetrics />
 				<FreightsTable />
 			</div>
 		</section>

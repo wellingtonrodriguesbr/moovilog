@@ -13,6 +13,7 @@ interface RegisterFreightData {
 	vehicleId: string;
 	routeId: string;
 	date: Date;
+	paymentDate: Date;
 	modality:
 		| "DAILY"
 		| "PERCENTAGE"

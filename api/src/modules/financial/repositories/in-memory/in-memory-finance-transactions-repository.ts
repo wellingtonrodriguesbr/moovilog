@@ -13,7 +13,6 @@ export class InMemoryFinanceTransactionsRepository
 		const transaction = {
 			id: data.id ?? randomUUID(),
 			description: data.description ?? null,
-			date: new Date(data.date),
 			dueDate: data.dueDate ? new Date(data.dueDate) : null,
 			amountInCents: data.amountInCents,
 			status: data.status,

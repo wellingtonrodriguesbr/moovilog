@@ -108,6 +108,7 @@ describe("[MODULE]: Register freight use case", () => {
 	it("should be able to register a freight", async () => {
 		const { freight } = await sut.execute({
 			date: new Date(),
+			paymentDate: new Date(),
 			type: "FRACTIONAL",
 			deliveriesQuantity: 12,
 			pickupsQuantity: 5,
@@ -147,6 +148,7 @@ describe("[MODULE]: Register freight use case", () => {
 		expect(() =>
 			sut.execute({
 				date: new Date(),
+				paymentDate: new Date(),
 				type: "FRACTIONAL",
 				deliveriesQuantity: 12,
 				pickupsQuantity: 5,
@@ -167,6 +169,28 @@ describe("[MODULE]: Register freight use case", () => {
 		expect(() =>
 			sut.execute({
 				date: new Date("2024-07-15 09:00:00"),
+				paymentDate: new Date(),
+				type: "FRACTIONAL",
+				deliveriesQuantity: 12,
+				pickupsQuantity: 5,
+				totalWeightOfDeliveries: 2400,
+				totalWeightOfPickups: 1000,
+				freightAmountInCents: 580,
+				modality: "DAILY",
+				userId: "john-doe-id-01",
+				driverId: "fake-driver-id-01",
+				routeId: "fake-route-01",
+				vehicleId: "fake-vehicle-id-01",
+			})
+		).rejects.toBeInstanceOf(BadRequestError);
+		expect(financeTransactionsRepository.items).toHaveLength(0);
+	});
+
+	it("not should be able to register a freight with a payment date less than the current date", async () => {
+		expect(() =>
+			sut.execute({
+				date: new Date(),
+				paymentDate: new Date("2024-07-15 09:00:00"),
 				type: "FRACTIONAL",
 				deliveriesQuantity: 12,
 				pickupsQuantity: 5,

@@ -6,7 +6,7 @@ export async function financialModuleRoutes(app: FastifyInstance) {
 	app.addHook("onRequest", verifyJWT);
 
 	app.get(
-		"/:companyId/transactions",
+		"/companies/:companyId/transactions",
 		FetchTransactionsFromCompanyController.handle
 	);
 }

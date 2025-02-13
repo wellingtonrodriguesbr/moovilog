@@ -283,7 +283,6 @@ model FinanceTransaction {
   id            String                   @id @default(uuid())
   description   String?
   amountInCents Int                      @map("amount_in_cents")
-  date          DateTime
   dueDate       DateTime?                @map("due_date")
   type          FinanceTransactionType
   status        FinanceTransactionStatus

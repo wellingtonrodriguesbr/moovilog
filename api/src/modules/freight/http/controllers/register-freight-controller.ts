@@ -10,6 +10,7 @@ export class RegisterFreightController {
 		const registerFreightBodySchema = z.object({
 			type: z.enum(["FRACTIONAL", "DEDICATED", "EXPRESS", "TRANSFER"]),
 			date: z.coerce.date(),
+			paymentDate: z.coerce.date(),
 			modality: z.enum([
 				"DAILY",
 				"PERCENTAGE",
@@ -35,6 +36,7 @@ export class RegisterFreightController {
 		const {
 			type,
 			date,
+			paymentDate,
 			modality,
 			observation,
 			pickupsQuantity,
@@ -56,6 +58,7 @@ export class RegisterFreightController {
 			const { freight } = await registerFreightUseCase.execute({
 				type,
 				date,
+				paymentDate,
 				modality,
 				observation,
 				pickupsQuantity,

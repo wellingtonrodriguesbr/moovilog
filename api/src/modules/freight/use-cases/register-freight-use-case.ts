@@ -20,6 +20,7 @@ import { FinanceCategoriesRepository } from "@/modules/financial/repositories/fi
 interface RegisterFreightUseCaseRequest {
 	type: IFreightTypes;
 	date: Date;
+	paymentDate: Date;
 	modality: IFreightModality;
 	observation?: string | null;
 	pickupsQuantity?: number;
@@ -53,6 +54,7 @@ export class RegisterFreightUseCase {
 	async execute({
 		type,
 		date,
+		paymentDate,
 		modality,
 		observation,
 		pickupsQuantity,
@@ -98,6 +100,10 @@ export class RegisterFreightUseCase {
 			throw new BadRequestError("Invalid freight date");
 		}
 
+		if (dayjs(paymentDate).isBefore(new Date(), "day")) {
+			throw new BadRequestError("Invalid payment date");
+		}
+
 		const transformedFreightAmountInCents =
 			transformToCents(freightAmountInCents);
 
@@ -128,10 +134,10 @@ export class RegisterFreightUseCase {
 		await this.financeTransactionsRepository.create({
 			amountInCents: transformedFreightAmountInCents,
 			description: `Referente ao frete com o id: ${freight.id}`,
+			dueDate: paymentDate,
 			creatorId: member.id,
 			categoryId: financeCategory.id,
 			companyId: member.companyId,
-			date: new Date(),
 			status: "PENDING",
 			type: "EXPENSE",
 			paymentMethod: "PIX",

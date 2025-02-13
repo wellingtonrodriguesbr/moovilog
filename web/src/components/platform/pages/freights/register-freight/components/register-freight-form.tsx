@@ -50,6 +50,9 @@ const formSchema = z.object({
 	vehicleId: z.string().uuid({ message: "Selecione um veículo" }),
 	routeId: z.string().uuid({ message: "Selecione uma rota" }),
 	date: z.coerce.date(),
+	paymentDate: z.coerce.date({
+		errorMap: () => ({ message: "Selecione uma data" }),
+	}),
 	modality: z.enum(
 		[
 			"DAILY",
@@ -86,6 +89,7 @@ export function RegisterFreightForm() {
 			vehicleId: "",
 			routeId: "",
 			date: new Date(),
+			paymentDate: undefined,
 			modality: undefined,
 			type: undefined,
 		},
@@ -215,20 +219,56 @@ export function RegisterFreightForm() {
 					/>
 				</fieldset>
 
-				<FormField
-					control={form.control}
-					name="date"
-					render={({ field }) => (
-						<FormItem className="flex flex-col my-2">
-							<FormLabel>Data do frete</FormLabel>
-							<DatePicker
-								selectedDate={field.value}
-								onChangeSelectedDate={field.onChange}
-							/>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
+				<fieldset className="grid grid-cols-1 xl:grid-cols-3 gap-4">
+					<FormField
+						control={form.control}
+						name="freightAmountInCents"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Valor do frete</FormLabel>
+								<FormControl>
+									<Input
+										type="number"
+										placeholder="R$"
+										{...field}
+									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+
+					<FormField
+						control={form.control}
+						name="date"
+						render={({ field }) => (
+							<FormItem className="flex flex-col my-[10px]">
+								<FormLabel>Data do frete</FormLabel>
+								<DatePicker
+									selectedDate={field.value}
+									onChangeSelectedDate={field.onChange}
+								/>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+					<FormField
+						control={form.control}
+						name="paymentDate"
+						render={({ field }) => (
+							<FormItem className="flex flex-col my-[10px]">
+								<FormLabel>
+									Data de pagamento do frete
+								</FormLabel>
+								<DatePicker
+									selectedDate={field.value}
+									onChangeSelectedDate={field.onChange}
+								/>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+				</fieldset>
 
 				<fieldset className="grid grid-cols-3 gap-4">
 					<FormField
@@ -331,24 +371,6 @@ export function RegisterFreightForm() {
 						)}
 					/>
 				</fieldset>
-
-				<FormField
-					control={form.control}
-					name="freightAmountInCents"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Valor do frete</FormLabel>
-							<FormControl>
-								<Input
-									type="number"
-									placeholder="R$"
-									{...field}
-								/>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
 
 				<FormField
 					control={form.control}

@@ -122,9 +122,10 @@ export function FreightDetailsForm() {
 			<Label className="flex flex-col gap-2 font-normal">
 				Observação:
 				<Textarea
-					className="resize-none"
+					className="resize-none placeholder:italic pointer-events-none select-none"
 					rows={4}
-					value={freightDetails.observation ?? "Não informado"}
+					placeholder="Nenhuma observação cadastrada.."
+					value={freightDetails.observation ?? ""}
 				/>
 			</Label>
 		</form>
