@@ -32,6 +32,8 @@ import { SelectVehicle } from "@/components/platform/select-vehicle";
 import { SelectRoute } from "@/components/platform/select-route";
 import { useRegisterFreight } from "@/hooks/freight/use-register-freight";
 import { Loader2 } from "lucide-react";
+import { formatCurrencyBR } from "@/utils/format-currency-br";
+import { formatWeight } from "@/utils/format-weight";
 
 const formSchema = z.object({
 	observation: z.string().optional().nullable(),
@@ -43,9 +45,12 @@ const formSchema = z.object({
 	totalWeightOfDeliveries: z.coerce.number({
 		message: "Digite o total de peso",
 	}),
-	freightAmountInCents: z.coerce.number({
-		message: "Digite o valor do frete",
-	}),
+	freightAmountInCents: z
+		.string({ message: "Digite o valor do frete" })
+		.transform((value) => {
+			const formattedValue = value.replace(/\D/g, "");
+			return Number(formattedValue);
+		}),
 	driverId: z.string().uuid({ message: "Selecione um motorista" }),
 	vehicleId: z.string().uuid({ message: "Selecione um veículo" }),
 	routeId: z.string().uuid({ message: "Selecione uma rota" }),
@@ -141,7 +146,10 @@ export function RegisterFreightForm() {
 							<FormItem>
 								<FormLabel>Peso total de entregas</FormLabel>
 								<FormControl>
-									<Input {...field} />
+									<Input
+										{...field}
+										value={formatWeight(field.value)}
+									/>
 								</FormControl>
 								<FormMessage />
 							</FormItem>
@@ -178,7 +186,7 @@ export function RegisterFreightForm() {
 								<FormControl>
 									<Input
 										{...field}
-										value={field.value ?? undefined}
+										value={formatWeight(field.value ?? "")}
 									/>
 								</FormControl>
 								<FormMessage />
@@ -228,9 +236,8 @@ export function RegisterFreightForm() {
 								<FormLabel>Valor do frete</FormLabel>
 								<FormControl>
 									<Input
-										type="number"
-										placeholder="R$"
 										{...field}
+										value={formatCurrencyBR(field.value)}
 									/>
 								</FormControl>
 								<FormMessage />

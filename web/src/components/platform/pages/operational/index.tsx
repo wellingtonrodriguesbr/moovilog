@@ -7,7 +7,7 @@ export function Operational() {
 				<h1 className="text-2xl md:text-3xl font-medium">
 					Operacional
 				</h1>
-				<p>
+				<p className="text-sm">
 					Aqui você poderá consultar a programação do dia, gerenciar
 					os suprimentos e verificar avisos deixados pela gerência.
 				</p>

@@ -1,10 +1,9 @@
-export function formatCurrencyBR(valueInCents: number) {
-	if (typeof valueInCents !== "number" || isNaN(valueInCents)) {
-		throw new Error("O valor deve ser um número válido.");
-	}
+export function formatCurrencyBR(value: string | number): string {
+	const numericValue = String(value).replace(/[^0-9-]/g, "");
 
-	const valueInReais = valueInCents / 100;
-	return valueInReais.toLocaleString("pt-BR", {
+	const parsedValue = Number(numericValue) / 100;
+
+	return parsedValue.toLocaleString("pt-BR", {
 		style: "currency",
 		currency: "BRL",
 	});

@@ -36,4 +36,17 @@ export class InMemoryFinanceTransactionsRepository
 
 		return transactions;
 	}
+
+	async countByCompanyId(companyId: string) {
+		return this.items.filter(
+			(transaction) => transaction.companyId === companyId
+		).length;
+	}
+
+	async sumByTypeAndCompanyId(type: "INCOME" | "EXPENSE", companyId: string) {
+		return this.items
+			.filter((transaction) => transaction.type === type)
+			.filter((transaction) => transaction.companyId === companyId)
+			.reduce((acc, transaction) => acc + transaction.amountInCents, 0);
+	}
 }

@@ -25,4 +25,21 @@ export class PrismaFinanceTransactionsRepository
 
 		return transactions;
 	}
+
+	async countByCompanyId(companyId: string) {
+		const count = await prisma.financeTransaction.count({
+			where: { companyId },
+		});
+
+		return count;
+	}
+
+	async sumByTypeAndCompanyId(type: "INCOME" | "EXPENSE", companyId: string) {
+		const result = await prisma.financeTransaction.aggregate({
+			_sum: { amountInCents: true },
+			where: { type, companyId },
+		});
+
+		return result._sum.amountInCents || 0;
+	}
 }

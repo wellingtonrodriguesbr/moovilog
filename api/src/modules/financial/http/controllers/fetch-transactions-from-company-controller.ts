@@ -1,9 +1,9 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
+import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
 import { makeFetchTransactionsFromCompanyUseCase } from "@/modules/financial/use-cases/factories/make-fetch-transactions-from-company-use-case";
 
 import z from "zod";
-import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
 
 export class FetchTransactionsFromCompanyController {
 	static async handle(req: FastifyRequest, reply: FastifyReply) {

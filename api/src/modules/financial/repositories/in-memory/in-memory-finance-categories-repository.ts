@@ -28,4 +28,8 @@ export class InMemoryFinanceCategoriesRepository
 
 		return category;
 	}
+
+	async findMany() {
+		return this.items;
+	}
 }

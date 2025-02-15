@@ -1,6 +1,6 @@
 import { DriversRepository } from "@/modules/driver/repositories/drivers-repository";
 import { CompanyMembersRepository } from "@/modules/company-member/repositories/company-members-repository";
-import { IDriver, IDriverType } from "@/modules/shared/interfaces/driver";
+import { IDriver, IDriverType } from "@/modules/driver/interfaces/driver";
 import { DriverAlreadyExistsError } from "@/modules/driver/use-cases/errors/driver-already-exists-error";
 import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
 import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";

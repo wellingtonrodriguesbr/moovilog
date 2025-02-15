@@ -8,14 +8,13 @@ import { DriversRepository } from "@/modules/driver/repositories/drivers-reposit
 import { VehiclesRepository } from "@/modules/vehicle/repositories/vehicles-repository";
 import { RoutesRepository } from "@/modules/route/repositories/routes-repository";
 import { CompanyMembersRepository } from "@/modules/company-member/repositories/company-members-repository";
+import { FinanceTransactionsRepository } from "@/modules/financial/repositories/finance-transactions-repository";
+import { FinanceCategoriesRepository } from "@/modules/financial/repositories/finance-categories-repository";
 import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
 import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
 import { BadRequestError } from "@/modules/shared/errors/bad-request-error";
-import { transformToCents } from "@/utils/transform-to-cents";
 
 import dayjs from "dayjs";
-import { FinanceTransactionsRepository } from "@/modules/financial/repositories/finance-transactions-repository";
-import { FinanceCategoriesRepository } from "@/modules/financial/repositories/finance-categories-repository";
 
 interface RegisterFreightUseCaseRequest {
 	type: IFreightTypes;
@@ -104,9 +103,6 @@ export class RegisterFreightUseCase {
 			throw new BadRequestError("Invalid payment date");
 		}
 
-		const transformedFreightAmountInCents =
-			transformToCents(freightAmountInCents);
-
 		const freight = await this.freightsRepository.create({
 			date,
 			modality,
@@ -115,7 +111,7 @@ export class RegisterFreightUseCase {
 			deliveriesQuantity,
 			totalWeightOfPickups,
 			totalWeightOfDeliveries,
-			freightAmountInCents: transformedFreightAmountInCents,
+			freightAmountInCents,
 			observation,
 			driverId: driver.id,
 			creatorId: member.id,
@@ -124,15 +120,16 @@ export class RegisterFreightUseCase {
 			vehicleId: vehicle.id,
 		});
 
+		// Here it is stuck on this name, because until now, to register a freight, this is the ideal category. This may change in the future.
 		const financeCategory =
-			await this.financeCategoriesRepository.findByName("Frete");
+			await this.financeCategoriesRepository.findByName("Coletas e Entregas");
 
 		if (!financeCategory) {
 			throw new ResourceNotFoundError("Finance category not found");
 		}
 
 		await this.financeTransactionsRepository.create({
-			amountInCents: transformedFreightAmountInCents,
+			amountInCents: freightAmountInCents,
 			description: `Referente ao frete com o id: ${freight.id}`,
 			dueDate: paymentDate,
 			creatorId: member.id,

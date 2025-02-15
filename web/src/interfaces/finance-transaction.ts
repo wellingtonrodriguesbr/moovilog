@@ -7,7 +7,14 @@ export interface FinanceTransaction {
 	dueDate: Date | null;
 	type: "INCOME" | "EXPENSE";
 	status: "PENDING" | "PAID" | "OVERDUE";
-	paymentMethod: string | null;
+	paymentMethod:
+		| "PIX"
+		| "CREDIT_CARD"
+		| "DEBIT_CARD"
+		| "CASH"
+		| "BANK_TRANSFER"
+		| "OTHER"
+		| null;
 	createdAt: Date;
 	updatedAt: Date;
 	categoryId: string;

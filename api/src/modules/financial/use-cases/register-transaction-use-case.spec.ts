@@ -4,7 +4,7 @@ import { InMemoryCompaniesRepository } from "@/modules/company/repositories/in-m
 import { InMemoryUsersRepository } from "@/modules/user/repositories/in-memory/in-memory-users-repository";
 import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
 import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
-import { FetchTransactionsFromCompanyUseCase } from "@/modules/financial/use-cases/fetch-transactions-from-company-use-case";
+import { RegisterTransactionUseCase } from "@/modules/financial/use-cases/register-transaction-use-case";
 import { InMemoryFinanceTransactionsRepository } from "@/modules/financial/repositories/in-memory/in-memory-finance-transactions-repository";
 import { InMemoryFinanceCategoriesRepository } from "@/modules/financial/repositories/in-memory/in-memory-finance-categories-repository";
 
@@ -13,19 +13,20 @@ let companiesRepository: InMemoryCompaniesRepository;
 let companyMembersRepository: InMemoryCompanyMembersRepository;
 let financeTransactionsRepository: InMemoryFinanceTransactionsRepository;
 let financeCategoriesRepository: InMemoryFinanceCategoriesRepository;
-let sut: FetchTransactionsFromCompanyUseCase;
+let sut: RegisterTransactionUseCase;
 
-describe("[MODULE]: Fetch transactions from company use case", () => {
+describe("[MODULE]: Register transaction use case", () => {
 	beforeEach(async () => {
 		usersRepository = new InMemoryUsersRepository();
 		companiesRepository = new InMemoryCompaniesRepository();
 		companyMembersRepository = new InMemoryCompanyMembersRepository();
 		financeTransactionsRepository = new InMemoryFinanceTransactionsRepository();
 		financeCategoriesRepository = new InMemoryFinanceCategoriesRepository();
-		sut = new FetchTransactionsFromCompanyUseCase(
+		sut = new RegisterTransactionUseCase(
 			companyMembersRepository,
 			companiesRepository,
-			financeTransactionsRepository
+			financeTransactionsRepository,
+			financeCategoriesRepository
 		);
 
 		await usersRepository.create({
@@ -55,33 +56,36 @@ describe("[MODULE]: Fetch transactions from company use case", () => {
 			id: "category-id-01",
 			name: "Frete",
 		});
+	});
 
-		await financeTransactionsRepository.create({
-			id: "transaction-id-01",
-			amountInCents: 1000,
+	it("should be able to register a new transaction", async () => {
+		const { transaction } = await sut.execute({
+			amountInCents: 100000,
+			dueDate: new Date(),
 			status: "PAID",
 			type: "EXPENSE",
-			categoryId: "category-id-01",
-			creatorId: "company-member-id-01",
-			companyId: "company-id-01",
-		});
-	});
-
-	it("should be able to fetch transactions", async () => {
-		const { transactions } = await sut.execute({
-			userId: "john-doe-id-01",
+			paymentMethod: "PIX",
+			categoryName: "Frete",
+			creatorId: "john-doe-id-01",
 			companyId: "company-id-01",
 		});
 
-		expect(transactions).toHaveLength(1);
-		expect(transactions[0].id).toEqual(expect.any(String));
-		expect(transactions[0].type).toStrictEqual("EXPENSE");
+		expect(transaction.amountInCents).toStrictEqual(100000);
+		expect(transaction.categoryId).toStrictEqual("category-id-01");
+		expect(transaction.type).toStrictEqual("EXPENSE");
+		expect(transaction.creatorId).toStrictEqual("company-member-id-01");
 	});
 
-	it("should not be able to fetch transactions if the company member is not found", async () => {
+	it("should not be able to register a new transaction if the company member is not found", async () => {
 		await expect(() =>
 			sut.execute({
-				userId: "non-existent-user-id",
+				amountInCents: 100000,
+				dueDate: new Date(),
+				status: "PAID",
+				type: "EXPENSE",
+				paymentMethod: "PIX",
+				categoryName: "Frete",
+				creatorId: "unexistent-creator-id",
 				companyId: "company-id-01",
 			})
 		).rejects.toBeInstanceOf(ResourceNotFoundError);
@@ -90,8 +94,14 @@ describe("[MODULE]: Fetch transactions from company use case", () => {
 	it("should not be able to fetch transactions if the company is not found", async () => {
 		await expect(() =>
 			sut.execute({
-				userId: "john-doe-id-01",
-				companyId: "non-existent-company-id",
+				amountInCents: 100000,
+				dueDate: new Date(),
+				status: "PAID",
+				type: "EXPENSE",
+				paymentMethod: "PIX",
+				categoryName: "Frete",
+				creatorId: "john-doe-id-01",
+				companyId: "unexistent-company-id",
 			})
 		).rejects.toBeInstanceOf(ResourceNotFoundError);
 	});
@@ -114,7 +124,13 @@ describe("[MODULE]: Fetch transactions from company use case", () => {
 
 		await expect(() =>
 			sut.execute({
-				userId: "john-doe-id-02",
+				amountInCents: 100000,
+				dueDate: new Date(),
+				status: "PAID",
+				type: "EXPENSE",
+				paymentMethod: "PIX",
+				categoryName: "Frete",
+				creatorId: "john-doe-id-02",
 				companyId: "company-id-01",
 			})
 		).rejects.toBeInstanceOf(NotAllowedError);

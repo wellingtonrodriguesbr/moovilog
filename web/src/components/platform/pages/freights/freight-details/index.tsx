@@ -8,7 +8,7 @@ export function FreightDetails() {
 		<section>
 			<header className="flex flex-col items-start gap-12">
 				<Link
-					className="flex items-center gap-2 hover:underline text-sm group"
+					className="w-fit flex items-center gap-2 hover:underline text-sm group"
 					href="/fretes"
 				>
 					<ArrowLeft className="size-4 group-hover:-translate-x-0.5 transition-transform" />

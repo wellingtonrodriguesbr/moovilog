@@ -11,6 +11,7 @@ import {
 	DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { RegisterTransactionForm } from "@/components/platform/pages/financial/components/register-transaction-form";
 
 import { Plus } from "lucide-react";
 
@@ -29,7 +30,7 @@ export function RegisterTransactionDialog() {
 					Cadastrar transação
 				</Button>
 			</DialogTrigger>
-			<DialogContent className="rounded-md max-w-[350px] md:max-w-[600px]">
+			<DialogContent className="rounded-md max-w-[350px] md:max-w-[600px] max-h-[95vh] overflow-y-auto">
 				<DialogHeader>
 					<DialogTitle>Novo cadastro</DialogTitle>
 					<DialogDescription>
@@ -37,7 +38,7 @@ export function RegisterTransactionDialog() {
 						transação
 					</DialogDescription>
 				</DialogHeader>
-				{/* <RegisterDriverForm onCloseDialog={handleCloseDialog} /> */}
+				<RegisterTransactionForm onCloseDialog={handleCloseDialog} />
 			</DialogContent>
 		</Dialog>
 	);

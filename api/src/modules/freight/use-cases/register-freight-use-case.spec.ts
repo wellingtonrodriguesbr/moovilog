@@ -114,7 +114,7 @@ describe("[MODULE]: Register freight use case", () => {
 			pickupsQuantity: 5,
 			totalWeightOfDeliveries: 2400,
 			totalWeightOfPickups: 1000,
-			freightAmountInCents: 600,
+			freightAmountInCents: 60000,
 			modality: "DAILY",
 			userId: "john-doe-id-01",
 			driverId: "fake-driver-id-01",

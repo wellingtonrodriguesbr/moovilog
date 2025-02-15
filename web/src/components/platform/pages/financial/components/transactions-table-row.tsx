@@ -2,9 +2,9 @@ import { TransactionDropdownOptions } from "@/components/platform/pages/financia
 import { TableCell, TableRow } from "@/components/ui/table";
 import { CopyButton } from "@/components/platform/copy-button";
 import { Badge } from "@/components/ui/badge";
-import { formatCurrencyBR } from "@/utils/format-currency-br";
 import { formatBrazilianDate } from "@/utils/format-brazilian-date";
 import { FinanceTransaction } from "@/interfaces/finance-transaction";
+import { formatCurrencyBR } from "@/utils/format-currency-br";
 
 const TRANSACTION_TYPE: Record<string, string> = {
 	INCOME: "Entrada",

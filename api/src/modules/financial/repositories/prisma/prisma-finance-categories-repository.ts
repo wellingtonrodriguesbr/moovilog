@@ -22,4 +22,14 @@ export class PrismaFinanceCategoriesRepository
 
 		return category;
 	}
+
+	async findMany() {
+		const categories = await prisma.financeCategory.findMany({
+			orderBy: {
+				name: "asc",
+			},
+		});
+
+		return categories;
+	}
 }
