@@ -29,7 +29,12 @@ export function PercentageTransactionsCard({
 				<CardDescription className="text-zinc-600">
 					Porcentagem de lucro
 				</CardDescription>
-				<Activity className="size-8 absolute top-4 right-4" />
+				<Activity
+					data-financialHealth={financialHealth(
+						percentageTransactions
+					)}
+					className="size-8 absolute top-4 right-4 animate-pulse data-[financialHealth=Prejuízo]:text-rose-600 data-[financialHealth=Crítica]:text-orange-500 data-[financialHealth=Regular]:text-amber-400 data-[financialHealth=Boa]:text-app-blue-600 data-[financialHealth=Extraordinária]:text-emerald-600"
+				/>
 			</CardHeader>
 			<CardContent>
 				<p className="text-sm">
