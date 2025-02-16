@@ -6,7 +6,7 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { formatCurrencyBR } from "@/utils/format-currency-br";
-import { PiggyBank } from "lucide-react";
+import { Wallet } from "lucide-react";
 
 interface SummaryTransactionsAmountCardProps {
 	summaryTransactionsAmount: number;
@@ -22,9 +22,9 @@ export function SummaryTransactionsAmountCard({
 					{formatCurrencyBR(summaryTransactionsAmount)}
 				</CardTitle>
 				<CardDescription className="text-app-blue-600">
-					Valor restante em caixa
+					Saldo atual
 				</CardDescription>
-				<PiggyBank className="size-8 absolute top-4 right-4 text-app-blue-600" />
+				<Wallet className="size-8 absolute top-4 right-4 text-app-blue-600" />
 			</CardHeader>
 			<CardContent></CardContent>
 		</Card>

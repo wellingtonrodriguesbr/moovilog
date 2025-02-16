@@ -46,7 +46,7 @@ export function PercentageTransactionsCard({
 						className="data-[financialHealth=Prejuízo]:text-rose-600 data-[financialHealth=Crítica]:text-orange-500 data-[financialHealth=Regular]:text-amber-400 data-[financialHealth=Boa]:text-app-blue-600 data-[financialHealth=Extraordinária]:text-emerald-600"
 					>
 						{financialHealth(percentageTransactions)}.
-						<Tooltip>
+						<Tooltip delayDuration={0}>
 							<TooltipTrigger className="ml-1">
 								<Info className="size-5 fill-zinc-400 stroke-zinc-100" />
 							</TooltipTrigger>
@@ -54,23 +54,23 @@ export function PercentageTransactionsCard({
 								<ul className="text-sm space-y-2">
 									<li>
 										🏆 <strong>Extraordinária</strong>:
-										Acima de <strong>90%</strong>
+										Acima de <strong>30%</strong>
 									</li>
 									<li>
 										🟢 <strong>Ótima</strong>: Entre{" "}
-										<strong>80% e 90%</strong>
+										<strong>20% e 30%</strong>
 									</li>
 									<li>
 										🔵 <strong>Boa</strong>: Entre{" "}
-										<strong>50% e 79%</strong>
+										<strong>10% e 19%</strong>
 									</li>
 									<li>
 										🟡 <strong>Regular</strong>: Entre{" "}
-										<strong>20% e 49%</strong>
+										<strong>5% e 9%</strong>
 									</li>
 									<li>
 										🟠 <strong>Crítica</strong>: Entre{" "}
-										<strong>0% e 19%</strong>
+										<strong>0% e 4%</strong>
 									</li>
 									<li>
 										🔴 <strong>Prejuízo</strong>: Abaixo de{" "}

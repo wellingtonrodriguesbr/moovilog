@@ -1,46 +1,58 @@
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
+"use client";
+
+import { Skeleton } from "@/components/ui/skeleton";
+import { useGetFreightsSummaryFromCompany } from "@/hooks/freight/use-get-freights-summary-from-company";
+import { TotalFreightsCard } from "./total-freights-card";
+import { TotalDeliveriesCard } from "./total-deliveries-card";
+import { TotalPickupsCard } from "./total-pickups-card";
+import { TotalWeightPickupsCard } from "./total-weight-pickups-card";
+import { TotalWeightDeliveriesCard } from "./total-weight-deliveries-card";
+import { TotalFreightsAmountCard } from "./total-freights-amount-card";
 
 export function FreightsMetrics() {
+	const { summary, isGetFreightsSummaryPending } =
+		useGetFreightsSummaryFromCompany();
+
+	if (isGetFreightsSummaryPending) {
+		return (
+			<section className="w-full h-full flex flex-col gap-4">
+				<div className="grid gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-6">
+					<Skeleton className="h-48 w-full rounded-lg" />
+					<Skeleton className="h-48 w-full rounded-lg" />
+					<Skeleton className="h-48 w-full rounded-lg" />
+					<Skeleton className="h-48 w-full rounded-lg" />
+					<Skeleton className="h-48 w-full rounded-lg" />
+					<Skeleton className="h-48 w-full rounded-lg" />
+				</div>
+			</section>
+		);
+	}
+
 	return (
 		<section className="w-full h-full flex flex-col gap-4">
-			<div className="grid gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
-				<Card className="h-48 bg-app-blue-50">
-					<CardHeader>
-						<CardTitle className="flex items-center gap-2"></CardTitle>
-						<CardDescription className="text-zinc-600"></CardDescription>
-					</CardHeader>
-					<CardContent></CardContent>
-				</Card>
+			<div className="grid gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-6">
+				<TotalFreightsCard
+					totalFreights={summary?.totalFreights ?? 0}
+				/>
 
-				<Card className="h-48 bg-app-blue-50">
-					<CardHeader>
-						<CardTitle className="flex items-center gap-2"></CardTitle>
-						<CardDescription className="text-zinc-600"></CardDescription>
-					</CardHeader>
-					<CardContent></CardContent>
-				</Card>
+				<TotalDeliveriesCard
+					totalDeliveries={summary?.totalDeliveries ?? 0}
+				/>
 
-				<Card className="col-span-1 md:col-span-2 xl:col-span-1 h-48 bg-app-blue-50">
-					<CardHeader>
-						<CardTitle className="flex items-center gap-2"></CardTitle>
-						<CardDescription className="text-zinc-600"></CardDescription>
-					</CardHeader>
-					<CardContent></CardContent>
-				</Card>
+				<TotalWeightDeliveriesCard
+					totalWeightDeliveries={
+						summary?.totalWeightOfDeliveries ?? 0
+					}
+				/>
 
-				<Card className="col-span-1 md:col-span-2 xl:col-span-1 h-48 bg-app-blue-50">
-					<CardHeader>
-						<CardTitle className="flex items-center gap-2"></CardTitle>
-						<CardDescription className="text-zinc-600"></CardDescription>
-					</CardHeader>
-					<CardContent></CardContent>
-				</Card>
+				<TotalPickupsCard totalPickups={summary?.totalPickups ?? 0} />
+
+				<TotalWeightPickupsCard
+					totalWeightPickups={summary?.totalWeightOfPickups ?? 0}
+				/>
+				<TotalFreightsAmountCard
+					totalFreightsAmount={summary?.totalFreightsAmount ?? 0}
+				/>
 			</div>
 		</section>
 	);

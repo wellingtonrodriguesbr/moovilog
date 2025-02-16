@@ -41,6 +41,19 @@ export class PrismaRoutesRepository implements RoutesRepository {
 			where: {
 				companyId,
 			},
+			include: {
+				creator: {
+					include: {
+						user: {
+							select: {
+								id: true,
+								name: true,
+								email: true,
+							},
+						},
+					},
+				},
+			},
 		});
 
 		return routes;

@@ -10,7 +10,7 @@ export function Routes() {
 				<RegisterRouteDialog />
 			</header>
 			<div className="flex flex-col gap-12 mt-12">
-				<RoutesMetrics />
+				{/* <RoutesMetrics /> */}
 				<RoutesTable />
 			</div>
 		</section>

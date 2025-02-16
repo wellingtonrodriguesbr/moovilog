@@ -1,11 +1,25 @@
 import { api } from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 import { useCompanyStore } from "@/stores/company-store";
-import { Route } from "@/interfaces";
+import { CompanyMember, Route } from "@/interfaces";
+
+type SimplifiedUser = Omit<
+	CompanyMember["user"],
+	"phone" | "createdAt" | "updatedAt"
+>;
+
+interface SimplifiedCompanyMember extends Omit<CompanyMember, "user"> {
+	user: SimplifiedUser;
+}
+
+export interface ExtendedRoute extends Route {
+	creator: SimplifiedCompanyMember;
+}
 
 interface FetchRoutesFromCompanyResponse {
-	routes: Route[];
+	routes: ExtendedRoute[];
 }
+
 export function useFetchRoutesFromCompany() {
 	const { company } = useCompanyStore();
 	const { data: routes, isPending: isFetchRoutesFromCompanyPending } =

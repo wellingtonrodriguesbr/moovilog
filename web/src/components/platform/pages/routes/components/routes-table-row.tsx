@@ -4,10 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Ellipsis } from "lucide-react";
 import { formatBrazilianDate } from "@/utils/format-brazilian-date";
 import { ListCitiesFromRouteDropdown } from "@/components/platform/pages/routes/components/list-cities-from-route-dropdown";
-import { Route } from "@/interfaces";
+import { ExtendedRoute } from "@/hooks/route/use-fetch-routes-from-company";
 
 interface DriversTableRowProps {
-	route: Route;
+	route: ExtendedRoute;
 }
 
 export function RoutesTableRow({ route }: DriversTableRowProps) {
@@ -18,7 +18,9 @@ export function RoutesTableRow({ route }: DriversTableRowProps) {
 			<TableCell className="text-nowrap">
 				<ListCitiesFromRouteDropdown routeId={route.id} />
 			</TableCell>
-			<TableCell className="text-nowrap">{route.creatorId}</TableCell>
+			<TableCell className="text-nowrap">
+				{route.creator.user.name}
+			</TableCell>
 			<TableCell className="text-nowrap">
 				{formatBrazilianDate(route.createdAt)}
 			</TableCell>

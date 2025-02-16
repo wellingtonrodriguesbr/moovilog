@@ -1,8 +1,8 @@
 export function financialHealth(profitPercentage: number): string {
-	if (profitPercentage > 90) return "Extraordinária";
-	if (profitPercentage >= 80) return "Ótima";
-	if (profitPercentage >= 50) return "Boa";
-	if (profitPercentage >= 20) return "Regular";
-	if (profitPercentage >= 0) return "Crítica";
+	if (profitPercentage > 30) return "Extraordinária";
+	if (profitPercentage >= 30) return "Ótima";
+	if (profitPercentage >= 19) return "Boa";
+	if (profitPercentage >= 9) return "Regular";
+	if (profitPercentage >= 4) return "Crítica";
 	return "Prejuízo";
 }
