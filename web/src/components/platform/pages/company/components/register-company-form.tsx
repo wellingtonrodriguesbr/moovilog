@@ -36,7 +36,8 @@ const formSchema = z.object({
 	documentNumber: z
 		.string()
 		.min(14, { message: "Digite um CNPJ válido" })
-		.max(14, { message: "Digite um CNPJ válido" }),
+		.max(14, { message: "Digite um CNPJ válido" })
+		.transform((value) => value.replace(/\D/g, "")),
 	name: z.string().min(3, { message: "Digite seu nome completo" }),
 	size: z.enum(["MICRO", "SMALL", "MEDIUM", "BIG"]),
 	acceptTerms: z.boolean({ message: "Aceite os termos para prosseguir" }),
@@ -122,6 +123,7 @@ export function RegisterCompanyForm() {
 									<Input
 										className="border-0 rounded-none outline-none focus-visible:ring-0"
 										placeholder="00.000.000/0000-00"
+										maxLength={14}
 										autoComplete="off"
 										{...field}
 										onChange={({ currentTarget }) =>

@@ -126,6 +126,7 @@ export function RegisterCompanyAddressForm() {
 										placeholder="00000-000"
 										autoComplete="off"
 										autoCorrect="off"
+										maxLength={8}
 										{...field}
 										onChange={({ currentTarget }) =>
 											form.setValue(

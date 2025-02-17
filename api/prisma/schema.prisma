@@ -357,8 +357,8 @@ model FinanceTransaction {
   category   FinanceCategory @relation(fields: [categoryId], references: [id])
   companyId  String          @map("company_id")
   company    Company         @relation(fields: [companyId], references: [id])
-  creatorId  String          @map("creator_id")
-  creator    CompanyMember   @relation(fields: [creatorId], references: [id])
+  creatorId  String?         @map("creator_id")
+  creator    CompanyMember?  @relation(fields: [creatorId], references: [id], onDelete: SetNull)
 
   @@map("finance_transactions")
 }

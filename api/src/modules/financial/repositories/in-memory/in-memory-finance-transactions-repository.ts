@@ -19,7 +19,7 @@ export class InMemoryFinanceTransactionsRepository
 			paymentMethod: data.paymentMethod ?? null,
 			type: data.type,
 			categoryId: data.categoryId,
-			creatorId: data.creatorId,
+			creatorId: data.creatorId ?? null,
 			companyId: data.companyId,
 			createdAt: new Date(),
 			updatedAt: new Date(),

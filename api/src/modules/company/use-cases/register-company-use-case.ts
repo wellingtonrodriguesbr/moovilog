@@ -1,7 +1,7 @@
 import { CompaniesRepository } from "@/modules/company/repositories/companies-repository";
 import { UsersRepository } from "@/modules/user/repositories/users-repository";
 import { CompanyMembersRepository } from "@/modules/company-member/repositories/company-members-repository";
-import { ICompany, ICompanySizes } from "@/modules/shared/interfaces/company";
+import { ICompany, ICompanySizes } from "@/modules/company/interfaces/company";
 
 import { CompanyAlreadyExistsError } from "@/modules/company/use-cases/errors/company-already-exists-error";
 import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";

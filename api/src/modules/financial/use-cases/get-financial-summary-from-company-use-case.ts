@@ -64,14 +64,14 @@ export class GetFinancialSummaryFromCompanyUseCase {
 				companyId
 			);
 
-		const summary =
-			totalIncomeInCents > 0 ? totalIncomeInCents - totalExpenseInCents : 0;
+		const summary = totalIncomeInCents - totalExpenseInCents;
 
 		const percentage =
-			totalIncomeInCents > 0
-				? ((totalIncomeInCents - totalExpenseInCents) / totalIncomeInCents) *
-					100
-				: 0;
+			totalIncomeInCents !== 0
+				? (summary / totalIncomeInCents) * 100
+				: summary < 0
+					? -100
+					: 0;
 
 		return {
 			totalTransactions,

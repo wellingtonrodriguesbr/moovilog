@@ -36,10 +36,9 @@ const formSchema = z.object({
 	name: z.string().min(3, { message: "Digite o nome completo" }),
 	documentNumber: z
 		.string()
-		.min(11, { message: "Digite um CPF válido" })
-		.max(11, { message: "Digite um CPF válido" })
-		.transform((value) => value.replace(/\D/g, ""))
-		.transform((cpf) => cpf.slice(0, 11)),
+		.min(14, { message: "Digite um CPF válido" })
+		.max(14, { message: "Digite um CPF válido" })
+		.transform((value) => value.replace(/\D/g, "")),
 	phone: z
 		.string()
 		.min(11, { message: "Digite um telefone válido" })
@@ -60,8 +59,6 @@ export function RegisterDriverForm({ onCloseDialog }: RegisterDriverFormProps) {
 			type: undefined,
 		},
 	});
-
-	console.log(form.watch("documentNumber"));
 
 	async function onSubmit(registerData: z.infer<typeof formSchema>) {
 		try {
@@ -99,7 +96,14 @@ export function RegisterDriverForm({ onCloseDialog }: RegisterDriverFormProps) {
 										className="border-0 rounded-none outline-none focus-visible:ring-0"
 										placeholder="000.000.000-00"
 										autoComplete="off"
+										maxLength={14}
 										{...field}
+										onChange={({ currentTarget }) =>
+											form.setValue(
+												"documentNumber",
+												currentTarget.value
+											)
+										}
 										value={formatCPF(field.value)}
 									/>
 								</div>

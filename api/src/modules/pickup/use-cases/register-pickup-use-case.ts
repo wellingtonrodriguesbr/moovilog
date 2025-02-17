@@ -28,6 +28,11 @@ interface RegisterPickupUseCaseRequest {
 	collectedAt: Date;
 	scheduledDate: Date;
 	requestedAt: Date;
+	addressZipCode: number;
+	addressStreet: string;
+	addressNeighborhood: string;
+	addressNumber: number;
+	addressComplement?: string | null;
 	userId: string;
 	companyId: string;
 	assignedDriverId: string;
