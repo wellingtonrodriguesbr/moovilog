@@ -16,6 +16,7 @@ export const config = {
 		"/financeiro",
 		"/operacional/:path*",
 		"/fretes/:path*",
+		"/coletas/:path*",
 		"/rotas",
 		"/motoristas",
 		"/veiculos",
