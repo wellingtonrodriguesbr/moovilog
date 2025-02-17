@@ -4,6 +4,8 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
+		"build": "tsup src --out-dir build",
+    "start": "node build/http/server.js",
 		"dev": "tsx watch --env-file .env src/http/server.ts",
 		"email:dev": "email dev --dir src/mail",
 		"test": "vitest run --dir src",
@@ -28,6 +30,7 @@
 		"globals": "^15.9.0",
 		"prettier": "^3.3.3",
 		"prisma": "^5.15.0",
+		"tsup": "^8.3.6",
 		"tsx": "^4.15.4",
 		"typescript": "^5.4.5",
 		"typescript-eslint": "^8.6.0",
