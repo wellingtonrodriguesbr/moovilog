@@ -17,12 +17,12 @@ export function FreightsMetrics() {
 		return (
 			<section className="w-full h-full flex flex-col gap-4">
 				<div className="grid gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-6">
-					<Skeleton className="h-48 w-full rounded-lg" />
-					<Skeleton className="h-48 w-full rounded-lg" />
-					<Skeleton className="h-48 w-full rounded-lg" />
-					<Skeleton className="h-48 w-full rounded-lg" />
-					<Skeleton className="h-48 w-full rounded-lg" />
-					<Skeleton className="h-48 w-full rounded-lg" />
+					<Skeleton className="h-36 w-full rounded-lg" />
+					<Skeleton className="h-36 w-full rounded-lg" />
+					<Skeleton className="h-36 w-full rounded-lg" />
+					<Skeleton className="h-36 w-full rounded-lg" />
+					<Skeleton className="h-36 w-full rounded-lg" />
+					<Skeleton className="h-36 w-full rounded-lg" />
 				</div>
 			</section>
 		);

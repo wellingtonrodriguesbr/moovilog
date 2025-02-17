@@ -19,6 +19,7 @@ const SidebarContext = createContext({} as SidebarContextData);
 
 export default function SidebarProvider({ children }: { children: ReactNode }) {
 	const path = usePathname();
+	const isZoomLevel = window.devicePixelRatio > 1;
 
 	const { width } = useWindowSize();
 	const [isOpen, setIsOpen] = useState(false);
@@ -28,12 +29,12 @@ export default function SidebarProvider({ children }: { children: ReactNode }) {
 	}
 
 	useEffect(() => {
-		if (width >= 720 && !path?.includes("/cadastro")) {
+		if (width >= 720 && !path?.includes("/cadastro") && !isZoomLevel) {
 			setIsOpen(true);
 		} else {
 			setIsOpen(false);
 		}
-	}, [path, width]);
+	}, [path, width, isZoomLevel]);
 
 	return (
 		<SidebarContext.Provider value={{ isOpen, handleOpenAndCloseSidebar }}>
