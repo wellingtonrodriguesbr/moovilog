@@ -28,7 +28,7 @@ api.interceptors.response.use(
 		}
 
 		if (originalRequest.url === "/token/refresh") {
-			window.location.href = "/entrar/empresa";
+			window.location.href = "/entrar";
 			localStorage.removeItem("accessToken");
 			return Promise.reject(error);
 		}
