@@ -44,6 +44,7 @@ model Company {
   vehicles            Vehicle[]
   companyStatesAreas  CompanyStateArea[]
   financeTransactions FinanceTransaction[]
+  Pickup              Pickup[]
 
   @@map("companies")
 }
@@ -83,6 +84,7 @@ model CompanyMember {
   vehicles            Vehicle[]
   routes              Route[]
   financeTransactions FinanceTransaction[]
+  pickups             Pickup[]
 
   @@unique([companyId, userId])
   @@map("company_members")
@@ -107,7 +109,9 @@ model Driver {
   addressId String?  @map("address_id")
   address   Address? @relation(fields: [addressId], references: [id], onDelete: Cascade)
 
-  freights Freight[]
+  freights      Freight[]
+  Pickup        Pickup[]
+  PickupHistory PickupHistory[]
 
   @@unique([documentNumber, companyId])
   @@map("drivers")
@@ -160,8 +164,8 @@ model Freight {
   vehicleId String  @map("vehicle_id")
   vehicle   Vehicle @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
 
-  creatorId String        @map("creator_id")
-  creator   CompanyMember @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  creatorId String?        @map("creator_id")
+  creator   CompanyMember? @relation(fields: [creatorId], references: [id], onDelete: SetNull)
 
   companyId String  @map("company_id")
   company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
@@ -169,11 +173,69 @@ model Freight {
   routeId String? @map("route_id")
   route   Route?  @relation(fields: [routeId], references: [id])
 
-  cityId String? @map("city_id")
-  city   City?   @relation(fields: [cityId], references: [id])
+  cityId String?  @map("city_id")
+  city   City?    @relation(fields: [cityId], references: [id])
+  Pickup Pickup[]
 
   @@index([date])
   @@map("freights")
+}
+
+model Pickup {
+  id              String           @id @default(uuid())
+  pickupNumber    String           @unique @map("pickup_number")
+  senderName      String           @map("sender_name")
+  recipientName   String           @map("recipient_name")
+  weight          Decimal          @db.Decimal(10, 2)
+  volumeQuantity  Int              @map("volume_quantity")
+  cubage          Decimal?         @db.Decimal(10, 2)
+  status          PickupStatus     @default(PENDING)
+  priority        PickupPriority   @default(NORMAL)
+  observation     String?
+  nonPickupReason NonPickupReason? @map("non_pickup_reason")
+  requestedAt     DateTime         @default(now()) @map("requested_at")
+  scheduledDate   DateTime         @map("scheduled_date")
+  collectedAt     DateTime?        @map("collected_at")
+  createdAt       DateTime         @default(now()) @map("created_at")
+  updatedAt       DateTime         @updatedAt @map("last_updated_at")
+
+  freightId String?  @map("freight_id")
+  freight   Freight? @relation(fields: [freightId], references: [id], onDelete: SetNull)
+
+  companyId String  @map("company_id")
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  creatorId String?        @map("creator_id")
+  creator   CompanyMember? @relation(fields: [creatorId], references: [id], onDelete: SetNull)
+
+  assignedDriverId String? @map("assigned_driver_id")
+  assignedDriver   Driver? @relation(fields: [assignedDriverId], references: [id], onDelete: SetNull)
+
+  addressId     String  @map("address_id")
+  pickupAddress Address @relation(fields: [addressId], references: [id])
+
+  pickupHistories PickupHistory[]
+
+  @@index([pickupNumber])
+  @@index([status])
+  @@map("pickups")
+}
+
+model PickupHistory {
+  id              String           @id @default(uuid())
+  status          PickupStatus     @map("status")
+  nonPickupReason NonPickupReason? @map("non_pickup_reason")
+  attemptDate     DateTime         @default(now()) @map("attempt_date")
+  observation     String?          @map("observation")
+
+  pickupId String @map("pickup_id")
+  pickup   Pickup @relation(fields: [pickupId], references: [id], onDelete: Cascade)
+
+  driverId String? @map("driver_id")
+  driver   Driver? @relation(fields: [driverId], references: [id], onDelete: SetNull)
+
+  @@index([pickupId])
+  @@map("pickup_histories")
 }
 
 model Route {
@@ -263,6 +325,7 @@ model Address {
 
   companies Company[]
   drivers   Driver[]
+  pickups   Pickup[]
 
   @@map("addresses")
 }
@@ -376,6 +439,27 @@ enum FreightModality {
   TIME_BASED
   PER_STOP
   ZONE_BASED
+}
+
+enum PickupStatus {
+  PENDING
+  IN_ROUTE
+  COLLECTED
+  CANCELED
+}
+
+enum PickupPriority {
+  NORMAL
+  URGENT
+}
+
+enum NonPickupReason {
+  CUSTOMER_ABSENT
+  WRONG_ADDRESS
+  ACCESS_RESTRICTED
+  REFUSED_BY_CUSTOMER
+  WEATHER_CONDITIONS
+  OTHER
 }
 
 enum AccountStatus {

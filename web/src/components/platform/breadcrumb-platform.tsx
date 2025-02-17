@@ -39,11 +39,22 @@ export function BreadcrumbPlatform() {
 				{paths?.map((segment, index) => {
 					const accumulatedPath = `/${paths?.slice(0, index + 1).join("/")}`;
 					const isLast = index === paths?.length - 1;
-					const breadcrumbLabel =
+					let breadcrumbLabel =
+						ROUTES_MAP[accumulatedPath] || segment;
+
+					if (
+						path !== "/coletas" &&
+						!path.includes("novo") &&
+						accumulatedPath.endsWith("/coletas")
+					) {
+						breadcrumbLabel = "Adicionar coleta";
+					} else if (
 						accumulatedPath.startsWith("/fretes/") &&
-						!ROUTES_MAP[accumulatedPath]
-							? "Detalhes do frete"
-							: ROUTES_MAP[accumulatedPath] || segment;
+						!ROUTES_MAP[accumulatedPath] &&
+						!paths.includes("coletas")
+					) {
+						breadcrumbLabel = "Detalhes do frete";
+					}
 
 					return (
 						<React.Fragment key={accumulatedPath}>

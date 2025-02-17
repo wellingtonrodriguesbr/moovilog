@@ -102,8 +102,8 @@ export function RegisterFreightForm() {
 
 	async function onSubmit(registerData: z.infer<typeof formSchema>) {
 		try {
-			await registerFreight({ ...registerData });
-			router.push("/fretes");
+			const freight = await registerFreight({ ...registerData });
+			router.push(`/fretes/${freight.id}/coletas`);
 			toast.success("Frete cadastrado com sucesso");
 		} catch (error) {
 			if (error instanceof AxiosError) {
@@ -155,47 +155,6 @@ export function RegisterFreightForm() {
 							</FormItem>
 						)}
 					/>
-
-					<FormField
-						control={form.control}
-						name="pickupsQuantity"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>
-									Quantidade de coletas (Opcional)
-								</FormLabel>
-								<FormControl>
-									<Input
-										{...field}
-										value={field.value ?? undefined}
-									/>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-
-					<FormField
-						control={form.control}
-						name="totalWeightOfPickups"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>
-									Peso total de coletas (Opcional)
-								</FormLabel>
-								<FormControl>
-									<Input
-										{...field}
-										value={formatWeight(field.value ?? "")}
-									/>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-				</fieldset>
-
-				<fieldset className="grid grid-cols-1 xl:grid-cols-2 gap-4">
 					<FormField
 						control={form.control}
 						name="driverId"

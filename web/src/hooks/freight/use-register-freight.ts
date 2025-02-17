@@ -49,7 +49,7 @@ export function useRegisterFreight() {
 		const { data } = await api.post<RegisterFreightResponse>("/freights", {
 			...registerData,
 		});
-		return data;
+		return data.freight;
 	}
 
 	return { registerFreight, isPendingRegisterFreight };

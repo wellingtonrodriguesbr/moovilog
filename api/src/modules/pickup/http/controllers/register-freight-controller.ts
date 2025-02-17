@@ -49,6 +49,8 @@ export class RegisterFreightController {
 			routeId,
 		} = registerFreightBodySchema.parse(req.body);
 
+		console.log(date);
+
 		const userId = req.user.sub;
 
 		try {
