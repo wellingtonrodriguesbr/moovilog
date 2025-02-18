@@ -20,12 +20,12 @@ export function FinancialSummaryMetrics() {
 	if (isGetFinancialSummaryFromCompanyPending) {
 		return (
 			<section className="w-full h-full flex flex-col gap-4">
-				<div className="grid gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-5">
-					<Skeleton className="h-48 w-full rounded-lg" />
-					<Skeleton className="h-48 w-full rounded-lg" />
-					<Skeleton className="h-48 w-full rounded-lg" />
-					<Skeleton className="h-48 w-full rounded-lg" />
-					<Skeleton className="h-48 w-full rounded-lg" />
+				<div className="w-full grid grid-cols-5 gap-4 overflow-hidden">
+					<Skeleton className="w-[250px] md:w-full h-48 rounded-lg" />
+					<Skeleton className="w-[250px] md:w-full h-48 rounded-lg" />
+					<Skeleton className="w-[250px] md:w-full h-48 rounded-lg" />
+					<Skeleton className="w-[250px] md:w-full h-48 rounded-lg" />
+					<Skeleton className="w-[250px] md:w-full h-48 rounded-lg" />
 				</div>
 			</section>
 		);
