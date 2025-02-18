@@ -30,7 +30,7 @@ export function RegisterTransactionDialog() {
 					Cadastrar transação
 				</Button>
 			</DialogTrigger>
-			<DialogContent className="rounded-md max-w-[350px] md:max-w-[600px] max-h-[95vh] overflow-y-auto">
+			<DialogContent className="rounded-md max-w-[350px] md:max-w-[600px] max-h-[80vh] overflow-y-auto">
 				<DialogHeader>
 					<DialogTitle>Novo cadastro</DialogTitle>
 					<DialogDescription>

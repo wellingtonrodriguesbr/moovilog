@@ -30,7 +30,7 @@ export function RegisterVehicleDialog() {
 					Cadastrar veículo
 				</Button>
 			</DialogTrigger>
-			<DialogContent className="rounded-md max-w-[350px] overflow-auto max-h-[95vh] md:max-h-auto md:max-w-[600px]">
+			<DialogContent className="rounded-md max-w-[350px] overflow-auto max-h-[80vh] md:max-h-auto md:max-w-[600px]">
 				<DialogHeader>
 					<DialogTitle>Novo cadastro de veículo</DialogTitle>
 					<DialogDescription>
