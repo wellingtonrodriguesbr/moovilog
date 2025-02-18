@@ -16,7 +16,7 @@ export function TotalFreightsAmountCard({
 	totalFreightsAmount,
 }: TotalFreightsAmountCardProps) {
 	return (
-		<Card className="bg-app-blue-500 relative">
+		<Card className="h-full bg-app-blue-500 relative">
 			<CardHeader>
 				<CardTitle className="flex items-center gap-2 text-2xl text-zinc-50">
 					{formatCurrencyBR(totalFreightsAmount)}

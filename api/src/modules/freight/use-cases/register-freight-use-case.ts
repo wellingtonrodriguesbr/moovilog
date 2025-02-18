@@ -4,6 +4,7 @@ import {
 	IFreightTypes,
 } from "@/modules/freight/interfaces/freight";
 import { FreightsRepository } from "@/modules/freight/repositories/freights-repository";
+import { FreightTransactionsRepository } from "@/modules/financial/repositories/freight-transactions-repository";
 import { DriversRepository } from "@/modules/driver/repositories/drivers-repository";
 import { VehiclesRepository } from "@/modules/vehicle/repositories/vehicles-repository";
 import { RoutesRepository } from "@/modules/route/repositories/routes-repository";
@@ -45,6 +46,7 @@ export class RegisterFreightUseCase {
 		private driversRepository: DriversRepository,
 		private vehiclesRepository: VehiclesRepository,
 		private freightsRepository: FreightsRepository,
+		private freightTransactionsRepository: FreightTransactionsRepository,
 		private routesRepository: RoutesRepository,
 		private financeTransactionsRepository: FinanceTransactionsRepository,
 		private financeCategoriesRepository: FinanceCategoriesRepository
@@ -128,9 +130,9 @@ export class RegisterFreightUseCase {
 			throw new ResourceNotFoundError("Finance category not found");
 		}
 
-		await this.financeTransactionsRepository.create({
+		const financeTransaction = await this.financeTransactionsRepository.create({
 			amountInCents: freightAmountInCents,
-			description: `Referente ao frete com o id: ${freight.id}`,
+			description: `Referente ao frete com o id: ${freight.id}, porgramado para o dia ${date} na rota ${route.name}.`,
 			dueDate: paymentDate,
 			creatorId: member.id,
 			categoryId: financeCategory.id,
@@ -138,6 +140,11 @@ export class RegisterFreightUseCase {
 			status: "PENDING",
 			type: "EXPENSE",
 			paymentMethod: "PIX",
+		});
+
+		await this.freightTransactionsRepository.create({
+			freightId: freight.id,
+			financeTransactionId: financeTransaction.id,
 		});
 
 		return { freight };

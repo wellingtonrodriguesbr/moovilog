@@ -35,7 +35,7 @@ model Company {
   owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade, name: "user_company_owner")
 
   addressId String?  @unique @map("address_id")
-  address   Address? @relation(fields: [addressId], references: [id], onDelete: Cascade)
+  address   Address? @relation(fields: [addressId], references: [id])
 
   companyMembers      CompanyMember[]
   drivers             Driver[]
@@ -173,9 +173,11 @@ model Freight {
   routeId String? @map("route_id")
   route   Route?  @relation(fields: [routeId], references: [id])
 
-  cityId String?  @map("city_id")
-  city   City?    @relation(fields: [cityId], references: [id])
-  Pickup Pickup[]
+  cityId String? @map("city_id")
+  city   City?   @relation(fields: [cityId], references: [id])
+
+  pickups             Pickup[]
+  freightTransactions FreightTransaction[]
 
   @@index([date])
   @@map("freights")
@@ -214,7 +216,8 @@ model Pickup {
   addressId     String  @map("address_id")
   pickupAddress Address @relation(fields: [addressId], references: [id])
 
-  pickupHistories PickupHistory[]
+  pickupHistories    PickupHistory[]
+  pickupTransactions PickupTransaction[]
 
   @@index([pickupNumber])
   @@index([status])
@@ -360,7 +363,38 @@ model FinanceTransaction {
   creatorId  String?         @map("creator_id")
   creator    CompanyMember?  @relation(fields: [creatorId], references: [id], onDelete: SetNull)
 
+  freightTransactions FreightTransaction[]
+  pickupTransactions  PickupTransaction[]
+
   @@map("finance_transactions")
+}
+
+model FreightTransaction {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  freightId String  @map("freight_id")
+  freight   Freight @relation(fields: [freightId], references: [id], onDelete: Cascade)
+
+  financeTransactionId String             @map("finance_transaction_id")
+  financeTransaction   FinanceTransaction @relation(fields: [financeTransactionId], references: [id], onDelete: Cascade)
+
+  @@map("freight_transactions")
+}
+
+model PickupTransaction {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  pickupId String @map("pickup_id")
+  pickup   Pickup @relation(fields: [pickupId], references: [id], onDelete: Cascade)
+
+  financeTransactionId String             @map("finance_transaction_id")
+  financeTransaction   FinanceTransaction @relation(fields: [financeTransactionId], references: [id], onDelete: Cascade)
+
+  @@map("pickup_transactions")
 }
 
 model FinanceCategory {

@@ -22,7 +22,7 @@ export class InMemoryFreightsRepository implements FreightsRepository {
 			),
 			freightAmountInCents: data.freightAmountInCents,
 			observation: data.observation || null,
-			creatorId: data.creatorId,
+			creatorId: data.creatorId || null,
 			driverId: data.driverId,
 			companyId: data.companyId,
 			routeId: data.routeId || null,

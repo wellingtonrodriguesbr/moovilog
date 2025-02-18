@@ -13,7 +13,7 @@ interface TotalFreightsCardProps {
 
 export function TotalFreightsCard({ totalFreights }: TotalFreightsCardProps) {
 	return (
-		<Card className="bg-zinc-100 relative">
+		<Card className="h-full bg-zinc-100 relative">
 			<CardHeader>
 				<CardTitle className="flex items-center gap-2 text-4xl">
 					{totalFreights}

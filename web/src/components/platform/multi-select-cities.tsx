@@ -247,14 +247,14 @@ export const MultiSelectCities = React.forwardRef<
 								>
 									<div
 										className={cn(
-											"mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+											"mr-2 flex p-0.5 items-center justify-center rounded-md border",
 											selectedValues.length ===
 												options.length
-												? "bg-primary text-primary-foreground"
+												? "bg-app-blue-500 text-primary-foreground"
 												: "opacity-50 [&_svg]:invisible"
 										)}
 									>
-										<CheckIcon className="size-4 text-app-blue-500" />
+										<CheckIcon className="size-4 text-white" />
 									</div>
 									<span>(Selecionar Todos)</span>
 								</CommandItem>
@@ -272,13 +272,13 @@ export const MultiSelectCities = React.forwardRef<
 										>
 											<div
 												className={cn(
-													"mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+													"mr-2 flex p-0.5 items-center justify-center rounded-md border",
 													isSelected
-														? "bg-primary text-primary-foreground"
+														? "bg-app-blue-500 text-primary-foreground"
 														: "opacity-50 [&_svg]:invisible"
 												)}
 											>
-												<CheckIcon className="size-4 text-app-blue-500" />
+												<CheckIcon className="size-4 text-white" />
 											</div>
 											<span>{option.name}</span>
 										</CommandItem>

@@ -13,7 +13,7 @@ interface TotalPickupsCardProps {
 
 export function TotalPickupsCard({ totalPickups }: TotalPickupsCardProps) {
 	return (
-		<Card className="bg-app-blue-200 relative">
+		<Card className="h-full bg-app-blue-200 relative">
 			<CardHeader>
 				<CardTitle className="flex items-center gap-2 text-3xl text-app-blue-700">
 					{totalPickups}

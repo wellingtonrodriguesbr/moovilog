@@ -11,6 +11,7 @@ import { BadRequestError } from "@/modules/shared/errors/bad-request-error";
 import { RegisterFreightUseCase } from "@/modules/freight/use-cases/register-freight-use-case";
 import { InMemoryFinanceTransactionsRepository } from "@/modules/financial/repositories/in-memory/in-memory-finance-transactions-repository";
 import { InMemoryFinanceCategoriesRepository } from "@/modules/financial/repositories/in-memory/in-memory-finance-categories-repository";
+import { InMemoryFreightTransactionsRepository } from "@/modules/financial/repositories/in-memory/in-memory-freight-transactions-repository";
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
@@ -18,6 +19,7 @@ let companyMembersRepository: InMemoryCompanyMembersRepository;
 let driversRepository: InMemoryDriversRepository;
 let vehiclesRepository: InMemoryVehiclesRepository;
 let freightsRepository: InMemoryFreightsRepository;
+let freightTransactionsRepository: InMemoryFreightTransactionsRepository;
 let routesRepository: InMemoryRoutesRepository;
 let financeTransactionsRepository: InMemoryFinanceTransactionsRepository;
 let financeCategoriesRepository: InMemoryFinanceCategoriesRepository;
@@ -31,6 +33,7 @@ describe("[MODULE]: Register freight use case", () => {
 		companyMembersRepository = new InMemoryCompanyMembersRepository();
 		driversRepository = new InMemoryDriversRepository();
 		freightsRepository = new InMemoryFreightsRepository();
+		freightTransactionsRepository = new InMemoryFreightTransactionsRepository();
 		routesRepository = new InMemoryRoutesRepository();
 		financeTransactionsRepository = new InMemoryFinanceTransactionsRepository();
 		financeCategoriesRepository = new InMemoryFinanceCategoriesRepository();
@@ -40,6 +43,7 @@ describe("[MODULE]: Register freight use case", () => {
 			driversRepository,
 			vehiclesRepository,
 			freightsRepository,
+			freightTransactionsRepository,
 			routesRepository,
 			financeTransactionsRepository,
 			financeCategoriesRepository
@@ -101,7 +105,7 @@ describe("[MODULE]: Register freight use case", () => {
 
 		await financeCategoriesRepository.create({
 			id: "fake-finance-category-id-01",
-			name: "Frete",
+			name: "Coletas e Entregas",
 		});
 	});
 
@@ -129,6 +133,7 @@ describe("[MODULE]: Register freight use case", () => {
 		expect(financeTransactionsRepository.items[0].paymentMethod).toStrictEqual(
 			"PIX"
 		);
+		expect(freightTransactionsRepository.items).toHaveLength(1);
 	});
 
 	it("not should be able to register a freight with the a creator role that is different between operational, manager or admin", async () => {

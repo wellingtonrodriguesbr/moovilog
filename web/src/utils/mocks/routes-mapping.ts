@@ -1,6 +1,7 @@
 export const ROUTES_MAP: Record<string, string> = {
 	"/inicio": "Início",
 	"/financeiro": "Financeiro",
+	"/financeiro/fechamento": "Fechamento financeiro",
 	"/operacional": "Operacional",
 	"/operacional/programacao-do-dia": "Programação do dia",
 	"/operacional/recursos-e-suprimentos": "Recursos e Suprimentos",

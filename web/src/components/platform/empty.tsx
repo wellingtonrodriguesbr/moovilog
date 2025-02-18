@@ -40,7 +40,7 @@ export function Empty({ context }: EmptyProps) {
 					style={{ objectFit: "contain" }}
 				/>
 			</div>
-			<h6 className="text-2xl text-app-blue-900">
+			<h6 className="text-center text-2xl text-app-blue-900">
 				Nenhum dado encontrado!
 			</h6>
 			<p className="text-center max-w-full md:max-w-sm">

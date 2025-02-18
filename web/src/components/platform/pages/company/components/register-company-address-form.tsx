@@ -27,7 +27,10 @@ const formSchema = z.object({
 	zipCode: z.coerce
 		.string()
 		.min(8, { message: "Digite um CEP válido" })
-		.max(8, { message: "Digite um CEP válido" }),
+		.max(8, { message: "Digite um CEP válido" })
+		.transform((value) => {
+			return value.replace(/\D/g, "");
+		}),
 	street: z.string().min(3, { message: "Campo obrigatório" }),
 	neighborhood: z.string().min(5, { message: "Campo obrigatório" }),
 	number: z.string().min(1, { message: "Campo obrigatório" }),
@@ -55,6 +58,8 @@ export function RegisterCompanyAddressForm() {
 	});
 
 	const zipCode = form.watch("zipCode");
+
+	console.log(zipCode);
 
 	const { data, isPendingGetCompanyAddress, status } =
 		useGetCompanyAddressByZipCode({
@@ -126,12 +131,15 @@ export function RegisterCompanyAddressForm() {
 										placeholder="00000-000"
 										autoComplete="off"
 										autoCorrect="off"
-										maxLength={8}
+										maxLength={9}
 										{...field}
 										onChange={({ currentTarget }) =>
 											form.setValue(
 												"zipCode",
-												currentTarget.value
+												currentTarget.value.replace(
+													/\D/g,
+													""
+												)
 											)
 										}
 										value={formatCEP(field.value)}

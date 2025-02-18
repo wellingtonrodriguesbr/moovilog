@@ -30,7 +30,7 @@ export function useGetCompanyAddressByZipCode({
 	const [debouncedValue, setDebouncedValue] = useState("");
 
 	const { data, isPending, status } = useQuery({
-		queryKey: ["get-company-address", zipCode],
+		queryKey: ["get-company-address", debouncedValue],
 		queryFn: () => handleValidZipCode({ zipCode }),
 		enabled: !!isReady() && !!debouncedValue.length,
 	});
