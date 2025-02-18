@@ -84,7 +84,9 @@ export function RegisterCompanyForm() {
 					error.response.data.message ===
 						"A company already exists with this document number"
 				) {
-					toast.error("Já existe uma empresa com este CNPJ");
+					toast.error(
+						"Já existe uma empresa cadastrada com este CNPJ"
+					);
 				} else if (
 					error.response?.status === 409 &&
 					error.response.data.message ===
