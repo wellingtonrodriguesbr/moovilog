@@ -209,14 +209,8 @@ export function RegisterRouteForm({ onCloseDialog }: RegisterRouteFormProps) {
 					/>
 				</fieldset>
 
-				<fieldset className="flex justify-end gap-4 mt-6">
+				<fieldset className="flex justify-end gap-2 mt-6">
 					<Button
-						disabled={
-							isFetchStatesAreasFromCompanyPending ||
-							isFetchCitiesByAreaPending ||
-							!form.watch("citiesIds").length ||
-							isPendingRegisterNewRoute
-						}
 						onClick={onCloseDialog}
 						type="button"
 						variant="destructive-outline"

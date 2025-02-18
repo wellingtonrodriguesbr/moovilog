@@ -78,7 +78,7 @@ export class GetFinancialSummaryFromCompanyUseCase {
 			totalIncomeInCents,
 			totalExpenseInCents,
 			summary,
-			percentage: Math.round(percentage),
+			percentage: Number(percentage.toFixed(2)),
 		};
 	}
 }

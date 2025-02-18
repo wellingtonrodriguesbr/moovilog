@@ -191,7 +191,7 @@ export function RegisterNewCollaboratorForm({
 					)}
 				/>
 
-				<fieldset className="flex justify-end gap-4 mt-6">
+				<fieldset className="flex justify-end gap-2 mt-6">
 					<Button
 						disabled={isPendingSendInvitationToCompanyMember}
 						onClick={onCloseDialog}
@@ -207,10 +207,7 @@ export function RegisterNewCollaboratorForm({
 						{isPendingSendInvitationToCompanyMember ? (
 							<Loader2 className="size-4 animate-spin" />
 						) : (
-							<>
-								Enviar convite
-								<Send className="size-4" />
-							</>
+							"Enviar convite"
 						)}
 					</Button>
 				</fieldset>

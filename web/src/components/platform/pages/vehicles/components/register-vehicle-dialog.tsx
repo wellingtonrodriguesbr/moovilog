@@ -11,7 +11,7 @@ import {
 	DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { RegisterVehicleForm } from "./register-vehicle-form";
+import { RegisterVehicleForm } from "@/components/platform/pages/vehicles/components/register-vehicle-form";
 
 import { Plus } from "lucide-react";
 

@@ -33,8 +33,11 @@ interface RegisterDriverFormProps {
 }
 
 const formSchema = z.object({
-	plate: z.string(),
-	trailerPlate: z.string().optional().nullable(),
+	plate: z.string({ message: "Digite a placa do veículo" }),
+	trailerPlate: z
+		.string({ message: "Digite a placa do reboque" })
+		.optional()
+		.nullable(),
 	year: z
 		.string()
 		.transform((value) => value.replace(/\D/g, ""))
@@ -351,7 +354,7 @@ export function RegisterVehicleForm({
 					)}
 				/>
 
-				<fieldset className="flex justify-end gap-4 mt-6">
+				<fieldset className="flex justify-end gap-2 mt-6">
 					<Button
 						disabled={isPendingRegisterVehicle}
 						onClick={onCloseDialog}

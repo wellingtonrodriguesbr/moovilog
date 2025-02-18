@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function RegisterNewFreightPagePlatform() {
 	return (
-		<main className="w-full max-w-screen-lg mx-auto p-4 md:p-6">
+		<main className="w-full xl:max-w-screen-lg mx-auto p-0 md:p-6">
 			<RegisterFreight />
 		</main>
 	);

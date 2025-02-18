@@ -298,7 +298,7 @@ export function RegisterTransactionForm({
 					)}
 				/>
 
-				<fieldset className="flex gap-4 justify-end mt-6">
+				<fieldset className="flex gap-2 justify-end mt-6">
 					<Button
 						type="button"
 						variant="destructive-outline"

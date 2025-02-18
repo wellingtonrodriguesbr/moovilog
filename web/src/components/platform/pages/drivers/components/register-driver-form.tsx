@@ -175,7 +175,7 @@ export function RegisterDriverForm({ onCloseDialog }: RegisterDriverFormProps) {
 					)}
 				/>
 
-				<fieldset className="flex justify-end gap-4 mt-6">
+				<fieldset className="flex justify-end gap-2 mt-6">
 					<Button
 						disabled={isPendingRegisterDriver}
 						onClick={onCloseDialog}

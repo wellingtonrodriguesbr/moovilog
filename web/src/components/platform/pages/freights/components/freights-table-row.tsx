@@ -1,10 +1,10 @@
 import { TableCell, TableRow } from "@/components/ui/table";
 
-import { Freight } from "@/interfaces";
 import { formatBrazilianDate } from "@/utils/format-brazilian-date";
 import { formatWeight } from "@/utils/format-weight";
 
 import { FreightDropdownOptions } from "./freight-dropdown-options";
+import { ExtendedFreight } from "@/hooks/freight/use-fetch-freights-from-company";
 
 const FREIGHT_MODALITY: Record<string, string> = {
 	DAILY: "Diária",
@@ -26,7 +26,7 @@ const FREIGHT_TYPE: Record<string, string> = {
 };
 
 interface FreightsTableRowProps {
-	freight: Freight;
+	freight: ExtendedFreight;
 }
 
 export function FreightsTableRow({ freight }: FreightsTableRowProps) {
@@ -41,13 +41,9 @@ export function FreightsTableRow({ freight }: FreightsTableRowProps) {
 			<TableCell className="text-nowrap">
 				{formatWeight(freight.totalWeightOfDeliveries)}kg
 			</TableCell>
+			<TableCell className="text-nowrap">{freight.driver.name}</TableCell>
 			<TableCell className="text-nowrap">
-				{freight.pickupsQuantity > 0 ? freight.pickupsQuantity : "-"}
-			</TableCell>
-			<TableCell className="text-nowrap">
-				{Number(freight.totalWeightOfPickups) > 0
-					? `${formatWeight(freight.totalWeightOfPickups)}kg`
-					: "-"}
+				{freight.vehicle.plate}
 			</TableCell>
 			<TableCell className="text-nowrap">
 				{FREIGHT_TYPE[freight.type]}

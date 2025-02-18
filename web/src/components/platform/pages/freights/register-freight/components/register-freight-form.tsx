@@ -124,7 +124,7 @@ export function RegisterFreightForm() {
 				onSubmit={form.handleSubmit(onSubmit)}
 				className="flex flex-col gap-4 w-full"
 			>
-				<fieldset className="grid grid-cols-2 xl:grid-cols-4 gap-4">
+				<fieldset className="grid grid-cols-1 xl:grid-cols-4 gap-4">
 					<FormField
 						control={form.control}
 						name="deliveriesQuantity"
@@ -222,7 +222,7 @@ export function RegisterFreightForm() {
 						control={form.control}
 						name="paymentDate"
 						render={({ field }) => (
-							<FormItem className="flex flex-col my-[10px]">
+							<FormItem className="flex flex-col my-0 md:my-[10px]">
 								<FormLabel>
 									Data de pagamento do frete
 								</FormLabel>
@@ -236,7 +236,7 @@ export function RegisterFreightForm() {
 					/>
 				</fieldset>
 
-				<fieldset className="grid grid-cols-3 gap-4">
+				<fieldset className="grid grid-cols-1 md:grid-cols-3 gap-4">
 					<FormField
 						control={form.control}
 						name="type"
@@ -358,7 +358,7 @@ export function RegisterFreightForm() {
 					)}
 				/>
 
-				<fieldset className="flex gap-4 justify-end mt-6">
+				<fieldset className="flex gap-2 justify-end mt-6">
 					<Button type="button" variant="destructive-outline" asChild>
 						<Link href="/fretes">Cancelar</Link>
 					</Button>

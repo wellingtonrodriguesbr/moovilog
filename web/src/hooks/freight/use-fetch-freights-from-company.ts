@@ -3,8 +3,20 @@ import { useQuery } from "@tanstack/react-query";
 import { Freight } from "@/interfaces";
 import { useCompanyStore } from "@/stores/company-store";
 
+export interface ExtendedFreight extends Freight {
+	vehicle: {
+		id: string;
+		plate: string;
+	};
+	driver: {
+		id: string;
+		name: string;
+		documentNumber: string;
+	};
+}
+
 interface FreightResponse {
-	freights: Freight[];
+	freights: ExtendedFreight[];
 }
 
 export function useFetchFreightsFromCompany() {

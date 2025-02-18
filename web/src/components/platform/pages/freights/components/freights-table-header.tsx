@@ -14,10 +14,10 @@ export function FreightsTableHeader() {
 					Peso total de entregas
 				</TableHead>
 				<TableHead className="text-app-blue-900 font-medium text-nowrap">
-					Quantidade de coletas
+					Motorista
 				</TableHead>
 				<TableHead className="text-app-blue-900 font-medium text-nowrap">
-					Peso total de coletas
+					Veículo
 				</TableHead>
 				<TableHead className="text-app-blue-900 font-medium text-nowrap">
 					Tipo
