@@ -10,6 +10,8 @@ import {
 import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
 import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
 import { CompaniesRepository } from "@/modules/company/repositories/companies-repository";
+import { DriversRepository } from "@/modules/driver/repositories/drivers-repository";
+import { DriverTransactionsRepository } from "../repositories/driver-transactions-repository";
 
 interface RegisterTransactionUseCaseRequest {
 	description?: string | null;
@@ -20,6 +22,7 @@ interface RegisterTransactionUseCaseRequest {
 	paymentMethod: IFinanceTransactionPaymentMethod;
 	creatorId: string;
 	companyId: string;
+	driverId?: string;
 	categoryName: string;
 }
 
@@ -33,6 +36,8 @@ export class RegisterTransactionUseCase {
 	constructor(
 		private companyMembersRepository: CompanyMembersRepository,
 		private companiesRepository: CompaniesRepository,
+		private driversRepository: DriversRepository,
+		private driverTransactionsRepository: DriverTransactionsRepository,
 		private financeTransactionsRepository: FinanceTransactionsRepository,
 		private financeCategoriesRepository: FinanceCategoriesRepository
 	) {}
@@ -46,6 +51,7 @@ export class RegisterTransactionUseCase {
 		paymentMethod,
 		categoryName,
 		creatorId,
+		driverId,
 		companyId,
 	}: RegisterTransactionUseCaseRequest): Promise<RegisterTransactionUseCaseResponse> {
 		const [memberInCompany, company] = await Promise.all([
@@ -85,6 +91,27 @@ export class RegisterTransactionUseCase {
 			creatorId: memberInCompany.id,
 			categoryId: transactionCategory.id,
 		});
+
+		if (
+			["Coletas e Entregas", "Combustível", "Pedágios"].includes(
+				transactionCategory.name
+			) &&
+			driverId
+		) {
+			const driver = await this.driversRepository.findDriverInCompany(
+				driverId,
+				companyId
+			);
+
+			if (!driver) {
+				throw new ResourceNotFoundError("Driver not found in company");
+			}
+
+			await this.driverTransactionsRepository.create({
+				financeTransactionId: transaction.id,
+				driverId: driver.id,
+			});
+		}
 
 		return {
 			transaction,

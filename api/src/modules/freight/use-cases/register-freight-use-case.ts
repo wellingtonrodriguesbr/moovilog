@@ -16,6 +16,7 @@ import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
 import { BadRequestError } from "@/modules/shared/errors/bad-request-error";
 
 import dayjs from "dayjs";
+import { DriverTransactionsRepository } from "@/modules/financial/repositories/driver-transactions-repository";
 
 interface RegisterFreightUseCaseRequest {
 	type: IFreightTypes;
@@ -47,6 +48,7 @@ export class RegisterFreightUseCase {
 		private vehiclesRepository: VehiclesRepository,
 		private freightsRepository: FreightsRepository,
 		private freightTransactionsRepository: FreightTransactionsRepository,
+		private driverTransactionsRepository: DriverTransactionsRepository,
 		private routesRepository: RoutesRepository,
 		private financeTransactionsRepository: FinanceTransactionsRepository,
 		private financeCategoriesRepository: FinanceCategoriesRepository
@@ -144,6 +146,11 @@ export class RegisterFreightUseCase {
 
 		await this.freightTransactionsRepository.create({
 			freightId: freight.id,
+			financeTransactionId: financeTransaction.id,
+		});
+
+		await this.driverTransactionsRepository.create({
+			driverId: driver.id,
 			financeTransactionId: financeTransaction.id,
 		});
 

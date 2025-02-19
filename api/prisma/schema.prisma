@@ -44,7 +44,7 @@ model Company {
   vehicles            Vehicle[]
   companyStatesAreas  CompanyStateArea[]
   financeTransactions FinanceTransaction[]
-  Pickup              Pickup[]
+  pickups             Pickup[]
 
   @@map("companies")
 }
@@ -109,9 +109,10 @@ model Driver {
   addressId String?  @map("address_id")
   address   Address? @relation(fields: [addressId], references: [id], onDelete: Cascade)
 
-  freights      Freight[]
-  Pickup        Pickup[]
-  PickupHistory PickupHistory[]
+  freights           Freight[]
+  Pickup             Pickup[]
+  PickupHistory      PickupHistory[]
+  driverTransactions DriverTransaction[]
 
   @@unique([documentNumber, companyId])
   @@map("drivers")
@@ -276,9 +277,9 @@ model State {
   name    String
   acronym String @unique
 
-  cities           City[]
-  areas            Area[]
-  CompanyStateArea CompanyStateArea[]
+  cities            City[]
+  areas             Area[]
+  companyStateAreas CompanyStateArea[]
 
   @@map("states")
 }
@@ -291,8 +292,8 @@ model Area {
   stateId String @map("state_id")
   state   State  @relation(fields: [stateId], references: [id], onDelete: Cascade)
 
-  cities           City[]
-  CompanyStateArea CompanyStateArea[]
+  cities            City[]
+  companyStateAreas CompanyStateArea[]
 
   @@map("areas")
 }
@@ -365,8 +366,23 @@ model FinanceTransaction {
 
   freightTransactions FreightTransaction[]
   pickupTransactions  PickupTransaction[]
+  driverTransactions  DriverTransaction[]
 
   @@map("finance_transactions")
+}
+
+model DriverTransaction {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  driverId String @map("driver_id")
+  driver   Driver @relation(fields: [driverId], references: [id], onDelete: Cascade)
+
+  financeTransactionId String             @map("finance_transaction_id")
+  financeTransaction   FinanceTransaction @relation(fields: [financeTransactionId], references: [id], onDelete: Cascade)
+
+  @@map("driver_transactions")
 }
 
 model FreightTransaction {

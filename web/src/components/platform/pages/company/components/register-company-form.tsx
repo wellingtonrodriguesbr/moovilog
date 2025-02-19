@@ -196,7 +196,10 @@ export function RegisterCompanyForm() {
 										<SelectValue placeholder="Selecione o tamanho da sua empresa" />
 									</SelectTrigger>
 								</FormControl>
-								<SelectContent>
+								<SelectContent
+									className="max-w-[320px] md:max-w-full"
+									align="center"
+								>
 									<SelectItem value="MICRO">
 										Microempresa (Faturamento anual de até
 										R$ 360mil)

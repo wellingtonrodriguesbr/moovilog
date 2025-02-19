@@ -22,6 +22,7 @@ export class RegisterTransactionController {
 				"OTHER",
 			]),
 			categoryName: z.string(),
+			driverId: z.string().uuid().optional(),
 		});
 
 		const registerTransactionParamsSchema = z.object({
@@ -37,6 +38,7 @@ export class RegisterTransactionController {
 			type,
 			paymentMethod,
 			categoryName,
+			driverId,
 		} = registerTransactionBodySchema.parse(req.body);
 
 		const userId = req.user.sub;
@@ -53,6 +55,7 @@ export class RegisterTransactionController {
 				categoryName,
 				companyId,
 				creatorId: userId,
+				driverId,
 			});
 
 			reply.status(201).send({ transaction });

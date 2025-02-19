@@ -3,10 +3,14 @@ import { PrismaCompaniesRepository } from "@/modules/company/repositories/prisma
 import { PrismaFinanceTransactionsRepository } from "@/modules/financial/repositories/prisma/prisma-finance-transactions-repository";
 import { PrismaFinanceCategoriesRepository } from "@/modules/financial/repositories/prisma/prisma-finance-categories-repository";
 import { RegisterTransactionUseCase } from "@/modules/financial/use-cases/register-transaction-use-case";
+import { PrismaDriversRepository } from "@/modules/driver/repositories/prisma/prisma-drivers-repository";
+import { PrismaDriverTransactionsRepository } from "@/modules/financial/repositories/prisma/prisma-driver-transactions-repository";
 
 export function makeRegisterTransactionUseCase() {
 	const companyMembersRepository = new PrismaCompanyMembersRepository();
 	const companiesRepository = new PrismaCompaniesRepository();
+	const driversRepository = new PrismaDriversRepository();
+	const driverTransactionsRepository = new PrismaDriverTransactionsRepository();
 	const financeTransactionsRepository =
 		new PrismaFinanceTransactionsRepository();
 	const financeCategoriesRepository = new PrismaFinanceCategoriesRepository();
@@ -14,6 +18,8 @@ export function makeRegisterTransactionUseCase() {
 	const registerTransactionUseCase = new RegisterTransactionUseCase(
 		companyMembersRepository,
 		companiesRepository,
+		driversRepository,
+		driverTransactionsRepository,
 		financeTransactionsRepository,
 		financeCategoriesRepository
 	);
