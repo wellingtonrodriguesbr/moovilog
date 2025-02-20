@@ -17,7 +17,7 @@ import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { ArrowRight, Check, Loader2, X } from "lucide-react";
 import { formatCEP } from "@/utils/format-cep";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useRegisterCompanyAddress } from "@/hooks/company/use-register-company-address";
 import { useGetCompanyAddressByZipCode } from "@/hooks/use-get-company-address-by-zip-code";
 import { toast } from "sonner";
@@ -41,6 +41,7 @@ const formSchema = z.object({
 
 export function RegisterCompanyAddressForm() {
 	const router = useRouter();
+	const inputRef = useRef<HTMLInputElement | null>(null);
 
 	const { registerCompanyAddress, isPendingRegisterCompanyAddress } =
 		useRegisterCompanyAddress();
@@ -107,6 +108,10 @@ export function RegisterCompanyAddressForm() {
 		form.setValue("city", data?.city ?? "");
 		form.setValue("stateAcronym", data?.state ?? "");
 
+		if (form.watch("street").length > 0 && inputRef.current) {
+			inputRef.current.blur();
+		}
+
 		if (status === "error") {
 			form.reset();
 		}
@@ -135,6 +140,7 @@ export function RegisterCompanyAddressForm() {
 										pattern="\d{5}\-\d{3}"
 										maxLength={9}
 										{...field}
+										ref={inputRef}
 										onChange={({ currentTarget }) =>
 											form.setValue(
 												"zipCode",
