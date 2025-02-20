@@ -39,7 +39,7 @@ export function AlertDeleteDriver({ driverId }: AlertDeleteDriverProps) {
 					Deletar Motorista
 				</button>
 			</AlertDialogTrigger>
-			<AlertDialogContent>
+			<AlertDialogContent className="rounded-md max-w-[350px]">
 				<AlertDialogHeader>
 					<AlertDialogTitle>
 						Tem certeza que deseja deletar este motorista?

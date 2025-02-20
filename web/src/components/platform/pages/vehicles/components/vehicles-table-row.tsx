@@ -11,7 +11,7 @@ interface VehcilesTableRowProps {
 
 const VEHICLE_TYPES: Record<string, string> = {
 	OWN: "Próprio",
-	OUTSOURCED: "Terceirizado",
+	OUTSOURCED: "Agregado",
 	RENTED: "Alugado",
 };
 

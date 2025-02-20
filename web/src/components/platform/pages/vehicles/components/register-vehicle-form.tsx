@@ -46,32 +46,44 @@ const formSchema = z.object({
 		.refine((value) => value >= 1900 && value <= new Date().getFullYear(), {
 			message: "O ano deve estar entre 1900 e o atual",
 		}),
-	category: z.enum([
-		"UTILITY",
-		"VAN",
-		"LIGHT_TRUCKS",
-		"STRAIGHT_TRUCKS",
-		"TRUCKS",
-		"QUAD_AXLE_TRUCKS",
-		"SEMI_TRAILER",
-		"B_TRAIN",
-		"ROAD_TRAIN",
-	]),
-	type: z.enum(["OWN", "OUTSOURCED", "RENTED"]),
-	body: z.enum([
-		"CLOSED",
-		"OPEN",
-		"SIDER",
-		"REFRIGERATED",
-		"BUCKET",
-		"TANK",
-		"BULK_CARRIER",
-		"LIVESTOCK",
-		"FLATBED",
-		"CONTAINER",
-		"WOOD",
-		"CAR_CARRIER",
-	]),
+	category: z.enum(
+		[
+			"UTILITY",
+			"VAN",
+			"LIGHT_TRUCKS",
+			"STRAIGHT_TRUCKS",
+			"TRUCKS",
+			"QUAD_AXLE_TRUCKS",
+			"SEMI_TRAILER",
+			"B_TRAIN",
+			"ROAD_TRAIN",
+		],
+		{
+			message: "Selecione a categoria do veículo",
+		}
+	),
+	type: z.enum(["OWN", "OUTSOURCED", "RENTED"], {
+		message: "Selecione o tipo do veículo",
+	}),
+	body: z.enum(
+		[
+			"CLOSED",
+			"OPEN",
+			"SIDER",
+			"REFRIGERATED",
+			"BUCKET",
+			"TANK",
+			"BULK_CARRIER",
+			"LIVESTOCK",
+			"FLATBED",
+			"CONTAINER",
+			"WOOD",
+			"CAR_CARRIER",
+		],
+		{
+			message: "Selecione a carroceria do veículo",
+		}
+	),
 	fullLoadCapacity: z
 		.string()
 		.transform((value) => value.replace(/\D/g, ""))
@@ -359,7 +371,6 @@ export function RegisterVehicleForm({
 									<Input
 										type="text"
 										inputMode="numeric"
-										pattern="[0-9]*"
 										placeholder="Ex: 4.000kg"
 										{...field}
 										value={formatWeight(field.value)}
@@ -399,7 +410,7 @@ const VEHICLE_TYPES = [
 		value: "OWN",
 	},
 	{
-		label: "Terceirizado",
+		label: "Agregado",
 		value: "OUTSOURCED",
 	},
 	{
