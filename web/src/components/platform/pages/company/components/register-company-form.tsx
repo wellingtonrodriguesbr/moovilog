@@ -104,7 +104,7 @@ export function RegisterCompanyForm() {
 	useEffect(() => {
 		form.setValue("name", companyInformation?.razao_social ?? "");
 
-		if (form.watch("name").length && inputRef.current) {
+		if (form.watch("name").length > 0 && inputRef.current) {
 			inputRef.current.blur();
 		}
 
