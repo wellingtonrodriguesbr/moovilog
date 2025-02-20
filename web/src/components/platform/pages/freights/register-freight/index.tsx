@@ -15,7 +15,7 @@ export function RegisterFreight() {
 					Voltar
 				</Link>
 				<h1 className="font-medium text-2xl">Novo frete</h1>
-				<span className="block text-sm">
+				<span className="block text-sm text-zinc-600">
 					Preencha as informações abaixo para cadastrar um novo frete.
 				</span>
 			</header>

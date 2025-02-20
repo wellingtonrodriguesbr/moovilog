@@ -18,7 +18,7 @@ export function FreightsMetrics() {
 	const { summary, isGetFreightsSummaryPending } =
 		useGetFreightsSummaryFromCompany();
 
-	if (!isGetFreightsSummaryPending) {
+	if (isGetFreightsSummaryPending) {
 		return <SkeletonFreightsMetrics />;
 	}
 
