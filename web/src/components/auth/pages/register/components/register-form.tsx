@@ -123,6 +123,7 @@ export function RegisterForm() {
 							<FormLabel>E-mail</FormLabel>
 							<FormControl>
 								<Input
+									type="email"
 									placeholder="seuemail@email.com"
 									{...field}
 								/>
