@@ -127,6 +127,8 @@ export function RegisterCompanyForm() {
 										placeholder="00.000.000/0000-00"
 										maxLength={14}
 										autoComplete="off"
+										inputMode="numeric"
+										pattern="\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}"
 										{...field}
 										onChange={({ currentTarget }) =>
 											form.setValue(

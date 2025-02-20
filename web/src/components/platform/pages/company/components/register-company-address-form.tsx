@@ -131,6 +131,8 @@ export function RegisterCompanyAddressForm() {
 										placeholder="00000-000"
 										autoComplete="off"
 										autoCorrect="off"
+										inputMode="numeric"
+										pattern="\d{5}\-\d{3}"
 										maxLength={9}
 										{...field}
 										onChange={({ currentTarget }) =>
@@ -195,6 +197,7 @@ export function RegisterCompanyAddressForm() {
 								<FormControl>
 									<Input
 										placeholder=""
+										type="number"
 										disabled={
 											isPendingGetCompanyAddress ||
 											status === "pending"
