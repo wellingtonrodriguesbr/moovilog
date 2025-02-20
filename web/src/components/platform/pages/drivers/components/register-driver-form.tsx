@@ -98,6 +98,9 @@ export function RegisterDriverForm({ onCloseDialog }: RegisterDriverFormProps) {
 									<Input
 										className="border-0 rounded-none outline-none focus-visible:ring-0"
 										placeholder="000.000.000-00"
+										type="text"
+										inputMode="numeric"
+										pattern="[0-9]{3}.[0-9]{3}.[0-9]{3}-[0-9]{2}"
 										autoComplete="off"
 										maxLength={14}
 										{...field}
@@ -137,6 +140,8 @@ export function RegisterDriverForm({ onCloseDialog }: RegisterDriverFormProps) {
 							<FormControl>
 								<Input
 									{...field}
+									inputMode="numeric"
+									pattern="[0-9]{2}[0-9]{5}-[0-9]{4}"
 									placeholder="(00) 00000-0000"
 									value={formatPhone(field.value)}
 								/>

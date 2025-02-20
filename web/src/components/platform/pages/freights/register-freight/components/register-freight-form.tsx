@@ -144,6 +144,9 @@ export function RegisterFreightForm() {
 								<FormLabel>Peso total de entregas</FormLabel>
 								<FormControl>
 									<Input
+										type="text"
+										inputMode="numeric"
+										pattern="[0-9]*"
 										{...field}
 										value={formatWeight(field.value)}
 									/>

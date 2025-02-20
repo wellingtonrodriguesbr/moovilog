@@ -40,9 +40,12 @@ const formSchema = z.object({
 		.nullable(),
 	year: z
 		.string()
-		.transform((value) => value.replace(/\D/g, ""))
-		.transform((value) => value.slice(0, 4))
-		.transform((value) => Number(value)),
+		.trim()
+		.regex(/^\d{1,4}$/, { message: "Digite até 4 números" })
+		.transform((value) => Number(value))
+		.refine((value) => value >= 1900 && value <= new Date().getFullYear(), {
+			message: "O ano deve estar entre 1900 e o atual",
+		}),
 	category: z.enum([
 		"UTILITY",
 		"VAN",
@@ -332,7 +335,11 @@ export function RegisterVehicleForm({
 								<FormLabel>Ano de fabricação</FormLabel>
 								<FormControl>
 									<Input
+										type="text"
 										maxLength={4}
+										inputMode="numeric"
+										pattern="[0-9]*"
+										autoComplete="off"
 										placeholder="Ex: 1996"
 										{...field}
 									/>
@@ -350,6 +357,9 @@ export function RegisterVehicleForm({
 								<FormLabel>Capacidade de carga</FormLabel>
 								<FormControl>
 									<Input
+										type="text"
+										inputMode="numeric"
+										pattern="[0-9]*"
 										placeholder="Ex: 4.000kg"
 										{...field}
 										value={formatWeight(field.value)}

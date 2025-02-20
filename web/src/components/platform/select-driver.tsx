@@ -82,6 +82,7 @@ export function SelectDriver({
 								<CommandItem
 									key={driver.id}
 									value={driver.name}
+									className="z-50"
 									onSelect={(currentValue) =>
 										handleSelectDriver(currentValue)
 									}
