@@ -30,7 +30,7 @@ import { formatCNPJ } from "@/utils/format-cnpj";
 import { useRegisterCompany } from "@/hooks/company/use-register-company";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
-import { useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 const formSchema = z.object({
 	documentNumber: z
@@ -45,6 +45,7 @@ const formSchema = z.object({
 
 export function RegisterCompanyForm() {
 	const router = useRouter();
+	const inputRef = useRef<HTMLInputElement | null>(null);
 	const { registerCompany, isPendingRegisterCompany } = useRegisterCompany();
 
 	const form = useForm<z.infer<typeof formSchema>>({
@@ -103,6 +104,10 @@ export function RegisterCompanyForm() {
 	useEffect(() => {
 		form.setValue("name", companyInformation?.razao_social ?? "");
 
+		if (form.watch("name").length && inputRef.current) {
+			inputRef.current.blur();
+		}
+
 		if (status === "error") {
 			form.reset();
 		}
@@ -136,6 +141,7 @@ export function RegisterCompanyForm() {
 												currentTarget.value
 											)
 										}
+										ref={inputRef}
 										value={formatCNPJ(field.value)}
 									/>
 									{documentNumber.length === 14 &&

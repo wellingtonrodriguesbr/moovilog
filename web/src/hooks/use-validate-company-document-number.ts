@@ -97,7 +97,6 @@ export function useValidateCompanyDocumentNumber({
 				await axios.get<UseValidateCompanyDocumentNumberResponse>(
 					`https://brasilapi.com.br/api/cnpj/v1/${documentNumber}`
 				);
-
 			toast.success("CNPJ encontrado com sucesso");
 			return data;
 		} catch (error) {
