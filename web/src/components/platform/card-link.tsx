@@ -16,8 +16,8 @@ interface CardLinkProps {
 
 export function CardLink({ title, description, link }: CardLinkProps) {
 	return (
-		<Link href={link} className="group">
-			<Card className="border border-transparent group-hover:border-zinc-200">
+		<Link href={link} className="h-full group">
+			<Card className="h-full border border-transparent group-hover:border-zinc-200">
 				<CardHeader className="relative gap-2">
 					<CardTitle className="flex items-center gap-2">
 						{title}

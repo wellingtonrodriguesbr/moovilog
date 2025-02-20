@@ -146,7 +146,6 @@ export function RegisterFreightForm() {
 									<Input
 										type="text"
 										inputMode="numeric"
-										pattern="[0-9]*"
 										{...field}
 										value={formatWeight(field.value)}
 									/>

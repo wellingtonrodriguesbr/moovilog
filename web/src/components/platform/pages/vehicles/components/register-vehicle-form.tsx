@@ -270,7 +270,7 @@ export function RegisterVehicleForm({
 											<SelectValue placeholder="Selecione uma opção" />
 										</SelectTrigger>
 									</FormControl>
-									<SelectContent>
+									<SelectContent side="right">
 										{VEHICLE_BODIES.map((body) => (
 											<SelectItem
 												key={body.label}
@@ -303,7 +303,7 @@ export function RegisterVehicleForm({
 								</FormLabel>
 								<FormControl>
 									<Input
-										placeholder="XXX-XXXX"
+										placeholder="ABC-0000"
 										autoComplete="off"
 										maxLength={8}
 										{...field}
@@ -324,7 +324,7 @@ export function RegisterVehicleForm({
 									<FormLabel>Placa do reboque</FormLabel>
 									<FormControl>
 										<Input
-											placeholder="XXX-XXXX"
+											placeholder="ABC-0000"
 											autoComplete="off"
 											maxLength={8}
 											{...field}
