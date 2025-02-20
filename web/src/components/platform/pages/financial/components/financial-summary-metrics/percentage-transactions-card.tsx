@@ -6,10 +6,13 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import {
-	Tooltip,
-	TooltipContent,
-	TooltipTrigger,
-} from "@/components/ui/tooltip";
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { financialHealth } from "@/utils/financial-health";
 import { Activity, Info } from "lucide-react";
 
@@ -46,39 +49,41 @@ export function PercentageTransactionsCard({
 						className="data-[financialHealth=Prejuízo]:text-rose-600 data-[financialHealth=Crítica]:text-orange-500 data-[financialHealth=Regular]:text-amber-400 data-[financialHealth=Boa]:text-app-blue-600 data-[financialHealth=Extraordinária]:text-emerald-600"
 					>
 						{financialHealth(percentageTransactions)}.
-						<Tooltip delayDuration={0}>
-							<TooltipTrigger className="ml-1">
+						<DropdownMenu>
+							<DropdownMenuTrigger className="ml-1">
 								<Info className="size-5 fill-zinc-400 stroke-zinc-100" />
-							</TooltipTrigger>
-							<TooltipContent>
-								<ul className="text-sm space-y-2">
-									<li>
-										🏆 <strong>Extraordinária</strong>:
-										Acima de <strong>30%</strong>
-									</li>
-									<li>
-										🟢 <strong>Ótima</strong>: Entre{" "}
-										<strong>20% e 30%</strong>
-									</li>
-									<li>
-										🔵 <strong>Boa</strong>: Entre{" "}
-										<strong>10% e 19%</strong>
-									</li>
-									<li>
-										🟡 <strong>Regular</strong>: Entre{" "}
-										<strong>5% e 9%</strong>
-									</li>
-									<li>
-										🟠 <strong>Crítica</strong>: Entre{" "}
-										<strong>0% e 4%</strong>
-									</li>
-									<li>
-										🔴 <strong>Prejuízo</strong>: Abaixo de{" "}
-										<strong>0%</strong>
-									</li>
-								</ul>
-							</TooltipContent>
-						</Tooltip>
+							</DropdownMenuTrigger>
+							<DropdownMenuContent align="center">
+								<DropdownMenuItem>
+									<ul className="flex flex-col items-start justify-start gap-2 text-sm">
+										<li>
+											🏆 <strong>Extraordinária</strong>:
+											Acima de <strong>30%</strong>
+										</li>
+										<li>
+											🟢 <strong>Ótima</strong>: Entre{" "}
+											<strong>20% e 30%</strong>
+										</li>
+										<li>
+											🔵 <strong>Boa</strong>: Entre{" "}
+											<strong>10% e 19%</strong>
+										</li>
+										<li>
+											🟡 <strong>Regular</strong>: Entre{" "}
+											<strong>5% e 9%</strong>
+										</li>
+										<li>
+											🟠 <strong>Crítica</strong>: Entre{" "}
+											<strong>0% e 4%</strong>
+										</li>
+										<li>
+											🔴 <strong>Prejuízo</strong>: Abaixo
+											de <strong>0%</strong>
+										</li>
+									</ul>
+								</DropdownMenuItem>
+							</DropdownMenuContent>
+						</DropdownMenu>
 					</strong>
 				</p>
 			</CardContent>

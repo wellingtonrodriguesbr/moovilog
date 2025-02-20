@@ -16,6 +16,7 @@ interface RegisterTransactionData {
 		| "BANK_TRANSFER"
 		| "OTHER";
 	categoryName: string;
+	driverId?: string | null;
 }
 
 interface RegisterTransactionResponse {

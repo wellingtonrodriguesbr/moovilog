@@ -22,7 +22,7 @@ export class RegisterTransactionController {
 				"OTHER",
 			]),
 			categoryName: z.string(),
-			driverId: z.string().uuid().optional(),
+			driverId: z.string().uuid().optional().nullable(),
 		});
 
 		const registerTransactionParamsSchema = z.object({

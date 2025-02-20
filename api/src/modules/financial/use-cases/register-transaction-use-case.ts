@@ -22,7 +22,7 @@ interface RegisterTransactionUseCaseRequest {
 	paymentMethod: IFinanceTransactionPaymentMethod;
 	creatorId: string;
 	companyId: string;
-	driverId?: string;
+	driverId?: string | null;
 	categoryName: string;
 }
 
@@ -98,12 +98,18 @@ export class RegisterTransactionUseCase {
 			) &&
 			driverId
 		) {
-			const driver = await this.driversRepository.findDriverInCompany(
-				driverId,
+			const driver = await this.driversRepository.findById(driverId);
+
+			if (!driver) {
+				throw new ResourceNotFoundError("Driver not found");
+			}
+
+			const driverinCompany = await this.driversRepository.findDriverInCompany(
+				driver.documentNumber,
 				companyId
 			);
 
-			if (!driver) {
+			if (!driverinCompany) {
 				throw new ResourceNotFoundError("Driver not found in company");
 			}
 

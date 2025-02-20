@@ -5,33 +5,21 @@ import {
 	CarouselContent,
 	CarouselItem,
 } from "@/components/ui/carousel";
-import { Skeleton } from "@/components/ui/skeleton";
 import { useGetFreightsSummaryFromCompany } from "@/hooks/freight/use-get-freights-summary-from-company";
-import { TotalFreightsCard } from "./total-freights-card";
-import { TotalDeliveriesCard } from "./total-deliveries-card";
-import { TotalPickupsCard } from "./total-pickups-card";
-import { TotalWeightPickupsCard } from "./total-weight-pickups-card";
-import { TotalWeightDeliveriesCard } from "./total-weight-deliveries-card";
-import { TotalFreightsAmountCard } from "./total-freights-amount-card";
+import { TotalFreightsCard } from "@/components/platform/pages/freights/components/freights-metrics/total-freights-card";
+import { TotalDeliveriesCard } from "@/components/platform/pages/freights/components/freights-metrics/total-deliveries-card";
+import { TotalPickupsCard } from "@/components/platform/pages/freights/components/freights-metrics/total-pickups-card";
+import { TotalWeightPickupsCard } from "@/components/platform/pages/freights/components/freights-metrics/total-weight-pickups-card";
+import { TotalWeightDeliveriesCard } from "@/components/platform/pages/freights/components/freights-metrics/total-weight-deliveries-card";
+import { TotalFreightsAmountCard } from "@/components/platform/pages/freights/components/freights-metrics/total-freights-amount-card";
+import { SkeletonFreightsMetrics } from "@/components/platform/pages/freights/components/freights-metrics/skeleton-freights-metrics";
 
 export function FreightsMetrics() {
 	const { summary, isGetFreightsSummaryPending } =
 		useGetFreightsSummaryFromCompany();
 
-	if (isGetFreightsSummaryPending) {
-		return (
-			<section className="w-full h-full flex flex-col gap-4">
-				<div className="grid gap-4 grid-cols-7 overflow-x-hidden">
-					<Skeleton className="h-36 w-[150px] md:w-full rounded-lg" />
-					<Skeleton className="h-36 w-[150px] md:w-full rounded-lg" />
-					<Skeleton className="h-36 w-[150px] md:w-full rounded-lg" />
-					<Skeleton className="h-36 w-[150px] md:w-full rounded-lg" />
-					<Skeleton className="h-36 w-[150px] md:w-full rounded-lg" />
-					<Skeleton className="h-36 w-[150px] md:w-full rounded-lg" />
-					<Skeleton className="h-36 w-[150px] md:w-full rounded-lg" />
-				</div>
-			</section>
-		);
+	if (!isGetFreightsSummaryPending) {
+		return <SkeletonFreightsMetrics />;
 	}
 
 	return (

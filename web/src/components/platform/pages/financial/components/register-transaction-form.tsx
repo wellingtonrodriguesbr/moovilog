@@ -30,6 +30,7 @@ import { formatCurrencyBR } from "@/utils/format-currency-br";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 import { Loader2 } from "lucide-react";
+import { SelectDriver } from "@/components/platform/select-driver";
 
 interface RegisterTransactionFormProps {
 	onCloseDialog: () => void;
@@ -59,6 +60,7 @@ const formSchema = z.object({
 	),
 	categoryName: z.string({ message: "Selecione uma categoria" }),
 	description: z.string().optional().nullable(),
+	driverId: z.string().uuid().optional().nullable(),
 });
 
 export function RegisterTransactionForm({
@@ -78,6 +80,7 @@ export function RegisterTransactionForm({
 			paymentMethod: undefined,
 			categoryName: undefined,
 			description: null,
+			driverId: null,
 		},
 	});
 
@@ -287,6 +290,25 @@ export function RegisterTransactionForm({
 						)}
 					/>
 				</fieldset>
+
+				{["Coletas e Entregas", "Pedágios", "Combustível"].includes(
+					form.watch("categoryName")
+				) && (
+					<FormField
+						control={form.control}
+						name="driverId"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Motorista</FormLabel>
+								<SelectDriver
+									selectedDriver={field.value as string}
+									onChangeSelectedDriver={field.onChange}
+								/>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+				)}
 
 				<FormField
 					control={form.control}
