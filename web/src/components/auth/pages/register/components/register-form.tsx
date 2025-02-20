@@ -106,7 +106,7 @@ export function RegisterForm() {
 								<Input
 									{...field}
 									inputMode="numeric"
-									pattern="[0-9]{2}[0-9]{5}-[0-9]{4}"
+									pattern="\(\d{2}\) \d{5}-\d{4}"
 									placeholder="(00) 00000-0000"
 									value={formatPhone(field.value)}
 								/>
