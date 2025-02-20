@@ -1,6 +1,7 @@
 import { api } from "@/lib/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useCompanyStore } from "@/stores/company-store";
+import { Driver } from "@/interfaces";
 
 interface DeleteDriverProps {
 	driverId: string;
@@ -12,7 +13,15 @@ export function useDeleteDriver() {
 	const { mutateAsync: deleteDriver, isPending: isDeleteDriverPending } =
 		useMutation({
 			mutationFn: handleDeleteDriver,
-			onSuccess: () => {
+			onSuccess: (_, { driverId }) => {
+				queryClient.setQueryData(["drivers"], (oldData: Driver[]) => {
+					return oldData
+						? oldData.filter(
+								(driver: Driver) => driver.id !== driverId
+							)
+						: [];
+				});
+
 				queryClient.invalidateQueries({ queryKey: ["drivers"] });
 			},
 		});

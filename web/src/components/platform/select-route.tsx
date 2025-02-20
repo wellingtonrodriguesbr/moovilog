@@ -94,8 +94,12 @@ export function SelectRoute({
 									{route.name}
 								</CommandItem>
 							))}
-							<CommandSeparator className="my-2 border-b" />
-							<RegisterRouteDialog buttonWidthFull />
+							{routes.length > 0 && (
+								<>
+									<CommandSeparator className="my-2 border-b" />
+									<RegisterRouteDialog buttonWidthFull />
+								</>
+							)}
 						</CommandGroup>
 					</CommandList>
 				</Command>

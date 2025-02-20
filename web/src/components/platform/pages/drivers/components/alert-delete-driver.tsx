@@ -27,7 +27,7 @@ export function AlertDeleteDriver({ driverId }: AlertDeleteDriverProps) {
 			});
 			toast.success("Motorista deletado com sucesso");
 		} catch (error) {
-			toast.error("Erro ao deletar veículo");
+			toast.error("Erro ao deletar motorista");
 		}
 	}
 

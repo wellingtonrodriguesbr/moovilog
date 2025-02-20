@@ -97,8 +97,12 @@ export function SelectVehicle({
 									{vehicle.plate}
 								</CommandItem>
 							))}
-							<CommandSeparator className="my-2 border-b" />
-							<RegisterVehicleDialog buttonWidthFull />
+							{vehiclesFromCompany.length > 0 && (
+								<>
+									<CommandSeparator className="my-2 border-b" />
+									<RegisterVehicleDialog buttonWidthFull />
+								</>
+							)}
 						</CommandGroup>
 					</CommandList>
 				</Command>

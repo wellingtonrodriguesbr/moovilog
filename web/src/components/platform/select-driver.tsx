@@ -97,8 +97,12 @@ export function SelectDriver({
 									{driver.name}
 								</CommandItem>
 							))}
-							<CommandSeparator className="my-2 border-b" />
-							<RegisterDriverDialog buttonWidthFull />
+							{driversFromCompany.length > 0 && (
+								<>
+									<CommandSeparator className="my-2 border-b" />
+									<RegisterDriverDialog buttonWidthFull />
+								</>
+							)}
 						</CommandGroup>
 					</CommandList>
 				</Command>
