@@ -34,10 +34,10 @@ const EMPTY_CONTEXTS = {
 export function Empty({ context }: EmptyProps) {
 	return (
 		<div className="flex items-center justify-center flex-col gap-4 w-full h-auto p-6 md:p-12 rounded-md bg-zinc-100 text-zinc-600">
-			<div className="w-full h-full max-w-[300px] max-h-[300px]">
+			<div className="w-full h-full max-w-[300px] max-h-[300px] pointer-events-none">
 				<Lottie
 					options={DEFAULT_OPTIONS}
-					style={{ objectFit: "contain" }}
+					style={{ objectFit: "contain", pointerEvents: "none" }}
 				/>
 			</div>
 			<h6 className="text-center text-2xl text-app-blue-900">
