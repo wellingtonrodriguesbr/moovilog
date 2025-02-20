@@ -2,11 +2,9 @@ import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-foun
 import { CompanyMembersRepository } from "@/modules/company-member/repositories/company-members-repository";
 import { CompaniesRepository } from "@/modules/company/repositories/companies-repository";
 import { ICompany } from "@/modules/company/interfaces/company";
-import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
 
 interface GetCompanyInformationUseCaseRequest {
 	userId: string;
-	companyId: string;
 }
 
 interface GetCompanyInformationUseCaseResponse {
@@ -21,24 +19,17 @@ export class GetCompanyInformationUseCase {
 
 	async execute({
 		userId,
-		companyId,
 	}: GetCompanyInformationUseCaseRequest): Promise<GetCompanyInformationUseCaseResponse> {
-		const company = await this.companiesRepository.findById(companyId);
+		const member = await this.companyMembersRepository.findByUserId(userId);
+
+		if (!member) {
+			throw new ResourceNotFoundError("Member not found");
+		}
+
+		const company = await this.companiesRepository.findById(member.companyId);
 
 		if (!company) {
 			throw new ResourceNotFoundError("Company not found");
-		}
-
-		const memberInCompany =
-			await this.companyMembersRepository.findMemberInCompany(
-				userId,
-				companyId
-			);
-
-		if (!memberInCompany) {
-			throw new NotAllowedError(
-				"You do not have permission to perform this action"
-			);
 		}
 
 		return { company };

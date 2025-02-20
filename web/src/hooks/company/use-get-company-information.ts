@@ -13,7 +13,7 @@ export function useGetCompanyInformation() {
 	const pathName = usePathname();
 	const enabledQuery = pathName !== "/cadastro/empresa" && pathName !== "/";
 
-	const { company, setCompany } = useCompanyStore();
+	const { setCompany } = useCompanyStore();
 
 	const {
 		data: companyInformation,
@@ -28,7 +28,7 @@ export function useGetCompanyInformation() {
 	async function handleGetCompanyInformation() {
 		try {
 			const { data } = await api.get<CompanyInformationResponse>(
-				`/companies/${company.id}/information`
+				"/companies/information"
 			);
 			setCompany(data.company);
 			return data.company;
