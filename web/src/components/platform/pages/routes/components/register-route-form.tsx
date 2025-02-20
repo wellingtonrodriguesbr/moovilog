@@ -79,7 +79,10 @@ export function RegisterRouteForm({ onCloseDialog }: RegisterRouteFormProps) {
 	return (
 		<Form {...form}>
 			<form
-				onSubmit={form.handleSubmit(onSubmit)}
+				onSubmit={(e) => {
+					e.stopPropagation();
+					form.handleSubmit(onSubmit)(e);
+				}}
 				className="flex flex-col gap-4 w-full"
 			>
 				<FormField

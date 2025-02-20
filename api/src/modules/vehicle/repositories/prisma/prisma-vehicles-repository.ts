@@ -76,13 +76,40 @@ export class PrismaVehiclesRepository implements VehiclesRepository {
 		return vehicle;
 	}
 
-	async findManyByCompanyId(companyId: string) {
-		const vehicles = await prisma.vehicle.findMany({
+	async findVehicleInCompany(id: string, companyId: string) {
+		const vehicle = await prisma.vehicle.findUnique({
 			where: {
+				id,
 				companyId,
 			},
 		});
 
+		if (!vehicle) {
+			return null;
+		}
+
+		return vehicle;
+	}
+
+	async findManyByCompanyId(companyId: string) {
+		const vehicles = await prisma.vehicle.findMany({
+			where: {
+				companyId,
+				deletedAt: null,
+			},
+		});
+
 		return vehicles;
+	}
+
+	async deleteById(id: string) {
+		await prisma.vehicle.update({
+			where: {
+				id,
+			},
+			data: {
+				deletedAt: new Date(),
+			},
+		});
 	}
 }

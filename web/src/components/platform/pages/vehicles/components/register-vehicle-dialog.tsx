@@ -15,7 +15,13 @@ import { RegisterVehicleForm } from "@/components/platform/pages/vehicles/compon
 
 import { Plus } from "lucide-react";
 
-export function RegisterVehicleDialog() {
+interface RegisterVehicleDialogProps {
+	buttonWidthFull?: boolean;
+}
+
+export function RegisterVehicleDialog({
+	buttonWidthFull,
+}: RegisterVehicleDialogProps) {
 	const [dialogOpen, setDialogOpen] = useState(false);
 
 	function handleCloseDialog() {
@@ -25,12 +31,15 @@ export function RegisterVehicleDialog() {
 	return (
 		<Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
 			<DialogTrigger asChild>
-				<Button>
+				<Button
+					data-widthFull={buttonWidthFull}
+					className="data-[widthFull=true]:w-full"
+				>
 					<Plus className="size-4" />
 					Cadastrar veículo
 				</Button>
 			</DialogTrigger>
-			<DialogContent className="rounded-md max-w-[350px] overflow-auto max-h-[80vh] md:max-h-auto md:max-w-[600px]">
+			<DialogContent className="rounded-md max-w-[350px] overflow-auto max-h-[80vh] md:max-h-auto md:max-w-[800px]">
 				<DialogHeader>
 					<DialogTitle>Novo cadastro de veículo</DialogTitle>
 					<DialogDescription>

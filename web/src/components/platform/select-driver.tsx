@@ -20,6 +20,7 @@ import { useFetchDriversFromCompany } from "@/hooks/driver/use-fetch-drivers-fro
 import { RegisterDriverDialog } from "@/components/platform/pages/drivers/components/register-driver-dialog";
 import { cn } from "@/lib/cn";
 import { Check, ChevronsUpDown } from "lucide-react";
+import { CommandSeparator } from "cmdk";
 
 interface SelectDriverProps {
 	selectedDriver: string;
@@ -68,7 +69,7 @@ export function SelectDriver({
 					<ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
 				</Button>
 			</PopoverTrigger>
-			<PopoverContent className="w-full md:w-[400px] p-0" align="start">
+			<PopoverContent className="w-full p-0" align="start">
 				<Command>
 					<CommandInput placeholder="Pesquise um motorista.." />
 					<CommandList>
@@ -96,6 +97,8 @@ export function SelectDriver({
 									{driver.name}
 								</CommandItem>
 							))}
+							<CommandSeparator className="my-2 border-b" />
+							<RegisterDriverDialog buttonWidthFull />
 						</CommandGroup>
 					</CommandList>
 				</Command>

@@ -2,7 +2,7 @@ import { CompaniesRepository } from "@/modules/company/repositories/companies-re
 import { CompanyMembersRepository } from "@/modules/company-member/repositories/company-members-repository";
 import { DriversRepository } from "@/modules/driver/repositories/drivers-repository";
 import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
-import { IDriver } from "@/modules/shared/interfaces/driver";
+import { IDriver } from "@/modules/driver/interfaces/driver";
 
 interface FetchDriversFromCompanyUseCaseRequest {
 	companyId: string;

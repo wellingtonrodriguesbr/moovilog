@@ -15,7 +15,13 @@ import { RegisterDriverForm } from "@/components/platform/pages/drivers/componen
 
 import { Plus } from "lucide-react";
 
-export function RegisterDriverDialog() {
+interface RegisterDriverDialogProps {
+	buttonWidthFull?: boolean;
+}
+
+export function RegisterDriverDialog({
+	buttonWidthFull,
+}: RegisterDriverDialogProps) {
 	const [dialogOpen, setDialogOpen] = useState(false);
 
 	function handleCloseDialog() {
@@ -25,7 +31,10 @@ export function RegisterDriverDialog() {
 	return (
 		<Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
 			<DialogTrigger asChild>
-				<Button>
+				<Button
+					data-widthFull={buttonWidthFull}
+					className="data-[widthFull=true]:w-full"
+				>
 					<Plus className="size-4" />
 					Cadastrar motorista
 				</Button>

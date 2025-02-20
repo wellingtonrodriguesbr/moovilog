@@ -15,7 +15,13 @@ import { RegisterRouteForm } from "@/components/platform/pages/routes/components
 
 import { Plus } from "lucide-react";
 
-export function RegisterRouteDialog() {
+interface RegisterRouteDialogProps {
+	buttonWidthFull?: boolean;
+}
+
+export function RegisterRouteDialog({
+	buttonWidthFull,
+}: RegisterRouteDialogProps) {
 	const [dialogOpen, setDialogOpen] = useState(false);
 
 	function handleCloseDialog() {
@@ -25,7 +31,10 @@ export function RegisterRouteDialog() {
 	return (
 		<Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
 			<DialogTrigger asChild>
-				<Button>
+				<Button
+					data-widthFull={buttonWidthFull}
+					className="data-[widthFull=true]:w-full"
+				>
 					<Plus className="size-4" />
 					Cadastrar rota
 				</Button>

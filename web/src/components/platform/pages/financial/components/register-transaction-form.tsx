@@ -107,151 +107,128 @@ export function RegisterTransactionForm({
 				onSubmit={form.handleSubmit(onSubmit)}
 				className="flex flex-col gap-4 w-full"
 			>
-				<FormField
-					control={form.control}
-					name="amountInCents"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Valor</FormLabel>
-							<FormControl>
-								<Input
-									{...field}
-									value={formatCurrencyBR(field.value)}
-								/>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-
-				<FormField
-					control={form.control}
-					name="type"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Tipo da transação</FormLabel>
-							<Select
-								onValueChange={field.onChange}
-								defaultValue={field.value}
-							>
+				<fieldset className="grid grid-cols-1 md:grid-cols-2 gap-4">
+					<FormField
+						control={form.control}
+						name="amountInCents"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Valor</FormLabel>
 								<FormControl>
-									<SelectTrigger>
-										<SelectValue placeholder="Selecione uma opção" />
-									</SelectTrigger>
+									<Input
+										{...field}
+										value={formatCurrencyBR(field.value)}
+									/>
 								</FormControl>
-								<SelectContent>
-									<SelectItem value="INCOME">
-										Entrada
-									</SelectItem>
-									<SelectItem value="EXPENSE">
-										Despesa
-									</SelectItem>
-								</SelectContent>
-							</Select>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
 
-				<FormField
-					control={form.control}
-					name="status"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Status da transação</FormLabel>
-							<Select
-								onValueChange={field.onChange}
-								defaultValue={field.value}
-							>
+					<FormField
+						control={form.control}
+						name="type"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Tipo da transação</FormLabel>
+								<Select
+									onValueChange={field.onChange}
+									defaultValue={field.value}
+								>
+									<FormControl>
+										<SelectTrigger>
+											<SelectValue placeholder="Selecione uma opção" />
+										</SelectTrigger>
+									</FormControl>
+									<SelectContent>
+										<SelectItem value="INCOME">
+											Entrada
+										</SelectItem>
+										<SelectItem value="EXPENSE">
+											Despesa
+										</SelectItem>
+									</SelectContent>
+								</Select>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+				</fieldset>
+
+				<fieldset className="grid grid-cols-1 md:grid-cols-2 gap-4">
+					<FormField
+						control={form.control}
+						name="status"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Status da transação</FormLabel>
+								<Select
+									onValueChange={field.onChange}
+									defaultValue={field.value}
+								>
+									<FormControl>
+										<SelectTrigger>
+											<SelectValue placeholder="Selecione uma opção" />
+										</SelectTrigger>
+									</FormControl>
+									<SelectContent>
+										<SelectItem value="PENDING">
+											Pendente
+										</SelectItem>
+										<SelectItem value="PAID">
+											Paga
+										</SelectItem>
+										<SelectItem value="OVERDUE">
+											Atrasada
+										</SelectItem>
+									</SelectContent>
+								</Select>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+
+					<FormField
+						control={form.control}
+						name="categoryName"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Categoria</FormLabel>
 								<FormControl>
-									<SelectTrigger>
-										<SelectValue placeholder="Selecione uma opção" />
-									</SelectTrigger>
+									<Select
+										onValueChange={field.onChange}
+										value={field.value}
+									>
+										<FormControl>
+											<SelectTrigger>
+												<SelectValue placeholder="Selecione uma opção" />
+											</SelectTrigger>
+										</FormControl>
+										<SelectContent>
+											{categories.map((category) => (
+												<SelectItem
+													key={category.id}
+													value={category.name}
+												>
+													{category.name}
+												</SelectItem>
+											))}
+										</SelectContent>
+									</Select>
 								</FormControl>
-								<SelectContent>
-									<SelectItem value="PENDING">
-										Pendente
-									</SelectItem>
-									<SelectItem value="PAID">Paga</SelectItem>
-									<SelectItem value="OVERDUE">
-										Atrasada
-									</SelectItem>
-								</SelectContent>
-							</Select>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+				</fieldset>
 
-				<FormField
-					control={form.control}
-					name="dueDate"
-					render={({ field }) => (
-						<FormItem className="flex flex-col my-[10px]">
-							<FormLabel>Data de vencimento</FormLabel>
-							<FormControl>
-								<DatePicker
-									selectedDate={field.value}
-									onChangeSelectedDate={field.onChange}
-								/>
-							</FormControl>
-							<FormMessage />
-							<FormDescription>
-								Preencha com a data limite para pagar ou para
-								receber essa transação.
-							</FormDescription>
-						</FormItem>
-					)}
-				/>
-
-				<FormField
-					control={form.control}
-					name="paymentMethod"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Método de pagamento</FormLabel>
-							<Select
-								onValueChange={field.onChange}
-								value={field.value}
-							>
-								<FormControl>
-									<SelectTrigger>
-										<SelectValue placeholder="Selecione uma opção" />
-									</SelectTrigger>
-								</FormControl>
-								<SelectContent>
-									<SelectItem value="PIX">PIX</SelectItem>
-									<SelectItem value="CREDIT_CARD">
-										Cartão de Crédito
-									</SelectItem>
-									<SelectItem value="DEBIT_CARD">
-										Cartão de Débito
-									</SelectItem>
-									<SelectItem value="CASH">
-										Dinheiro
-									</SelectItem>
-									<SelectItem value="BANK_TRANSFER">
-										Transferência Bancária
-									</SelectItem>
-									<SelectItem value="OTHER">Outro</SelectItem>
-								</SelectContent>
-							</Select>
-							<FormMessage />
-							<FormDescription>
-								Escolha a forma de pagamento ou recebimento para
-								essa transação.
-							</FormDescription>
-						</FormItem>
-					)}
-				/>
-
-				<FormField
-					control={form.control}
-					name="categoryName"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Categoria</FormLabel>
-							<FormControl>
+				<fieldset className="grid grid-cols-1 md:grid-cols-2 gap-4">
+					<FormField
+						control={form.control}
+						name="paymentMethod"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Método de pagamento</FormLabel>
 								<Select
 									onValueChange={field.onChange}
 									value={field.value}
@@ -262,21 +239,54 @@ export function RegisterTransactionForm({
 										</SelectTrigger>
 									</FormControl>
 									<SelectContent>
-										{categories.map((category) => (
-											<SelectItem
-												key={category.id}
-												value={category.name}
-											>
-												{category.name}
-											</SelectItem>
-										))}
+										<SelectItem value="PIX">PIX</SelectItem>
+										<SelectItem value="CREDIT_CARD">
+											Cartão de Crédito
+										</SelectItem>
+										<SelectItem value="DEBIT_CARD">
+											Cartão de Débito
+										</SelectItem>
+										<SelectItem value="CASH">
+											Dinheiro
+										</SelectItem>
+										<SelectItem value="BANK_TRANSFER">
+											Transferência Bancária
+										</SelectItem>
+										<SelectItem value="OTHER">
+											Outro
+										</SelectItem>
 									</SelectContent>
 								</Select>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
+								<FormMessage />
+								<FormDescription>
+									Escolha a forma de pagamento ou recebimento
+									para essa transação.
+								</FormDescription>
+							</FormItem>
+						)}
+					/>
+
+					<FormField
+						control={form.control}
+						name="dueDate"
+						render={({ field }) => (
+							<FormItem className="flex flex-col my-[10px]">
+								<FormLabel>Data de vencimento</FormLabel>
+								<FormControl>
+									<DatePicker
+										selectedDate={field.value}
+										onChangeSelectedDate={field.onChange}
+									/>
+								</FormControl>
+								<FormMessage />
+								<FormDescription>
+									Preencha com a data limite para pagar ou
+									para receber essa transação.
+								</FormDescription>
+							</FormItem>
+						)}
+					/>
+				</fieldset>
 
 				<FormField
 					control={form.control}

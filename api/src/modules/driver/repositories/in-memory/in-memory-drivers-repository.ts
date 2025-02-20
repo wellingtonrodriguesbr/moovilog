@@ -18,6 +18,7 @@ export class InMemoryDriversRepository implements DriversRepository {
 			addressId: data.addressId ?? null,
 			createdAt: new Date(),
 			updatedAt: new Date(),
+			deletedAt: null,
 		};
 
 		this.items.push(driver);
@@ -63,5 +64,11 @@ export class InMemoryDriversRepository implements DriversRepository {
 		const drivers = this.items.filter((item) => item.companyId === companyId);
 
 		return drivers;
+	}
+
+	async deleteById(id: string) {
+		const driverIndex = this.items.findIndex((item) => item.id !== id);
+
+		this.items[driverIndex].deletedAt = new Date();
 	}
 }

@@ -1,4 +1,5 @@
 import { BackPageButton } from "@/components/platform/back-page-button";
+import { UnderConstruction } from "@/components/platform/under-construction";
 
 export function RegisterPickups() {
 	return (
@@ -9,7 +10,9 @@ export function RegisterPickups() {
 					Cadastrar coletas
 				</h1>
 			</header>
-			<div className="mt-12"></div>
+			<div className="mt-12">
+				<UnderConstruction />
+			</div>
 		</section>
 	);
 }

@@ -37,11 +37,9 @@ import { formatWeight } from "@/utils/format-weight";
 
 const formSchema = z.object({
 	observation: z.string().optional().nullable(),
-	pickupsQuantity: z.coerce.string().optional().nullable(),
 	deliveriesQuantity: z.coerce.number({
 		message: "Digite a quantidade de entregas",
 	}),
-	totalWeightOfPickups: z.coerce.number().optional().nullable(),
 	totalWeightOfDeliveries: z.coerce.number({
 		message: "Digite o total de peso",
 	}),
@@ -85,9 +83,7 @@ export function RegisterFreightForm() {
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			observation: null,
-			pickupsQuantity: undefined,
 			deliveriesQuantity: undefined,
-			totalWeightOfPickups: undefined,
 			totalWeightOfDeliveries: undefined,
 			freightAmountInCents: undefined,
 			driverId: "",
@@ -103,7 +99,8 @@ export function RegisterFreightForm() {
 	async function onSubmit(registerData: z.infer<typeof formSchema>) {
 		try {
 			const freight = await registerFreight({ ...registerData });
-			router.push(`/fretes/${freight.id}/coletas`);
+			// router.push(`/fretes/${freight.id}/coletas`);
+			router.push(`/fretes`);
 			toast.success("Frete cadastrado com sucesso");
 		} catch (error) {
 			if (error instanceof AxiosError) {
@@ -132,7 +129,7 @@ export function RegisterFreightForm() {
 							<FormItem>
 								<FormLabel>Quantidade de entregas</FormLabel>
 								<FormControl>
-									<Input {...field} />
+									<Input type="number" {...field} />
 								</FormControl>
 								<FormMessage />
 							</FormItem>

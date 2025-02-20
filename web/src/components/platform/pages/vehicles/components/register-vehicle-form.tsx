@@ -121,185 +121,194 @@ export function RegisterVehicleForm({
 	return (
 		<Form {...form}>
 			<form
-				onSubmit={form.handleSubmit(onSubmit)}
+				onSubmit={(e) => {
+					e.stopPropagation();
+					form.handleSubmit(onSubmit)(e);
+				}}
 				className="flex flex-col gap-4 w-full"
 			>
-				<FormField
-					control={form.control}
-					name="brand"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Marca</FormLabel>
-							<Select
-								onValueChange={field.onChange}
-								defaultValue={field.value}
-							>
+				<fieldset className="grid grid-cols-1 md:grid-cols-2 gap-4">
+					<FormField
+						control={form.control}
+						name="brand"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Marca</FormLabel>
+								<Select
+									onValueChange={field.onChange}
+									defaultValue={field.value}
+								>
+									<FormControl>
+										<SelectTrigger>
+											<SelectValue placeholder="Selecione uma opção" />
+										</SelectTrigger>
+									</FormControl>
+									<SelectContent>
+										{TRUCK_BRANDS.map((brand) => (
+											<SelectItem
+												key={brand}
+												value={brand}
+											>
+												{brand}
+											</SelectItem>
+										))}
+									</SelectContent>
+								</Select>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+
+					<FormField
+						control={form.control}
+						name="model"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Modelo</FormLabel>
 								<FormControl>
-									<SelectTrigger>
-										<SelectValue placeholder="Selecione uma opção" />
-									</SelectTrigger>
-								</FormControl>
-								<SelectContent>
-									{TRUCK_BRANDS.map((brand) => (
-										<SelectItem key={brand} value={brand}>
-											{brand}
-										</SelectItem>
-									))}
-								</SelectContent>
-							</Select>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-
-				<FormField
-					control={form.control}
-					name="model"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Modelo</FormLabel>
-							<FormControl>
-								<Input
-									placeholder="Ex: ATEGO 1419"
-									{...field}
-								/>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-
-				<FormField
-					control={form.control}
-					name="category"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Categoria</FormLabel>
-							<Select
-								onValueChange={field.onChange}
-								defaultValue={field.value}
-							>
-								<FormControl>
-									<SelectTrigger>
-										<SelectValue placeholder="Selecione uma opção" />
-									</SelectTrigger>
-								</FormControl>
-								<SelectContent>
-									{VEHICLE_CATEGORIES.map((category) => (
-										<SelectItem
-											key={category.label}
-											value={category.value}
-										>
-											{category.label}
-										</SelectItem>
-									))}
-								</SelectContent>
-							</Select>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-
-				<FormField
-					control={form.control}
-					name="type"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Tipo de veículo</FormLabel>
-							<Select
-								onValueChange={field.onChange}
-								defaultValue={field.value}
-							>
-								<FormControl>
-									<SelectTrigger>
-										<SelectValue placeholder="Selecione uma opção" />
-									</SelectTrigger>
-								</FormControl>
-								<SelectContent>
-									{VEHICLE_TYPES.map((type) => (
-										<SelectItem
-											key={type.label}
-											value={type.value}
-										>
-											{type.label}
-										</SelectItem>
-									))}
-								</SelectContent>
-							</Select>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-
-				<FormField
-					control={form.control}
-					name="body"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Tipo de carroceria</FormLabel>
-							<Select
-								onValueChange={field.onChange}
-								defaultValue={field.value}
-							>
-								<FormControl>
-									<SelectTrigger>
-										<SelectValue placeholder="Selecione uma opção" />
-									</SelectTrigger>
-								</FormControl>
-								<SelectContent>
-									{VEHICLE_BODIES.map((body) => (
-										<SelectItem
-											key={body.label}
-											value={body.value}
-										>
-											{body.label}
-										</SelectItem>
-									))}
-								</SelectContent>
-							</Select>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-
-				<FormField
-					control={form.control}
-					name="plate"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>
-								{shouldIncludeTrailerPlate
-									? "Placa do cavalo"
-									: "Placa"}
-							</FormLabel>
-							<FormControl>
-								<div className="flex items-center rounded-md overflow-hidden border pr-4">
 									<Input
-										className="border-0 rounded-none outline-none focus-visible:ring-0 uppercase"
+										placeholder="Ex: ATEGO 1419"
+										{...field}
+									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+				</fieldset>
+
+				<fieldset className="grid grid-cols-1 md:grid-cols-3 gap-4">
+					<FormField
+						control={form.control}
+						name="category"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Categoria</FormLabel>
+								<Select
+									onValueChange={field.onChange}
+									defaultValue={field.value}
+								>
+									<FormControl>
+										<SelectTrigger>
+											<SelectValue placeholder="Selecione uma opção" />
+										</SelectTrigger>
+									</FormControl>
+									<SelectContent>
+										{VEHICLE_CATEGORIES.map((category) => (
+											<SelectItem
+												key={category.label}
+												value={category.value}
+											>
+												{category.label}
+											</SelectItem>
+										))}
+									</SelectContent>
+								</Select>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+
+					<FormField
+						control={form.control}
+						name="type"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Tipo de veículo</FormLabel>
+								<Select
+									onValueChange={field.onChange}
+									defaultValue={field.value}
+								>
+									<FormControl>
+										<SelectTrigger>
+											<SelectValue placeholder="Selecione uma opção" />
+										</SelectTrigger>
+									</FormControl>
+									<SelectContent>
+										{VEHICLE_TYPES.map((type) => (
+											<SelectItem
+												key={type.label}
+												value={type.value}
+											>
+												{type.label}
+											</SelectItem>
+										))}
+									</SelectContent>
+								</Select>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+
+					<FormField
+						control={form.control}
+						name="body"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Tipo de carroceria</FormLabel>
+								<Select
+									onValueChange={field.onChange}
+									defaultValue={field.value}
+								>
+									<FormControl>
+										<SelectTrigger>
+											<SelectValue placeholder="Selecione uma opção" />
+										</SelectTrigger>
+									</FormControl>
+									<SelectContent>
+										{VEHICLE_BODIES.map((body) => (
+											<SelectItem
+												key={body.label}
+												value={body.value}
+											>
+												{body.label}
+											</SelectItem>
+										))}
+									</SelectContent>
+								</Select>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+				</fieldset>
+
+				<fieldset
+					data-shouldIncludeTrailerPlate={shouldIncludeTrailerPlate}
+					className="grid grid-cols-1 md:grid-cols-3 md:data-[shouldIncludeTrailerPlate=true]:grid-cols-4 gap-4"
+				>
+					<FormField
+						control={form.control}
+						name="plate"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>
+									{shouldIncludeTrailerPlate
+										? "Placa do cavalo"
+										: "Placa"}
+								</FormLabel>
+								<FormControl>
+									<Input
 										placeholder="XXX-XXXX"
 										autoComplete="off"
 										maxLength={8}
 										{...field}
 										value={formatPlate(field.value)}
 									/>
-								</div>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
 
-				{shouldIncludeTrailerPlate ? (
-					<FormField
-						control={form.control}
-						name="trailerPlate"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Placa do reboque</FormLabel>
-								<FormControl>
-									<div className="flex items-center rounded-md overflow-hidden border pr-4">
+					{shouldIncludeTrailerPlate ? (
+						<FormField
+							control={form.control}
+							name="trailerPlate"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Placa do reboque</FormLabel>
+									<FormControl>
 										<Input
-											className="border-0 rounded-none outline-none focus-visible:ring-0 uppercase"
 											placeholder="XXX-XXXX"
 											autoComplete="off"
 											maxLength={8}
@@ -308,51 +317,49 @@ export function RegisterVehicleForm({
 												field.value ?? ""
 											)}
 										/>
-									</div>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+					) : null}
+
+					<FormField
+						control={form.control}
+						name="year"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Ano de fabricação</FormLabel>
+								<FormControl>
+									<Input
+										maxLength={4}
+										placeholder="Ex: 1996"
+										{...field}
+									/>
 								</FormControl>
 								<FormMessage />
 							</FormItem>
 						)}
 					/>
-				) : null}
 
-				<FormField
-					control={form.control}
-					name="year"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Ano de fabricação</FormLabel>
-							<FormControl>
-								<Input
-									maxLength={4}
-									placeholder="Ex: 1996"
-									{...field}
-								/>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-
-				<FormField
-					control={form.control}
-					name="fullLoadCapacity"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>
-								Capacidade máxima de peso (Tara)
-							</FormLabel>
-							<FormControl>
-								<Input
-									placeholder="Ex: 4.000kg"
-									{...field}
-									value={formatWeight(field.value)}
-								/>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
+					<FormField
+						control={form.control}
+						name="fullLoadCapacity"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Capacidade de carga</FormLabel>
+								<FormControl>
+									<Input
+										placeholder="Ex: 4.000kg"
+										{...field}
+										value={formatWeight(field.value)}
+									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+				</fieldset>
 
 				<fieldset className="flex justify-end gap-2 mt-6">
 					<Button

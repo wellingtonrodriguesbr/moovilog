@@ -12,5 +12,7 @@ export interface VehiclesRepository {
 		companyId: string
 	): Promise<Vehicle | null>;
 	findById(id: string): Promise<Vehicle | null>;
+	findVehicleInCompany(id: string, companyId: string): Promise<Vehicle | null>;
 	findManyByCompanyId(companyId: string): Promise<Vehicle[]>;
+	deleteById(id: string): Promise<void>;
 }

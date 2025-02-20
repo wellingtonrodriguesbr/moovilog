@@ -62,9 +62,21 @@ export class PrismaDriversRepository implements DriversRepository {
 		const drivers = await prisma.driver.findMany({
 			where: {
 				companyId,
+				deletedAt: null,
 			},
 		});
 
 		return drivers;
+	}
+
+	async deleteById(id: string) {
+		await prisma.driver.update({
+			where: {
+				id,
+			},
+			data: {
+				deletedAt: new Date(),
+			},
+		});
 	}
 }

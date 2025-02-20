@@ -1,10 +1,9 @@
 import { TableCell, TableRow } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
 import { formatPlate } from "@/utils/format-plate";
-import { Ellipsis } from "lucide-react";
 import { formatBrazilianDate } from "@/utils/format-brazilian-date";
 import { formatWeight } from "@/utils/format-weight";
 import { Vehicle } from "@/interfaces";
+import { VehicleDropdownOptions } from "@/components/platform/pages/vehicles/components/vehicle-dropdown-options";
 
 interface VehcilesTableRowProps {
 	vehicle: Vehicle;
@@ -70,9 +69,7 @@ export function VehiclesTableRow({ vehicle }: VehcilesTableRowProps) {
 				{formatBrazilianDate(vehicle.createdAt.toString())}
 			</TableCell>
 			<TableCell className="text-right">
-				<Button variant="ghost">
-					<Ellipsis className="size-4" />
-				</Button>
+				<VehicleDropdownOptions vehicleId={vehicle.id} />
 			</TableCell>
 		</TableRow>
 	);

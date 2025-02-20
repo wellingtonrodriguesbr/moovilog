@@ -26,7 +26,7 @@ export function VehiclesTableHeader() {
 					Carroceria
 				</TableHead>
 				<TableHead className="text-app-blue-900 font-medium text-nowrap">
-					Tara
+					Capacidade máxima
 				</TableHead>
 				<TableHead className="text-app-blue-900 font-medium text-nowrap">
 					Cadastrado em

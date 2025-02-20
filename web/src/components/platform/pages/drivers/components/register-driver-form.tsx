@@ -81,7 +81,10 @@ export function RegisterDriverForm({ onCloseDialog }: RegisterDriverFormProps) {
 	return (
 		<Form {...form}>
 			<form
-				onSubmit={form.handleSubmit(onSubmit)}
+				onSubmit={(e) => {
+					e.stopPropagation();
+					form.handleSubmit(onSubmit)(e);
+				}}
 				className="flex flex-col gap-4 w-full"
 			>
 				<FormField

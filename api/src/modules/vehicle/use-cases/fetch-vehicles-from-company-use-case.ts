@@ -2,7 +2,7 @@ import { CompaniesRepository } from "@/modules/company/repositories/companies-re
 import { CompanyMembersRepository } from "@/modules/company-member/repositories/company-members-repository";
 import { VehiclesRepository } from "@/modules/vehicle/repositories/vehicles-repository";
 import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
-import { IVehicle } from "@/modules/shared/interfaces/vehicle";
+import { IVehicle } from "@/modules/vehicle/interfaces/vehicle";
 
 interface FetchVehiclesFromCompanyUseCaseRequest {
 	companyId: string;

@@ -1,13 +1,11 @@
 import { TableCell, TableRow } from "@/components/ui/table";
 import { CopyButton } from "@/components/platform/copy-button";
-import { Button } from "@/components/ui/button";
+import { DriverDropdownOptions } from "@/components/platform/pages/drivers/components/driver-dropdown-options";
+import { Badge } from "@/components/ui/badge";
 
 import { formatCPF } from "@/utils/format-cpf";
 import { formatPhone } from "@/utils/format-phone";
-
-import { Ellipsis } from "lucide-react";
 import { formatBrazilianDate } from "@/utils/format-brazilian-date";
-import { Badge } from "@/components/ui/badge";
 import { Driver } from "@/interfaces";
 
 const DRIVER_TYPE: Record<string, string> = {
@@ -55,9 +53,7 @@ export function DriversTableRow({ driver }: DriversTableRowProps) {
 				{formatBrazilianDate(driver.createdAt.toString())}
 			</TableCell>
 			<TableCell className="text-right">
-				<Button variant="ghost">
-					<Ellipsis className="size-4" />
-				</Button>
+				<DriverDropdownOptions driverId={driver.id} />
 			</TableCell>
 		</TableRow>
 	);

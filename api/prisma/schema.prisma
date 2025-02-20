@@ -99,6 +99,7 @@ model Driver {
   type           DriverType
   createdAt      DateTime      @default(now()) @map("created_at")
   updatedAt      DateTime      @updatedAt @map("updated_at")
+  deletedAt      DateTime?     @map("deleted_at")
 
   creatorId String        @map("creator_id")
   creator   CompanyMember @relation(fields: [creatorId], references: [id], onDelete: Cascade)
@@ -131,6 +132,7 @@ model Vehicle {
   fullLoadCapacity Int             @map("full_load_capacity")
   createdAt        DateTime        @default(now()) @map("created_at")
   updatedAt        DateTime        @updatedAt @map("updated_at")
+  deletedAt        DateTime?       @map("deleted_at")
 
   companyId String  @map("company_id")
   company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
