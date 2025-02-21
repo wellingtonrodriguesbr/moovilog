@@ -23,15 +23,14 @@ export function CollaboratorsTableHeader() {
 					Setor
 				</TableHead>
 				<TableHead className="flex items-center gap-2 text-app-blue-900 font-medium">
-					Cargo
+					Permissão
 					<Tooltip delayDuration={0} defaultOpen>
 						<TooltipTrigger className="mt-1">
 							<Info className="size-4" />
 						</TooltipTrigger>
 						<TooltipContent className="max-w-64">
 							<p className="font-normal text-zinc-700">
-								O <strong className="underline">cargo</strong>{" "}
-								refere-se as permissões que este usuário poderá
+								Refere-se as permissões que este usuário poderá
 								realizar dentro da conta da empresa.
 							</p>
 						</TooltipContent>

@@ -141,18 +141,14 @@ export function RegisterNewCollaboratorForm({
 					render={({ field }) => (
 						<FormItem>
 							<FormLabel className="flex items-center gap-2">
-								Cargo
+								Permissão
 								<Tooltip>
 									<TooltipTrigger>
 										<Info className="size-4" />
 									</TooltipTrigger>
 									<TooltipContent className="max-w-64">
 										<p className="font-normal text-zinc-700">
-											O{" "}
-											<strong className="underline">
-												cargo
-											</strong>{" "}
-											refere-se as permissões que este
+											Refere-se as permissões que este
 											usuário poderá realizar dentro da
 											conta da empresa.
 										</p>
