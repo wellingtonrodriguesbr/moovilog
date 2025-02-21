@@ -1,4 +1,5 @@
 import { api } from "@/lib/axios";
+import { useCompanyStore } from "@/stores/company-store";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface SendInvitationToCompanyMemberData {
@@ -9,6 +10,7 @@ interface SendInvitationToCompanyMemberData {
 }
 
 export function useSendInvitationToCompanyMember() {
+	const { company } = useCompanyStore();
 	const queryClient = useQueryClient();
 	const {
 		mutateAsync: sendinvitationtoCompanyMember,
@@ -24,7 +26,7 @@ export function useSendInvitationToCompanyMember() {
 		sendinvitationtoData: SendInvitationToCompanyMemberData
 	) {
 		const { data } = await api.post<{ companyMemberId: string }>(
-			"/members/invite",
+			`/${company.id}/members/invite`,
 			{
 				...sendinvitationtoData,
 			}
