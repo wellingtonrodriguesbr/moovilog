@@ -1,4 +1,4 @@
-import { Driver, Prisma } from "@prisma/client";
+import { AccountStatus, Driver, Prisma } from "@prisma/client";
 
 export interface DriversRepository {
 	create(data: Prisma.DriverUncheckedCreateInput): Promise<Driver>;
@@ -13,5 +13,5 @@ export interface DriversRepository {
 	): Promise<Driver | null>;
 	findById(id: string): Promise<Driver | null>;
 	findManyByCompanyId(companyId: string): Promise<Driver[]>;
-	deleteById(id: string): Promise<void>;
+	updateStatus(id: string, status: AccountStatus): Promise<void>;
 }

@@ -1,5 +1,6 @@
 import { VehiclesTable } from "@/components/platform/pages/vehicles/components/vehicles-table";
 import { RegisterVehicleDialog } from "@/components/platform/pages/vehicles/components/register-vehicle-dialog";
+import { VehiclesMetrics } from "./components/vehicles-metrics";
 
 export function Vehicles() {
 	return (
@@ -8,7 +9,8 @@ export function Vehicles() {
 				<h1 className="text-2xl md:text-3xl font-medium">Veículos</h1>
 				<RegisterVehicleDialog />
 			</header>
-			<div className="mt-12">
+			<div className="flex flex-col gap-12 mt-12">
+				<VehiclesMetrics />
 				<VehiclesTable />
 			</div>
 		</section>

@@ -22,7 +22,6 @@ export class InMemoryVehiclesRepository implements VehiclesRepository {
 			companyId: data.companyId,
 			createdAt: new Date(),
 			updatedAt: new Date(),
-			deletedAt: null,
 		};
 
 		this.items.push(vehicle);
@@ -93,12 +92,6 @@ export class InMemoryVehiclesRepository implements VehiclesRepository {
 		const vehicles = this.items.filter((item) => item.companyId === companyId);
 
 		return vehicles;
-	}
-
-	async deleteById(id: string) {
-		const vehicleIndex = this.items.findIndex((item) => item.id === id);
-
-		this.items.splice(vehicleIndex, 1);
 	}
 
 	async updateStatus(id: string, status: VehicleStatus) {

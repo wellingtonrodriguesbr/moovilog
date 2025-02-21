@@ -1,27 +1,35 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
 import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
-import { makeDeleteDriverUseCase } from "@/modules/driver/use-cases/factories/make-delete-driver-use-case";
+import { makeUpdateDriverStatusUseCase } from "@/modules/driver/use-cases/factories/make-update-driver-status-use-case";
 
 import z from "zod";
 
-export class DeleteDriverController {
+export class UpdateDriverStatusController {
 	static async handle(req: FastifyRequest, reply: FastifyReply) {
-		const deleteDriverParamsSchema = z.object({
+		const updateDriverStatusBodySchema = z.object({
+			status: z.enum(["ACTIVE", "INACTIVE"]),
+		});
+
+		const updateDriverStatusParamsSchema = z.object({
 			companyId: z.string().uuid(),
 			driverId: z.string().uuid(),
 		});
 
-		const { companyId, driverId } = deleteDriverParamsSchema.parse(req.params);
+		const { companyId, driverId } = updateDriverStatusParamsSchema.parse(
+			req.params
+		);
+		const { status } = updateDriverStatusBodySchema.parse(req.body);
 
 		const userId = req.user.sub;
 
 		try {
-			const deleteDriverUseCase = makeDeleteDriverUseCase();
-			await deleteDriverUseCase.execute({
+			const updateDriverStatusUseCase = makeUpdateDriverStatusUseCase();
+			await updateDriverStatusUseCase.execute({
 				driverId,
 				userId,
 				companyId,
+				status,
 			});
 
 			reply.status(204).send();

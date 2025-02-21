@@ -82,6 +82,7 @@ export function SelectVehicle({
 								<CommandItem
 									key={vehicle.id}
 									value={vehicle.plate}
+									disabled={vehicle.status !== "ACTIVE"}
 									onSelect={(currentValue) =>
 										handleSelectVehicle(currentValue)
 									}

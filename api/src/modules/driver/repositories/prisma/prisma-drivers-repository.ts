@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma, AccountStatus } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { DriversRepository } from "@/modules/driver/repositories/drivers-repository";
 
@@ -64,15 +64,21 @@ export class PrismaDriversRepository implements DriversRepository {
 			where: {
 				companyId,
 			},
+			orderBy: {
+				createdAt: "asc",
+			},
 		});
 
 		return drivers;
 	}
 
-	async deleteById(id: string) {
-		await prisma.driver.delete({
+	async updateStatus(id: string, status: AccountStatus) {
+		await prisma.driver.update({
 			where: {
 				id,
+			},
+			data: {
+				status,
 			},
 		});
 	}

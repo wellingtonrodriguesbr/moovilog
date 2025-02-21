@@ -1,4 +1,4 @@
-import { Driver, Prisma } from "@prisma/client";
+import { AccountStatus, Driver, Prisma } from "@prisma/client";
 import { DriversRepository } from "@/modules/driver/repositories/drivers-repository";
 import { randomUUID } from "node:crypto";
 
@@ -18,7 +18,6 @@ export class InMemoryDriversRepository implements DriversRepository {
 			addressId: data.addressId ?? null,
 			createdAt: new Date(),
 			updatedAt: new Date(),
-			deletedAt: null,
 		};
 
 		this.items.push(driver);
@@ -50,6 +49,18 @@ export class InMemoryDriversRepository implements DriversRepository {
 		return driver;
 	}
 
+	async findByPhoneNumberInCompany(phone: string, companyId: string) {
+		const driver = this.items.find(
+			(item) => item.phone === phone && item.companyId === companyId
+		);
+
+		if (!driver) {
+			return null;
+		}
+
+		return driver;
+	}
+
 	async findById(id: string) {
 		const driver = this.items.find((item) => item.id === id);
 
@@ -66,9 +77,9 @@ export class InMemoryDriversRepository implements DriversRepository {
 		return drivers;
 	}
 
-	async deleteById(id: string) {
+	async updateStatus(id: string, status: AccountStatus) {
 		const driverIndex = this.items.findIndex((item) => item.id !== id);
 
-		this.items.splice(driverIndex, 1);
+		this.items[driverIndex].status = status;
 	}
 }

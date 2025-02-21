@@ -104,14 +104,6 @@ export class PrismaVehiclesRepository implements VehiclesRepository {
 		return vehicles;
 	}
 
-	async deleteById(id: string) {
-		await prisma.vehicle.delete({
-			where: {
-				id,
-			},
-		});
-	}
-
 	async updateStatus(id: string, status: VehicleStatus) {
 		await prisma.vehicle.update({
 			where: {

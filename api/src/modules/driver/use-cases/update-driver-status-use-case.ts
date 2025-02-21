@@ -4,15 +4,16 @@ import { DriversRepository } from "@/modules/driver/repositories/drivers-reposit
 import { CompanyMembersRepository } from "@/modules/company-member/repositories/company-members-repository";
 import { CompaniesRepository } from "@/modules/company/repositories/companies-repository";
 
-interface DeleteDriverUseCaseRequest {
+interface UpdateDriverStatusUseCaseRequest {
 	driverId: string;
 	userId: string;
 	companyId: string;
+	status: "ACTIVE" | "INACTIVE";
 }
 
 const ROLE_PERMISSIONS = ["ADMIN", "MANAGER"];
 
-export class DeleteDriverUseCase {
+export class UpdateDriverStatusUseCase {
 	constructor(
 		private companyMembersRepository: CompanyMembersRepository,
 		private companiesRepository: CompaniesRepository,
@@ -23,7 +24,8 @@ export class DeleteDriverUseCase {
 		driverId,
 		userId,
 		companyId,
-	}: DeleteDriverUseCaseRequest): Promise<void> {
+		status,
+	}: UpdateDriverStatusUseCaseRequest): Promise<void> {
 		const [member, company] = await Promise.all([
 			await this.companyMembersRepository.findMemberInCompany(
 				userId,
@@ -61,6 +63,6 @@ export class DeleteDriverUseCase {
 			throw new ResourceNotFoundError("Driver not found in company");
 		}
 
-		await this.driversRepository.deleteById(driver.id);
+		await this.driversRepository.updateStatus(driver.id, status);
 	}
 }

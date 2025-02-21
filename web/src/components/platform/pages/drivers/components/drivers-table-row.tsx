@@ -53,7 +53,7 @@ export function DriversTableRow({ driver }: DriversTableRowProps) {
 				{formatBrazilianDate(driver.createdAt.toString())}
 			</TableCell>
 			<TableCell className="text-right">
-				<DriverDropdownOptions driverId={driver.id} />
+				<DriverDropdownOptions driver={driver} />
 			</TableCell>
 		</TableRow>
 	);

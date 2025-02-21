@@ -82,7 +82,7 @@ export function VehiclesTableRow({ vehicle }: VehcilesTableRowProps) {
 			<TableCell className="text-nowrap">
 				{formatWeight(vehicle.fullLoadCapacity)}kg
 			</TableCell>
-			<TableCell className="text-nowrap">
+			<TableCell className="text-nowrap pointer-events-none">
 				<Badge
 					data-active={vehicle.status === "ACTIVE"}
 					data-inactive={vehicle.status === "INACTIVE"}

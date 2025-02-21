@@ -83,6 +83,7 @@ export function SelectDriver({
 									key={driver.id}
 									value={driver.name}
 									className="z-50"
+									disabled={driver.status !== "ACTIVE"}
 									onSelect={(currentValue) =>
 										handleSelectDriver(currentValue)
 									}
