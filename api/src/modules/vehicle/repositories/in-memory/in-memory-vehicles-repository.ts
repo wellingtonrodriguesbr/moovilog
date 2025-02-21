@@ -1,4 +1,4 @@
-import { Prisma, Vehicle } from "@prisma/client";
+import { Prisma, Vehicle, VehicleStatus } from "@prisma/client";
 import { VehiclesRepository } from "@/modules/vehicle/repositories/vehicles-repository";
 import { randomUUID } from "node:crypto";
 
@@ -12,6 +12,7 @@ export class InMemoryVehiclesRepository implements VehiclesRepository {
 			trailerPlate: data.trailerPlate ?? null,
 			year: data.year,
 			category: data.category,
+			status: data.status ?? "ACTIVE",
 			type: data.type,
 			body: data.body,
 			fullLoadCapacity: data.fullLoadCapacity,
@@ -97,6 +98,12 @@ export class InMemoryVehiclesRepository implements VehiclesRepository {
 	async deleteById(id: string) {
 		const vehicleIndex = this.items.findIndex((item) => item.id === id);
 
-		this.items[vehicleIndex].deletedAt = new Date();
+		this.items.splice(vehicleIndex, 1);
+	}
+
+	async updateStatus(id: string, status: VehicleStatus) {
+		const vehicleIndex = this.items.findIndex((item) => item.id === id);
+
+		this.items[vehicleIndex].status = status;
 	}
 }

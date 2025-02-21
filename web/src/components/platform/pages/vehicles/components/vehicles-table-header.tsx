@@ -29,6 +29,9 @@ export function VehiclesTableHeader() {
 					Capacidade máxima
 				</TableHead>
 				<TableHead className="text-app-blue-900 font-medium text-nowrap">
+					Status
+				</TableHead>
+				<TableHead className="text-app-blue-900 font-medium text-nowrap">
 					Cadastrado em
 				</TableHead>
 				<TableHead className="text-app-blue-900 font-medium rounded-tr-lg"></TableHead>

@@ -1,29 +1,42 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
 import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
-import { makeDeleteVehicleUseCase } from "@/modules/vehicle/use-cases/factories/make-delete-vehicle-use-case";
+import { makeUpdateVehicleStatusUseCase } from "@/modules/vehicle/use-cases/factories/make-update-vehicle-status-use-case";
 
 import z from "zod";
 
-export class DeleteVehicleController {
+export class UpdateVehicleStatusController {
 	static async handle(req: FastifyRequest, reply: FastifyReply) {
-		const deleteVehicleParamsSchema = z.object({
+		const updateVehicleStatusBodySchema = z.object({
+			status: z.enum([
+				"ACTIVE",
+				"INACTIVE",
+				"MAINTENANCE",
+				"RESERVED",
+				"BROKEN",
+			]),
+		});
+
+		const updateVehicleStatusParamsSchema = z.object({
 			companyId: z.string().uuid(),
 			vehicleId: z.string().uuid(),
 		});
 
-		const { companyId, vehicleId } = deleteVehicleParamsSchema.parse(
+		const { status } = updateVehicleStatusBodySchema.parse(req.body);
+
+		const { companyId, vehicleId } = updateVehicleStatusParamsSchema.parse(
 			req.params
 		);
 
 		const userId = req.user.sub;
 
 		try {
-			const deleteVehicleUseCase = makeDeleteVehicleUseCase();
-			await deleteVehicleUseCase.execute({
+			const updateVehicleStatusUseCase = makeUpdateVehicleStatusUseCase();
+			await updateVehicleStatusUseCase.execute({
 				vehicleId,
 				companyId,
 				userId,
+				status,
 			});
 
 			reply.status(204).send();

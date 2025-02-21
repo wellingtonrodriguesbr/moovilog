@@ -88,7 +88,7 @@ describe("[MODULE]: Register freight use case", () => {
 			year: 1996,
 			body: "CLOSED",
 			category: "STRAIGHT_TRUCKS",
-			type: "OUTSOURCED",
+			type: "AGGREGATE",
 			fullLoadCapacity: 4500,
 			brand: "Mercedes-Benz",
 			model: "710",

@@ -32,14 +32,23 @@ interface RegisterDriverFormProps {
 	onCloseDialog: () => void;
 }
 
+const PLATE_REGEX = /^[A-Z]{3}-\d[A-Z0-9]\d{2}$/;
+
 const formSchema = z.object({
-	plate: z.string({ message: "Digite a placa do veículo" }),
+	plate: z
+		.string({ message: "Digite a placa do veículo" })
+		.regex(PLATE_REGEX, {
+			message: "Placa inválida. Formatos válidos: ABC-1234 ou ABC-1A34",
+		}),
 	trailerPlate: z
 		.string({ message: "Digite a placa do reboque" })
 		.optional()
-		.nullable(),
+		.nullable()
+		.refine((value) => !value || PLATE_REGEX.test(value), {
+			message: "Placa inválida. Formatos válidos: ABC-1234 ou ABC-1A34",
+		}),
 	year: z
-		.string()
+		.string({ message: "Digite o ano do veículo" })
 		.trim()
 		.regex(/^\d{1,4}$/, { message: "Digite até 4 números" })
 		.transform((value) => Number(value))
@@ -62,7 +71,7 @@ const formSchema = z.object({
 			message: "Selecione a categoria do veículo",
 		}
 	),
-	type: z.enum(["OWN", "OUTSOURCED", "RENTED"], {
+	type: z.enum(["OWN", "AGGREGATE", "RENTED"], {
 		message: "Selecione o tipo do veículo",
 	}),
 	body: z.enum(
@@ -85,11 +94,11 @@ const formSchema = z.object({
 		}
 	),
 	fullLoadCapacity: z
-		.string()
+		.string({ message: "Digite a capacidade de carga do veículo" })
 		.transform((value) => value.replace(/\D/g, ""))
 		.transform((value) => Number(value)),
-	brand: z.string(),
-	model: z.string(),
+	brand: z.string().min(2, { message: "Selecione a marca do veículo" }),
+	model: z.string({ message: "Digite o modelo do veículo" }),
 });
 
 const typesThatRequireTrailerPlate = ["SEMI_TRAILER", "B_TRAIN", "ROAD_TRAIN"];
@@ -303,9 +312,10 @@ export function RegisterVehicleForm({
 								</FormLabel>
 								<FormControl>
 									<Input
-										placeholder="ABC-0000"
+										placeholder="ABC-0000 / ABC-0A00"
 										autoComplete="off"
 										maxLength={8}
+										// pattern="[A-Z]{3}-\d[A-Z0-9]\d{2}"
 										{...field}
 										value={formatPlate(field.value)}
 									/>
@@ -324,9 +334,10 @@ export function RegisterVehicleForm({
 									<FormLabel>Placa do reboque</FormLabel>
 									<FormControl>
 										<Input
-											placeholder="ABC-0000"
+											placeholder="ABC-0000 / ABC-0A00"
 											autoComplete="off"
 											maxLength={8}
+											// pattern="[A-Z]{3}-\d[A-Z0-9]\d{2}"
 											{...field}
 											value={formatPlate(
 												field.value ?? ""
@@ -411,7 +422,7 @@ const VEHICLE_TYPES = [
 	},
 	{
 		label: "Agregado",
-		value: "OUTSOURCED",
+		value: "AGGREGATE",
 	},
 	{
 		label: "Alugado",

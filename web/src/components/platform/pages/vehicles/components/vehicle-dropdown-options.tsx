@@ -6,16 +6,17 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { UpdateVehicleStatusDialog } from "@/components/platform/pages/vehicles/components/update-vehicle-status-dialog";
 import { Button } from "@/components/ui/button";
 import { Ellipsis } from "lucide-react";
-import { AlertDeleteVehicle } from "./alert-delete-vehicle";
+import { Vehicle } from "@/interfaces";
 
 interface VehicleDropdownOptionsProps {
-	vehicleId: string;
+	vehicle: Vehicle;
 }
 
 export function VehicleDropdownOptions({
-	vehicleId,
+	vehicle,
 }: VehicleDropdownOptionsProps) {
 	return (
 		<DropdownMenu>
@@ -28,7 +29,10 @@ export function VehicleDropdownOptions({
 				<DropdownMenuLabel>Configurações</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 				<DropdownMenuItem asChild>
-					<AlertDeleteVehicle vehicleId={vehicleId} />
+					<UpdateVehicleStatusDialog
+						currentStatus={vehicle.status}
+						vehicleId={vehicle.id}
+					/>
 				</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>

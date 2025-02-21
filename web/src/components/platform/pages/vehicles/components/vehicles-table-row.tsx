@@ -4,6 +4,7 @@ import { formatBrazilianDate } from "@/utils/format-brazilian-date";
 import { formatWeight } from "@/utils/format-weight";
 import { Vehicle } from "@/interfaces";
 import { VehicleDropdownOptions } from "@/components/platform/pages/vehicles/components/vehicle-dropdown-options";
+import { Badge } from "@/components/ui/badge";
 
 interface VehcilesTableRowProps {
 	vehicle: Vehicle;
@@ -11,8 +12,16 @@ interface VehcilesTableRowProps {
 
 const VEHICLE_TYPES: Record<string, string> = {
 	OWN: "Próprio",
-	OUTSOURCED: "Agregado",
+	AGGREGATE: "Agregado",
 	RENTED: "Alugado",
+};
+
+const VEHICLE_STATUS: Record<string, string> = {
+	ACTIVE: "Ativo",
+	INACTIVE: "Inativo",
+	MAINTENANCE: "Em Manutenção",
+	RESERVED: "Reservado",
+	BROKEN: "Com defeito",
 };
 
 const VEHICLE_BODIES: Record<string, string> = {
@@ -42,6 +51,14 @@ const VEHICLE_CATEGORIES: Record<string, string> = {
 	ROAD_TRAIN: "Rodotrem",
 };
 
+const STATUS_COLORS = {
+	ACTIVE: "text-emerald-500 bg-emerald-500/15",
+	INACTIVE: "text-rose-500 bg-rose-500/15",
+	MAINTENANCE: "text-amber-500 bg-amber-500/15",
+	RESERVED: "text-sky-500 bg-sky-500/15",
+	BROKEN: "text-rose-500 bg-rose-500/15",
+};
+
 export function VehiclesTableRow({ vehicle }: VehcilesTableRowProps) {
 	return (
 		<TableRow className="hover:bg-transparent">
@@ -66,10 +83,20 @@ export function VehiclesTableRow({ vehicle }: VehcilesTableRowProps) {
 				{formatWeight(vehicle.fullLoadCapacity)}kg
 			</TableCell>
 			<TableCell className="text-nowrap">
+				<Badge
+					data-active={vehicle.status === "ACTIVE"}
+					data-inactive={vehicle.status === "INACTIVE"}
+					data-pending={vehicle.status === "MAINTENANCE"}
+					className={STATUS_COLORS[vehicle.status]}
+				>
+					{VEHICLE_STATUS[vehicle.status]}
+				</Badge>
+			</TableCell>
+			<TableCell className="text-nowrap">
 				{formatBrazilianDate(vehicle.createdAt.toString())}
 			</TableCell>
 			<TableCell className="text-right">
-				<VehicleDropdownOptions vehicleId={vehicle.id} />
+				<VehicleDropdownOptions vehicle={vehicle} />
 			</TableCell>
 		</TableRow>
 	);

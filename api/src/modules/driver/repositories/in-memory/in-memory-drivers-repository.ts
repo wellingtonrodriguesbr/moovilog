@@ -69,6 +69,6 @@ export class InMemoryDriversRepository implements DriversRepository {
 	async deleteById(id: string) {
 		const driverIndex = this.items.findIndex((item) => item.id !== id);
 
-		this.items[driverIndex].deletedAt = new Date();
+		this.items.splice(driverIndex, 1);
 	}
 }

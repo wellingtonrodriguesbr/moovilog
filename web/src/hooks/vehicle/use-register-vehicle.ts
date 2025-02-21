@@ -16,7 +16,7 @@ interface RegisterVehicleData {
 		| "SEMI_TRAILER"
 		| "B_TRAIN"
 		| "ROAD_TRAIN";
-	type: "OWN" | "OUTSOURCED" | "RENTED";
+	type: "OWN" | "AGGREGATE" | "RENTED";
 	body:
 		| "CLOSED"
 		| "OPEN"

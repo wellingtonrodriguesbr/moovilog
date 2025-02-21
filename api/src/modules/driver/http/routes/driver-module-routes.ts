@@ -13,5 +13,5 @@ export async function driverModuleRoutes(app: FastifyInstance) {
 		"/companies/:companyId/drivers",
 		FetchDriversFromCompanyController.handle
 	);
-	app.patch("/:companyId/drivers/:driverId", DeleteDriverController.handle);
+	app.delete("/:companyId/drivers/:driverId", DeleteDriverController.handle);
 }

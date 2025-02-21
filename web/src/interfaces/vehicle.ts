@@ -6,8 +6,21 @@ export interface Vehicle {
 	brand: string;
 	model: string;
 	category: string;
-	type: string;
-	body: string;
+	status: "ACTIVE" | "INACTIVE" | "MAINTENANCE" | "RESERVED" | "BROKEN";
+	type: "OWN" | "AGGREGATE" | "RENTED";
+	body:
+		| "CLOSED"
+		| "OPEN"
+		| "SIDER"
+		| "REFRIGERATED"
+		| "BUCKET"
+		| "TANK"
+		| "BULK_CARRIER"
+		| "LIVESTOCK"
+		| "FLATBED"
+		| "CONTAINER"
+		| "WOOD"
+		| "CAR_CARRIER";
 	fullLoadCapacity: number;
 	createdAt: Date;
 	updatedAt: Date;

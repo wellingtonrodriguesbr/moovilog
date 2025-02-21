@@ -99,7 +99,6 @@ model Driver {
   type           DriverType
   createdAt      DateTime      @default(now()) @map("created_at")
   updatedAt      DateTime      @updatedAt @map("updated_at")
-  deletedAt      DateTime?     @map("deleted_at")
 
   creatorId String        @map("creator_id")
   creator   CompanyMember @relation(fields: [creatorId], references: [id], onDelete: Cascade)
@@ -111,11 +110,12 @@ model Driver {
   address   Address? @relation(fields: [addressId], references: [id], onDelete: Cascade)
 
   freights           Freight[]
-  Pickup             Pickup[]
-  PickupHistory      PickupHistory[]
+  pickups            Pickup[]
+  pickupHistories    PickupHistory[]
   driverTransactions DriverTransaction[]
 
   @@unique([documentNumber, companyId])
+  @@unique([phone, companyId])
   @@map("drivers")
 }
 
@@ -126,13 +126,13 @@ model Vehicle {
   year             Int
   brand            String
   model            String
+  status           VehicleStatus   @default(ACTIVE)
   category         VehicleCategory
   type             VehicleType
   body             VehicleBody
   fullLoadCapacity Int             @map("full_load_capacity")
   createdAt        DateTime        @default(now()) @map("created_at")
   updatedAt        DateTime        @updatedAt @map("updated_at")
-  deletedAt        DateTime?       @map("deleted_at")
 
   companyId String  @map("company_id")
   company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
@@ -175,9 +175,6 @@ model Freight {
 
   routeId String? @map("route_id")
   route   Route?  @relation(fields: [routeId], references: [id])
-
-  cityId String? @map("city_id")
-  city   City?   @relation(fields: [cityId], references: [id])
 
   pickups             Pickup[]
   freightTransactions FreightTransaction[]
@@ -312,7 +309,6 @@ model City {
 
   addresses     Address[]
   citiesInRoute CityInRoute[]
-  freights      Freight[]
 
   @@map("cities")
 }
@@ -470,8 +466,16 @@ enum VehicleBody {
 
 enum VehicleType {
   OWN
-  OUTSOURCED
+  AGGREGATE
   RENTED
+}
+
+enum VehicleStatus {
+  ACTIVE
+  MAINTENANCE
+  INACTIVE
+  RESERVED
+  BROKEN
 }
 
 enum FreightType {

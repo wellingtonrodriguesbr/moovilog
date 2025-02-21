@@ -4,15 +4,16 @@ import { VehiclesRepository } from "@/modules/vehicle/repositories/vehicles-repo
 import { CompanyMembersRepository } from "@/modules/company-member/repositories/company-members-repository";
 import { CompaniesRepository } from "@/modules/company/repositories/companies-repository";
 
-interface DeleteVehicleUseCaseRequest {
+interface UpdateVehicleStatusUseCaseRequest {
 	vehicleId: string;
 	userId: string;
 	companyId: string;
+	status: "ACTIVE" | "INACTIVE" | "MAINTENANCE" | "RESERVED" | "BROKEN";
 }
 
 const ROLE_PERMISSIONS = ["ADMIN", "MANAGER"];
 
-export class DeleteVehicleUseCase {
+export class UpdateVehicleStatusUseCase {
 	constructor(
 		private companyMembersRepository: CompanyMembersRepository,
 		private companiesRepository: CompaniesRepository,
@@ -23,7 +24,8 @@ export class DeleteVehicleUseCase {
 		vehicleId,
 		userId,
 		companyId,
-	}: DeleteVehicleUseCaseRequest): Promise<void> {
+		status,
+	}: UpdateVehicleStatusUseCaseRequest): Promise<void> {
 		const [member, company] = await Promise.all([
 			await this.companyMembersRepository.findMemberInCompany(
 				userId,
@@ -55,6 +57,6 @@ export class DeleteVehicleUseCase {
 			throw new ResourceNotFoundError("Vehicle not found");
 		}
 
-		await this.vehiclesRepository.deleteById(vehicle.id);
+		await this.vehiclesRepository.updateStatus(vehicle.id, status);
 	}
 }

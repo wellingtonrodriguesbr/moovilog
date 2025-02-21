@@ -1,4 +1,4 @@
-import { Prisma, Vehicle } from "@prisma/client";
+import { Prisma, Vehicle, VehicleStatus } from "@prisma/client";
 
 export interface VehiclesRepository {
 	create(data: Prisma.VehicleUncheckedCreateInput): Promise<Vehicle>;
@@ -15,4 +15,5 @@ export interface VehiclesRepository {
 	findVehicleInCompany(id: string, companyId: string): Promise<Vehicle | null>;
 	findManyByCompanyId(companyId: string): Promise<Vehicle[]>;
 	deleteById(id: string): Promise<void>;
+	updateStatus(id: string, status: VehicleStatus): Promise<void>;
 }

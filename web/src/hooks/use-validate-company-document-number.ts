@@ -72,7 +72,7 @@ export function useValidateCompanyDocumentNumber({
 		() => {
 			setDebouncedValue(documentNumber);
 		},
-		2000,
+		4000,
 		[documentNumber]
 	);
 	const [debouncedValue, setDebouncedValue] = useState("");
@@ -84,7 +84,8 @@ export function useValidateCompanyDocumentNumber({
 	} = useQuery({
 		queryKey: ["validate-company-document-number", debouncedValue],
 		queryFn: () => handleValidDocumentNumber({ documentNumber }),
-		enabled: !!isReady() && !!debouncedValue.length,
+		enabled:
+			!!isReady() && !!debouncedValue.length && debouncedValue.length > 8,
 	});
 
 	async function handleValidDocumentNumber({

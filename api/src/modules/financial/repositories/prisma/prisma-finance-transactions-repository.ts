@@ -21,6 +21,9 @@ export class PrismaFinanceTransactionsRepository
 			include: {
 				category: true,
 			},
+			orderBy: {
+				createdAt: "asc",
+			},
 		});
 
 		return transactions;

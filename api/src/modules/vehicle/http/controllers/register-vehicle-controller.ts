@@ -23,7 +23,7 @@ export class RegisterVehicleController {
 				"B_TRAIN",
 				"ROAD_TRAIN",
 			]),
-			type: z.enum(["OWN", "OUTSOURCED", "RENTED"]),
+			type: z.enum(["OWN", "AGGREGATE", "RENTED"]),
 			body: z.enum([
 				"CLOSED",
 				"OPEN",

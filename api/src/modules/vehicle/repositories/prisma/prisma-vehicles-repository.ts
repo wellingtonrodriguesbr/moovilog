@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { Prisma } from "@prisma/client";
+import { Prisma, VehicleStatus } from "@prisma/client";
 import { VehiclesRepository } from "@/modules/vehicle/repositories/vehicles-repository";
 
 export class PrismaVehiclesRepository implements VehiclesRepository {
@@ -95,7 +95,9 @@ export class PrismaVehiclesRepository implements VehiclesRepository {
 		const vehicles = await prisma.vehicle.findMany({
 			where: {
 				companyId,
-				deletedAt: null,
+			},
+			orderBy: {
+				createdAt: "asc",
 			},
 		});
 
@@ -103,12 +105,20 @@ export class PrismaVehiclesRepository implements VehiclesRepository {
 	}
 
 	async deleteById(id: string) {
+		await prisma.vehicle.delete({
+			where: {
+				id,
+			},
+		});
+	}
+
+	async updateStatus(id: string, status: VehicleStatus) {
 		await prisma.vehicle.update({
 			where: {
 				id,
 			},
 			data: {
-				deletedAt: new Date(),
+				status,
 			},
 		});
 	}

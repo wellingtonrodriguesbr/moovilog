@@ -20,9 +20,18 @@ export class PrismaDriversRepository implements DriversRepository {
 			},
 		});
 
-		if (!driver) {
-			return null;
-		}
+		return driver;
+	}
+
+	async findByPhoneNumberInCompany(phone: string, companyId: string) {
+		const driver = await prisma.driver.findUnique({
+			where: {
+				phone_companyId: {
+					phone,
+					companyId,
+				},
+			},
+		});
 
 		return driver;
 	}
@@ -37,10 +46,6 @@ export class PrismaDriversRepository implements DriversRepository {
 			},
 		});
 
-		if (!driver) {
-			return null;
-		}
-
 		return driver;
 	}
 
@@ -51,10 +56,6 @@ export class PrismaDriversRepository implements DriversRepository {
 			},
 		});
 
-		if (!driver) {
-			return null;
-		}
-
 		return driver;
 	}
 
@@ -62,7 +63,6 @@ export class PrismaDriversRepository implements DriversRepository {
 		const drivers = await prisma.driver.findMany({
 			where: {
 				companyId,
-				deletedAt: null,
 			},
 		});
 
@@ -70,12 +70,9 @@ export class PrismaDriversRepository implements DriversRepository {
 	}
 
 	async deleteById(id: string) {
-		await prisma.driver.update({
+		await prisma.driver.delete({
 			where: {
 				id,
-			},
-			data: {
-				deletedAt: new Date(),
 			},
 		});
 	}

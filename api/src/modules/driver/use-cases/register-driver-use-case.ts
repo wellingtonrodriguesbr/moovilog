@@ -42,14 +42,28 @@ export class RegisterDriverUseCase {
 			);
 		}
 
-		const driverAlreadyExistsInCompany =
-			await this.driversRepository.findDriverInCompany(
-				documentNumber,
-				member.companyId
+		const [driverAlreadyExistsInCompany, driverAlreadyExistsWithSamePhone] =
+			await Promise.all([
+				await this.driversRepository.findDriverInCompany(
+					documentNumber,
+					member.companyId
+				),
+				await this.driversRepository.findByPhoneNumberInCompany(
+					phone,
+					member.companyId
+				),
+			]);
+
+		if (driverAlreadyExistsWithSamePhone) {
+			throw new DriverAlreadyExistsError(
+				"Driver already exists with same phone"
 			);
+		}
 
 		if (driverAlreadyExistsInCompany) {
-			throw new DriverAlreadyExistsError();
+			throw new DriverAlreadyExistsError(
+				"Driver already exists in company with same document number"
+			);
 		}
 
 		const driver = await this.driversRepository.create({

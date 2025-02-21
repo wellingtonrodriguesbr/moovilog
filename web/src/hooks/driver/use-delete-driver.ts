@@ -27,7 +27,7 @@ export function useDeleteDriver() {
 		});
 
 	async function handleDeleteDriver({ driverId }: DeleteDriverProps) {
-		await api.patch(`/${company.id}/drivers/${driverId}`);
+		await api.delete(`/${company.id}/drivers/${driverId}`);
 	}
 
 	return {
