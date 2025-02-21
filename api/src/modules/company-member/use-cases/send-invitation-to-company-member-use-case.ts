@@ -3,7 +3,7 @@ import { MemberAlreadyExistsInCompanyError } from "@/modules/company-member/use-
 import {
 	ICompanyMember,
 	ICompanyMemberRoles,
-} from "@/modules/shared/interfaces/company-member";
+} from "@/modules/company-member/interfaces/company-member";
 import { UsersRepository } from "@/modules/user/repositories/users-repository";
 import { UserAlreadyExistsError } from "@/modules/auth/use-cases/errors/user-already-exists-error";
 import { TokensRepository } from "@/modules/shared/repositories/tokens-repository";
