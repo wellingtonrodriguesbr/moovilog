@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import {
 	Form,
 	FormControl,
@@ -18,7 +19,6 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -30,7 +30,7 @@ import { formatCNPJ } from "@/utils/format-cnpj";
 import { useRegisterCompany } from "@/hooks/company/use-register-company";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
-import { useCallback, useEffect, useRef } from "react";
+import { SECTORS } from "@/utils/mocks/sectors";
 
 const formSchema = z.object({
 	documentNumber: z
@@ -40,6 +40,7 @@ const formSchema = z.object({
 		.transform((value) => value.replace(/\D/g, "")),
 	name: z.string().min(3, { message: "Digite seu nome completo" }),
 	size: z.enum(["MICRO", "SMALL", "MEDIUM", "BIG"]),
+	ownerSector: z.string().min(2, { message: "Selecione um setor" }),
 	acceptTerms: z.boolean({ message: "Aceite os termos para prosseguir" }),
 });
 
@@ -54,6 +55,7 @@ export function RegisterCompanyForm() {
 			documentNumber: "",
 			name: "",
 			size: undefined,
+			ownerSector: undefined,
 			acceptTerms: false,
 		},
 	});
@@ -67,13 +69,9 @@ export function RegisterCompanyForm() {
 		documentNumber,
 	});
 
-	async function onSubmit({
-		name,
-		documentNumber,
-		size,
-	}: z.infer<typeof formSchema>) {
+	async function onSubmit(registerData: z.infer<typeof formSchema>) {
 		try {
-			await registerCompany({ name, documentNumber, size });
+			await registerCompany({ ...registerData });
 			toast.success("Empresa cadastrada com sucesso");
 			router.push("/cadastro/empresa/endereco");
 		} catch (error) {
@@ -205,7 +203,7 @@ export function RegisterCompanyForm() {
 									</SelectTrigger>
 								</FormControl>
 								<SelectContent
-									className="max-w-[320px] md:max-w-full"
+									className="max-w-[350px] md:max-w-full"
 									align="center"
 								>
 									<SelectItem value="MICRO">
@@ -226,6 +224,41 @@ export function RegisterCompanyForm() {
 									</SelectItem>
 								</SelectContent>
 							</Select>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+
+				<FormField
+					control={form.control}
+					name="ownerSector"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>
+								Qual é o seu setor na empresa?
+							</FormLabel>
+							<FormControl>
+								<Select
+									onValueChange={field.onChange}
+									defaultValue={field.value}
+								>
+									<FormControl>
+										<SelectTrigger>
+											<SelectValue placeholder="Selecione seu setor" />
+										</SelectTrigger>
+									</FormControl>
+									<SelectContent>
+										{SECTORS.map((sector) => (
+											<SelectItem
+												key={sector}
+												value={sector}
+											>
+												{sector}
+											</SelectItem>
+										))}
+									</SelectContent>
+								</Select>
+							</FormControl>
 							<FormMessage />
 						</FormItem>
 					)}

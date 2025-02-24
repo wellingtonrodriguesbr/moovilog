@@ -104,10 +104,11 @@ export function RegisterFreightForm() {
 			toast.success("Frete cadastrado com sucesso");
 		} catch (error) {
 			if (error instanceof AxiosError) {
-				if (error.response?.status === 409) {
+				if (error.response?.status === 403) {
 					toast.error(
-						"Já existe um motorista com este CPF ou telefone"
+						"Você não tem permissão para esta ação, fale com seu gestor."
 					);
+					router.push("/fretes");
 				}
 			} else {
 				toast.error("Erro ao cadastrar motorista");
@@ -148,6 +149,16 @@ export function RegisterFreightForm() {
 										inputMode="numeric"
 										{...field}
 										value={formatWeight(field.value)}
+										onChange={(e) => {
+											const rawValue =
+												e.target.value.replace(
+													/\D/g,
+													""
+												);
+											field.onChange(
+												rawValue ? Number(rawValue) : ""
+											);
+										}}
 									/>
 								</FormControl>
 								<FormMessage />

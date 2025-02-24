@@ -5,7 +5,7 @@ import {
 	CarouselItem,
 } from "@/components/ui/carousel";
 
-export function SkeletonFinancialSummaryMetrics() {
+export function SkeletonFinancialMetricsCards() {
 	return (
 		<section className="w-full h-full flex flex-col gap-4">
 			<Carousel

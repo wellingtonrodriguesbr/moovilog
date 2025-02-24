@@ -6,7 +6,7 @@ interface SendInvitationToCompanyMemberData {
 	name: string;
 	email: string;
 	sector: string;
-	role: "ADMIN" | "FINANCIAL" | "OPERATIONAL" | "COMERCIAL" | "MANAGER";
+	permissions: string[];
 }
 
 export function useSendInvitationToCompanyMember() {

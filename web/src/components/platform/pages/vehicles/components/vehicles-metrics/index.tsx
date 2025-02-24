@@ -8,7 +8,14 @@ import {
 import { useFetchVehiclesFromCompany } from "@/hooks/vehicle/use-fetch-vehicles-from-company";
 import { VehicleMetricsCard } from "./vehicle-metrics-card";
 import { SkeletonVehiclesMetrics } from "./skeleton-vehicles-metrics";
-import { Check, Skull, TriangleAlert, Truck, Wrench, X } from "lucide-react";
+import {
+	Skull,
+	ThumbsDown,
+	ThumbsUp,
+	TriangleAlert,
+	Truck,
+	Wrench,
+} from "lucide-react";
 
 export function VehiclesMetrics() {
 	const { vehiclesFromCompany, isFetchVehiclesFromCompanyPending } =
@@ -54,14 +61,14 @@ export function VehiclesMetrics() {
 					<CarouselItem className="w-fit basis-[200px] md:basis-1/4 xl:basis-[264px] pl-0">
 						<VehicleMetricsCard
 							description="Ativos"
-							icon={Check}
+							icon={ThumbsUp}
 							total={totalActiveVehicles.length}
 						/>
 					</CarouselItem>
 					<CarouselItem className="w-fit basis-[200px] md:basis-1/4 xl:basis-[264px] pl-0">
 						<VehicleMetricsCard
 							description="Inativos"
-							icon={X}
+							icon={ThumbsDown}
 							total={totalInactiveVehicles.length}
 						/>
 					</CarouselItem>

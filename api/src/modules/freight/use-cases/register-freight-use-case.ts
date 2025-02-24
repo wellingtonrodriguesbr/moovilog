@@ -11,12 +11,13 @@ import { RoutesRepository } from "@/modules/route/repositories/routes-repository
 import { CompanyMembersRepository } from "@/modules/company-member/repositories/company-members-repository";
 import { FinanceTransactionsRepository } from "@/modules/financial/repositories/finance-transactions-repository";
 import { FinanceCategoriesRepository } from "@/modules/financial/repositories/finance-categories-repository";
+import { DriverTransactionsRepository } from "@/modules/financial/repositories/driver-transactions-repository";
+import { PermissionService } from "@/services/permission-service";
 import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
 import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
 import { BadRequestError } from "@/modules/shared/errors/bad-request-error";
 
 import dayjs from "dayjs";
-import { DriverTransactionsRepository } from "@/modules/financial/repositories/driver-transactions-repository";
 
 interface RegisterFreightUseCaseRequest {
 	type: IFreightTypes;
@@ -39,8 +40,6 @@ interface RegisterFreightUseCaseResponse {
 	freight: IFreight;
 }
 
-const ROLE_PERMISSIONS = ["OPERATIONAL", "MANAGER", "ADMIN"];
-
 export class RegisterFreightUseCase {
 	constructor(
 		private companyMembersRepository: CompanyMembersRepository,
@@ -51,7 +50,8 @@ export class RegisterFreightUseCase {
 		private driverTransactionsRepository: DriverTransactionsRepository,
 		private routesRepository: RoutesRepository,
 		private financeTransactionsRepository: FinanceTransactionsRepository,
-		private financeCategoriesRepository: FinanceCategoriesRepository
+		private financeCategoriesRepository: FinanceCategoriesRepository,
+		private permissionService: PermissionService
 	) {}
 
 	async execute({
@@ -81,9 +81,14 @@ export class RegisterFreightUseCase {
 			throw new ResourceNotFoundError("Member not found");
 		}
 
-		if (!ROLE_PERMISSIONS.includes(member.role)) {
+		const hasPermission = await this.permissionService.hasPermission(
+			member.id,
+			["ADMIN", "MANAGE_SHIPMENTS_AND_PICKUPS"]
+		);
+
+		if (!hasPermission) {
 			throw new NotAllowedError(
-				"You do not have permission to perform this action, please ask your administrator for access"
+				"You do not have permission to perform this action"
 			);
 		}
 

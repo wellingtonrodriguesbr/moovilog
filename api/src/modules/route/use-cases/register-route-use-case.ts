@@ -3,7 +3,9 @@ import { CitiesInRouteRepository } from "@/modules/route/repositories/cities-in-
 import { RoutesRepository } from "@/modules/route/repositories/routes-repository";
 import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
 import { BadRequestError } from "@/modules/shared/errors/bad-request-error";
-import { IRoute } from "@/modules/shared/interfaces/route";
+import { IRoute } from "@/modules/route/interfaces/route";
+import { PermissionService } from "@/services/permission-service";
+import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
 
 interface RegisterRouteUseCaseRequest {
 	name: string;
@@ -19,7 +21,8 @@ export class RegisterRouteUseCase {
 	constructor(
 		private companyMembersRepository: CompanyMembersRepository,
 		private routesRepository: RoutesRepository,
-		private citiesInRouteRepository: CitiesInRouteRepository
+		private citiesInRouteRepository: CitiesInRouteRepository,
+		private permissionService: PermissionService
 	) {}
 
 	async execute({
@@ -31,17 +34,27 @@ export class RegisterRouteUseCase {
 			throw new BadRequestError("At least one city ID must be provided");
 		}
 
-		const companyMember =
-			await this.companyMembersRepository.findByUserId(userId);
+		const member = await this.companyMembersRepository.findByUserId(userId);
 
-		if (!companyMember) {
+		if (!member) {
 			throw new ResourceNotFoundError("Company member not found");
+		}
+
+		const hasPermission = await this.permissionService.hasPermission(
+			member.id,
+			["ADMIN", "MANAGE_ROUTES"]
+		);
+
+		if (!hasPermission) {
+			throw new NotAllowedError(
+				"You do not have permission to perform this action"
+			);
 		}
 
 		const routeAlreadyExistsWithSameNameInCompany =
 			await this.routesRepository.findRouteInCompanyWithSameName(
 				name,
-				companyMember.companyId
+				member.companyId
 			);
 
 		if (routeAlreadyExistsWithSameNameInCompany) {
@@ -52,8 +65,8 @@ export class RegisterRouteUseCase {
 
 		const route = await this.routesRepository.create({
 			name,
-			creatorId: companyMember.id,
-			companyId: companyMember.companyId,
+			creatorId: member.id,
+			companyId: member.companyId,
 		});
 
 		await Promise.all(

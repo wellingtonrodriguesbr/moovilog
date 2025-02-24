@@ -73,6 +73,10 @@ export class PrismaCompanyMembersRepository
 						updatedAt: true,
 					},
 				},
+				companyMemberPermissions: true,
+			},
+			orderBy: {
+				createdAt: "asc",
 			},
 		});
 

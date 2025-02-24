@@ -4,6 +4,7 @@ import { IDriver, IDriverType } from "@/modules/driver/interfaces/driver";
 import { DriverAlreadyExistsError } from "@/modules/driver/use-cases/errors/driver-already-exists-error";
 import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
 import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
+import { PermissionService } from "@/services/permission-service";
 
 interface RegisterDriverUseCaseRequest {
 	name: string;
@@ -20,7 +21,8 @@ interface RegisterDriverUseCaseResponse {
 export class RegisterDriverUseCase {
 	constructor(
 		private companyMembersRepository: CompanyMembersRepository,
-		private driversRepository: DriversRepository
+		private driversRepository: DriversRepository,
+		private permissionService: PermissionService
 	) {}
 
 	async execute({
@@ -36,9 +38,14 @@ export class RegisterDriverUseCase {
 			throw new ResourceNotFoundError("Member not found");
 		}
 
-		if (member.role !== "ADMIN" && member.role !== "MANAGER") {
+		const hasPermission = await this.permissionService.hasPermission(
+			member.id,
+			["ADMIN", "MANAGE_VEHICLES_AND_DRIVERS"]
+		);
+
+		if (!hasPermission) {
 			throw new NotAllowedError(
-				"You do not have permission to perform this action, please ask your administrator for access"
+				"You do not have permission to perform this action"
 			);
 		}
 

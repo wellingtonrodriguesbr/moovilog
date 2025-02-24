@@ -23,6 +23,7 @@ import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { useUpdateVehicleStatus } from "@/hooks/vehicle/use-update-vehicle-status";
 import { Vehicle } from "@/interfaces";
+import { AxiosError } from "axios";
 
 interface UpdateVehicleStatusFormProps {
 	onCloseDialog: () => void;
@@ -52,10 +53,21 @@ export function UpdateVehicleStatusForm({
 	async function onSubmit({ status }: z.infer<typeof formSchema>) {
 		try {
 			await updateVehicleStatus({ status, vehicleId });
-			onCloseDialog();
 			toast.success("Status atualizado com sucesso");
 		} catch (error) {
-			toast.error("Erro ao atualizar status do veículo, tente novamente");
+			if (error instanceof AxiosError) {
+				if (error.response?.status === 403) {
+					toast.error(
+						"Você não tem permissão para esta ação, fale com seu gestor."
+					);
+				}
+			} else {
+				toast.error(
+					"Erro ao atualizar status do veículo, tente novamente"
+				);
+			}
+		} finally {
+			onCloseDialog();
 		}
 	}
 

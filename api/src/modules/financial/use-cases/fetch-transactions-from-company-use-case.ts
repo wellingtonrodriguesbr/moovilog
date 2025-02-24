@@ -4,6 +4,7 @@ import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-foun
 import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
 import { FinanceTransactionsRepository } from "@/modules/financial/repositories/finance-transactions-repository";
 import { IFinanceTransaction } from "@/modules/financial/interfaces/finance-transaction";
+import { PermissionService } from "@/services/permission-service";
 
 interface FetchTransactionsFromCompanyUseCaseRequest {
 	userId: string;
@@ -12,15 +13,19 @@ interface FetchTransactionsFromCompanyUseCaseRequest {
 
 interface FetchTransactionsFromCompanyUseCaseResponse {
 	transactions: IFinanceTransaction[];
+	totalTransactions: number;
+	totalIncomeInCents: number;
+	totalExpenseInCents: number;
+	totalBalanceInCents: number;
+	percentage: number;
 }
-
-const ROLE_PERMISSIONS = ["FINANCIAL", "MANAGER", "ADMIN"];
 
 export class FetchTransactionsFromCompanyUseCase {
 	constructor(
 		private companyMembersRepository: CompanyMembersRepository,
 		private companiesRepository: CompaniesRepository,
-		private financeTransactionsRepository: FinanceTransactionsRepository
+		private financeTransactionsRepository: FinanceTransactionsRepository,
+		private permissionService: PermissionService
 	) {}
 
 	async execute({
@@ -40,7 +45,12 @@ export class FetchTransactionsFromCompanyUseCase {
 			throw new ResourceNotFoundError("Member not found in company");
 		}
 
-		if (!ROLE_PERMISSIONS.includes(memberInCompany.role)) {
+		const hasPermission = await this.permissionService.hasPermission(
+			memberInCompany.id,
+			["ADMIN", "VIEW_FINANCES"]
+		);
+
+		if (!hasPermission) {
 			throw new NotAllowedError(
 				"You do not have permission to perform this action"
 			);
@@ -49,6 +59,37 @@ export class FetchTransactionsFromCompanyUseCase {
 		const transactions =
 			await this.financeTransactionsRepository.findManyByCompanyId(companyId);
 
-		return { transactions };
+		const totalTransactions =
+			await this.financeTransactionsRepository.countByCompanyId(companyId);
+
+		const totalIncomeInCents =
+			await this.financeTransactionsRepository.sumByTypeAndCompanyId(
+				"INCOME",
+				companyId
+			);
+
+		const totalExpenseInCents =
+			await this.financeTransactionsRepository.sumByTypeAndCompanyId(
+				"EXPENSE",
+				companyId
+			);
+
+		const totalBalanceInCents = totalIncomeInCents - totalExpenseInCents;
+
+		const percentage =
+			totalIncomeInCents !== 0
+				? (totalBalanceInCents / totalIncomeInCents) * 100
+				: totalBalanceInCents < 0
+					? -100
+					: 0;
+
+		return {
+			transactions,
+			totalTransactions,
+			totalIncomeInCents,
+			totalExpenseInCents,
+			totalBalanceInCents,
+			percentage,
+		};
 	}
 }

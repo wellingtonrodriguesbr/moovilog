@@ -2,6 +2,7 @@ import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CopyButton } from "@/components/platform/copy-button";
+import { CollaboratorPermissionsDropdown } from "@/components/platform/pages/collaborators/components/collaborator-permissions-dropdown";
 import { CompanyMember } from "@/interfaces";
 
 import { formatBrazilianDate } from "@/utils/format-brazilian-date";
@@ -11,14 +12,6 @@ import { Ellipsis } from "lucide-react";
 interface CollaboratorsTableRowProps {
 	companyMember: CompanyMember;
 }
-
-const COMPANY_MEMBER_ROLE: Record<string, string> = {
-	ADMIN: "Administrador",
-	FINANCIAL: "Financeiro",
-	OPERATIONAL: "Operacional",
-	MANAGER: "Gerente",
-	COMERCIAL: "Comercial",
-};
 
 const COMPANY_MEMBER_STATUS: Record<string, string> = {
 	ACTIVE: "Ativo",
@@ -53,7 +46,11 @@ export function CollaboratorsTableRow({
 				</Badge>
 			</TableCell>
 			<TableCell>{companyMember.sector}</TableCell>
-			<TableCell>{COMPANY_MEMBER_ROLE[companyMember.role]}</TableCell>
+			<TableCell>
+				<CollaboratorPermissionsDropdown
+					permissions={companyMember.companyMemberPermissions}
+				/>
+			</TableCell>
 			<TableCell>
 				{formatBrazilianDate(companyMember.createdAt)}
 			</TableCell>

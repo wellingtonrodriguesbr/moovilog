@@ -1,6 +1,6 @@
 import { TransactionsTable } from "@/components/platform/pages/financial/components/transactions-table";
 import { RegisterTransactionDialog } from "@/components/platform/pages/financial/components/register-transaction-dialog";
-import { FinancialSummaryMetrics } from "@/components/platform/pages/financial/components/financial-summary-metrics";
+import { FinancialMetricsCards } from "@/components/platform/pages/financial/components/financial-metrics-cards";
 
 export function Financial() {
 	return (
@@ -10,7 +10,7 @@ export function Financial() {
 				<RegisterTransactionDialog />
 			</header>
 			<div className="flex flex-col gap-12">
-				<FinancialSummaryMetrics />
+				<FinancialMetricsCards />
 				<TransactionsTable />
 			</div>
 		</section>

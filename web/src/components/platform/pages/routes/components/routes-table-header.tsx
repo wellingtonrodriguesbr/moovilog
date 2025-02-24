@@ -5,7 +5,7 @@ export function RoutesTableHeader() {
 		<TableHeader className="bg-zinc-100 hover:bg-zinc-100">
 			<TableRow className="hover:bg-zinc-100">
 				<TableHead className="text-app-blue-900 font-medium text-nowrap">
-					Id da rota
+					Código da rota
 				</TableHead>
 				<TableHead className="text-app-blue-900 font-medium rounded-tl-lg text-nowrap">
 					Nome

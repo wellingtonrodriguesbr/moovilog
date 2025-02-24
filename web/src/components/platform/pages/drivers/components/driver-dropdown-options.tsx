@@ -11,6 +11,7 @@ import { Check, Ellipsis, X } from "lucide-react";
 import { useUpdateDriverStatus } from "@/hooks/driver/use-update-driver-status";
 import { toast } from "sonner";
 import { Driver } from "@/interfaces";
+import { AxiosError } from "axios";
 
 interface DriverDropdownOptionsProps {
 	driver: Driver;
@@ -28,9 +29,17 @@ export function DriverDropdownOptions({ driver }: DriverDropdownOptionsProps) {
 			});
 			toast.success("Status atualizado com sucesso");
 		} catch (error) {
-			toast.error(
-				"Erro ao atualizar status do motorista, tente novamente"
-			);
+			if (error instanceof AxiosError) {
+				if (error.response?.status === 403) {
+					toast.error(
+						"Você não tem permissão para esta ação, fale com seu gestor."
+					);
+				}
+			} else {
+				toast.error(
+					"Erro ao atualizar status do motorista, tente novamente"
+				);
+			}
 		}
 	}
 

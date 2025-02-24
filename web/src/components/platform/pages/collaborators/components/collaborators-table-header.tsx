@@ -25,7 +25,7 @@ export function CollaboratorsTableHeader() {
 				<TableHead className="flex items-center gap-2 text-app-blue-900 font-medium">
 					Permissão
 					<Tooltip delayDuration={0} defaultOpen>
-						<TooltipTrigger className="mt-1">
+						<TooltipTrigger>
 							<Info className="size-4" />
 						</TooltipTrigger>
 						<TooltipContent className="max-w-64">

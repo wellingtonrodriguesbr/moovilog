@@ -40,7 +40,6 @@ export function useRegisterFreight() {
 		mutationFn: handleRegisterFreight,
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["freights"] });
-			queryClient.invalidateQueries({ queryKey: ["freights-summary"] });
 			queryClient.invalidateQueries({ queryKey: ["transactions"] });
 		},
 	});

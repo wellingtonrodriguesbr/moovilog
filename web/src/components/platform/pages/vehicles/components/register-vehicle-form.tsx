@@ -135,10 +135,17 @@ export function RegisterVehicleForm({
 			if (error instanceof AxiosError) {
 				if (error.response?.status === 409) {
 					toast.error("Já existe um veículo com esta placa");
+				} else if (error.response?.status === 403) {
+					toast.error(
+						"Você não tem permissão para esta ação, fale com seu gestor."
+					);
 				}
 			} else {
 				toast.error("Erro ao cadastrar veículo");
 			}
+		} finally {
+			form.reset();
+			onCloseDialog();
 		}
 	}
 

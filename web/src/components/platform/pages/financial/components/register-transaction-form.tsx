@@ -92,7 +92,9 @@ export function RegisterTransactionForm({
 		} catch (error) {
 			if (error instanceof AxiosError) {
 				if (error.response?.status === 403) {
-					toast.error("Você não tem permissão para esta ação");
+					toast.error(
+						"Você não tem permissão para esta ação, fale com seu gestor."
+					);
 				} else if (error.response?.status === 404) {
 					toast.error(
 						"Falha ao cadastrar transação, tente novamente."
@@ -200,11 +202,18 @@ export function RegisterTransactionForm({
 								<FormControl>
 									<Select
 										onValueChange={field.onChange}
+										disabled={isFetchCategoriesPending}
 										value={field.value}
 									>
 										<FormControl>
 											<SelectTrigger>
-												<SelectValue placeholder="Selecione uma opção" />
+												<SelectValue
+													placeholder={
+														isFetchCategoriesPending
+															? "Carregando categorias.."
+															: "Selecione uma opção"
+													}
+												/>
 											</SelectTrigger>
 										</FormControl>
 										<SelectContent>

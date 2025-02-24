@@ -12,6 +12,7 @@ import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
 import { CompaniesRepository } from "@/modules/company/repositories/companies-repository";
 import { DriversRepository } from "@/modules/driver/repositories/drivers-repository";
 import { DriverTransactionsRepository } from "../repositories/driver-transactions-repository";
+import { PermissionService } from "@/services/permission-service";
 
 interface RegisterTransactionUseCaseRequest {
 	description?: string | null;
@@ -30,8 +31,6 @@ interface RegisterTransactionUseCaseResponse {
 	transaction: IFinanceTransaction;
 }
 
-const ROLE_PERMISSIONS = ["FINANCIAL", "MANAGER", "ADMIN"];
-
 export class RegisterTransactionUseCase {
 	constructor(
 		private companyMembersRepository: CompanyMembersRepository,
@@ -39,7 +38,8 @@ export class RegisterTransactionUseCase {
 		private driversRepository: DriversRepository,
 		private driverTransactionsRepository: DriverTransactionsRepository,
 		private financeTransactionsRepository: FinanceTransactionsRepository,
-		private financeCategoriesRepository: FinanceCategoriesRepository
+		private financeCategoriesRepository: FinanceCategoriesRepository,
+		private permissionService: PermissionService
 	) {}
 
 	async execute({
@@ -67,9 +67,14 @@ export class RegisterTransactionUseCase {
 			throw new ResourceNotFoundError("Company not found");
 		}
 
-		if (!ROLE_PERMISSIONS.includes(memberInCompany.role)) {
+		const hasPermission = await this.permissionService.hasPermission(
+			memberInCompany.id,
+			["ADMIN", "MANAGE_FINANCES"]
+		);
+
+		if (!hasPermission) {
 			throw new NotAllowedError(
-				"You do not have permission to perform this action, please ask your administrator for access"
+				"You do not have permission to perform this action"
 			);
 		}
 

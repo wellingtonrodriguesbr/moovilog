@@ -7,6 +7,7 @@ interface RegisterCompanyData {
 	name: string;
 	documentNumber: string;
 	size: "MICRO" | "SMALL" | "MEDIUM" | "BIG";
+	ownerSector: string;
 }
 
 interface CompanyResponse {
@@ -23,16 +24,9 @@ export function useRegisterCompany() {
 		mutationFn: handleRegisterCompany,
 	});
 
-	async function handleRegisterCompany({
-		name,
-		documentNumber,
-		size,
-	}: RegisterCompanyData) {
+	async function handleRegisterCompany(registerData: RegisterCompanyData) {
 		const { data } = await api.post<CompanyResponse>("/companies", {
-			name,
-			documentNumber,
-			size,
-			ownerSector: "Diretoria",
+			...registerData,
 		});
 		setCompany(data.company);
 		return data.company;

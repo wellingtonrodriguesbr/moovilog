@@ -1,26 +1,26 @@
 import { CompanyMembersRepository } from "@/modules/company-member/repositories/company-members-repository";
 import { MemberAlreadyExistsInCompanyError } from "@/modules/company-member/use-cases/errors/member-already-exists-in-company";
-import {
-	ICompanyMember,
-	ICompanyMemberRoles,
-} from "@/modules/company-member/interfaces/company-member";
+import { ICompanyMember } from "@/modules/company-member/interfaces/company-member";
 import { UsersRepository } from "@/modules/user/repositories/users-repository";
 import { UserAlreadyExistsError } from "@/modules/auth/use-cases/errors/user-already-exists-error";
 import { TokensRepository } from "@/modules/shared/repositories/tokens-repository";
-import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
 import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
 import { generateRamdonCode } from "@/utils/generate-random-code";
 import { env } from "@/env";
 import { EmailDetails, EmailQueue } from "@/utils/email-queue";
+import { CompaniesRepository } from "@/modules/company/repositories/companies-repository";
+import { CompanyMemberPermissionsRepository } from "@/modules/company-member/repositories/company-member-permissions-repository";
+import { ICompanyMemberPermission } from "@/modules/company-member/interfaces/company-member-permission";
 
 import SendInvitationToCompanyMemberTemplate from "@/mail/templates/send-invitation-to-company-member-template";
-import { CompaniesRepository } from "@/modules/company/repositories/companies-repository";
+import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
+import { PermissionService } from "@/services/permission-service";
 
 interface SendInvitationToCompanyMemberUseCaseRequest {
 	name: string;
 	email: string;
 	sector: string;
-	role: ICompanyMemberRoles;
+	permissions: string[];
 	senderId: string;
 	companyId: string;
 }
@@ -33,15 +33,17 @@ export class SendInvitationToCompanyMemberUseCase {
 	constructor(
 		private usersRepository: UsersRepository,
 		private companyMembersRepository: CompanyMembersRepository,
+		private companyMemberPermissionsRepository: CompanyMemberPermissionsRepository,
 		private companiesRepository: CompaniesRepository,
-		private tokensRepository: TokensRepository
+		private tokensRepository: TokensRepository,
+		private permissionService: PermissionService
 	) {}
 
 	async execute({
 		name,
 		email,
 		sector,
-		role,
+		permissions,
 		senderId,
 		companyId,
 	}: SendInvitationToCompanyMemberUseCaseRequest): Promise<SendInvitationToCompanyMemberUseCaseResponse> {
@@ -68,12 +70,14 @@ export class SendInvitationToCompanyMemberUseCase {
 			throw new ResourceNotFoundError("Sender not found in company");
 		}
 
-		if (
-			senderInCompany.role !== "ADMIN" &&
-			senderInCompany.role !== "MANAGER"
-		) {
+		const hasPermission = await this.permissionService.hasPermission(
+			senderInCompany.id,
+			["ADMIN", "MANAGE_USERS", "MANAGE_PERMISSIONS"]
+		);
+
+		if (!hasPermission) {
 			throw new NotAllowedError(
-				"You do not have permission to perform this action, please ask your administrator for access"
+				"You do not have permission to perform this action"
 			);
 		}
 
@@ -104,8 +108,14 @@ export class SendInvitationToCompanyMemberUseCase {
 			companyId: senderInCompany.companyId,
 			userId: user.id,
 			sector,
-			role,
 		});
+
+		await this.companyMemberPermissionsRepository.createMany(
+			(permissions as ICompanyMemberPermission[]).map((permission) => ({
+				companyMemberId: companyMember.id,
+				permission,
+			}))
+		);
 
 		const code = generateRamdonCode();
 		const link = `${env.WEBSITE_DOMAIN_URL}/validacao-do-codigo?codigo=${code}`;

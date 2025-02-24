@@ -26,8 +26,11 @@ import {
 	TooltipContent,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Info, Loader2, Send } from "lucide-react";
+import { Info, Loader2 } from "lucide-react";
 import { useSendInvitationToCompanyMember } from "@/hooks/company-member/use-send-invitation-to-company-member";
+import { MultiSelectUserPermissions } from "@/components/platform/multi-select-user-permissions";
+import { SECTORS } from "@/utils/mocks/sectors";
+import { USER_PERMISSIONS } from "@/utils/mocks/user-permissions";
 
 interface RegisterNewCollaboratorFormProps {
 	onCloseDialog: () => void;
@@ -37,12 +40,10 @@ const formSchema = z.object({
 	name: z.coerce.string().min(8, { message: "Digite o nome completo" }),
 	email: z.string().email({ message: "Digite um e-mail válido" }),
 	sector: z.string(),
-	role: z.enum(
-		["ADMIN", "FINANCIAL", "OPERATIONAL", "MANAGER", "COMERCIAL"],
-		{
-			message: "Selecione uma opção",
-		}
-	),
+	permissions: z
+		.string()
+		.array()
+		.min(1, { message: "Selecione pelo menos uma permissão" }),
 });
 
 export function RegisterNewCollaboratorForm({
@@ -52,15 +53,18 @@ export function RegisterNewCollaboratorForm({
 		sendinvitationtoCompanyMember,
 		isPendingSendInvitationToCompanyMember,
 	} = useSendInvitationToCompanyMember();
+
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			name: "",
 			email: "",
 			sector: "",
-			role: undefined,
+			permissions: [],
 		},
 	});
+
+	console.log(form.watch("permissions"));
 
 	async function onSubmit(registerData: z.infer<typeof formSchema>) {
 		try {
@@ -122,13 +126,29 @@ export function RegisterNewCollaboratorForm({
 					control={form.control}
 					name="sector"
 					render={({ field }) => (
-						<FormItem className="col-span-3">
+						<FormItem>
 							<FormLabel>Setor</FormLabel>
 							<FormControl>
-								<Input
-									placeholder="Ex: Administrativo, Controladoria, Logística.."
-									{...field}
-								/>
+								<Select
+									onValueChange={field.onChange}
+									defaultValue={field.value}
+								>
+									<FormControl>
+										<SelectTrigger>
+											<SelectValue placeholder="Selecione o setor do colaborador" />
+										</SelectTrigger>
+									</FormControl>
+									<SelectContent>
+										{SECTORS.map((sector) => (
+											<SelectItem
+												key={sector}
+												value={sector}
+											>
+												{sector}
+											</SelectItem>
+										))}
+									</SelectContent>
+								</Select>
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -137,12 +157,12 @@ export function RegisterNewCollaboratorForm({
 
 				<FormField
 					control={form.control}
-					name="role"
+					name="permissions"
 					render={({ field }) => (
 						<FormItem>
 							<FormLabel className="flex items-center gap-2">
 								Permissão
-								<Tooltip>
+								<Tooltip delayDuration={0}>
 									<TooltipTrigger>
 										<Info className="size-4" />
 									</TooltipTrigger>
@@ -155,33 +175,13 @@ export function RegisterNewCollaboratorForm({
 									</TooltipContent>
 								</Tooltip>
 							</FormLabel>
-							<Select
-								onValueChange={field.onChange}
-								defaultValue={field.value}
-							>
-								<FormControl>
-									<SelectTrigger>
-										<SelectValue placeholder="Selecione o cargo" />
-									</SelectTrigger>
-								</FormControl>
-								<SelectContent>
-									<SelectItem value="ADMIN">
-										Administrador
-									</SelectItem>
-									<SelectItem value="MANAGER">
-										Gerente
-									</SelectItem>
-									<SelectItem value="OPERATIONAL">
-										Operacional
-									</SelectItem>
-									<SelectItem value="FINANCIAL">
-										Financeiro
-									</SelectItem>
-									<SelectItem value="COMERCIAL">
-										Comercial
-									</SelectItem>
-								</SelectContent>
-							</Select>
+							<MultiSelectUserPermissions
+								modalPopover
+								options={USER_PERMISSIONS}
+								onUserPermissionsChange={(permissions) =>
+									form.setValue("permissions", permissions)
+								}
+							/>
 							<FormMessage />
 						</FormItem>
 					)}

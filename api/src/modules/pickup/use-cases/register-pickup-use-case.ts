@@ -87,7 +87,7 @@ export class RegisterPickupUseCase {
 
 		if (!ROLE_PERMISSIONS.includes(memberInCompany.role)) {
 			throw new NotAllowedError(
-				"You do not have permission to perform this action, please ask your administrator for access"
+				"You do not have permission to perform this action"
 			);
 		}
 

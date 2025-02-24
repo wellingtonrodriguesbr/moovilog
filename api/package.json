@@ -5,7 +5,7 @@
 	"main": "index.js",
 	"scripts": {
 		"build": "tsup src --out-dir build",
-    "start": "node build/http/server.js",
+		"start": "node build/http/server.js",
 		"dev": "tsx watch --env-file .env src/http/server.ts",
 		"email:dev": "email dev --dir src/mail",
 		"test": "vitest run --dir src",
@@ -20,7 +20,7 @@
 		"@eslint/js": "^9.11.0",
 		"@types/bcryptjs": "^2.4.6",
 		"@types/node": "^20.14.2",
-		"@types/react": "^18.3.1",
+		"@types/react": "latest",
 		"@typescript-eslint/eslint-plugin": "^8.6.0",
 		"@typescript-eslint/parser": "^8.6.0",
 		"eslint": "8.57.0",
@@ -47,9 +47,9 @@
 		"dayjs": "^1.11.11",
 		"dotenv": "^16.4.5",
 		"fastify": "^4.27.0",
-		"react": "^18.3.1",
+		"react": "latest",
 		"react-email": "^3.0.1",
-		"resend": "^4.0.0",
+		"resend": "^4.1.2",
 		"zod": "^3.23.8"
 	}
 }

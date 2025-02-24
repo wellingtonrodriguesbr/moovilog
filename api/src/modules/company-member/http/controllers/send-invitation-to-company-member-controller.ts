@@ -13,13 +13,7 @@ export class SendInvitationToCompanyMemberController {
 			name: z.string(),
 			email: z.string().email(),
 			sector: z.string(),
-			role: z.enum([
-				"ADMIN",
-				"FINANCIAL",
-				"OPERATIONAL",
-				"MANAGER",
-				"COMERCIAL",
-			]),
+			permissions: z.string().array(),
 		});
 
 		const sendInvitationtoCompanyMemberParamsSchema = z.object({
@@ -30,7 +24,7 @@ export class SendInvitationToCompanyMemberController {
 			req.params
 		);
 
-		const { name, email, sector, role } =
+		const { name, email, sector, permissions } =
 			sendInvitationtoCompanyMemberBodySchema.parse(req.body);
 
 		const senderId = req.user.sub;
@@ -43,7 +37,7 @@ export class SendInvitationToCompanyMemberController {
 					name,
 					email,
 					sector,
-					role,
+					permissions,
 					senderId,
 					companyId,
 				});

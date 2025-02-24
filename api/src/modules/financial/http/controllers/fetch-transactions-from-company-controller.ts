@@ -20,13 +20,26 @@ export class FetchTransactionsFromCompanyController {
 		try {
 			const fetchTransactionsFromCompanyUseCase =
 				makeFetchTransactionsFromCompanyUseCase();
-			const { transactions } =
-				await fetchTransactionsFromCompanyUseCase.execute({
-					companyId,
-					userId,
-				});
+			const {
+				transactions,
+				totalTransactions,
+				totalIncomeInCents,
+				totalExpenseInCents,
+				totalBalanceInCents,
+				percentage,
+			} = await fetchTransactionsFromCompanyUseCase.execute({
+				companyId,
+				userId,
+			});
 
-			reply.status(200).send({ transactions });
+			reply.status(200).send({
+				transactions,
+				totalTransactions,
+				totalIncomeInCents,
+				totalExpenseInCents,
+				totalBalanceInCents,
+				percentage,
+			});
 		} catch (error) {
 			if (error instanceof ResourceNotFoundError) {
 				reply.status(404).send({ message: error.message });

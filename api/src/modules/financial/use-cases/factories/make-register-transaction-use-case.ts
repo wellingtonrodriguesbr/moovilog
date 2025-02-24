@@ -5,6 +5,8 @@ import { PrismaFinanceCategoriesRepository } from "@/modules/financial/repositor
 import { RegisterTransactionUseCase } from "@/modules/financial/use-cases/register-transaction-use-case";
 import { PrismaDriversRepository } from "@/modules/driver/repositories/prisma/prisma-drivers-repository";
 import { PrismaDriverTransactionsRepository } from "@/modules/financial/repositories/prisma/prisma-driver-transactions-repository";
+import { PermissionService } from "@/services/permission-service";
+import { PrismaCompanyMemberPermissionsRepository } from "@/modules/company-member/repositories/prisma/prisma-company-member-permissions-repository";
 
 export function makeRegisterTransactionUseCase() {
 	const companyMembersRepository = new PrismaCompanyMembersRepository();
@@ -15,13 +17,21 @@ export function makeRegisterTransactionUseCase() {
 		new PrismaFinanceTransactionsRepository();
 	const financeCategoriesRepository = new PrismaFinanceCategoriesRepository();
 
+	const companyMemberPermissionsRepository =
+		new PrismaCompanyMemberPermissionsRepository();
+
+	const permissionService = new PermissionService(
+		companyMemberPermissionsRepository
+	);
+
 	const registerTransactionUseCase = new RegisterTransactionUseCase(
 		companyMembersRepository,
 		companiesRepository,
 		driversRepository,
 		driverTransactionsRepository,
 		financeTransactionsRepository,
-		financeCategoriesRepository
+		financeCategoriesRepository,
+		permissionService
 	);
 
 	return registerTransactionUseCase;

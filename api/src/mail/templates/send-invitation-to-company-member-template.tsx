@@ -38,9 +38,9 @@ export default function SendInvitationToCompanyMemberTemplate({
 							Olá, {userName}.
 						</Heading>
 						<Text className="text-[20px]">
-							Voce recebeu um convite para se juntar com {senderName} e
-							companhia dentro da plataforma do{" "}
-							<Link href="https://moovilog.com" className="text-[#2222FF]">
+							Voce recebeu um convite para se juntar a {senderName} e companhia
+							dentro da plataforma do{" "}
+							<Link href="https://moovilog.com.br" className="text-[#2222FF]">
 								Moovilog
 							</Link>
 							. Seu e-mail cadastrado é {userEmail}.

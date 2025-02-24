@@ -9,6 +9,7 @@ import {
 	IVehicleCategory,
 	IVehicleType,
 } from "@/modules/vehicle/interfaces/vehicle";
+import { PermissionService } from "@/services/permission-service";
 
 interface RegisterVehicleUseCaseRequest {
 	plate: string;
@@ -27,12 +28,11 @@ interface RegisterVehicleUseCaseResponse {
 	vehicle: IVehicle;
 }
 
-const ROLE_PERMISSIONS = ["ADMIN", "MANAGER"];
-
 export class RegisterVehicleUseCase {
 	constructor(
 		private companyMembersRepository: CompanyMembersRepository,
-		private vehiclesRepository: VehiclesRepository
+		private vehiclesRepository: VehiclesRepository,
+		private permissionService: PermissionService
 	) {}
 
 	async execute({
@@ -53,9 +53,14 @@ export class RegisterVehicleUseCase {
 			throw new ResourceNotFoundError("Member not found");
 		}
 
-		if (!ROLE_PERMISSIONS.includes(member.role)) {
+		const hasPermission = await this.permissionService.hasPermission(
+			member.id,
+			["ADMIN", "MANAGE_VEHICLES_AND_DRIVERS"]
+		);
+
+		if (!hasPermission) {
 			throw new NotAllowedError(
-				"You do not have permission to perform this action, please ask your administrator for access"
+				"You do not have permission to perform this action"
 			);
 		}
 

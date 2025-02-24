@@ -6,6 +6,7 @@ import { ICompany, ICompanySizes } from "@/modules/company/interfaces/company";
 import { CompanyAlreadyExistsError } from "@/modules/company/use-cases/errors/company-already-exists-error";
 import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
 import { OwnerAlreadyHasACompanyError } from "@/modules/company/use-cases/errors/owner-already-has-a-company-error";
+import { CompanyMemberPermissionsRepository } from "@/modules/company-member/repositories/company-member-permissions-repository";
 
 interface RegisterCompanyUseCaseRequest {
 	ownerId: string;
@@ -23,6 +24,7 @@ export class RegisterCompanyUseCase {
 	constructor(
 		private companiesRepository: CompaniesRepository,
 		private companyMembersRepository: CompanyMembersRepository,
+		private companyMemberPermissionsRepository: CompanyMemberPermissionsRepository,
 		private usersRepository: UsersRepository
 	) {}
 
@@ -34,6 +36,8 @@ export class RegisterCompanyUseCase {
 		size,
 	}: RegisterCompanyUseCaseRequest): Promise<RegisterCompanyUseCaseResponse> {
 		const user = await this.usersRepository.findById(ownerId);
+
+		console.log(user);
 
 		if (!user) {
 			throw new ResourceNotFoundError("User not found");
@@ -60,13 +64,19 @@ export class RegisterCompanyUseCase {
 			size,
 		});
 
-		await this.companyMembersRepository.create({
+		const companyMember = await this.companyMembersRepository.create({
 			userId: user.id,
 			companyId: company.id,
-			role: "ADMIN",
 			sector: ownerSector,
 			status: "ACTIVE",
 		});
+
+		await this.companyMemberPermissionsRepository.createMany([
+			{
+				companyMemberId: companyMember.id,
+				permission: "ADMIN",
+			},
+		]);
 
 		return { company };
 	}

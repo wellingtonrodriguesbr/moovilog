@@ -3,6 +3,7 @@ import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-foun
 import { DriversRepository } from "@/modules/driver/repositories/drivers-repository";
 import { CompanyMembersRepository } from "@/modules/company-member/repositories/company-members-repository";
 import { CompaniesRepository } from "@/modules/company/repositories/companies-repository";
+import { PermissionService } from "@/services/permission-service";
 
 interface UpdateDriverStatusUseCaseRequest {
 	driverId: string;
@@ -11,13 +12,12 @@ interface UpdateDriverStatusUseCaseRequest {
 	status: "ACTIVE" | "INACTIVE";
 }
 
-const ROLE_PERMISSIONS = ["ADMIN", "MANAGER"];
-
 export class UpdateDriverStatusUseCase {
 	constructor(
 		private companyMembersRepository: CompanyMembersRepository,
 		private companiesRepository: CompaniesRepository,
-		private driversRepository: DriversRepository
+		private driversRepository: DriversRepository,
+		private permissionService: PermissionService
 	) {}
 
 	async execute({
@@ -42,9 +42,14 @@ export class UpdateDriverStatusUseCase {
 			throw new ResourceNotFoundError("Company not found");
 		}
 
-		if (!ROLE_PERMISSIONS.includes(member.role)) {
+		const hasPermission = await this.permissionService.hasPermission(
+			member.id,
+			["ADMIN", "MANAGE_VEHICLES_AND_DRIVERS"]
+		);
+
+		if (!hasPermission) {
 			throw new NotAllowedError(
-				"You do not have permission to perform this action, please ask your administrator for access"
+				"You do not have permission to perform this action"
 			);
 		}
 

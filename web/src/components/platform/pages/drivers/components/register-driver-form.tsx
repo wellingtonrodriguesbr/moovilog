@@ -44,7 +44,9 @@ const formSchema = z.object({
 		.min(11, { message: "Digite um telefone válido" })
 		.transform((value) => value.replace(/\D/g, ""))
 		.transform((phone) => phone.slice(0, 11)),
-	type: z.enum(["AGGREGATE", "INTERNAL", "FREELANCER"]),
+	type: z.enum(["AGGREGATE", "INTERNAL", "FREELANCER"], {
+		message: "Selecione uma opção",
+	}),
 });
 
 export function RegisterDriverForm({ onCloseDialog }: RegisterDriverFormProps) {
@@ -67,14 +69,17 @@ export function RegisterDriverForm({ onCloseDialog }: RegisterDriverFormProps) {
 			toast.success("Motorista cadastrado com sucesso");
 		} catch (error) {
 			if (error instanceof AxiosError) {
-				if (error.response?.status === 409) {
+				if (error.response?.status === 403) {
 					toast.error(
-						"Já existe um motorista com este CPF ou telefone"
+						"Você não tem permissão para esta ação, fale com seu gestor."
 					);
 				}
 			} else {
 				toast.error("Erro ao cadastrar motorista");
 			}
+		} finally {
+			form.reset();
+			onCloseDialog();
 		}
 	}
 

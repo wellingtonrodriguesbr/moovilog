@@ -20,7 +20,6 @@ export class PrismaFreightsRepository implements FreightsRepository {
 				creator: {
 					select: {
 						id: true,
-						role: true,
 						user: {
 							select: {
 								id: true,

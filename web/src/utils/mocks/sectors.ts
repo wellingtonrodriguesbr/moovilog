@@ -1,0 +1,15 @@
+export const SECTORS = [
+	"Diretoria",
+	"Administrativo",
+	"Operacional",
+	"Financeiro",
+	"Comercial",
+	"Logística",
+	"Frota",
+	"Recursos Humanos",
+	"Tecnologia da Informação",
+	"Segurança do Trabalho",
+	"Jurídico",
+	"Atendimento ao Cliente",
+	"Armazém e Estoque",
+];

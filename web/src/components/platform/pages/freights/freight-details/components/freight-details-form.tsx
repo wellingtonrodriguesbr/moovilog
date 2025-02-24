@@ -41,7 +41,7 @@ export function FreightDetailsForm() {
 
 	return (
 		<form className="space-y-6 bg-zinc-100 rounded-md p-6">
-			<fieldset className="grid grid-cols-4 gap-4">
+			<fieldset className="grid grid-cols-1 md:grid-cols-4 gap-4">
 				<Label className="flex flex-col gap-2 font-normal">
 					Data do frete:
 					<Input value={formatBrazilianDate(freightDetails.date)} />
@@ -63,7 +63,7 @@ export function FreightDetailsForm() {
 					/>
 				</Label>
 			</fieldset>
-			<fieldset className="grid grid-cols-4 gap-4">
+			<fieldset className="grid grid-cols-1 md:grid-cols-4 gap-4">
 				<Label className="flex flex-col gap-2 font-normal">
 					Tipo:
 					<Input value={FREIGHT_TYPE[freightDetails.type]} />
@@ -81,7 +81,7 @@ export function FreightDetailsForm() {
 					<Input value={freightDetails.creator.user.name} />
 				</Label>
 			</fieldset>
-			<fieldset className="grid grid-cols-5 gap-4">
+			<fieldset className="grid grid-cols-2 md:grid-cols-5 gap-4">
 				<Label className="flex flex-col gap-2 font-normal">
 					Quantidade de entregas:
 					<Input value={freightDetails.deliveriesQuantity} />
@@ -112,7 +112,7 @@ export function FreightDetailsForm() {
 						}
 					/>
 				</Label>
-				<Label className="flex flex-col gap-2 font-normal">
+				<Label className="flex flex-col gap-2 font-normal col-span-2 md:col-span-1">
 					Cadastro em:
 					<Input
 						value={formatBrazilianDate(freightDetails.createdAt)}
