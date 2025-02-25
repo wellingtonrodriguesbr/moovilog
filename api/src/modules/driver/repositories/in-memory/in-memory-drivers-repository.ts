@@ -82,4 +82,22 @@ export class InMemoryDriversRepository implements DriversRepository {
 
 		this.items[driverIndex].status = status;
 	}
+
+	async update(
+		driverId: string,
+		data: Prisma.DriverUncheckedUpdateInput
+	): Promise<void> {
+		const driverIndex = this.items.findIndex((item) => item.id === driverId);
+
+		if (driverIndex === -1) {
+			return;
+		}
+
+		const updatedDriver = {
+			...this.items[driverIndex],
+			...data,
+		} as Driver;
+
+		this.items[driverIndex] = updatedDriver;
+	}
 }

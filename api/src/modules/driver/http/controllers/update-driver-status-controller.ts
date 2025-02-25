@@ -12,13 +12,10 @@ export class UpdateDriverStatusController {
 		});
 
 		const updateDriverStatusParamsSchema = z.object({
-			companyId: z.string().uuid(),
 			driverId: z.string().uuid(),
 		});
 
-		const { companyId, driverId } = updateDriverStatusParamsSchema.parse(
-			req.params
-		);
+		const { driverId } = updateDriverStatusParamsSchema.parse(req.params);
 		const { status } = updateDriverStatusBodySchema.parse(req.body);
 
 		const userId = req.user.sub;
@@ -28,7 +25,6 @@ export class UpdateDriverStatusController {
 			await updateDriverStatusUseCase.execute({
 				driverId,
 				userId,
-				companyId,
 				status,
 			});
 

@@ -4,6 +4,7 @@ import { verifyJWT } from "@/modules/shared/http/middlewares/verify-jwt";
 import { RegisterDriverController } from "@/modules/driver/http/controllers/register-driver-controller";
 import { FetchDriversFromCompanyController } from "@/modules/driver/http/controllers/fetch-drivers-from-company-controller";
 import { UpdateDriverStatusController } from "@/modules/driver/http/controllers/update-driver-status-controller";
+import { UpdateDriverController } from "@/modules/driver/http/controllers/update-driver-controller";
 
 export async function driverModuleRoutes(app: FastifyInstance) {
 	app.addHook("onRequest", verifyJWT);
@@ -13,8 +14,6 @@ export async function driverModuleRoutes(app: FastifyInstance) {
 		"/companies/:companyId/drivers",
 		FetchDriversFromCompanyController.handle
 	);
-	app.patch(
-		"/:companyId/drivers/:driverId",
-		UpdateDriverStatusController.handle
-	);
+	app.patch("/drivers/:driverId/status", UpdateDriverStatusController.handle);
+	app.put("/drivers/:driverId", UpdateDriverController.handle);
 }

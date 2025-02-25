@@ -12,6 +12,7 @@ import { useUpdateDriverStatus } from "@/hooks/driver/use-update-driver-status";
 import { toast } from "sonner";
 import { Driver } from "@/interfaces";
 import { AxiosError } from "axios";
+import { UpdateDriverDialog } from "@/components/platform/pages/drivers/components/update-driver-dialog";
 
 interface DriverDropdownOptionsProps {
 	driver: Driver;
@@ -53,6 +54,9 @@ export function DriverDropdownOptions({ driver }: DriverDropdownOptionsProps) {
 			<DropdownMenuContent align="end">
 				<DropdownMenuLabel>Configurações</DropdownMenuLabel>
 				<DropdownMenuSeparator />
+				<DropdownMenuItem asChild>
+					<UpdateDriverDialog driver={driver} />
+				</DropdownMenuItem>
 				<DropdownMenuItem asChild>
 					<button
 						data-active={driver.status === "ACTIVE"}

@@ -82,4 +82,13 @@ export class PrismaDriversRepository implements DriversRepository {
 			},
 		});
 	}
+
+	async update(id: string, data: Prisma.DriverUncheckedUpdateInput) {
+		await prisma.driver.update({
+			where: {
+				id,
+			},
+			data,
+		});
+	}
 }

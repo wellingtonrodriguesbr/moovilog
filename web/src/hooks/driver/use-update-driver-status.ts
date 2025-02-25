@@ -1,6 +1,5 @@
 import { api } from "@/lib/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useCompanyStore } from "@/stores/company-store";
 
 interface UpdateDriverStatusProps {
 	driverId: string;
@@ -9,7 +8,6 @@ interface UpdateDriverStatusProps {
 
 export function useUpdateDriverStatus() {
 	const queryClient = useQueryClient();
-	const { company } = useCompanyStore();
 	const {
 		mutateAsync: updateDriverStatus,
 		isPending: isUpdateDriverStatusPending,
@@ -24,7 +22,7 @@ export function useUpdateDriverStatus() {
 		driverId,
 		status,
 	}: UpdateDriverStatusProps) {
-		await api.patch(`/${company.id}/drivers/${driverId}`, {
+		await api.patch(`/drivers/${driverId}/status`, {
 			status,
 		});
 	}

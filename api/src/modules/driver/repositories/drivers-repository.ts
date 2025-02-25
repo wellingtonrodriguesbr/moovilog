@@ -14,4 +14,8 @@ export interface DriversRepository {
 	findById(id: string): Promise<Driver | null>;
 	findManyByCompanyId(companyId: string): Promise<Driver[]>;
 	updateStatus(id: string, status: AccountStatus): Promise<void>;
+	update(
+		driverId: string,
+		data: Prisma.DriverUncheckedUpdateInput
+	): Promise<void>;
 }

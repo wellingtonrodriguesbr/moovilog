@@ -19,7 +19,7 @@ import { Button } from "@/components/ui/button";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useRegisterDriver } from "@/hooks/driver/use-register-driver";
+import { useUpdateDriver } from "@/hooks/driver/use-update-driver";
 import { toast } from "sonner";
 
 import { formatCPF } from "@/utils/format-cpf";
@@ -27,8 +27,10 @@ import { formatPhone } from "@/utils/format-phone";
 
 import { Loader2 } from "lucide-react";
 import { AxiosError } from "axios";
+import { Driver } from "@/interfaces";
 
-interface RegisterDriverFormProps {
+interface UpdateDriverFormProps {
+	driver: Driver;
 	onCloseDialog: () => void;
 }
 
@@ -49,24 +51,27 @@ const formSchema = z.object({
 	}),
 });
 
-export function RegisterDriverForm({ onCloseDialog }: RegisterDriverFormProps) {
-	const { registerDriver, isPendingRegisterDriver } = useRegisterDriver();
+export function UpdateDriverForm({
+	onCloseDialog,
+	driver,
+}: UpdateDriverFormProps) {
+	const { updateDriver, isPendingUpdateDriver } = useUpdateDriver();
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			name: "",
-			documentNumber: "",
-			phone: "",
-			type: undefined,
+			name: driver.name ?? "",
+			documentNumber: driver.documentNumber ?? "",
+			phone: driver.phone ?? "",
+			type: driver.type ?? undefined,
 		},
 	});
 
-	async function onSubmit(registerData: z.infer<typeof formSchema>) {
+	async function onSubmit(updateData: z.infer<typeof formSchema>) {
 		try {
-			await registerDriver({ ...registerData });
+			await updateDriver({ ...updateData, driverId: driver.id });
 			onCloseDialog();
-			toast.success("Motorista cadastrado com sucesso");
+			toast.success("Motorista atualizado com sucesso");
 		} catch (error) {
 			if (error instanceof AxiosError) {
 				if (error.response?.status === 403) {
@@ -75,7 +80,7 @@ export function RegisterDriverForm({ onCloseDialog }: RegisterDriverFormProps) {
 					);
 				}
 			} else {
-				toast.error("Erro ao cadastrar motorista");
+				toast.error("Erro ao atualizar motorista");
 			}
 		} finally {
 			form.reset();
@@ -99,25 +104,22 @@ export function RegisterDriverForm({ onCloseDialog }: RegisterDriverFormProps) {
 						<FormItem>
 							<FormLabel>CPF</FormLabel>
 							<FormControl>
-								<div className="flex items-center rounded-md overflow-hidden border pr-4">
-									<Input
-										className="border-0 rounded-none outline-none focus-visible:ring-0"
-										placeholder="000.000.000-00"
-										type="text"
-										inputMode="numeric"
-										pattern="[0-9]{3}.[0-9]{3}.[0-9]{3}-[0-9]{2}"
-										autoComplete="off"
-										maxLength={14}
-										{...field}
-										onChange={({ currentTarget }) =>
-											form.setValue(
-												"documentNumber",
-												currentTarget.value
-											)
-										}
-										value={formatCPF(field.value)}
-									/>
-								</div>
+								<Input
+									placeholder="000.000.000-00"
+									type="text"
+									inputMode="numeric"
+									pattern="[0-9]{3}.[0-9]{3}.[0-9]{3}-[0-9]{2}"
+									autoComplete="off"
+									maxLength={14}
+									{...field}
+									onChange={({ currentTarget }) =>
+										form.setValue(
+											"documentNumber",
+											currentTarget.value
+										)
+									}
+									value={formatCPF(field.value)}
+								/>
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -190,18 +192,18 @@ export function RegisterDriverForm({ onCloseDialog }: RegisterDriverFormProps) {
 
 				<fieldset className="flex justify-end gap-2 mt-6">
 					<Button
-						disabled={isPendingRegisterDriver}
+						disabled={isPendingUpdateDriver}
 						onClick={onCloseDialog}
 						type="button"
 						variant="destructive-outline"
 					>
 						Cancelar
 					</Button>
-					<Button disabled={isPendingRegisterDriver} type="submit">
-						{isPendingRegisterDriver ? (
+					<Button disabled={isPendingUpdateDriver} type="submit">
+						{isPendingUpdateDriver ? (
 							<Loader2 className="size-4 animate-spin" />
 						) : (
-							"Concluir cadastro"
+							"Salvar"
 						)}
 					</Button>
 				</fieldset>

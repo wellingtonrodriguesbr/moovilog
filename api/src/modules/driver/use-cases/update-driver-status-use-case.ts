@@ -8,7 +8,6 @@ import { PermissionService } from "@/services/permission-service";
 interface UpdateDriverStatusUseCaseRequest {
 	driverId: string;
 	userId: string;
-	companyId: string;
 	status: "ACTIVE" | "INACTIVE";
 }
 
@@ -23,23 +22,12 @@ export class UpdateDriverStatusUseCase {
 	async execute({
 		driverId,
 		userId,
-		companyId,
 		status,
 	}: UpdateDriverStatusUseCaseRequest): Promise<void> {
-		const [member, company] = await Promise.all([
-			await this.companyMembersRepository.findMemberInCompany(
-				userId,
-				companyId
-			),
-			await this.companiesRepository.findById(companyId),
-		]);
+		const member = await this.companyMembersRepository.findByUserId(userId);
 
 		if (!member) {
 			throw new ResourceNotFoundError("Member not found");
-		}
-
-		if (!company) {
-			throw new ResourceNotFoundError("Company not found");
 		}
 
 		const hasPermission = await this.permissionService.hasPermission(
@@ -61,7 +49,7 @@ export class UpdateDriverStatusUseCase {
 
 		const driverInCompany = await this.driversRepository.findDriverInCompany(
 			driver.documentNumber,
-			companyId
+			member.companyId
 		);
 
 		if (!driverInCompany) {
