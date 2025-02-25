@@ -60,8 +60,6 @@ export function RegisterCompanyAddressForm() {
 
 	const zipCode = form.watch("zipCode");
 
-	console.log(zipCode);
-
 	const { data, isPendingGetCompanyAddress, status } =
 		useGetCompanyAddressByZipCode({
 			zipCode,
