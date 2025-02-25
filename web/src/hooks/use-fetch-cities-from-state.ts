@@ -24,7 +24,7 @@ export function useFetchCitiesFromState({
 
 	async function handleFetchCitiesFromState() {
 		try {
-			const { data } = await axios.get<FetchCitiesFromStateResponse>(
+			const { data } = await axios.get<FetchCitiesFromStateResponse[]>(
 				`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${stateAcronym.toLocaleLowerCase()}/municipios`
 			);
 
@@ -35,7 +35,7 @@ export function useFetchCitiesFromState({
 	}
 
 	return {
-		cities,
+		cities: cities ?? [],
 		isFetchCitiesFromStatePending,
 	};
 }

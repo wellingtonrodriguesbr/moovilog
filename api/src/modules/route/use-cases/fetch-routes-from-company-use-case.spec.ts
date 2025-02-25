@@ -3,14 +3,12 @@ import { InMemoryCompanyMembersRepository } from "@/modules/company-member/repos
 import { InMemoryRoutesRepository } from "@/modules/route/repositories/in-memory/in-memory-routes-repository";
 import { InMemoryUsersRepository } from "@/modules/user/repositories/in-memory/in-memory-users-repository";
 import { InMemoryCompaniesRepository } from "@/modules/company/repositories/in-memory/in-memory-companies-repository";
-import { InMemoryAreasRepository } from "@/modules/shared/repositories/in-memory/in-memory-areas-repository";
 import { InMemoryStatesRepository } from "@/modules/shared/repositories/in-memory/in-memory-states-repository";
 import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
 import { FetchRoutesFromCompanyUseCase } from "@/modules/route/use-cases/fetch-routes-from-company-use-case";
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
-let areasRepository: InMemoryAreasRepository;
 let statesRepository: InMemoryStatesRepository;
 
 let companyMembersRepository: InMemoryCompanyMembersRepository;
@@ -21,7 +19,6 @@ describe("Fetch routes from company use case", () => {
 	beforeEach(async () => {
 		usersRepository = new InMemoryUsersRepository();
 		companiesRepository = new InMemoryCompaniesRepository();
-		areasRepository = new InMemoryAreasRepository();
 		statesRepository = new InMemoryStatesRepository();
 
 		companyMembersRepository = new InMemoryCompanyMembersRepository();
@@ -51,7 +48,6 @@ describe("Fetch routes from company use case", () => {
 			companyId: "company-id-01",
 			userId: "john-doe-01",
 			sector: "Gerência",
-			role: "ADMIN",
 		});
 
 		await routesRepository.create({
@@ -67,13 +63,6 @@ describe("Fetch routes from company use case", () => {
 			id: "fake-state-id",
 			name: "São Paulo",
 			acronym: "SP",
-		});
-
-		await areasRepository.create({
-			id: "fake-area-id",
-			name: "Area A",
-			code: 15,
-			stateId: "fake-state-id",
 		});
 	});
 

@@ -6,13 +6,11 @@ import { InMemoryCitiesRepository } from "@/modules/shared/repositories/in-memor
 import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
 import { InMemoryUsersRepository } from "@/modules/user/repositories/in-memory/in-memory-users-repository";
 import { InMemoryCompaniesRepository } from "@/modules/company/repositories/in-memory/in-memory-companies-repository";
-import { InMemoryAreasRepository } from "@/modules/shared/repositories/in-memory/in-memory-areas-repository";
 import { InMemoryStatesRepository } from "@/modules/shared/repositories/in-memory/in-memory-states-repository";
 import { FetchCitiesFromRouteUseCase } from "@/modules/route/use-cases/fetch-cities-from-route-use-case";
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
-let areasRepository: InMemoryAreasRepository;
 let statesRepository: InMemoryStatesRepository;
 
 let companyMembersRepository: InMemoryCompanyMembersRepository;
@@ -25,7 +23,6 @@ describe("[MODULE]: Fetch cities from route use case", () => {
 	beforeEach(async () => {
 		usersRepository = new InMemoryUsersRepository();
 		companiesRepository = new InMemoryCompaniesRepository();
-		areasRepository = new InMemoryAreasRepository();
 		statesRepository = new InMemoryStatesRepository();
 
 		companyMembersRepository = new InMemoryCompanyMembersRepository();
@@ -58,7 +55,6 @@ describe("[MODULE]: Fetch cities from route use case", () => {
 			companyId: "company-id-01",
 			userId: "john-doe-01",
 			sector: "Gerência",
-			role: "ADMIN",
 		});
 
 		await routesRepository.create({
@@ -76,18 +72,10 @@ describe("[MODULE]: Fetch cities from route use case", () => {
 			acronym: "SP",
 		});
 
-		await areasRepository.create({
-			id: "fake-area-id",
-			name: "Area A",
-			code: 15,
-			stateId: "fake-state-id",
-		});
-
 		await citiesRepository.create({
 			id: "city-01",
 			name: "City A",
 			stateId: "fake-state-id",
-			areaId: "fake-area-id",
 		});
 
 		await citiesInRouteRepository.create({

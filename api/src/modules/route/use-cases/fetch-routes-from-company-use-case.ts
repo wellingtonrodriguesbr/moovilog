@@ -2,7 +2,7 @@ import { CompanyMembersRepository } from "@/modules/company-member/repositories/
 import { RoutesRepository } from "@/modules/route/repositories/routes-repository";
 import { CompaniesRepository } from "@/modules/company/repositories/companies-repository";
 import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
-import { IRoute } from "@/modules/shared/interfaces/route";
+import { IRoute } from "@/modules/route/interfaces/route";
 
 interface FetchRoutesFromCompanyUseCaseRequest {
 	userId: string;

@@ -130,7 +130,7 @@ export function RegisterRouteForm({ onCloseDialog }: RegisterRouteFormProps) {
 					<Label>Selecione as cidades</Label>
 					<MultiSelectCities
 						modalPopover
-						options={cities ?? []}
+						options={cities}
 						onCitiesChange={(selectedCities) => {
 							form.setValue("cityNames", selectedCities);
 						}}
