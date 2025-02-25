@@ -9,6 +9,7 @@ import {
 	CommandInput,
 	CommandItem,
 	CommandList,
+	CommandSeparator,
 } from "@/components/ui/command";
 import {
 	Popover,
@@ -20,7 +21,6 @@ import { useFetchDriversFromCompany } from "@/hooks/driver/use-fetch-drivers-fro
 import { RegisterDriverDialog } from "@/components/platform/pages/drivers/components/register-driver-dialog";
 import { cn } from "@/lib/cn";
 import { Check, ChevronsUpDown } from "lucide-react";
-import { CommandSeparator } from "cmdk";
 
 interface SelectDriverProps {
 	selectedDriver: string;
@@ -35,16 +35,10 @@ export function SelectDriver({
 	const { driversFromCompany, isFetchDriversFromCompanyPending } =
 		useFetchDriversFromCompany();
 
-	console.log("DRIVERS", driversFromCompany);
-
 	function handleSelectDriver(currentValue: string) {
 		const selectedDriverObj = driversFromCompany.find(
 			(driver) => driver.name === currentValue
 		);
-
-		console.log("OBJ: ", selectedDriverObj);
-		console.log("SELECTED DRIVER: ", selectedDriver);
-		console.log("CURRENT VALUE: ", currentValue);
 
 		if (selectedDriverObj) {
 			onChangeSelectedDriver(
