@@ -167,21 +167,6 @@ export function RegisterFreightForm() {
 					/>
 					<FormField
 						control={form.control}
-						name="driverId"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Motorista</FormLabel>
-								<SelectDriver
-									selectedDriver={field.value}
-									onChangeSelectedDriver={field.onChange}
-								/>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-
-					<FormField
-						control={form.control}
 						name="vehicleId"
 						render={({ field }) => (
 							<FormItem>
@@ -189,6 +174,20 @@ export function RegisterFreightForm() {
 								<SelectVehicle
 									selectedVehicle={field.value}
 									onChangeSelectedVehicle={field.onChange}
+								/>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+					<FormField
+						control={form.control}
+						name="driverId"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Motorista</FormLabel>
+								<SelectDriver
+									selectedDriver={field.value}
+									onChangeSelectedDriver={field.onChange}
 								/>
 								<FormMessage />
 							</FormItem>
