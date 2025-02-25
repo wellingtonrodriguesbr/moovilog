@@ -37,7 +37,7 @@ export function SelectDriver({
 
 	function handleSelectDriver(currentValue: string) {
 		const selectedDriverObj = driversFromCompany.find(
-			(driver) => driver.name === currentValue
+			(driver) => driver.id === currentValue
 		);
 
 		if (selectedDriverObj) {
@@ -81,7 +81,7 @@ export function SelectDriver({
 							{driversFromCompany.map((driver) => (
 								<CommandItem
 									key={driver.id}
-									value={driver.name}
+									value={driver.id}
 									disabled={driver.status !== "ACTIVE"}
 									onSelect={(currentValue) =>
 										handleSelectDriver(currentValue)
