@@ -96,6 +96,8 @@ export function RegisterFreightForm() {
 		},
 	});
 
+	console.log("DRIVER ID: ", form.watch("driverId"));
+
 	async function onSubmit(registerData: z.infer<typeof formSchema>) {
 		try {
 			const freight = await registerFreight({ ...registerData });

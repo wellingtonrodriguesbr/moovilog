@@ -35,14 +35,16 @@ export function SelectDriver({
 	const { driversFromCompany, isFetchDriversFromCompanyPending } =
 		useFetchDriversFromCompany();
 
+	console.log("DRIVERS", driversFromCompany);
+
 	function handleSelectDriver(currentValue: string) {
 		const selectedDriverObj = driversFromCompany.find(
 			(driver) => driver.name === currentValue
 		);
 
-		console.log(selectedDriverObj);
-		console.log(selectedDriver);
-		console.log(currentValue);
+		console.log("OBJ: ", selectedDriverObj);
+		console.log("SELECTED DRIVER: ", selectedDriver);
+		console.log("CURRENT VALUE: ", currentValue);
 
 		if (selectedDriverObj) {
 			onChangeSelectedDriver(
@@ -86,7 +88,6 @@ export function SelectDriver({
 								<CommandItem
 									key={driver.id}
 									value={driver.name}
-									className="z-50"
 									disabled={driver.status !== "ACTIVE"}
 									onSelect={(currentValue) =>
 										handleSelectDriver(currentValue)
