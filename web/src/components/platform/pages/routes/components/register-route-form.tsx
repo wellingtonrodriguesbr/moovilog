@@ -1,7 +1,6 @@
 import {
 	Form,
 	FormControl,
-	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
@@ -16,18 +15,20 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-
-import { Loader2 } from "lucide-react";
-import { useFetchStatesAreasFromCompany } from "@/hooks/company/use-fetch-states-areas-from-company";
-import { useFetchCitiesByArea } from "@/hooks/use-fetch-cities-by-area";
 import { Label } from "@/components/ui/label";
 import { MultiSelectCities } from "@/components/platform/multi-select-cities";
 import { useRegisterNewRoute } from "@/hooks/route/use-register-new-route";
+
+import { Loader2 } from "lucide-react";
+import { STATES_ARRAY } from "@/utils/mocks/states";
+import {
+	FetchCitiesFromStateResponse,
+	useFetchCitiesFromState,
+} from "@/hooks/use-fetch-cities-from-state";
 
 interface RegisterRouteFormProps {
 	onCloseDialog: () => void;
@@ -39,11 +40,7 @@ const formSchema = z.object({
 		.string()
 		.min(1, { message: "Selecione um estado" })
 		.transform((value) => value.toLowerCase()),
-	areaCode: z
-		.string()
-		.min(1, { message: "Selecione pelo menos uma cidade" })
-		.transform((value) => Number(value)),
-	citiesIds: z.array(z.string()),
+	cityNames: z.array(z.string()),
 });
 
 export function RegisterRouteForm({ onCloseDialog }: RegisterRouteFormProps) {
@@ -52,16 +49,14 @@ export function RegisterRouteForm({ onCloseDialog }: RegisterRouteFormProps) {
 		defaultValues: {
 			name: "",
 			stateAcronym: "",
-			areaCode: undefined,
-			citiesIds: [],
+			cityNames: [],
 		},
 	});
 
-	const { states, areas, isFetchStatesAreasFromCompanyPending } =
-		useFetchStatesAreasFromCompany();
-	const { cities, isFetchCitiesByAreaPending } = useFetchCitiesByArea({
-		areaCode: form.watch("areaCode"),
+	const { cities, isFetchCitiesFromStatePending } = useFetchCitiesFromState({
+		stateAcronym: form.watch("stateAcronym"),
 	});
+
 	const { registerNewRoute, isPendingRegisterNewRoute } =
 		useRegisterNewRoute();
 
@@ -87,27 +82,36 @@ export function RegisterRouteForm({ onCloseDialog }: RegisterRouteFormProps) {
 			>
 				<FormField
 					control={form.control}
+					name="name"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>Nome da rota</FormLabel>
+							<FormControl>
+								<Input
+									placeholder=""
+									autoComplete="off"
+									{...field}
+								/>
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+
+				<FormField
+					control={form.control}
 					name="stateAcronym"
 					render={({ field }) => (
 						<FormItem>
 							<FormLabel>Estado</FormLabel>
-							<Select
-								disabled={isFetchStatesAreasFromCompanyPending}
-								onValueChange={field.onChange}
-							>
+							<Select onValueChange={field.onChange}>
 								<FormControl>
 									<SelectTrigger>
-										<SelectValue
-											placeholder={
-												isFetchStatesAreasFromCompanyPending
-													? "Carregando..."
-													: "Selecione um estado"
-											}
-										/>
+										<SelectValue placeholder="Selecione um estado" />
 									</SelectTrigger>
 								</FormControl>
 								<SelectContent>
-									{states.map((state) => (
+									{STATES_ARRAY.map((state) => (
 										<SelectItem
 											value={state.acronym}
 											key={state.acronym}
@@ -118,74 +122,6 @@ export function RegisterRouteForm({ onCloseDialog }: RegisterRouteFormProps) {
 								</SelectContent>
 							</Select>
 							<FormMessage />
-							<FormDescription>
-								Os estados listados aqui são com base na sua
-								escolha no momento da criação de conta na etapa
-								de cadastro de área atendida.
-							</FormDescription>
-						</FormItem>
-					)}
-				/>
-
-				<FormField
-					control={form.control}
-					name="areaCode"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Região de atendimento</FormLabel>
-							<Select
-								disabled={isFetchStatesAreasFromCompanyPending}
-								onValueChange={field.onChange}
-							>
-								<FormControl>
-									<SelectTrigger>
-										<SelectValue
-											placeholder={
-												isFetchStatesAreasFromCompanyPending
-													? "Carregando..."
-													: "Selecione uma região"
-											}
-										/>
-									</SelectTrigger>
-								</FormControl>
-								<SelectContent>
-									{areas.map((area) => (
-										<SelectItem
-											key={area.id}
-											value={area.code.toString()}
-										>
-											DDD {area.code} - {area.name}
-										</SelectItem>
-									))}
-								</SelectContent>
-							</Select>
-							<FormMessage />
-							<FormDescription>
-								As regiões listadas aqui são com base na sua
-								escolha no momento da criação de conta na etapa
-								de cadastro de área atendida.
-							</FormDescription>
-						</FormItem>
-					)}
-				/>
-
-				<FormField
-					control={form.control}
-					name="name"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Nome da rota</FormLabel>
-							<FormControl>
-								<div className="flex items-center rounded-md overflow-hidden border pr-4">
-									<Input
-										className="border-0 rounded-none outline-none focus-visible:ring-0"
-										placeholder=""
-										autoComplete="off"
-										{...field}
-									/>
-								</div>
-							</FormControl>
-							<FormMessage />
 						</FormItem>
 					)}
 				/>
@@ -194,18 +130,18 @@ export function RegisterRouteForm({ onCloseDialog }: RegisterRouteFormProps) {
 					<Label>Selecione as cidades</Label>
 					<MultiSelectCities
 						modalPopover
-						options={cities}
-						onCitiesChange={(selectedCities) =>
-							form.setValue("citiesIds", selectedCities)
-						}
-						defaultValue={form.watch("citiesIds")}
+						options={cities ?? []}
+						onCitiesChange={(selectedCities) => {
+							form.setValue("cityNames", selectedCities);
+						}}
 						disabled={
-							isFetchCitiesByAreaPending &&
-							!form.watch("areaCode")
+							!form.watch("stateAcronym") ||
+							isFetchCitiesFromStatePending
 						}
 						placeholder={
-							isFetchCitiesByAreaPending && form.watch("areaCode")
-								? "Carregando cidades..."
+							form.watch("stateAcronym") &&
+							isFetchCitiesFromStatePending
+								? "Carregando cidades.."
 								: "Clique para selecionar"
 						}
 						maxCount={3}
@@ -222,10 +158,9 @@ export function RegisterRouteForm({ onCloseDialog }: RegisterRouteFormProps) {
 					</Button>
 					<Button
 						disabled={
-							isFetchStatesAreasFromCompanyPending ||
-							isFetchCitiesByAreaPending ||
-							!form.watch("citiesIds").length ||
-							isPendingRegisterNewRoute
+							!form.watch("cityNames").length ||
+							isPendingRegisterNewRoute ||
+							isFetchCitiesFromStatePending
 						}
 						type="submit"
 					>

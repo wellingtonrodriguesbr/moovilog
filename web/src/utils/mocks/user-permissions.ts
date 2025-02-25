@@ -1,5 +1,9 @@
 export const USER_PERMISSIONS = [
 	{
+		key: "SUPER_ADMIN",
+		label: "Super Admin",
+	},
+	{
 		key: "ADMIN",
 		label: "Administrador",
 	},

@@ -83,7 +83,7 @@ export class RegisterFreightUseCase {
 
 		const hasPermission = await this.permissionService.hasPermission(
 			member.id,
-			["ADMIN", "MANAGE_SHIPMENTS_AND_PICKUPS"]
+			["SUPER_ADMIN", "ADMIN", "MANAGE_SHIPMENTS_AND_PICKUPS"]
 		);
 
 		if (!hasPermission) {

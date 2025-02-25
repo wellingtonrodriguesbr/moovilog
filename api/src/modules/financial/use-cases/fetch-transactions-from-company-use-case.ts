@@ -47,7 +47,7 @@ export class FetchTransactionsFromCompanyUseCase {
 
 		const hasPermission = await this.permissionService.hasPermission(
 			memberInCompany.id,
-			["ADMIN", "VIEW_FINANCES"]
+			["SUPER_ADMIN", "ADMIN", "VIEW_FINANCES"]
 		);
 
 		if (!hasPermission) {

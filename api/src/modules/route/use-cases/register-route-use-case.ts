@@ -6,10 +6,13 @@ import { BadRequestError } from "@/modules/shared/errors/bad-request-error";
 import { IRoute } from "@/modules/route/interfaces/route";
 import { PermissionService } from "@/services/permission-service";
 import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
+import { CitiesRepository } from "@/modules/shared/repositories/cities-repository";
+import { StatesRepository } from "@/modules/shared/repositories/states-repository";
 
 interface RegisterRouteUseCaseRequest {
 	name: string;
-	citiesIds: string[];
+	stateAcronym: string;
+	cityNames: string[];
 	userId: string;
 }
 
@@ -21,19 +24,18 @@ export class RegisterRouteUseCase {
 	constructor(
 		private companyMembersRepository: CompanyMembersRepository,
 		private routesRepository: RoutesRepository,
+		private citiesRepository: CitiesRepository,
+		private statesRepository: StatesRepository,
 		private citiesInRouteRepository: CitiesInRouteRepository,
 		private permissionService: PermissionService
 	) {}
 
 	async execute({
 		name,
-		citiesIds,
+		stateAcronym,
+		cityNames,
 		userId,
 	}: RegisterRouteUseCaseRequest): Promise<RegisterRouteUseCaseResponse> {
-		if (!citiesIds || citiesIds.length === 0) {
-			throw new BadRequestError("At least one city ID must be provided");
-		}
-
 		const member = await this.companyMembersRepository.findByUserId(userId);
 
 		if (!member) {
@@ -42,7 +44,7 @@ export class RegisterRouteUseCase {
 
 		const hasPermission = await this.permissionService.hasPermission(
 			member.id,
-			["ADMIN", "MANAGE_ROUTES"]
+			["SUPER_ADMIN", "ADMIN", "MANAGE_ROUTES"]
 		);
 
 		if (!hasPermission) {
@@ -63,6 +65,17 @@ export class RegisterRouteUseCase {
 			);
 		}
 
+		const state = await this.statesRepository.findByAcronym(stateAcronym);
+
+		if (!state) {
+			throw new ResourceNotFoundError("State not found");
+		}
+
+		const cities = await this.citiesRepository.findOrCreateManyByStateId(
+			cityNames,
+			state.id
+		);
+
 		const route = await this.routesRepository.create({
 			name,
 			creatorId: member.id,
@@ -70,10 +83,10 @@ export class RegisterRouteUseCase {
 		});
 
 		await Promise.all(
-			citiesIds.map((cityId) =>
+			cities.map((city) =>
 				this.citiesInRouteRepository.create({
 					routeId: route.id,
-					cityId,
+					cityId: city.id,
 				})
 			)
 		);

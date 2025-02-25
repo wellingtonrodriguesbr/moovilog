@@ -2,32 +2,34 @@ import { prisma } from "@/lib/prisma";
 import { CitiesRepository } from "@/modules/shared/repositories/cities-repository";
 
 export class PrismaCitiesRepository implements CitiesRepository {
-	async findByNameAndState(name: string) {
-		const city = await prisma.city.findFirst({
-			where: {
-				name,
-			},
-		});
-
-		return city;
-	}
-
-	async findById(id: string) {
+	async findOrCreateByNameAndStateId(name: string, stateId: string) {
 		const city = await prisma.city.findUnique({
 			where: {
-				id,
+				name_stateId: {
+					name,
+					stateId,
+				},
 			},
 		});
+
+		if (!city) {
+			const newCity = await prisma.city.create({
+				data: {
+					name,
+					stateId,
+				},
+			});
+
+			return newCity;
+		}
 
 		return city;
 	}
 
-	async findManyByAreaId(areaId: string) {
-		const cities = await prisma.city.findMany({
-			where: {
-				areaId,
-			},
-		});
+	async findOrCreateManyByStateId(names: string[], stateAcronym: string) {
+		const cities = await Promise.all(
+			names.map((name) => this.findOrCreateByNameAndStateId(name, stateAcronym))
+		);
 
 		return cities;
 	}

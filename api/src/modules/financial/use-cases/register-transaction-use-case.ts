@@ -69,7 +69,7 @@ export class RegisterTransactionUseCase {
 
 		const hasPermission = await this.permissionService.hasPermission(
 			memberInCompany.id,
-			["ADMIN", "MANAGE_FINANCES"]
+			["SUPER_ADMIN", "ADMIN", "MANAGE_FINANCES"]
 		);
 
 		if (!hasPermission) {

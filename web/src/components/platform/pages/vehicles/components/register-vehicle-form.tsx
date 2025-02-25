@@ -93,10 +93,9 @@ const formSchema = z.object({
 			message: "Selecione a carroceria do veículo",
 		}
 	),
-	fullLoadCapacity: z
-		.string({ message: "Digite a capacidade de carga do veículo" })
-		.transform((value) => value.replace(/\D/g, ""))
-		.transform((value) => Number(value)),
+	fullLoadCapacity: z.coerce.number({
+		message: "Digite a capacidade de carga do veículo",
+	}),
 	brand: z.string().min(2, { message: "Selecione a marca do veículo" }),
 	model: z.string({ message: "Digite o modelo do veículo" }),
 });
@@ -114,7 +113,7 @@ export function RegisterVehicleForm({
 			plate: "",
 			trailerPlate: "",
 			year: undefined,
-			fullLoadCapacity: undefined,
+			fullLoadCapacity: 0,
 			brand: "",
 			type: undefined,
 			body: undefined,
@@ -392,6 +391,16 @@ export function RegisterVehicleForm({
 										placeholder="Ex: 4.000kg"
 										{...field}
 										value={formatWeight(field.value)}
+										onChange={(e) => {
+											const rawValue =
+												e.target.value.replace(
+													/\D/g,
+													""
+												);
+											field.onChange(
+												rawValue ? Number(rawValue) : ""
+											);
+										}}
 									/>
 								</FormControl>
 								<FormMessage />

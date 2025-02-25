@@ -74,7 +74,7 @@ export class RegisterCompanyUseCase {
 		await this.companyMemberPermissionsRepository.createMany([
 			{
 				companyMemberId: companyMember.id,
-				permission: "ADMIN",
+				permission: "SUPER_ADMIN",
 			},
 		]);
 

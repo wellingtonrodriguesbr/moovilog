@@ -4,7 +4,8 @@ import { Route } from "@/interfaces";
 
 interface RegisterNewRouteData {
 	name: string;
-	citiesIds: string[];
+	stateAcronym: string;
+	cityNames: string[];
 }
 
 interface RegisterNewRouteResponse {
@@ -28,6 +29,7 @@ export function useRegisterNewRoute() {
 	async function handleRegisterNewRoute(registerData: RegisterNewRouteData) {
 		const { data } = await api.post<RegisterNewRouteResponse>("/routes", {
 			...registerData,
+			stateAcronym: registerData.stateAcronym.toUpperCase(),
 		});
 
 		return data.route;

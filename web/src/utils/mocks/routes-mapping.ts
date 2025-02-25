@@ -20,5 +20,4 @@ export const ROUTES_MAP: Record<string, string> = {
 	"/cadastro": "Cadastro",
 	"/cadastro/empresa": "Empresa",
 	"/cadastro/empresa/endereco": "Endereço",
-	"/cadastro/empresa/atendimento": "Atendimento",
 };

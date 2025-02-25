@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "Role" AS ENUM ('ADMIN', 'MANAGER', 'FINANCIAL', 'COMERCIAL', 'OPERATIONAL');
+CREATE TYPE "UserPermission" AS ENUM ('SUPER_ADMIN', 'ADMIN', 'MANAGE_SHIPMENTS_AND_PICKUPS', 'VIEW_SHIPMENTS_AND_PICKUPS', 'MANAGE_VEHICLES_AND_DRIVERS', 'VIEW_VEHICLES_AND_DRIVERS', 'MANAGE_ROUTES', 'VIEW_ROUTES', 'MANAGE_RESOURCES_AND_SUPPLIES', 'VIEW_RESOURCES_AND_SUPPLIES', 'MANAGE_NOTICES', 'VIEW_NOTICES', 'MANAGE_DAILY_SCHEDULE', 'VIEW_DAILY_SCHEDULE', 'MANAGE_USERS', 'MANAGE_FINANCES', 'VIEW_FINANCES', 'MANAGE_REPORTS', 'VIEW_REPORTS', 'MANAGE_PERMISSIONS');
 
 -- CreateEnum
 CREATE TYPE "CompanySize" AS ENUM ('MICRO', 'SMALL', 'MEDIUM', 'BIG');
@@ -11,7 +11,10 @@ CREATE TYPE "VehicleCategory" AS ENUM ('UTILITY', 'VAN', 'LIGHT_TRUCKS', 'STRAIG
 CREATE TYPE "VehicleBody" AS ENUM ('CLOSED', 'OPEN', 'SIDER', 'REFRIGERATED', 'BUCKET', 'TANK', 'BULK_CARRIER', 'LIVESTOCK', 'FLATBED', 'CONTAINER', 'WOOD', 'CAR_CARRIER');
 
 -- CreateEnum
-CREATE TYPE "VehicleType" AS ENUM ('OWN', 'OUTSOURCED', 'RENTED');
+CREATE TYPE "VehicleType" AS ENUM ('OWN', 'AGGREGATE', 'RENTED');
+
+-- CreateEnum
+CREATE TYPE "VehicleStatus" AS ENUM ('ACTIVE', 'MAINTENANCE', 'INACTIVE', 'RESERVED', 'BROKEN');
 
 -- CreateEnum
 CREATE TYPE "FreightType" AS ENUM ('FRACTIONAL', 'DEDICATED', 'EXPRESS', 'TRANSFER');
@@ -74,20 +77,9 @@ CREATE TABLE "companies" (
 );
 
 -- CreateTable
-CREATE TABLE "company_states_areas" (
-    "id" TEXT NOT NULL,
-    "company_id" TEXT NOT NULL,
-    "state_id" TEXT NOT NULL,
-    "area_id" TEXT NOT NULL,
-
-    CONSTRAINT "company_states_areas_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "company_members" (
     "id" TEXT NOT NULL,
     "sector" TEXT NOT NULL,
-    "role" "Role" NOT NULL,
     "status" "AccountStatus" NOT NULL DEFAULT 'PENDING',
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
@@ -95,6 +87,15 @@ CREATE TABLE "company_members" (
     "company_id" TEXT NOT NULL,
 
     CONSTRAINT "company_members_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "company_member_permissions" (
+    "id" TEXT NOT NULL,
+    "permission" "UserPermission" NOT NULL,
+    "company_member_id" TEXT NOT NULL,
+
+    CONSTRAINT "company_member_permissions_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -122,6 +123,7 @@ CREATE TABLE "vehicles" (
     "year" INTEGER NOT NULL,
     "brand" TEXT NOT NULL,
     "model" TEXT NOT NULL,
+    "status" "VehicleStatus" NOT NULL DEFAULT 'ACTIVE',
     "category" "VehicleCategory" NOT NULL,
     "type" "VehicleType" NOT NULL,
     "body" "VehicleBody" NOT NULL,
@@ -153,7 +155,6 @@ CREATE TABLE "freights" (
     "creator_id" TEXT,
     "company_id" TEXT NOT NULL,
     "route_id" TEXT,
-    "city_id" TEXT,
 
     CONSTRAINT "freights_pkey" PRIMARY KEY ("id")
 );
@@ -229,21 +230,10 @@ CREATE TABLE "states" (
 );
 
 -- CreateTable
-CREATE TABLE "areas" (
-    "id" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
-    "code" INTEGER NOT NULL,
-    "state_id" TEXT NOT NULL,
-
-    CONSTRAINT "areas_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "cities" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "state_id" TEXT NOT NULL,
-    "area_id" TEXT NOT NULL,
 
     CONSTRAINT "cities_pkey" PRIMARY KEY ("id")
 );
@@ -292,6 +282,39 @@ CREATE TABLE "finance_transactions" (
 );
 
 -- CreateTable
+CREATE TABLE "driver_transactions" (
+    "id" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "driver_id" TEXT NOT NULL,
+    "finance_transaction_id" TEXT NOT NULL,
+
+    CONSTRAINT "driver_transactions_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "freight_transactions" (
+    "id" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "freight_id" TEXT NOT NULL,
+    "finance_transaction_id" TEXT NOT NULL,
+
+    CONSTRAINT "freight_transactions_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "pickup_transactions" (
+    "id" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "pickup_id" TEXT NOT NULL,
+    "finance_transaction_id" TEXT NOT NULL,
+
+    CONSTRAINT "pickup_transactions_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "finance_categories" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
@@ -317,7 +340,13 @@ CREATE UNIQUE INDEX "companies_owner_id_key" ON "companies"("owner_id");
 CREATE UNIQUE INDEX "companies_address_id_key" ON "companies"("address_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "company_states_areas_company_id_state_id_area_id_key" ON "company_states_areas"("company_id", "state_id", "area_id");
+CREATE INDEX "company_members_status_idx" ON "company_members"("status");
+
+-- CreateIndex
+CREATE INDEX "company_members_sector_idx" ON "company_members"("sector");
+
+-- CreateIndex
+CREATE INDEX "company_members_user_id_idx" ON "company_members"("user_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "company_members_company_id_user_id_key" ON "company_members"("company_id", "user_id");
@@ -329,13 +358,52 @@ CREATE UNIQUE INDEX "drivers_document_number_key" ON "drivers"("document_number"
 CREATE UNIQUE INDEX "drivers_phone_key" ON "drivers"("phone");
 
 -- CreateIndex
+CREATE INDEX "drivers_name_idx" ON "drivers"("name");
+
+-- CreateIndex
+CREATE INDEX "drivers_type_idx" ON "drivers"("type");
+
+-- CreateIndex
+CREATE INDEX "drivers_status_idx" ON "drivers"("status");
+
+-- CreateIndex
+CREATE INDEX "drivers_created_at_idx" ON "drivers"("created_at");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "drivers_document_number_company_id_key" ON "drivers"("document_number", "company_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "drivers_phone_company_id_key" ON "drivers"("phone", "company_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "vehicles_plate_key" ON "vehicles"("plate");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "vehicles_trailer_plate_key" ON "vehicles"("trailer_plate");
+
+-- CreateIndex
+CREATE INDEX "vehicles_year_idx" ON "vehicles"("year");
+
+-- CreateIndex
+CREATE INDEX "vehicles_brand_idx" ON "vehicles"("brand");
+
+-- CreateIndex
+CREATE INDEX "vehicles_model_idx" ON "vehicles"("model");
+
+-- CreateIndex
+CREATE INDEX "vehicles_status_idx" ON "vehicles"("status");
+
+-- CreateIndex
+CREATE INDEX "vehicles_category_idx" ON "vehicles"("category");
+
+-- CreateIndex
+CREATE INDEX "vehicles_type_idx" ON "vehicles"("type");
+
+-- CreateIndex
+CREATE INDEX "vehicles_body_idx" ON "vehicles"("body");
+
+-- CreateIndex
+CREATE INDEX "vehicles_created_at_idx" ON "vehicles"("created_at");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "vehicles_plate_company_id_key" ON "vehicles"("plate", "company_id");
@@ -347,6 +415,27 @@ CREATE UNIQUE INDEX "vehicles_trailer_plate_company_id_key" ON "vehicles"("trail
 CREATE INDEX "freights_date_idx" ON "freights"("date");
 
 -- CreateIndex
+CREATE INDEX "freights_type_idx" ON "freights"("type");
+
+-- CreateIndex
+CREATE INDEX "freights_modality_idx" ON "freights"("modality");
+
+-- CreateIndex
+CREATE INDEX "freights_driver_id_idx" ON "freights"("driver_id");
+
+-- CreateIndex
+CREATE INDEX "freights_vehicle_id_idx" ON "freights"("vehicle_id");
+
+-- CreateIndex
+CREATE INDEX "freights_creator_id_idx" ON "freights"("creator_id");
+
+-- CreateIndex
+CREATE INDEX "freights_company_id_idx" ON "freights"("company_id");
+
+-- CreateIndex
+CREATE INDEX "freights_route_id_idx" ON "freights"("route_id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "pickups_pickup_number_key" ON "pickups"("pickup_number");
 
 -- CreateIndex
@@ -356,16 +445,85 @@ CREATE INDEX "pickups_pickup_number_idx" ON "pickups"("pickup_number");
 CREATE INDEX "pickups_status_idx" ON "pickups"("status");
 
 -- CreateIndex
+CREATE INDEX "pickups_sender_name_idx" ON "pickups"("sender_name");
+
+-- CreateIndex
+CREATE INDEX "pickups_recipient_name_idx" ON "pickups"("recipient_name");
+
+-- CreateIndex
+CREATE INDEX "pickups_scheduled_date_idx" ON "pickups"("scheduled_date");
+
+-- CreateIndex
+CREATE INDEX "pickups_collected_at_idx" ON "pickups"("collected_at");
+
+-- CreateIndex
+CREATE INDEX "pickups_freight_id_idx" ON "pickups"("freight_id");
+
+-- CreateIndex
+CREATE INDEX "pickups_company_id_idx" ON "pickups"("company_id");
+
+-- CreateIndex
+CREATE INDEX "pickups_creator_id_idx" ON "pickups"("creator_id");
+
+-- CreateIndex
+CREATE INDEX "pickups_assigned_driver_id_idx" ON "pickups"("assigned_driver_id");
+
+-- CreateIndex
+CREATE INDEX "pickups_requested_at_idx" ON "pickups"("requested_at");
+
+-- CreateIndex
+CREATE INDEX "pickups_priority_idx" ON "pickups"("priority");
+
+-- CreateIndex
 CREATE INDEX "pickup_histories_pickup_id_idx" ON "pickup_histories"("pickup_id");
+
+-- CreateIndex
+CREATE INDEX "pickup_histories_driver_id_idx" ON "pickup_histories"("driver_id");
+
+-- CreateIndex
+CREATE INDEX "pickup_histories_attempt_date_idx" ON "pickup_histories"("attempt_date");
+
+-- CreateIndex
+CREATE INDEX "routes_name_idx" ON "routes"("name");
+
+-- CreateIndex
+CREATE INDEX "routes_company_id_idx" ON "routes"("company_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "states_acronym_key" ON "states"("acronym");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "areas_code_key" ON "areas"("code");
+CREATE INDEX "cities_name_idx" ON "cities"("name");
+
+-- CreateIndex
+CREATE INDEX "cities_state_id_idx" ON "cities"("state_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "cities_name_state_id_key" ON "cities"("name", "state_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "token_code_key" ON "token"("code");
+
+-- CreateIndex
+CREATE INDEX "finance_transactions_due_date_idx" ON "finance_transactions"("due_date");
+
+-- CreateIndex
+CREATE INDEX "finance_transactions_type_idx" ON "finance_transactions"("type");
+
+-- CreateIndex
+CREATE INDEX "finance_transactions_status_idx" ON "finance_transactions"("status");
+
+-- CreateIndex
+CREATE INDEX "finance_transactions_category_id_idx" ON "finance_transactions"("category_id");
+
+-- CreateIndex
+CREATE INDEX "finance_transactions_company_id_idx" ON "finance_transactions"("company_id");
+
+-- CreateIndex
+CREATE INDEX "finance_transactions_creator_id_idx" ON "finance_transactions"("creator_id");
+
+-- CreateIndex
+CREATE INDEX "finance_transactions_payment_method_idx" ON "finance_transactions"("payment_method");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "finance_categories_name_key" ON "finance_categories"("name");
@@ -374,22 +532,16 @@ CREATE UNIQUE INDEX "finance_categories_name_key" ON "finance_categories"("name"
 ALTER TABLE "companies" ADD CONSTRAINT "companies_owner_id_fkey" FOREIGN KEY ("owner_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "companies" ADD CONSTRAINT "companies_address_id_fkey" FOREIGN KEY ("address_id") REFERENCES "addresses"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "company_states_areas" ADD CONSTRAINT "company_states_areas_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "company_states_areas" ADD CONSTRAINT "company_states_areas_state_id_fkey" FOREIGN KEY ("state_id") REFERENCES "states"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "company_states_areas" ADD CONSTRAINT "company_states_areas_area_id_fkey" FOREIGN KEY ("area_id") REFERENCES "areas"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "companies" ADD CONSTRAINT "companies_address_id_fkey" FOREIGN KEY ("address_id") REFERENCES "addresses"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "company_members" ADD CONSTRAINT "company_members_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "company_members" ADD CONSTRAINT "company_members_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "company_member_permissions" ADD CONSTRAINT "company_member_permissions_company_member_id_fkey" FOREIGN KEY ("company_member_id") REFERENCES "company_members"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "drivers" ADD CONSTRAINT "drivers_creator_id_fkey" FOREIGN KEY ("creator_id") REFERENCES "company_members"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -422,9 +574,6 @@ ALTER TABLE "freights" ADD CONSTRAINT "freights_company_id_fkey" FOREIGN KEY ("c
 ALTER TABLE "freights" ADD CONSTRAINT "freights_route_id_fkey" FOREIGN KEY ("route_id") REFERENCES "routes"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "freights" ADD CONSTRAINT "freights_city_id_fkey" FOREIGN KEY ("city_id") REFERENCES "cities"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "pickups" ADD CONSTRAINT "pickups_freight_id_fkey" FOREIGN KEY ("freight_id") REFERENCES "freights"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -455,16 +604,10 @@ ALTER TABLE "routes" ADD CONSTRAINT "routes_company_id_fkey" FOREIGN KEY ("compa
 ALTER TABLE "cities_in_route" ADD CONSTRAINT "cities_in_route_route_id_fkey" FOREIGN KEY ("route_id") REFERENCES "routes"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "cities_in_route" ADD CONSTRAINT "cities_in_route_city_id_fkey" FOREIGN KEY ("city_id") REFERENCES "cities"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "areas" ADD CONSTRAINT "areas_state_id_fkey" FOREIGN KEY ("state_id") REFERENCES "states"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "cities_in_route" ADD CONSTRAINT "cities_in_route_city_id_fkey" FOREIGN KEY ("city_id") REFERENCES "cities"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "cities" ADD CONSTRAINT "cities_state_id_fkey" FOREIGN KEY ("state_id") REFERENCES "states"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "cities" ADD CONSTRAINT "cities_area_id_fkey" FOREIGN KEY ("area_id") REFERENCES "areas"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "addresses" ADD CONSTRAINT "addresses_city_id_fkey" FOREIGN KEY ("city_id") REFERENCES "cities"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -476,7 +619,25 @@ ALTER TABLE "token" ADD CONSTRAINT "token_user_id_fkey" FOREIGN KEY ("user_id") 
 ALTER TABLE "finance_transactions" ADD CONSTRAINT "finance_transactions_category_id_fkey" FOREIGN KEY ("category_id") REFERENCES "finance_categories"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "finance_transactions" ADD CONSTRAINT "finance_transactions_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "finance_transactions" ADD CONSTRAINT "finance_transactions_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "finance_transactions" ADD CONSTRAINT "finance_transactions_creator_id_fkey" FOREIGN KEY ("creator_id") REFERENCES "company_members"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "driver_transactions" ADD CONSTRAINT "driver_transactions_driver_id_fkey" FOREIGN KEY ("driver_id") REFERENCES "drivers"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "driver_transactions" ADD CONSTRAINT "driver_transactions_finance_transaction_id_fkey" FOREIGN KEY ("finance_transaction_id") REFERENCES "finance_transactions"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "freight_transactions" ADD CONSTRAINT "freight_transactions_freight_id_fkey" FOREIGN KEY ("freight_id") REFERENCES "freights"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "freight_transactions" ADD CONSTRAINT "freight_transactions_finance_transaction_id_fkey" FOREIGN KEY ("finance_transaction_id") REFERENCES "finance_transactions"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "pickup_transactions" ADD CONSTRAINT "pickup_transactions_pickup_id_fkey" FOREIGN KEY ("pickup_id") REFERENCES "pickups"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "pickup_transactions" ADD CONSTRAINT "pickup_transactions_finance_transaction_id_fkey" FOREIGN KEY ("finance_transaction_id") REFERENCES "finance_transactions"("id") ON DELETE CASCADE ON UPDATE CASCADE;

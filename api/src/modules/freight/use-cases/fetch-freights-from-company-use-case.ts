@@ -50,7 +50,7 @@ export class FetchFreightsFromCompanyUseCase {
 
 		const hasPermission = await this.permissionService.hasPermission(
 			memberInCompany.id,
-			["ADMIN", "VIEW_SHIPMENTS_AND_PICKUPS"]
+			["SUPER_ADMIN", "ADMIN", "VIEW_SHIPMENTS_AND_PICKUPS"]
 		);
 
 		if (!hasPermission) {

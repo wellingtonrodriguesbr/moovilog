@@ -40,7 +40,7 @@ export class RegisterDriverUseCase {
 
 		const hasPermission = await this.permissionService.hasPermission(
 			member.id,
-			["ADMIN", "MANAGE_VEHICLES_AND_DRIVERS"]
+			["SUPER_ADMIN", "ADMIN", "MANAGE_VEHICLES_AND_DRIVERS"]
 		);
 
 		if (!hasPermission) {

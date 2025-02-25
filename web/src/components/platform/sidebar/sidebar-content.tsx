@@ -12,6 +12,7 @@ import {
 	Handshake,
 	Home,
 	Landmark,
+	LandPlot,
 	LayoutGrid,
 	Route,
 	Truck,
@@ -80,9 +81,9 @@ const ITEMS = [
 		icon: <Landmark className="size-4" />,
 	},
 	{
-		name: "Operacional",
-		url: "/operacional",
-		icon: <Group className="size-4" />,
+		name: "Rotas",
+		url: "/rotas",
+		icon: <Route className="size-4" />,
 	},
 	{
 		name: "Fretes",
@@ -95,11 +96,6 @@ const ITEMS = [
 		icon: <Box className="size-4" />,
 	},
 	{
-		name: "Rotas",
-		url: "/rotas",
-		icon: <Route className="size-4" />,
-	},
-	{
 		name: "Motoristas",
 		url: "/motoristas",
 		icon: <Handshake className="size-4" />,
@@ -108,6 +104,11 @@ const ITEMS = [
 		name: "Veículos",
 		url: "/veiculos",
 		icon: <Truck className="size-4" />,
+	},
+	{
+		name: "Operacional",
+		url: "/operacional",
+		icon: <Group className="size-4" />,
 	},
 	{
 		name: "Colaboradores",

@@ -42,27 +42,10 @@ model Company {
   freights            Freight[]
   routes              Route[]
   vehicles            Vehicle[]
-  companyStatesAreas  CompanyStateArea[]
   financeTransactions FinanceTransaction[]
   pickups             Pickup[]
 
   @@map("companies")
-}
-
-model CompanyStateArea {
-  id String @id @default(uuid())
-
-  companyId String  @map("company_id")
-  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
-
-  stateId String @map("state_id")
-  state   State  @relation(fields: [stateId], references: [id])
-
-  areaId String @map("area_id")
-  area   Area   @relation(fields: [areaId], references: [id])
-
-  @@unique([companyId, stateId, areaId], name: "unique_company_state_area")
-  @@map("company_states_areas")
 }
 
 model CompanyMember {
@@ -87,6 +70,9 @@ model CompanyMember {
   companyMemberPermissions CompanyMemberPermission[]
 
   @@unique([companyId, userId])
+  @@index([status])
+  @@index([sector])
+  @@index([userId])
   @@map("company_members")
 }
 
@@ -126,6 +112,10 @@ model Driver {
 
   @@unique([documentNumber, companyId])
   @@unique([phone, companyId])
+  @@index([name])
+  @@index([type])
+  @@index([status])
+  @@index([createdAt])
   @@map("drivers")
 }
 
@@ -154,6 +144,14 @@ model Vehicle {
 
   @@unique([plate, companyId])
   @@unique([trailerPlate, companyId])
+  @@index([year])
+  @@index([brand])
+  @@index([model])
+  @@index([status])
+  @@index([category])
+  @@index([type])
+  @@index([body])
+  @@index([createdAt])
   @@map("vehicles")
 }
 
@@ -190,6 +188,13 @@ model Freight {
   freightTransactions FreightTransaction[]
 
   @@index([date])
+  @@index([type])
+  @@index([modality])
+  @@index([driverId])
+  @@index([vehicleId])
+  @@index([creatorId])
+  @@index([companyId])
+  @@index([routeId])
   @@map("freights")
 }
 
@@ -231,6 +236,16 @@ model Pickup {
 
   @@index([pickupNumber])
   @@index([status])
+  @@index([senderName])
+  @@index([recipientName])
+  @@index([scheduledDate])
+  @@index([collectedAt])
+  @@index([freightId])
+  @@index([companyId])
+  @@index([creatorId])
+  @@index([assignedDriverId])
+  @@index([requestedAt])
+  @@index([priority])
   @@map("pickups")
 }
 
@@ -248,6 +263,8 @@ model PickupHistory {
   driver   Driver? @relation(fields: [driverId], references: [id], onDelete: SetNull)
 
   @@index([pickupId])
+  @@index([driverId])
+  @@index([attemptDate])
   @@map("pickup_histories")
 }
 
@@ -266,6 +283,8 @@ model Route {
   citiesInRoute CityInRoute[]
   freights      Freight[]
 
+  @@index([name])
+  @@index([companyId])
   @@map("routes")
 }
 
@@ -276,7 +295,7 @@ model CityInRoute {
   route   Route  @relation(fields: [routeId], references: [id], onDelete: Cascade)
 
   cityId String @map("city_id")
-  city   City   @relation(fields: [cityId], references: [id])
+  city   City   @relation(fields: [cityId], references: [id], onDelete: Cascade)
 
   @@map("cities_in_route")
 }
@@ -286,25 +305,9 @@ model State {
   name    String
   acronym String @unique
 
-  cities            City[]
-  areas             Area[]
-  companyStateAreas CompanyStateArea[]
+  cities City[]
 
   @@map("states")
-}
-
-model Area {
-  id   String @id @default(uuid())
-  name String
-  code Int    @unique
-
-  stateId String @map("state_id")
-  state   State  @relation(fields: [stateId], references: [id], onDelete: Cascade)
-
-  cities            City[]
-  companyStateAreas CompanyStateArea[]
-
-  @@map("areas")
 }
 
 model City {
@@ -314,12 +317,12 @@ model City {
   stateId String @map("state_id")
   state   State  @relation(fields: [stateId], references: [id], onDelete: Cascade)
 
-  areaId String @map("area_id")
-  area   Area   @relation(fields: [areaId], references: [id], onDelete: Cascade)
-
   addresses     Address[]
   citiesInRoute CityInRoute[]
 
+  @@unique([name, stateId])
+  @@index([name])
+  @@index([stateId])
   @@map("cities")
 }
 
@@ -368,7 +371,7 @@ model FinanceTransaction {
   categoryId String          @map("category_id")
   category   FinanceCategory @relation(fields: [categoryId], references: [id])
   companyId  String          @map("company_id")
-  company    Company         @relation(fields: [companyId], references: [id])
+  company    Company         @relation(fields: [companyId], references: [id], onDelete: Cascade)
   creatorId  String?         @map("creator_id")
   creator    CompanyMember?  @relation(fields: [creatorId], references: [id], onDelete: SetNull)
 
@@ -376,6 +379,13 @@ model FinanceTransaction {
   pickupTransactions  PickupTransaction[]
   driverTransactions  DriverTransaction[]
 
+  @@index([dueDate])
+  @@index([type])
+  @@index([status])
+  @@index([categoryId])
+  @@index([companyId])
+  @@index([creatorId])
+  @@index([paymentMethod])
   @@map("finance_transactions")
 }
 
@@ -433,6 +443,7 @@ model FinanceCategory {
 }
 
 enum UserPermission {
+  SUPER_ADMIN
   ADMIN
   MANAGE_SHIPMENTS_AND_PICKUPS
   VIEW_SHIPMENTS_AND_PICKUPS

@@ -50,10 +50,8 @@ interface MultiSelectCitiesProps
 	extends React.ButtonHTMLAttributes<HTMLButtonElement>,
 		VariantProps<typeof multiSelectCitiesVariants> {
 	options: {
-		id: string;
-		name: string;
-		stateId: string;
-		areaId: string;
+		id: number;
+		nome: string;
 	}[];
 	onCitiesChange: (name: string[]) => void;
 	defaultValues?: string[];
@@ -100,10 +98,10 @@ export const MultiSelectCities = React.forwardRef<
 			}
 		};
 
-		const toggleOption = (id: string) => {
-			const newSelectedValues = selectedValues.includes(id)
-				? selectedValues.filter((selectedId) => selectedId !== id)
-				: [...selectedValues, id];
+		const toggleOption = (name: string) => {
+			const newSelectedValues = selectedValues.includes(name)
+				? selectedValues.filter((selectedName) => selectedName !== name)
+				: [...selectedValues, name];
 			setSelectedValues(newSelectedValues);
 			onCitiesChange(newSelectedValues);
 		};
@@ -127,7 +125,7 @@ export const MultiSelectCities = React.forwardRef<
 			if (selectedValues.length === options.length) {
 				handleClear();
 			} else {
-				const allNames = options.map((option) => option.id);
+				const allNames = options.map((option) => option.nome);
 				setSelectedValues(allNames);
 				onCitiesChange(allNames);
 			}
@@ -154,13 +152,13 @@ export const MultiSelectCities = React.forwardRef<
 								<div className="flex flex-wrap items-center">
 									{selectedValues
 										.slice(0, maxCount)
-										.map((id) => {
+										.map((nome) => {
 											const option = options.find(
-												(o) => o.id === id
+												(o) => o.nome === nome
 											);
 											return (
 												<Badge
-													key={id}
+													key={nome}
 													className={cn(
 														multiSelectCitiesVariants(
 															{
@@ -169,12 +167,12 @@ export const MultiSelectCities = React.forwardRef<
 														)
 													)}
 												>
-													{option?.name}
+													{option?.nome}
 													<XCircle
 														className="ml-2 h-4 w-4 cursor-pointer"
 														onClick={(event) => {
 															event.stopPropagation();
-															toggleOption(id);
+															toggleOption(nome);
 														}}
 													/>
 												</Badge>
@@ -260,13 +258,13 @@ export const MultiSelectCities = React.forwardRef<
 								</CommandItem>
 								{options.map((option) => {
 									const isSelected = selectedValues.includes(
-										option.id
+										option.nome
 									);
 									return (
 										<CommandItem
 											key={option.id}
 											onSelect={() =>
-												toggleOption(option.id)
+												toggleOption(option.nome)
 											}
 											className="cursor-pointer"
 										>
@@ -280,7 +278,7 @@ export const MultiSelectCities = React.forwardRef<
 											>
 												<CheckIcon className="size-4 text-white" />
 											</div>
-											<span>{option.name}</span>
+											<span>{option.nome}</span>
 										</CommandItem>
 									);
 								})}

@@ -42,7 +42,7 @@ export class RegisterCompanyAddressUseCase {
 		const stateName = STATES[stateAcronym];
 		const state = await this.statesRepository.findByNameAndAcronym(
 			stateName,
-			stateAcronym
+			stateAcronym.toUpperCase()
 		);
 
 		if (!state) {
@@ -50,13 +50,12 @@ export class RegisterCompanyAddressUseCase {
 		}
 
 		const [city, company] = await Promise.all([
-			await this.citiesRepository.findByNameAndState(cityName, state.id),
+			await this.citiesRepository.findOrCreateByNameAndStateId(
+				cityName,
+				state.id
+			),
 			await this.companiesRepository.findByOwnerId(userId),
 		]);
-
-		if (!city) {
-			throw new ResourceNotFoundError("City not found");
-		}
 
 		if (!company) {
 			throw new ResourceNotFoundError("Company not found");

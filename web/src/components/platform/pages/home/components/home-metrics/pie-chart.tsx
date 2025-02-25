@@ -19,49 +19,44 @@ import {
 	ChartTooltipContent,
 } from "@/components/ui/chart";
 const chartData = [
-	{ browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
-	{ browser: "safari", visitors: 200, fill: "var(--color-safari)" },
-	{ browser: "firefox", visitors: 287, fill: "var(--color-firefox)" },
-	{ browser: "edge", visitors: 173, fill: "var(--color-edge)" },
-	{ browser: "other", visitors: 190, fill: "var(--color-other)" },
+	{ type: "fractional", quantity: 112, fill: "var(--color-fractional)" },
+	{ type: "dedicated", quantity: 31, fill: "var(--color-dedicated)" },
+	{ type: "express", quantity: 9, fill: "var(--color-express)" },
+	{ type: "transfer", quantity: 130, fill: "var(--color-transfer)" },
 ];
 
 const chartConfig = {
-	visitors: {
-		label: "Visitors",
+	quantity: {
+		label: "Quantidade",
 	},
-	chrome: {
-		label: "Chrome",
+	fractional: {
+		label: "Fracionado",
 		color: "hsl(var(--chart-1))",
 	},
-	safari: {
-		label: "Safari",
+	dedicated: {
+		label: "Dedicado",
 		color: "hsl(var(--chart-2))",
 	},
-	firefox: {
-		label: "Firefox",
+	express: {
+		label: "Entrega rápida",
 		color: "hsl(var(--chart-3))",
 	},
-	edge: {
-		label: "Edge",
+	transfer: {
+		label: "Transferência",
 		color: "hsl(var(--chart-4))",
-	},
-	other: {
-		label: "Other",
-		color: "hsl(var(--chart-5))",
 	},
 } satisfies ChartConfig;
 
 export function PieChartComponent() {
-	const totalVisitors = React.useMemo(() => {
-		return chartData.reduce((acc, curr) => acc + curr.visitors, 0);
+	const totalFreights = React.useMemo(() => {
+		return chartData.reduce((acc, curr) => acc + curr.quantity, 0);
 	}, []);
 
 	return (
 		<Card className="flex flex-col">
 			<CardHeader className="items-center pb-0">
-				<CardTitle>Relatório detalhado</CardTitle>
-				<CardDescription>Janeiro - Junho de 2024</CardDescription>
+				<CardTitle>Fretes registrados</CardTitle>
+				<CardDescription>Fevereiro de 2025</CardDescription>
 			</CardHeader>
 			<CardContent className="flex-1 pb-0">
 				<ChartContainer
@@ -75,8 +70,8 @@ export function PieChartComponent() {
 						/>
 						<Pie
 							data={chartData}
-							dataKey="visitors"
-							nameKey="browser"
+							dataKey="quantity"
+							nameKey="type"
 							innerRadius={60}
 							strokeWidth={5}
 						>
@@ -99,14 +94,14 @@ export function PieChartComponent() {
 													y={viewBox.cy}
 													className="fill-foreground text-3xl font-bold"
 												>
-													{totalVisitors.toLocaleString()}
+													{totalFreights.toLocaleString()}
 												</tspan>
 												<tspan
 													x={viewBox.cx}
 													y={(viewBox.cy || 0) + 24}
 													className="fill-muted-foreground"
 												>
-													Visitors
+													Fretes
 												</tspan>
 											</text>
 										);
@@ -119,11 +114,8 @@ export function PieChartComponent() {
 			</CardContent>
 			<CardFooter className="flex-col gap-2 text-sm">
 				<div className="flex items-center gap-2 font-medium leading-none">
-					Trending up by 5.2% this month{" "}
-					<TrendingUp className="h-4 w-4" />
-				</div>
-				<div className="leading-none text-muted-foreground">
-					Showing total visitors for the last 6 months
+					Um aumento de 5.2% em relação ao mês passado
+					<TrendingUp className="h-4 w-4 text-emerald-500" />
 				</div>
 			</CardFooter>
 		</Card>

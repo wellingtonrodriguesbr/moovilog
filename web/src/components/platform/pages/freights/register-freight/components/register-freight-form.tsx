@@ -84,7 +84,7 @@ export function RegisterFreightForm() {
 		defaultValues: {
 			observation: null,
 			deliveriesQuantity: undefined,
-			totalWeightOfDeliveries: undefined,
+			totalWeightOfDeliveries: 0,
 			freightAmountInCents: undefined,
 			driverId: "",
 			vehicleId: "",
