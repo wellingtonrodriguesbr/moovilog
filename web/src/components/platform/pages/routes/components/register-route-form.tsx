@@ -110,7 +110,7 @@ export function RegisterRouteForm({ onCloseDialog }: RegisterRouteFormProps) {
 										<SelectValue placeholder="Selecione um estado" />
 									</SelectTrigger>
 								</FormControl>
-								<SelectContent>
+								<SelectContent className="max-h-[300px]">
 									{STATES_ARRAY.map((state) => (
 										<SelectItem
 											value={state.acronym}

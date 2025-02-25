@@ -285,7 +285,7 @@ export function RegisterVehicleForm({
 											<SelectValue placeholder="Selecione uma opção" />
 										</SelectTrigger>
 									</FormControl>
-									<SelectContent side="right">
+									<SelectContent className="max-h-[300px]">
 										{VEHICLE_BODIES.map((body) => (
 											<SelectItem
 												key={body.label}
