@@ -24,7 +24,7 @@ import { CommandSeparator } from "cmdk";
 
 interface SelectDriverProps {
 	selectedDriver: string;
-	onChangeSelectedDriver: (driver: string) => void;
+	onChangeSelectedDriver: (driverId: string) => void;
 }
 
 export function SelectDriver({
@@ -39,6 +39,10 @@ export function SelectDriver({
 		const selectedDriverObj = driversFromCompany.find(
 			(driver) => driver.name === currentValue
 		);
+
+		console.log(selectedDriverObj);
+		console.log(selectedDriver);
+		console.log(currentValue);
 
 		if (selectedDriverObj) {
 			onChangeSelectedDriver(
