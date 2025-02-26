@@ -316,7 +316,9 @@ export function UpdateVehicleForm({
 										placeholder="ABC-0000 / ABC-0A00"
 										autoComplete="off"
 										maxLength={8}
-										// pattern="[A-Z]{3}-\d[A-Z0-9]\d{2}"
+										type="text"
+										inputMode="numeric"
+										pattern="/^[A-Z]{3}-\d[A-Z0-9]\d{2}$/"
 										{...field}
 										value={formatPlate(field.value)}
 									/>
@@ -338,7 +340,9 @@ export function UpdateVehicleForm({
 											placeholder="ABC-0000 / ABC-0A00"
 											autoComplete="off"
 											maxLength={8}
-											// pattern="[A-Z]{3}-\d[A-Z0-9]\d{2}"
+											type="text"
+											inputMode="numeric"
+											pattern="/^[A-Z]{3}-\d[A-Z0-9]\d{2}$/"
 											{...field}
 											value={formatPlate(
 												field.value ?? ""
