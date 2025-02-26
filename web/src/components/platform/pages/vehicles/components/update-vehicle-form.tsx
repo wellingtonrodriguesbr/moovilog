@@ -34,12 +34,21 @@ interface UpdateDriverFormProps {
 	onCloseDialog: () => void;
 }
 
+const PLATE_REGEX = /^[A-Z]{3}-\d[A-Z0-9]\d{2}$/;
+
 const formSchema = z.object({
-	plate: z.string({ message: "Digite a placa do veículo" }),
+	plate: z
+		.string({ message: "Digite a placa do veículo" })
+		.regex(PLATE_REGEX, {
+			message: "Placa inválida. Formatos válidos: ABC-1234 ou ABC-1A34",
+		}),
 	trailerPlate: z
 		.string({ message: "Digite a placa do reboque" })
 		.optional()
-		.nullable(),
+		.nullable()
+		.refine((value) => !value || PLATE_REGEX.test(value), {
+			message: "Placa inválida. Formatos válidos: ABC-1234 ou ABC-1A34",
+		}),
 	year: z.coerce
 		.string({ message: "Digite o ano do veículo" })
 		.transform((value) => Number(value))
@@ -113,8 +122,6 @@ export function UpdateVehicleForm({
 			category: vehicle.category ?? undefined,
 		},
 	});
-
-	console.log(form.watch("year"));
 
 	const shouldIncludeTrailerPlate = typesThatRequireTrailerPlate.includes(
 		form.watch("category")
@@ -317,7 +324,6 @@ export function UpdateVehicleForm({
 										autoComplete="off"
 										maxLength={8}
 										type="text"
-										pattern="/^[A-Z]{3}-\d[A-Z0-9]\d{2}$/"
 										{...field}
 										value={formatPlate(field.value)}
 									/>
@@ -340,7 +346,6 @@ export function UpdateVehicleForm({
 											autoComplete="off"
 											maxLength={8}
 											type="text"
-											pattern="/^[A-Z]{3}-\d[A-Z0-9]\d{2}$/"
 											{...field}
 											value={formatPlate(
 												field.value ?? ""
