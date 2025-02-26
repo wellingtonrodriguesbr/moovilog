@@ -99,4 +99,19 @@ export class InMemoryVehiclesRepository implements VehiclesRepository {
 
 		this.items[vehicleIndex].status = status;
 	}
+
+	async update(id: string, data: Prisma.VehicleUncheckedUpdateInput) {
+		const vehicleIndex = this.items.findIndex((item) => item.id === id);
+
+		if (vehicleIndex === -1) {
+			return;
+		}
+
+		const updatedVehicle = {
+			...this.items[vehicleIndex],
+			...data,
+		} as Vehicle;
+
+		this.items[vehicleIndex] = updatedVehicle;
+	}
 }

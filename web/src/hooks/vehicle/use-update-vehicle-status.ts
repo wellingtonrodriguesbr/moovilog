@@ -24,7 +24,7 @@ export function useUpdateVehicleStatus() {
 		vehicleId,
 		status,
 	}: UpdateVehicleStatusProps) {
-		await api.patch(`/${company.id}/vehicles/${vehicleId}`, {
+		await api.patch(`/vehicles/${vehicleId}/status`, {
 			status,
 		});
 	}

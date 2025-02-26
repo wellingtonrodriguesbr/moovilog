@@ -51,4 +51,14 @@ export class InMemoryCitiesRepository implements CitiesRepository {
 
 		return cities;
 	}
+
+	async findById(id: string) {
+		const city = this.items.find((item) => item.id === id);
+
+		if (!city) {
+			return null;
+		}
+
+		return city;
+	}
 }

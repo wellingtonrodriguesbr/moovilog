@@ -3,6 +3,7 @@ import { verifyJWT } from "@/modules/shared/http/middlewares/verify-jwt";
 import { RegisterVehicleController } from "@/modules/vehicle/http/controllers/register-vehicle-controller";
 import { FetchVehiclesFromCompanyController } from "@/modules/vehicle/http/controllers/fetch-vehicles-from-company-controller";
 import { UpdateVehicleStatusController } from "@/modules/vehicle/http/controllers/update-vehicle-status-controller";
+import { UpdateVehicleController } from "@/modules/vehicle/http/controllers/update-vehicle-controller";
 
 export async function vehicleModuleRoutes(app: FastifyInstance) {
 	app.addHook("onRequest", verifyJWT);
@@ -13,7 +14,8 @@ export async function vehicleModuleRoutes(app: FastifyInstance) {
 		FetchVehiclesFromCompanyController.handle
 	);
 	app.patch(
-		"/:companyId/vehicles/:vehicleId",
+		"/vehicles/:vehicleId/status",
 		UpdateVehicleStatusController.handle
 	);
+	app.put("/vehicles/:vehicleId", UpdateVehicleController.handle);
 }

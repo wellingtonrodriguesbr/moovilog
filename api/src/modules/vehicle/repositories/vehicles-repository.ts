@@ -15,4 +15,8 @@ export interface VehiclesRepository {
 	findVehicleInCompany(id: string, companyId: string): Promise<Vehicle | null>;
 	findManyByCompanyId(companyId: string): Promise<Vehicle[]>;
 	updateStatus(id: string, status: VehicleStatus): Promise<void>;
+	update(
+		vehicleId: string,
+		data: Prisma.VehicleUncheckedUpdateInput
+	): Promise<void>;
 }

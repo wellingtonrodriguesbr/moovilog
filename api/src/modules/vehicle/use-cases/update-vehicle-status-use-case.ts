@@ -2,20 +2,17 @@ import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
 import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
 import { VehiclesRepository } from "@/modules/vehicle/repositories/vehicles-repository";
 import { CompanyMembersRepository } from "@/modules/company-member/repositories/company-members-repository";
-import { CompaniesRepository } from "@/modules/company/repositories/companies-repository";
 import { PermissionService } from "@/services/permission-service";
 
 interface UpdateVehicleStatusUseCaseRequest {
 	vehicleId: string;
 	userId: string;
-	companyId: string;
 	status: "ACTIVE" | "INACTIVE" | "MAINTENANCE" | "RESERVED" | "BROKEN";
 }
 
 export class UpdateVehicleStatusUseCase {
 	constructor(
 		private companyMembersRepository: CompanyMembersRepository,
-		private companiesRepository: CompaniesRepository,
 		private vehiclesRepository: VehiclesRepository,
 		private permissionService: PermissionService
 	) {}
@@ -23,23 +20,13 @@ export class UpdateVehicleStatusUseCase {
 	async execute({
 		vehicleId,
 		userId,
-		companyId,
 		status,
 	}: UpdateVehicleStatusUseCaseRequest): Promise<void> {
-		const [member, company] = await Promise.all([
-			await this.companyMembersRepository.findMemberInCompany(
-				userId,
-				companyId
-			),
-			await this.companiesRepository.findById(companyId),
-		]);
+		const member =
+			await await this.companyMembersRepository.findByUserId(userId);
 
 		if (!member) {
 			throw new ResourceNotFoundError("Member not found");
-		}
-
-		if (!company) {
-			throw new ResourceNotFoundError("Company not found");
 		}
 
 		const hasPermission = await this.permissionService.hasPermission(
@@ -55,7 +42,7 @@ export class UpdateVehicleStatusUseCase {
 
 		const vehicle = await this.vehiclesRepository.findVehicleInCompany(
 			vehicleId,
-			companyId
+			member.companyId
 		);
 
 		if (!vehicle) {

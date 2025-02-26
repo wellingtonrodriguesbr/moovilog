@@ -18,15 +18,12 @@ export class UpdateVehicleStatusController {
 		});
 
 		const updateVehicleStatusParamsSchema = z.object({
-			companyId: z.string().uuid(),
 			vehicleId: z.string().uuid(),
 		});
 
 		const { status } = updateVehicleStatusBodySchema.parse(req.body);
 
-		const { companyId, vehicleId } = updateVehicleStatusParamsSchema.parse(
-			req.params
-		);
+		const { vehicleId } = updateVehicleStatusParamsSchema.parse(req.params);
 
 		const userId = req.user.sub;
 
@@ -34,7 +31,6 @@ export class UpdateVehicleStatusController {
 			const updateVehicleStatusUseCase = makeUpdateVehicleStatusUseCase();
 			await updateVehicleStatusUseCase.execute({
 				vehicleId,
-				companyId,
 				userId,
 				status,
 			});

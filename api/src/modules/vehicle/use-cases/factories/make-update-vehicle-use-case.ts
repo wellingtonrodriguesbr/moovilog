@@ -1,12 +1,12 @@
 import { PrismaVehiclesRepository } from "@/modules/vehicle/repositories/prisma/prisma-vehicles-repository";
 import { PrismaCompanyMembersRepository } from "@/modules/company-member/repositories/prisma/prisma-company-members-repository";
-import { UpdateVehicleStatusUseCase } from "@/modules/vehicle/use-cases/update-vehicle-status-use-case";
+import { UpdateVehicleUseCase } from "@/modules/vehicle/use-cases/update-vehicle-use-case";
 import { PrismaCompanyMemberPermissionsRepository } from "@/modules/company-member/repositories/prisma/prisma-company-member-permissions-repository";
 import { PermissionService } from "@/services/permission-service";
 
-export function makeUpdateVehicleStatusUseCase() {
-	const vehiclesRepository = new PrismaVehiclesRepository();
+export function makeUpdateVehicleUseCase() {
 	const companyMembersRepository = new PrismaCompanyMembersRepository();
+	const vehiclesRepository = new PrismaVehiclesRepository();
 
 	const companyMemberPermissionsRepository =
 		new PrismaCompanyMemberPermissionsRepository();
@@ -15,11 +15,11 @@ export function makeUpdateVehicleStatusUseCase() {
 		companyMemberPermissionsRepository
 	);
 
-	const updateVehicleStatusUseCase = new UpdateVehicleStatusUseCase(
+	const updateVehicleUseCase = new UpdateVehicleUseCase(
 		companyMembersRepository,
 		vehiclesRepository,
 		permissionService
 	);
 
-	return updateVehicleStatusUseCase;
+	return updateVehicleUseCase;
 }

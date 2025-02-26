@@ -7,6 +7,7 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { UpdateVehicleStatusDialog } from "@/components/platform/pages/vehicles/components/update-vehicle-status-dialog";
+import { UpdateVehicleDialog } from "@/components/platform/pages/vehicles/components/update-vehicle-dialog";
 import { Button } from "@/components/ui/button";
 import { Ellipsis } from "lucide-react";
 import { Vehicle } from "@/interfaces";
@@ -28,6 +29,9 @@ export function VehicleDropdownOptions({
 			<DropdownMenuContent align="end">
 				<DropdownMenuLabel>Configurações</DropdownMenuLabel>
 				<DropdownMenuSeparator />
+				<DropdownMenuItem asChild>
+					<UpdateVehicleDialog vehicle={vehicle} />
+				</DropdownMenuItem>
 				<DropdownMenuItem asChild>
 					<UpdateVehicleStatusDialog
 						currentStatus={vehicle.status}

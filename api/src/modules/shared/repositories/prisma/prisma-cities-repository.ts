@@ -45,4 +45,14 @@ export class PrismaCitiesRepository implements CitiesRepository {
 
 		return cities;
 	}
+
+	async findById(id: string) {
+		const city = await prisma.city.findUnique({
+			where: {
+				id,
+			},
+		});
+
+		return city;
+	}
 }

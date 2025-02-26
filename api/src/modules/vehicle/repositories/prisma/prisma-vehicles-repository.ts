@@ -114,4 +114,13 @@ export class PrismaVehiclesRepository implements VehiclesRepository {
 			},
 		});
 	}
+
+	async update(id: string, data: Prisma.VehicleUncheckedUpdateInput) {
+		await prisma.vehicle.update({
+			where: {
+				id,
+			},
+			data,
+		});
+	}
 }

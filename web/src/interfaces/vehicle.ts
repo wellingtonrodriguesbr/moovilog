@@ -5,7 +5,16 @@ export interface Vehicle {
 	year: number;
 	brand: string;
 	model: string;
-	category: string;
+	category:
+		| "UTILITY"
+		| "VAN"
+		| "LIGHT_TRUCKS"
+		| "STRAIGHT_TRUCKS"
+		| "TRUCKS"
+		| "QUAD_AXLE_TRUCKS"
+		| "SEMI_TRAILER"
+		| "B_TRAIN"
+		| "ROAD_TRAIN";
 	status: "ACTIVE" | "INACTIVE" | "MAINTENANCE" | "RESERVED" | "BROKEN";
 	type: "OWN" | "AGGREGATE" | "RENTED";
 	body:

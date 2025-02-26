@@ -7,4 +7,5 @@ export interface CitiesRepository {
 		stateAcronym: string
 	): Promise<City[]>;
 	findManyByIds(ids: string[]): Promise<City[] | null>;
+	findById(id: string): Promise<City | null>;
 }

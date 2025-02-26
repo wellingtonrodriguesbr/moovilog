@@ -23,34 +23,25 @@ import { toast } from "sonner";
 
 import { Loader2 } from "lucide-react";
 import { formatPlate } from "@/utils/format-plate";
-import { useRegisterVehicle } from "@/hooks/vehicle/use-register-vehicle";
+import { useUpdateVehicle } from "@/hooks/vehicle/use-update-vehicle";
 import { formatWeight } from "@/utils/format-weight";
 import { AxiosError } from "axios";
 import { TRUCK_BRANDS } from "@/utils/mocks/truck-brands";
+import { Vehicle } from "@/interfaces";
 
-interface RegisterDriverFormProps {
+interface UpdateDriverFormProps {
+	vehicle: Vehicle;
 	onCloseDialog: () => void;
 }
 
-const PLATE_REGEX = /^[A-Z]{3}-\d[A-Z0-9]\d{2}$/;
-
 const formSchema = z.object({
-	plate: z
-		.string({ message: "Digite a placa do veículo" })
-		.regex(PLATE_REGEX, {
-			message: "Placa inválida. Formatos válidos: ABC-1234 ou ABC-1A34",
-		}),
+	plate: z.string({ message: "Digite a placa do veículo" }),
 	trailerPlate: z
 		.string({ message: "Digite a placa do reboque" })
 		.optional()
-		.nullable()
-		.refine((value) => !value || PLATE_REGEX.test(value), {
-			message: "Placa inválida. Formatos válidos: ABC-1234 ou ABC-1A34",
-		}),
-	year: z
+		.nullable(),
+	year: z.coerce
 		.string({ message: "Digite o ano do veículo" })
-		.trim()
-		.regex(/^\d{1,4}$/, { message: "Digite até 4 números" })
 		.transform((value) => Number(value))
 		.refine((value) => value >= 1900 && value <= new Date().getFullYear(), {
 			message: "O ano deve estar entre 1900 e o atual",
@@ -102,35 +93,38 @@ const formSchema = z.object({
 
 const typesThatRequireTrailerPlate = ["SEMI_TRAILER", "B_TRAIN", "ROAD_TRAIN"];
 
-export function RegisterVehicleForm({
+export function UpdateVehicleForm({
 	onCloseDialog,
-}: RegisterDriverFormProps) {
-	const { registerVehicle, isPendingRegisterVehicle } = useRegisterVehicle();
+	vehicle,
+}: UpdateDriverFormProps) {
+	const { updateVehicle, isPendingUpdateVehicle } = useUpdateVehicle();
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			plate: "",
-			trailerPlate: "",
-			year: undefined,
-			fullLoadCapacity: 0,
-			model: "",
-			brand: "",
-			type: undefined,
-			body: undefined,
-			category: undefined,
+			plate: vehicle.plate ?? "",
+			trailerPlate: vehicle.trailerPlate ?? "",
+			year: vehicle.year ?? undefined,
+			fullLoadCapacity: vehicle.fullLoadCapacity ?? 0,
+			model: vehicle.model ?? "",
+			brand: vehicle.brand ?? "",
+			type: vehicle.type ?? undefined,
+			body: vehicle.body ?? undefined,
+			category: vehicle.category ?? undefined,
 		},
 	});
+
+	console.log(form.watch("year"));
 
 	const shouldIncludeTrailerPlate = typesThatRequireTrailerPlate.includes(
 		form.watch("category")
 	);
 
-	async function onSubmit(registerData: z.infer<typeof formSchema>) {
+	async function onSubmit(updateData: z.infer<typeof formSchema>) {
 		try {
-			await registerVehicle({ ...registerData });
+			await updateVehicle({ ...updateData, vehicleId: vehicle.id });
 			onCloseDialog();
-			toast.success("Veículo cadastrado com sucesso");
+			toast.success("Veículo atualizado com sucesso");
 		} catch (error) {
 			if (error instanceof AxiosError) {
 				if (error.response?.status === 409) {
@@ -141,7 +135,7 @@ export function RegisterVehicleForm({
 					);
 				}
 			} else {
-				toast.error("Erro ao cadastrar veículo");
+				toast.error("Erro ao atualizar veículo");
 			}
 		} finally {
 			form.reset();
@@ -412,15 +406,15 @@ export function RegisterVehicleForm({
 
 				<fieldset className="flex justify-end gap-2 mt-6">
 					<Button
-						disabled={isPendingRegisterVehicle}
+						disabled={isPendingUpdateVehicle}
 						onClick={onCloseDialog}
 						type="button"
 						variant="destructive-outline"
 					>
 						Cancelar
 					</Button>
-					<Button disabled={isPendingRegisterVehicle} type="submit">
-						{isPendingRegisterVehicle ? (
+					<Button disabled={isPendingUpdateVehicle} type="submit">
+						{isPendingUpdateVehicle ? (
 							<Loader2 className="size-4 animate-spin" />
 						) : (
 							"Concluir cadastro"
