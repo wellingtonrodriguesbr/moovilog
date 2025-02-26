@@ -2,10 +2,16 @@
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGetProfile } from "@/hooks/user/use-get-profile";
-import { QuickAccess } from "@/components/platform/pages/home/components/quick-access";
-import { BarChartComponent } from "@/components/platform/pages/home/components/home-metrics/bar-chart";
-import { PieChartComponent } from "@/components/platform/pages/home/components/home-metrics/pie-chart";
-import { Construction } from "lucide-react";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
+import { Box, LayoutGrid, TriangleAlert, Truck } from "lucide-react";
+import Link from "next/link";
 
 export function Home() {
 	const { profile, isGetProfilePending } = useGetProfile();
@@ -21,18 +27,73 @@ export function Home() {
 					)}
 				</h1>
 			</header>
-			<div className="w-full h-full flex flex-col gap-4 items-center justify-center flex-1 bg-zinc-100 p-6 rounded-md">
-				<Construction className="size-12 md:size-24 text-amber-500" />
-				<h2 className="text-2xl md:text-4xl text-center max-w-2xl leading-normal md:leading-relaxed">
-					A página home está sendo construída, mas fique a vontade
-					para explorar! 🚀
-				</h2>
+			<div className="grid gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
+				<Card className="bg-app-blue-50">
+					<CardHeader className="flex justify-between flex-row items-center">
+						<div className="space-y-1">
+							<CardTitle>Fretes</CardTitle>
+							<CardDescription>
+								2 fretes programados para hoje
+							</CardDescription>
+						</div>
+						<div className="flex items-center justify-center size-12 rounded-md bg-app-blue-200">
+							<LayoutGrid className="size-6 text-app-blue-500" />
+						</div>
+					</CardHeader>
+				</Card>
+				<Card className="bg-emerald-100">
+					<CardHeader className="flex justify-between flex-row items-center">
+						<div className="space-y-1">
+							<CardTitle>Coletas</CardTitle>
+							<CardDescription>
+								4 coletas programadas para hoje
+							</CardDescription>
+						</div>
+						<div className="flex items-center justify-center size-12 rounded-md bg-emerald-200">
+							<Box className="size-6 text-emerald-500" />
+						</div>
+					</CardHeader>
+				</Card>
+				<Card className="bg-amber-100">
+					<CardHeader className="flex justify-between flex-row items-center">
+						<div className="space-y-1">
+							<CardTitle>Avisos</CardTitle>
+							<CardDescription>
+								5 avisos registrados.{" "}
+								<Link
+									href="/operacional/avisos"
+									className="underline"
+								>
+									Clique aqui para ver
+								</Link>
+							</CardDescription>
+						</div>
+						<div className="flex items-center justify-center size-12 rounded-md bg-amber-200">
+							<TriangleAlert className="size-6 text-amber-500" />
+						</div>
+					</CardHeader>
+				</Card>
+				<Card className="bg-violet-50">
+					<CardHeader className="flex justify-between flex-row items-center">
+						<div className="space-y-1">
+							<CardTitle>Veículos</CardTitle>
+							<CardDescription>2 veículos na rua</CardDescription>
+						</div>
+						<div className="flex items-center justify-center size-12 rounded-md bg-violet-200">
+							<Truck className="size-6 text-violet-500" />
+						</div>
+					</CardHeader>
+				</Card>
 			</div>
-			{/* <QuickAccess />
 			<div className="grid grid-cols-1 xl:grid-cols-[1fr_400px] gap-4">
-				<BarChartComponent />
-				<PieChartComponent />
-			</div> */}
+				<Card className="h-48"></Card>
+				<Card className="h-48"></Card>
+			</div>
+			<div className="grid grid-cols-1 xl:grid-cols-[1fr_400px_400px] gap-4 pb-8">
+				<Card className="h-80"></Card>
+				<Card className="h-80"></Card>
+				<Card className="h-80"></Card>
+			</div>
 		</section>
 	);
 }
