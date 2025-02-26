@@ -424,7 +424,7 @@ export function UpdateVehicleForm({
 						{isPendingUpdateVehicle ? (
 							<Loader2 className="size-4 animate-spin" />
 						) : (
-							"Concluir cadastro"
+							"Salvar"
 						)}
 					</Button>
 				</fieldset>

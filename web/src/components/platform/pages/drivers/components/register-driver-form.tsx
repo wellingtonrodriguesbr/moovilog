@@ -201,7 +201,7 @@ export function RegisterDriverForm({ onCloseDialog }: RegisterDriverFormProps) {
 						{isPendingRegisterDriver ? (
 							<Loader2 className="size-4 animate-spin" />
 						) : (
-							"Concluir cadastro"
+							"Cadastrar"
 						)}
 					</Button>
 				</fieldset>
