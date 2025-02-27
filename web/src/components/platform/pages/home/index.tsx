@@ -1,17 +1,23 @@
 "use client";
 
+import Link from "next/link";
+
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGetProfile } from "@/hooks/user/use-get-profile";
 import {
 	Card,
 	CardContent,
 	CardDescription,
-	CardFooter,
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { Box, LayoutGrid, TriangleAlert, Trophy, Truck } from "lucide-react";
-import Link from "next/link";
+import {
+	Box,
+	LayoutGrid,
+	PackageCheck,
+	TriangleAlert,
+	Trophy,
+} from "lucide-react";
 import { AreaChartComponent } from "./components/home-metrics/area-chart";
 
 export function Home() {
@@ -29,7 +35,7 @@ export function Home() {
 				</h1>
 			</header>
 			<div className="grid gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
-				<Card className="bg-app-blue-50">
+				<Card className="bg-sky-50 border border-sky-100">
 					<CardHeader className="flex justify-between flex-row items-center">
 						<div className="space-y-1">
 							<CardTitle>Entregas</CardTitle>
@@ -37,12 +43,12 @@ export function Home() {
 								62 programadas para hoje
 							</CardDescription>
 						</div>
-						<div className="flex items-center justify-center size-12 rounded-md bg-app-blue-200">
-							<LayoutGrid className="size-6 text-app-blue-500" />
+						<div className="flex items-center justify-center size-12 rounded-md bg-sky-200">
+							<PackageCheck className="size-6 text-sky-500" />
 						</div>
 					</CardHeader>
 				</Card>
-				<Card className="bg-emerald-100">
+				<Card className="bg-emerald-50 border border-emerald-100">
 					<CardHeader className="flex justify-between flex-row items-center">
 						<div className="space-y-1">
 							<CardTitle>Coletas</CardTitle>
@@ -55,7 +61,20 @@ export function Home() {
 						</div>
 					</CardHeader>
 				</Card>
-				<Card className="bg-amber-100">
+				<Card className="bg-violet-50 border border-violet-100">
+					<CardHeader className="flex justify-between flex-row items-center">
+						<div className="space-y-1">
+							<CardTitle>Fretes</CardTitle>
+							<CardDescription>
+								8 no total para hoje
+							</CardDescription>
+						</div>
+						<div className="flex items-center justify-center size-12 rounded-md bg-violet-200">
+							<LayoutGrid className="size-6 text-violet-500" />
+						</div>
+					</CardHeader>
+				</Card>
+				<Card className="bg-amber-50 border border-amber-100">
 					<CardHeader className="flex justify-between flex-row items-center">
 						<div className="space-y-1">
 							<CardTitle>Avisos</CardTitle>
@@ -74,19 +93,6 @@ export function Home() {
 						</div>
 					</CardHeader>
 				</Card>
-				<Card className="bg-violet-50">
-					<CardHeader className="flex justify-between flex-row items-center">
-						<div className="space-y-1">
-							<CardTitle>Veículos</CardTitle>
-							<CardDescription>
-								6 saiu para entrega
-							</CardDescription>
-						</div>
-						<div className="flex items-center justify-center size-12 rounded-md bg-violet-200">
-							<Truck className="size-6 text-violet-500" />
-						</div>
-					</CardHeader>
-				</Card>
 			</div>
 			<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
 				<Card className="bg-white border">
@@ -100,21 +106,21 @@ export function Home() {
 						<ul className="flex flex-col gap-2">
 							<li className="py-2 px-4 bg-zinc-50 rounded-md flex gap-2 items-center">
 								<Trophy className="size-4 text-amber-400" />
-								1° Wellington Rodrigues
+								Wellington Rodrigues
 								<strong className="text-app-blue-500 ml-auto">
 									45
 								</strong>
 							</li>
 							<li className="py-2 px-4 bg-zinc-50 rounded-md flex gap-2 items-center">
 								<Trophy className="size-4 text-zinc-500" />
-								2° Leandro Lopes
+								Leandro Lopes
 								<strong className="text-app-blue-500 ml-auto">
 									42
 								</strong>
 							</li>
 							<li className="py-2 px-4 bg-zinc-50 rounded-md flex gap-2 items-center">
 								<Trophy className="size-4 text-amber-700" />
-								3° Albano Cunha Júnior
+								Albano Cunha Júnior
 								<strong className="text-app-blue-500 ml-auto">
 									37
 								</strong>
@@ -133,21 +139,21 @@ export function Home() {
 						<ul className="flex flex-col gap-2">
 							<li className="py-2 px-4 bg-zinc-50 rounded-md flex gap-2 items-center">
 								<Trophy className="size-4 text-amber-400" />
-								1° ABC-1111
+								ABC-1111
 								<strong className="text-app-blue-500 ml-auto">
 									45
 								</strong>
 							</li>
 							<li className="py-2 px-4 bg-zinc-50 rounded-md flex gap-2 items-center">
 								<Trophy className="size-4 text-zinc-500" />
-								2° ABC-2222
+								ABC-2222
 								<strong className="text-app-blue-500 ml-auto">
 									42
 								</strong>
 							</li>
 							<li className="py-2 px-4 bg-zinc-50 rounded-md flex gap-2 items-center">
 								<Trophy className="size-4 text-amber-700" />
-								3° ABC-3333
+								ABC-3333
 								<strong className="text-app-blue-500 ml-auto">
 									37
 								</strong>
@@ -166,21 +172,21 @@ export function Home() {
 						<ul className="flex flex-col gap-2">
 							<li className="py-2 px-4 bg-zinc-50 rounded-md flex gap-2 items-center">
 								<Trophy className="size-4 text-amber-400" />
-								1° Cicero Rodrigues
+								Cicero Rodrigues
 								<strong className="text-app-blue-500 ml-auto">
 									45
 								</strong>
 							</li>
 							<li className="py-2 px-4 bg-zinc-50 rounded-md flex gap-2 items-center">
 								<Trophy className="size-4 text-zinc-500" />
-								2° Benedito Arruda
+								Benedito Arruda
 								<strong className="text-app-blue-500 ml-auto">
 									42
 								</strong>
 							</li>
 							<li className="py-2 px-4 bg-zinc-50 rounded-md flex gap-2 items-center">
 								<Trophy className="size-4 text-amber-700" />
-								3° Donizete Silva
+								Donizete Silva
 								<strong className="text-app-blue-500 ml-auto">
 									37
 								</strong>
@@ -199,21 +205,21 @@ export function Home() {
 						<ul className="flex flex-col gap-2">
 							<li className="py-2 px-4 bg-zinc-50 rounded-md flex gap-2 items-center">
 								<Trophy className="size-4 text-amber-400" />
-								1° Itapetininga
+								Itapetininga
 								<strong className="text-app-blue-500 ml-auto">
 									45
 								</strong>
 							</li>
 							<li className="py-2 px-4 bg-zinc-50 rounded-md flex gap-2 items-center">
 								<Trophy className="size-4 text-zinc-500" />
-								2° Boituva
+								Boituva
 								<strong className="text-app-blue-500 ml-auto">
 									42
 								</strong>
 							</li>
 							<li className="py-2 px-4 bg-zinc-50 rounded-md flex gap-2 items-center">
 								<Trophy className="size-4 text-amber-700" />
-								3° Tatuí
+								Tatuí
 								<strong className="text-app-blue-500 ml-auto">
 									37
 								</strong>
