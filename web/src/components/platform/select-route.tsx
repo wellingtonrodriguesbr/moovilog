@@ -41,6 +41,8 @@ export function SelectRoute({
 			(route) => route.name === currentValue
 		);
 
+		console.log("SELECTED ROUTE OBJ: ", selectedRouteObj);
+
 		if (selectedRouteObj) {
 			onChangeSelectedRoute(
 				selectedRouteObj.id === selectedRoute ? "" : selectedRouteObj.id
@@ -79,7 +81,7 @@ export function SelectRoute({
 							{routes.map((route) => (
 								<CommandItem
 									key={route.id}
-									value={route.name}
+									value={route.id}
 									onSelect={(currentValue) =>
 										handleSelectRoute(currentValue)
 									}
