@@ -24,7 +24,7 @@ export function Home() {
 	const { profile, isGetProfilePending } = useGetProfile();
 
 	return (
-		<section className="flex flex-col mt-4 gap-8 w-full h-[85vh]">
+		<section className="flex flex-col mt-4 gap-4 w-full h-[85vh]">
 			<header className="flex justify-between">
 				<h1 className="text-2xl md:text-3xl font-medium">
 					{isGetProfilePending ? (
@@ -95,32 +95,41 @@ export function Home() {
 				</Card>
 			</div>
 			<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+				<Card className="col-span-1 md:col-span-2">
+					<CardHeader>
+						<CardTitle>Programação do dia</CardTitle>
+						<CardDescription>
+							Veículos a serem carregados na data de hoje
+						</CardDescription>
+					</CardHeader>
+					<CardContent></CardContent>
+				</Card>
 				<Card className="bg-white border">
 					<CardHeader>
-						<CardTitle>Ranking dos colaboradores</CardTitle>
+						<CardTitle>Ranking dos motoristas</CardTitle>
 						<CardDescription>
-							Que mais carregaram veículos no mês atual
+							Motoristas que mais fizeram frete no mês atual
 						</CardDescription>
 					</CardHeader>
 					<CardContent>
 						<ul className="flex flex-col gap-2">
 							<li className="py-2 px-4 bg-zinc-50 rounded-md flex gap-2 items-center">
 								<Trophy className="size-4 text-amber-400" />
-								Wellington Rodrigues
+								Cicero Rodrigues
 								<strong className="text-app-blue-500 ml-auto">
 									45
 								</strong>
 							</li>
 							<li className="py-2 px-4 bg-zinc-50 rounded-md flex gap-2 items-center">
 								<Trophy className="size-4 text-zinc-500" />
-								Leandro Lopes
+								Benedito Arruda
 								<strong className="text-app-blue-500 ml-auto">
 									42
 								</strong>
 							</li>
 							<li className="py-2 px-4 bg-zinc-50 rounded-md flex gap-2 items-center">
 								<Trophy className="size-4 text-amber-700" />
-								Albano Cunha Júnior
+								Donizete Silva
 								<strong className="text-app-blue-500 ml-auto">
 									37
 								</strong>
@@ -161,32 +170,43 @@ export function Home() {
 						</ul>
 					</CardContent>
 				</Card>
+			</div>
+			<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+				<Card className="col-span-1 md:col-span-2">
+					<CardHeader>
+						<CardTitle>Recursos e suprimentos</CardTitle>
+						<CardDescription>
+							Acompanhe em tempo real os recursos e suprimentos
+						</CardDescription>
+					</CardHeader>
+					<CardContent></CardContent>
+				</Card>
 				<Card className="bg-white border">
 					<CardHeader>
-						<CardTitle>Ranking dos motoristas</CardTitle>
+						<CardTitle>Ranking dos colaboradores</CardTitle>
 						<CardDescription>
-							Motoristas que mais fizeram frete no mês atual
+							Que mais carregaram veículos no mês atual
 						</CardDescription>
 					</CardHeader>
 					<CardContent>
 						<ul className="flex flex-col gap-2">
 							<li className="py-2 px-4 bg-zinc-50 rounded-md flex gap-2 items-center">
 								<Trophy className="size-4 text-amber-400" />
-								Cicero Rodrigues
+								Wellington Rodrigues
 								<strong className="text-app-blue-500 ml-auto">
 									45
 								</strong>
 							</li>
 							<li className="py-2 px-4 bg-zinc-50 rounded-md flex gap-2 items-center">
 								<Trophy className="size-4 text-zinc-500" />
-								Benedito Arruda
+								Leandro Lopes
 								<strong className="text-app-blue-500 ml-auto">
 									42
 								</strong>
 							</li>
 							<li className="py-2 px-4 bg-zinc-50 rounded-md flex gap-2 items-center">
 								<Trophy className="size-4 text-amber-700" />
-								Donizete Silva
+								Albano Cunha Júnior
 								<strong className="text-app-blue-500 ml-auto">
 									37
 								</strong>
@@ -228,9 +248,6 @@ export function Home() {
 					</CardContent>
 				</Card>
 			</div>
-			<footer className="pb-8">
-				<AreaChartComponent />
-			</footer>
 		</section>
 	);
 }
