@@ -22,7 +22,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { DatePicker } from "@/components/ui/date-picker";
 
-import { z } from "zod";
+import { Schema, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -35,45 +35,59 @@ import { Loader2 } from "lucide-react";
 import { formatCurrencyBR } from "@/utils/format-currency-br";
 import { formatWeight } from "@/utils/format-weight";
 
-const formSchema = z.object({
-	observation: z.string().optional().nullable(),
-	deliveriesQuantity: z.coerce.number({
-		message: "Digite a quantidade de entregas",
-	}),
-	totalWeightOfDeliveries: z.coerce.number({
-		message: "Digite o total de peso",
-	}),
-	freightAmountInCents: z
-		.string({ message: "Digite o valor do frete" })
-		.transform((value) => {
-			const formattedValue = value.replace(/\D/g, "");
-			return Number(formattedValue);
+const formSchema = z
+	.object({
+		observation: z.string().optional().nullable(),
+		deliveriesQuantity: z.coerce.number({
+			message: "Digite a quantidade de entregas",
 		}),
-	driverId: z.string().uuid({ message: "Selecione um motorista" }),
-	vehicleId: z.string().uuid({ message: "Selecione um veículo" }),
-	routeId: z.string().uuid({ message: "Selecione uma rota" }),
-	date: z.coerce.date(),
-	paymentDate: z.coerce.date({
-		errorMap: () => ({ message: "Selecione uma data" }),
-	}),
-	modality: z.enum(
-		[
-			"DAILY",
-			"PERCENTAGE",
-			"PRODUCTIVITY",
-			"FLAT_RATE",
-			"WEIGHT_BASED",
-			"DISTANCE_BASED",
-			"TIME_BASED",
-			"PER_STOP",
-			"ZONE_BASED",
-		],
-		{ message: "Selecione uma modalidade" }
-	),
-	type: z.enum(["FRACTIONAL", "DEDICATED", "EXPRESS", "TRANSFER"], {
-		message: "Selecione um tipo",
-	}),
-});
+		totalWeightOfDeliveries: z.coerce.number({
+			message: "Digite o total de peso",
+		}),
+		freightAmountInCents: z
+			.string({ message: "Digite o valor do frete" })
+			.transform((value) => {
+				const formattedValue = value.replace(/\D/g, "");
+				return Number(formattedValue);
+			}),
+		driverId: z.string().uuid({ message: "Selecione um motorista" }),
+		vehicleId: z.string().uuid({ message: "Selecione um veículo" }),
+		routeId: z.string().uuid({ message: "Selecione uma rota" }),
+		date: z.coerce.date(),
+		paymentDate: z.coerce.date({
+			errorMap: () => ({ message: "Selecione uma data" }),
+		}),
+		modality: z.enum(
+			[
+				"DAILY",
+				"PERCENTAGE",
+				"PRODUCTIVITY",
+				"FLAT_RATE",
+				"WEIGHT_BASED",
+				"DISTANCE_BASED",
+				"TIME_BASED",
+				"PER_STOP",
+				"ZONE_BASED",
+			],
+			{ message: "Selecione uma modalidade" }
+		),
+		type: z.enum(["FRACTIONAL", "DEDICATED", "EXPRESS", "TRANSFER"], {
+			message: "Selecione um tipo",
+		}),
+	})
+	.refine(
+		(data) => {
+			if (data.paymentDate < data.date) {
+				return false;
+			}
+			return true;
+		},
+		{
+			path: ["paymentDate"],
+			message:
+				"A data de pagamento não pode ser anterior à data do frete.",
+		}
+	);
 
 export function RegisterFreightForm() {
 	const router = useRouter();
@@ -95,8 +109,6 @@ export function RegisterFreightForm() {
 			type: undefined,
 		},
 	});
-
-	console.log("DRIVER ID: ", form.watch("driverId"));
 
 	async function onSubmit(registerData: z.infer<typeof formSchema>) {
 		try {

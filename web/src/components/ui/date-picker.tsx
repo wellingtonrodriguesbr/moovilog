@@ -15,11 +15,13 @@ import { Calendar as CalendarIcon } from "lucide-react";
 
 interface DatePickerProps {
 	selectedDate: Date;
+	disabled?: boolean;
 	onChangeSelectedDate: (date: Date) => void;
 }
 
 export function DatePicker({
 	selectedDate,
+	disabled = false,
 	onChangeSelectedDate,
 }: DatePickerProps) {
 	return (
@@ -48,7 +50,7 @@ export function DatePicker({
 					required
 					selected={selectedDate}
 					onSelect={onChangeSelectedDate}
-					// disabled={(date) => date < new Date()}
+					disabled={disabled}
 				/>
 			</PopoverContent>
 		</Popover>

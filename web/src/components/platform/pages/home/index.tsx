@@ -31,9 +31,9 @@ export function Home() {
 				<Card className="bg-app-blue-50">
 					<CardHeader className="flex justify-between flex-row items-center">
 						<div className="space-y-1">
-							<CardTitle>Fretes</CardTitle>
+							<CardTitle>Entregas</CardTitle>
 							<CardDescription>
-								2 fretes programados para hoje
+								62 programadas para hoje
 							</CardDescription>
 						</div>
 						<div className="flex items-center justify-center size-12 rounded-md bg-app-blue-200">
@@ -46,7 +46,7 @@ export function Home() {
 						<div className="space-y-1">
 							<CardTitle>Coletas</CardTitle>
 							<CardDescription>
-								4 coletas programadas para hoje
+								12 programadas para hoje
 							</CardDescription>
 						</div>
 						<div className="flex items-center justify-center size-12 rounded-md bg-emerald-200">
@@ -59,7 +59,7 @@ export function Home() {
 						<div className="space-y-1">
 							<CardTitle>Avisos</CardTitle>
 							<CardDescription>
-								5 avisos registrados.{" "}
+								5 registrados.{" "}
 								<Link
 									href="/operacional/avisos"
 									className="underline"
@@ -77,7 +77,9 @@ export function Home() {
 					<CardHeader className="flex justify-between flex-row items-center">
 						<div className="space-y-1">
 							<CardTitle>Veículos</CardTitle>
-							<CardDescription>2 veículos na rua</CardDescription>
+							<CardDescription>
+								6 saiu para entrega
+							</CardDescription>
 						</div>
 						<div className="flex items-center justify-center size-12 rounded-md bg-violet-200">
 							<Truck className="size-6 text-violet-500" />

@@ -36,6 +36,7 @@ export function SelectRoute({
 		useFetchRoutesFromCompany();
 
 	function handleSelectRoute(currentValue: string) {
+		console.log("CURRENT VALUE: ", currentValue);
 		const selectedRouteObj = routes.find(
 			(route) => route.name === currentValue
 		);
