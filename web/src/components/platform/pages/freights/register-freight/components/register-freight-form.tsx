@@ -110,8 +110,6 @@ export function RegisterFreightForm() {
 		},
 	});
 
-	console.log("ROUTE ID: ", form.watch("routeId"));
-
 	async function onSubmit(registerData: z.infer<typeof formSchema>) {
 		try {
 			const freight = await registerFreight({ ...registerData });
