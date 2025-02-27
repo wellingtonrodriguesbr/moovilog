@@ -35,10 +35,12 @@ export function SelectRoute({
 	const { routes, isFetchRoutesFromCompanyPending } =
 		useFetchRoutesFromCompany();
 
+	console.log("ROUTES: ", routes);
+
 	function handleSelectRoute(currentValue: string) {
 		console.log("CURRENT VALUE: ", currentValue);
 		const selectedRouteObj = routes.find(
-			(route) => route.name === currentValue
+			(route) => route.id === currentValue
 		);
 
 		console.log("SELECTED ROUTE OBJ: ", selectedRouteObj);
