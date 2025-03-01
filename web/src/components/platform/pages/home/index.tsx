@@ -18,7 +18,6 @@ import {
 	TriangleAlert,
 	Trophy,
 } from "lucide-react";
-import { AreaChartComponent } from "./components/home-metrics/area-chart";
 
 export function Home() {
 	const { profile, isGetProfilePending } = useGetProfile();
@@ -34,7 +33,7 @@ export function Home() {
 					)}
 				</h1>
 			</header>
-			<div className="grid gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
+			<div className="grid gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-4 mt-6">
 				<Card className="bg-sky-50 border border-sky-100">
 					<CardHeader className="flex justify-between flex-row items-center">
 						<div className="space-y-1">
