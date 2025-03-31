@@ -39,31 +39,28 @@ export function FreightsMetrics() {
 				className="w-full"
 			>
 				<CarouselContent className="w-full ml-0.5 xl:ml-0 gap-2">
-					<CarouselItem className="w-fit basis-[200px] md:basis-1/4 xl:basis-[225px] pl-0">
+					<CarouselItem className="w-fit basis-[200px] md:basis-1/4 xl:basis-[264px] pl-0">
 						<TotalFreightsCard totalFreights={totalFreights} />
 					</CarouselItem>
-					<CarouselItem className="w-fit basis-[200px] md:basis-1/4 xl:basis-[225px] pl-0">
+					<CarouselItem className="w-fit basis-[200px] md:basis-1/4 xl:basis-[264px] pl-0">
 						<TotalDeliveriesCard
 							totalDeliveries={totalDeliveries}
 						/>
 					</CarouselItem>
-					<CarouselItem className="w-fit basis-[200px] md:basis-1/4 xl:basis-[225px] pl-0">
+					<CarouselItem className="w-fit basis-[200px] md:basis-1/4 xl:basis-[264px] pl-0">
 						<TotalWeightDeliveriesCard
 							totalWeightDeliveries={totalWeightOfDeliveries}
 						/>
 					</CarouselItem>
-					<CarouselItem className="w-fit basis-[200px] md:basis-1/4 xl:basis-[225px] pl-0">
+					<CarouselItem className="w-fit basis-[200px] md:basis-1/4 xl:basis-[264px] pl-0">
 						<TotalPickupsCard totalPickups={totalPickups} />
 					</CarouselItem>
-					<CarouselItem className="w-fit basis-[200px] md:basis-1/4 xl:basis-[225px] pl-0">
+					<CarouselItem className="w-fit basis-[200px] md:basis-1/4 xl:basis-[264px] pl-0">
 						<TotalWeightPickupsCard
 							totalWeightPickups={totalWeightOfPickups}
 						/>
 					</CarouselItem>
-					<CarouselItem className="w-fit basis-[200px] md:basis-1/4 xl:basis-[225px] pl-0">
-						<TotalPickupsCard totalPickups={totalPickups} />
-					</CarouselItem>
-					<CarouselItem className="w-fit basis-[200px] md:basis-1/4 xl:basis-[225px] pl-0">
+					<CarouselItem className="w-fit basis-[200px] md:basis-1/4 xl:basis-[264px] pl-0">
 						<TotalFreightsAmountCard
 							totalFreightsAmount={totalFreightsAmountInCents}
 						/>
