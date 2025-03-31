@@ -89,8 +89,8 @@ model CompanyMemberPermission {
 model Driver {
   id             String        @id @default(uuid())
   name           String
-  documentNumber String        @unique @map("document_number")
-  phone          String        @unique
+  documentNumber String        @map("document_number")
+  phone          String
   status         AccountStatus @default(ACTIVE)
   type           DriverType
   createdAt      DateTime      @default(now()) @map("created_at")
@@ -121,8 +121,8 @@ model Driver {
 
 model Vehicle {
   id               String          @id @default(uuid())
-  plate            String          @unique
-  trailerPlate     String?         @unique @map("trailer_plate")
+  plate            String
+  trailerPlate     String?         @map("trailer_plate")
   year             Int
   brand            String
   model            String
