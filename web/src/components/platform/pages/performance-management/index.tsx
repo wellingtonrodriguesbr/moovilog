@@ -1,6 +1,6 @@
-import { AreaChartComponent } from "@/components/platform/pages/home/components/home-metrics/area-chart";
-import { PieChartComponent } from "@/components/platform/pages/home/components/home-metrics/pie-chart";
-import { BarChartMixedComponent } from "@/components/platform/pages/home/components/home-metrics/bar-chart-mixed";
+import { AreaChartComponent } from "@/components/platform/pages/performance-management/performance-management-metrics/area-chart";
+import { PieChartComponent } from "@/components/platform/pages/performance-management/performance-management-metrics/pie-chart";
+import { BarChartMixedComponent } from "@/components/platform/pages/performance-management/performance-management-metrics/bar-chart-mixed";
 
 export function PerformanceManagement() {
 	return (
