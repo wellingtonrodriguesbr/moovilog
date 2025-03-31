@@ -26,7 +26,7 @@ interface FreightResponse {
 		totalWeightOfDeliveries: number;
 		totalPickups: number;
 		totalWeightOfPickups: number;
-		totalFreightsAmountInCents: number;
+		totalFreightAmountInCents: number;
 	};
 }
 
@@ -73,7 +73,7 @@ export function useFetchFreightsFromCompany() {
 		totalWeightOfPickups:
 			freightsFromCompany?.summary.totalWeightOfPickups ?? 0,
 		totalFreightsAmountInCents:
-			freightsFromCompany?.summary.totalFreightsAmountInCents ?? 0,
+			freightsFromCompany?.summary.totalFreightAmountInCents ?? 0,
 		isFetchFreightsFromCompanyPending,
 	};
 }
