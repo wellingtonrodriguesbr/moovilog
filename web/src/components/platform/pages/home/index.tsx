@@ -103,7 +103,7 @@ export function Home() {
 					</CardHeader>
 					<CardContent></CardContent>
 				</Card>
-				<Card className="bg-white border">
+				<Card>
 					<CardHeader>
 						<CardTitle>Ranking dos motoristas</CardTitle>
 						<CardDescription>
@@ -111,7 +111,7 @@ export function Home() {
 						</CardDescription>
 					</CardHeader>
 					<CardContent>
-						<ul className="flex flex-col gap-2">
+						{/* <ul className="flex flex-col gap-2">
 							<li className="py-2 px-4 bg-zinc-50 rounded-md flex gap-2 items-center">
 								<Trophy className="size-4 text-amber-400" />
 								Cicero Rodrigues
@@ -133,10 +133,10 @@ export function Home() {
 									37
 								</strong>
 							</li>
-						</ul>
+						</ul> */}
 					</CardContent>
 				</Card>
-				<Card className="bg-white border">
+				<Card>
 					<CardHeader>
 						<CardTitle>Ranking dos veículos</CardTitle>
 						<CardDescription>
@@ -144,7 +144,7 @@ export function Home() {
 						</CardDescription>
 					</CardHeader>
 					<CardContent>
-						<ul className="flex flex-col gap-2">
+						{/* <ul className="flex flex-col gap-2">
 							<li className="py-2 px-4 bg-zinc-50 rounded-md flex gap-2 items-center">
 								<Trophy className="size-4 text-amber-400" />
 								ABC-1111
@@ -166,7 +166,7 @@ export function Home() {
 									37
 								</strong>
 							</li>
-						</ul>
+						</ul> */}
 					</CardContent>
 				</Card>
 			</div>
@@ -180,7 +180,7 @@ export function Home() {
 					</CardHeader>
 					<CardContent></CardContent>
 				</Card>
-				<Card className="bg-white border">
+				<Card>
 					<CardHeader>
 						<CardTitle>Ranking dos colaboradores</CardTitle>
 						<CardDescription>
@@ -188,7 +188,7 @@ export function Home() {
 						</CardDescription>
 					</CardHeader>
 					<CardContent>
-						<ul className="flex flex-col gap-2">
+						{/* <ul className="flex flex-col gap-2">
 							<li className="py-2 px-4 bg-zinc-50 rounded-md flex gap-2 items-center">
 								<Trophy className="size-4 text-amber-400" />
 								Wellington Rodrigues
@@ -210,10 +210,10 @@ export function Home() {
 									37
 								</strong>
 							</li>
-						</ul>
+						</ul> */}
 					</CardContent>
 				</Card>
-				<Card className="bg-white border">
+				<Card>
 					<CardHeader>
 						<CardTitle>Ranking das cidades</CardTitle>
 						<CardDescription>
@@ -221,7 +221,7 @@ export function Home() {
 						</CardDescription>
 					</CardHeader>
 					<CardContent>
-						<ul className="flex flex-col gap-2">
+						{/* <ul className="flex flex-col gap-2">
 							<li className="py-2 px-4 bg-zinc-50 rounded-md flex gap-2 items-center">
 								<Trophy className="size-4 text-amber-400" />
 								Itapetininga
@@ -243,7 +243,7 @@ export function Home() {
 									37
 								</strong>
 							</li>
-						</ul>
+						</ul> */}
 					</CardContent>
 				</Card>
 			</div>
