@@ -128,7 +128,7 @@ export function RegisterCompanyAddressForm() {
 						<FormItem>
 							<FormLabel>CEP</FormLabel>
 							<FormControl>
-								<div className="flex items-center rounded-md overflow-hidden border pr-4">
+								<div className="flex items-center rounded-md overflow-hidden border pr-4 bg-white">
 									<Input
 										className="border-0 rounded-none outline-none focus-visible:ring-0"
 										placeholder="00000-000"
