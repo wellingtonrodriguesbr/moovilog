@@ -12,7 +12,7 @@ import { CircleHelp, MessageSquareMore } from "lucide-react";
 
 export function HeaderPlatform() {
 	return (
-		<header className="col-span-full h-16 px-4 border-b sticky top-0 left-0 right-0 flex justify-between items-center bg-white z-50">
+		<header className="h-16 px-4 border-b sticky top-0 left-0 right-0 flex justify-between items-center bg-white z-50">
 			<div className="flex items-center gap-2">
 				<Image
 					src="/moovilog-icon-blue.svg"

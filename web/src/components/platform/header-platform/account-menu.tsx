@@ -66,11 +66,9 @@ export function AccountMenu() {
 							{profile?.email}
 						</span>
 					</DropdownMenuLabel>
-					<DropdownMenuSeparator />
-					<DropdownMenuLabel className="flex flex-col">
-						<span className="text-xs">
-							{companyInformation?.name}
-						</span>
+					<DropdownMenuSeparator className="md:hidden" />
+					<DropdownMenuLabel className="flex flex-col md:hidden">
+						<span>{companyInformation?.name}</span>
 						<span className="text-xs font-normal text-muted-foreground">
 							{formatCNPJ(
 								companyInformation?.documentNumber ?? ""
