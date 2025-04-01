@@ -26,7 +26,7 @@ export function SidebarContent() {
 
 	return (
 		<div className="px-4">
-			<div className="flex items-center gap-4">
+			<div className="hidden md:flex items-center gap-4">
 				<Image
 					src="/moovilog-icon-blue.svg"
 					alt="moovilog"
@@ -60,7 +60,7 @@ export function SidebarContent() {
 				</div>
 			</div>
 
-			<ul className="flex flex-col mt-6">
+			<ul className="flex flex-col mt-0 md:mt-6">
 				{ITEMS.map((item) => (
 					<SidebarItem key={item.name} item={item} isOpen={isOpen} />
 				))}

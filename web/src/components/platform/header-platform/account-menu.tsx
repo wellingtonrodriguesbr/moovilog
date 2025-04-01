@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 import {
 	DropdownMenu,
@@ -25,9 +25,11 @@ import {
 	User,
 } from "lucide-react";
 import { links } from "@/utils/links";
+import { useGetCompanyInformation } from "@/hooks/company/use-get-company-information";
+import { formatCNPJ } from "@/utils/format-cnpj";
 
 export function AccountMenu() {
-	const router = useRouter();
+	const { companyInformation } = useGetCompanyInformation();
 	const path = usePathname();
 
 	const { profile } = useGetProfile();
@@ -62,6 +64,17 @@ export function AccountMenu() {
 						<span>{profile?.name}</span>
 						<span className="text-xs font-normal text-muted-foreground">
 							{profile?.email}
+						</span>
+					</DropdownMenuLabel>
+					<DropdownMenuSeparator />
+					<DropdownMenuLabel className="flex flex-col">
+						<span className="text-xs">
+							{companyInformation?.name}
+						</span>
+						<span className="text-xs font-normal text-muted-foreground">
+							{formatCNPJ(
+								companyInformation?.documentNumber ?? ""
+							)}
 						</span>
 					</DropdownMenuLabel>
 					<DropdownMenuSeparator />
