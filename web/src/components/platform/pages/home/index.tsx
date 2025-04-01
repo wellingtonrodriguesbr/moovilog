@@ -1,29 +1,17 @@
 "use client";
 
-import Link from "next/link";
-
+import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGetProfile } from "@/hooks/user/use-get-profile";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
-import {
-	Box,
-	LayoutGrid,
-	PackageCheck,
-	TriangleAlert,
-	Trophy,
-} from "lucide-react";
+import { links } from "@/utils/links";
+import { MessageSquareMore } from "lucide-react";
+import Link from "next/link";
 
 export function Home() {
 	const { profile, isGetProfilePending } = useGetProfile();
 
 	return (
-		<section className="flex flex-col mt-4 gap-4 w-full h-[85vh]">
+		<section className="flex flex-col mt-4 gap-4 w-full h-[85dvh]">
 			<header className="flex justify-between">
 				<h1 className="text-2xl md:text-3xl font-medium">
 					{isGetProfilePending ? (
@@ -33,219 +21,31 @@ export function Home() {
 					)}
 				</h1>
 			</header>
-			<div className="grid gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-4 mt-6">
-				<Card className="bg-sky-50 border border-sky-100">
-					<CardHeader className="flex justify-between flex-row items-center">
-						<div className="space-y-1">
-							<CardTitle>Entregas</CardTitle>
-							<CardDescription>
-								62 programadas para hoje
-							</CardDescription>
-						</div>
-						<div className="flex items-center justify-center size-12 rounded-md bg-sky-200">
-							<PackageCheck className="size-6 text-sky-500" />
-						</div>
-					</CardHeader>
-				</Card>
-				<Card className="bg-emerald-50 border border-emerald-100">
-					<CardHeader className="flex justify-between flex-row items-center">
-						<div className="space-y-1">
-							<CardTitle>Coletas</CardTitle>
-							<CardDescription>
-								12 programadas para hoje
-							</CardDescription>
-						</div>
-						<div className="flex items-center justify-center size-12 rounded-md bg-emerald-200">
-							<Box className="size-6 text-emerald-500" />
-						</div>
-					</CardHeader>
-				</Card>
-				<Card className="bg-violet-50 border border-violet-100">
-					<CardHeader className="flex justify-between flex-row items-center">
-						<div className="space-y-1">
-							<CardTitle>Fretes</CardTitle>
-							<CardDescription>
-								8 no total para hoje
-							</CardDescription>
-						</div>
-						<div className="flex items-center justify-center size-12 rounded-md bg-violet-200">
-							<LayoutGrid className="size-6 text-violet-500" />
-						</div>
-					</CardHeader>
-				</Card>
-				<Card className="bg-amber-50 border border-amber-100">
-					<CardHeader className="flex justify-between flex-row items-center">
-						<div className="space-y-1">
-							<CardTitle>Avisos</CardTitle>
-							<CardDescription>
-								5 registrados.{" "}
-								<Link
-									href="/operacional/avisos"
-									className="underline"
-								>
-									Clique aqui para ver
-								</Link>
-							</CardDescription>
-						</div>
-						<div className="flex items-center justify-center size-12 rounded-md bg-amber-200">
-							<TriangleAlert className="size-6 text-amber-500" />
-						</div>
-					</CardHeader>
-				</Card>
-			</div>
-			<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-				<Card className="col-span-1 md:col-span-2">
-					<CardHeader>
-						<CardTitle>Programação do dia</CardTitle>
-						<CardDescription>
-							Veículos a serem carregados na data de hoje
-						</CardDescription>
-					</CardHeader>
-					<CardContent></CardContent>
-				</Card>
-				<Card>
-					<CardHeader>
-						<CardTitle>Ranking dos motoristas</CardTitle>
-						<CardDescription>
-							Motoristas que mais fizeram frete no mês atual
-						</CardDescription>
-					</CardHeader>
-					<CardContent>
-						{/* <ul className="flex flex-col gap-2">
-							<li className="py-2 px-4 bg-zinc-50 rounded-md flex gap-2 items-center">
-								<Trophy className="size-4 text-amber-400" />
-								Cicero Rodrigues
-								<strong className="text-app-blue-500 ml-auto">
-									45
-								</strong>
-							</li>
-							<li className="py-2 px-4 bg-zinc-50 rounded-md flex gap-2 items-center">
-								<Trophy className="size-4 text-zinc-500" />
-								Benedito Arruda
-								<strong className="text-app-blue-500 ml-auto">
-									42
-								</strong>
-							</li>
-							<li className="py-2 px-4 bg-zinc-50 rounded-md flex gap-2 items-center">
-								<Trophy className="size-4 text-amber-700" />
-								Donizete Silva
-								<strong className="text-app-blue-500 ml-auto">
-									37
-								</strong>
-							</li>
-						</ul> */}
-					</CardContent>
-				</Card>
-				<Card>
-					<CardHeader>
-						<CardTitle>Ranking dos veículos</CardTitle>
-						<CardDescription>
-							Veículos mais utilizados no mês atual
-						</CardDescription>
-					</CardHeader>
-					<CardContent>
-						{/* <ul className="flex flex-col gap-2">
-							<li className="py-2 px-4 bg-zinc-50 rounded-md flex gap-2 items-center">
-								<Trophy className="size-4 text-amber-400" />
-								ABC-1111
-								<strong className="text-app-blue-500 ml-auto">
-									45
-								</strong>
-							</li>
-							<li className="py-2 px-4 bg-zinc-50 rounded-md flex gap-2 items-center">
-								<Trophy className="size-4 text-zinc-500" />
-								ABC-2222
-								<strong className="text-app-blue-500 ml-auto">
-									42
-								</strong>
-							</li>
-							<li className="py-2 px-4 bg-zinc-50 rounded-md flex gap-2 items-center">
-								<Trophy className="size-4 text-amber-700" />
-								ABC-3333
-								<strong className="text-app-blue-500 ml-auto">
-									37
-								</strong>
-							</li>
-						</ul> */}
-					</CardContent>
-				</Card>
-			</div>
-			<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-				<Card className="col-span-1 md:col-span-2">
-					<CardHeader>
-						<CardTitle>Recursos e suprimentos</CardTitle>
-						<CardDescription>
-							Acompanhe em tempo real os recursos e suprimentos
-						</CardDescription>
-					</CardHeader>
-					<CardContent></CardContent>
-				</Card>
-				<Card>
-					<CardHeader>
-						<CardTitle>Ranking dos colaboradores</CardTitle>
-						<CardDescription>
-							Que mais carregaram veículos no mês atual
-						</CardDescription>
-					</CardHeader>
-					<CardContent>
-						{/* <ul className="flex flex-col gap-2">
-							<li className="py-2 px-4 bg-zinc-50 rounded-md flex gap-2 items-center">
-								<Trophy className="size-4 text-amber-400" />
-								Wellington Rodrigues
-								<strong className="text-app-blue-500 ml-auto">
-									45
-								</strong>
-							</li>
-							<li className="py-2 px-4 bg-zinc-50 rounded-md flex gap-2 items-center">
-								<Trophy className="size-4 text-zinc-500" />
-								Leandro Lopes
-								<strong className="text-app-blue-500 ml-auto">
-									42
-								</strong>
-							</li>
-							<li className="py-2 px-4 bg-zinc-50 rounded-md flex gap-2 items-center">
-								<Trophy className="size-4 text-amber-700" />
-								Albano Cunha Júnior
-								<strong className="text-app-blue-500 ml-auto">
-									37
-								</strong>
-							</li>
-						</ul> */}
-					</CardContent>
-				</Card>
-				<Card>
-					<CardHeader>
-						<CardTitle>Ranking das cidades</CardTitle>
-						<CardDescription>
-							Cidades mais atendidas no mês atual
-						</CardDescription>
-					</CardHeader>
-					<CardContent>
-						{/* <ul className="flex flex-col gap-2">
-							<li className="py-2 px-4 bg-zinc-50 rounded-md flex gap-2 items-center">
-								<Trophy className="size-4 text-amber-400" />
-								Itapetininga
-								<strong className="text-app-blue-500 ml-auto">
-									45
-								</strong>
-							</li>
-							<li className="py-2 px-4 bg-zinc-50 rounded-md flex gap-2 items-center">
-								<Trophy className="size-4 text-zinc-500" />
-								Boituva
-								<strong className="text-app-blue-500 ml-auto">
-									42
-								</strong>
-							</li>
-							<li className="py-2 px-4 bg-zinc-50 rounded-md flex gap-2 items-center">
-								<Trophy className="size-4 text-amber-700" />
-								Tatuí
-								<strong className="text-app-blue-500 ml-auto">
-									37
-								</strong>
-							</li>
-						</ul> */}
-					</CardContent>
-				</Card>
+			<div className="w-full h-full bg-white rounded-lg flex flex-col items-center justify-center p-4">
+				<h2 className="text-3xl md:text-4xl font-semibold">
+					Em construção
+				</h2>
+				<p className="text-center max-w-xl text-zinc-600 mt-4">
+					Estamos construindo a página inicial da plataforma, e logo
+					vem muita novidade por aí! Enquanto isso, sinta-se à vontade
+					para explorar tudo o que já está disponível. Fique de olho,
+					porque estamos preparando algo que vai transformar a sua
+					experiência! 😉
+				</p>
+				<p className="text-center max-w-sm text-zinc-600 mt-8">
+					Deseja contribuir com sugestões do que gostaria de ver por
+					aqui? Clique no botão abaixo
+				</p>
+				<Button
+					className="w-full md:w-fit mt-4"
+					variant="outline"
+					asChild
+				>
+					<Link href={links["send-feedback"]} target="_blank">
+						<MessageSquareMore className="size-4" />
+						Enviar feedback
+					</Link>
+				</Button>
 			</div>
 		</section>
 	);
