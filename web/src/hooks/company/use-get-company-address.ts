@@ -11,7 +11,8 @@ interface CompanyAddressResponse {
 
 export function useGetCompanyAddress() {
 	const pathName = usePathname();
-	const enabledQuery = pathName !== "/cadastro/empresa" && pathName !== "/";
+	const enabledQuery =
+		!pathName.includes("/cadastro/empresa") && pathName !== "/";
 
 	const { company } = useCompanyStore();
 
@@ -30,7 +31,7 @@ export function useGetCompanyAddress() {
 			);
 			return data.companyAddress;
 		} catch (error) {
-			toast.error("Falha ao encontrar informações da empresa");
+			toast.error("Falha ao encontrar endereço da empresa");
 		}
 	}
 

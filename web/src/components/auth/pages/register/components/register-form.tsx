@@ -28,12 +28,17 @@ const formSchema = z.object({
 	phone: z
 		.string()
 		.min(11, { message: "Digite um telefone válido" })
-		.transform((value) => value.replace(/\D/g, ""))
 		.transform((phone) => phone.slice(0, 11)),
 	email: z.string().email({ message: "Digite um endereço de e-mail válido" }),
 	password: z
 		.string()
-		.min(8, { message: "A senha precisa ter no mínimo 8 caracteres" }),
+		.min(8, {
+			message: "A senha precisa ter no mínimo 8 caracteres válidos",
+		})
+		.refine((value) => value.replace(/\s+/g, ""), {
+			message: "A senha precisa ter no mínimo 8 caracteres válidos",
+		}),
+
 	acceptTerms: z.boolean({ message: "Aceite os termos para prosseguir" }),
 });
 
@@ -90,7 +95,13 @@ export function RegisterForm() {
 						<FormItem>
 							<FormLabel>Nome completo</FormLabel>
 							<FormControl>
-								<Input {...field} />
+								<Input
+									{...field}
+									value={field.value.trimStart()}
+									onBlur={(e) =>
+										field.onChange(e.target.value.trim())
+									}
+								/>
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -143,6 +154,10 @@ export function RegisterForm() {
 									type="password"
 									placeholder="*********"
 									{...field}
+									value={field.value.trimStart()}
+									onBlur={(e) =>
+										field.onChange(e.target.value.trim())
+									}
 								/>
 							</FormControl>
 							<FormMessage />

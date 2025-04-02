@@ -11,7 +11,8 @@ interface CompanyInformationResponse {
 
 export function useGetCompanyInformation() {
 	const pathName = usePathname();
-	const enabledQuery = pathName !== "/cadastro/empresa" && pathName !== "/";
+	const enabledQuery =
+		!pathName.includes("/cadastro/empresa") && pathName !== "/";
 
 	const { setCompany } = useCompanyStore();
 

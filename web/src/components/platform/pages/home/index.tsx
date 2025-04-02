@@ -3,8 +3,8 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGetProfile } from "@/hooks/user/use-get-profile";
 import { QuickActions } from "@/components/platform/pages/home/components/quick-actions";
-import { ScheduleOfTheDay } from "./components/schedule-of-the-day";
-import { Notices } from "./components/notices";
+import { ScheduleOfTheDay } from "@/components/platform/pages/home/components/schedule-of-the-day";
+import { Notices } from "@/components/platform/pages/home/components/notices";
 
 export function Home() {
 	const { profile, isGetProfilePending } = useGetProfile();
