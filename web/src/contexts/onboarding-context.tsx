@@ -52,7 +52,8 @@ export function OnboardingContextProvider({
 			companyInformation &&
 			companyAddress &&
 			!isGetCompanyInformationPending &&
-			!isGetCompanyAddressPending
+			!isGetCompanyAddressPending &&
+			step === undefined
 		) {
 			setStep("complete");
 		}
@@ -63,6 +64,7 @@ export function OnboardingContextProvider({
 		isGetCompanyAddressPending,
 		pathname,
 		router,
+		step,
 		setStep,
 	]);
 
