@@ -14,7 +14,7 @@ export function Home() {
 			<header className="flex justify-between">
 				<h1 className="text-2xl md:text-3xl font-medium">
 					{isGetProfilePending ? (
-						<Skeleton className="h-8 md:h-11 w-80 md:w-[450px] rounded-lg" />
+						<Skeleton className="h-8 md:h-10 w-80 md:w-[450px] rounded-lg" />
 					) : (
 						<>Olá, {profile?.name}</>
 					)}
