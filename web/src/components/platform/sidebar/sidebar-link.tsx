@@ -39,7 +39,7 @@ export function SidebarbarLink({
 					data-active={path === url || path?.includes(url)}
 					href={url}
 					className={cn(
-						"text-sm font-medium w-full data-[state=closed]:w-fit flex items-center gap-2 border-b py-6 data-[active=true]:text-app-blue-500 hover:text-app-blue-500 transition-all group pl-1 data-[disabled=true]:opacity-50 data-[disabled=true]:pointer-events-none",
+						"text-sm font-medium w-full data-[state=closed]:w-fit flex items-center gap-2 border-b data-[active=true]:border-app-blue-500 py-6 data-[active=true]:text-app-blue-500 hover:text-app-blue-500 transition-all group pl-1 data-[disabled=true]:opacity-50 data-[disabled=true]:pointer-events-none",
 						className
 					)}
 				>
