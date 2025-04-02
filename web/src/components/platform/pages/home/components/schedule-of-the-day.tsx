@@ -45,7 +45,7 @@ export function ScheduleOfTheDay() {
 						dos veículos
 					</p>
 				</div>
-				<Button variant="secondary">
+				<Button variant="secondary" className="w-full md:w-fit">
 					<Filter className="size-4" />
 					Adicionar filtro
 				</Button>

@@ -16,7 +16,7 @@ import { ArrowUpRight } from "lucide-react";
 
 export function QuickActions() {
 	return (
-		<div className="flex flex-col gap-4 w-full h-full overflow-x-hidden">
+		<div className="flex flex-col gap-4 w-full h-full">
 			<h2 className="font-semibold text-xl">Ações rápidas</h2>
 			<Carousel
 				opts={{

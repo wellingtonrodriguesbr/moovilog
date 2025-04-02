@@ -30,7 +30,7 @@ export function Notices() {
 						atualizado(a).
 					</p>
 				</div>
-				<Button variant="secondary">
+				<Button variant="secondary" className="w-full md:w-fit ">
 					Ver todos
 					<ArrowRight className="size-4" />
 				</Button>
