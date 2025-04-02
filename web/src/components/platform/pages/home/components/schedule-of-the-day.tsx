@@ -88,14 +88,14 @@ export function ScheduleOfTheDay() {
 								</div>
 							</CardHeader>
 							<CardContent className="flex items-center justify-between mt-6 md:mt-0">
-								<div>
-									<div className="flex items-center justify-between gap-2">
+								<div className="w-full">
+									<div className="w-full flex items-center justify-between gap-2">
 										<strong className="text-xl text-nowrap text-ellipsis overflow-hidden">
 											{schedule.driver}
 										</strong>
 										<Link
 											href=""
-											className="w-fit flex items-center gap-2 px-3 py-1 bg-app-blue-50 text-sm rounded-full text-app-blue-600"
+											className="w-fit flex md:hidden items-center gap-2 px-3 py-1 bg-app-blue-50 text-sm rounded-full text-app-blue-600"
 										>
 											Ver detalhes
 											<ArrowUpRight className="size-3" />
