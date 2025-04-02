@@ -25,11 +25,11 @@ export function QuickActions() {
 				}}
 				className="w-full"
 			>
-				<CarouselContent className="w-full">
+				<CarouselContent className="w-full flex xl:grid xl:grid-cols-4 items-center gap-2 px-0 ml-0">
 					{actions.map((action) => (
 						<CarouselItem
 							key={action.title}
-							className="w-fit basis-10/12 md:basis-7/12 xl:basis-[406px]"
+							className="w-full basis-4/6 md:basis-1/2 pl-0"
 						>
 							<Link href={action.url} className="group">
 								<Card className="bg-app-blue-600 border group-hover:border-zinc-300 overflow-hidden relative">
