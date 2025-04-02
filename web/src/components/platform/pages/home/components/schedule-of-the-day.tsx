@@ -90,7 +90,7 @@ export function ScheduleOfTheDay() {
 							<CardContent className="flex items-center justify-between mt-6 md:mt-0">
 								<div>
 									<div className="flex items-center justify-between gap-2">
-										<strong className="text-xl text-nowrap text-ellipsis max-w-[9rem] overflow-hidden">
+										<strong className="text-xl text-nowrap text-ellipsis overflow-hidden">
 											{schedule.driver}
 										</strong>
 										<Link
