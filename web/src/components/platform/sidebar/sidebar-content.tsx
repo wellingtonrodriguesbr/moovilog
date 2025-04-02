@@ -12,9 +12,9 @@ import {
 	Handshake,
 	Home,
 	Landmark,
-	LandPlot,
 	LayoutGrid,
 	Route,
+	Siren,
 	Truck,
 	Users,
 } from "lucide-react";
@@ -104,6 +104,11 @@ const ITEMS = [
 		name: "Veículos",
 		url: "/veiculos",
 		icon: <Truck className="size-4" />,
+	},
+	{
+		name: "Ocorrências",
+		url: "/ocorrencias",
+		icon: <Siren className="size-4" />,
 	},
 	{
 		name: "Operacional",

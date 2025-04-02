@@ -6,3 +6,10 @@ export function formatBrazilianDate(date: string | Date) {
 
 	return formattedDate;
 }
+
+export function formatShortcutBrazilianDate(date: string | Date) {
+	const dateObject = new Date(date);
+	const formattedDate = dayjs(dateObject).format("DD/MM");
+
+	return formattedDate;
+}

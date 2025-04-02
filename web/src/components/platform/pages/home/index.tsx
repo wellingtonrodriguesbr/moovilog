@@ -2,14 +2,15 @@
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGetProfile } from "@/hooks/user/use-get-profile";
-import { HomeSummary } from "@/components/platform/pages/home/components/home-summary";
+import { QuickActions } from "@/components/platform/pages/home/components/quick-actions";
 import { ScheduleOfTheDay } from "./components/schedule-of-the-day";
+import { Notices } from "./components/notices";
 
 export function Home() {
 	const { profile, isGetProfilePending } = useGetProfile();
 
 	return (
-		<section className="flex flex-col mt-4 gap-12 w-full h-full pb-12">
+		<section className="flex flex-col mt-4 gap-12 w-full h-full">
 			<header className="flex justify-between">
 				<h1 className="text-2xl md:text-3xl font-medium">
 					{isGetProfilePending ? (
@@ -19,12 +20,12 @@ export function Home() {
 					)}
 				</h1>
 			</header>
-			<div className="grid grid-cols-1 md:grid-cols-[1fr_600px] gap-8">
-				<div className="flex flex-col gap-20">
-					<HomeSummary />
+			<div className="flex flex-col gap-16">
+				<QuickActions />
+				<div className="grid grid-cols-1 xl:grid-cols-[1fr_600px] gap-12">
 					<ScheduleOfTheDay />
+					<Notices />
 				</div>
-				<div className="flex flex-col gap-4"></div>
 			</div>
 		</section>
 	);

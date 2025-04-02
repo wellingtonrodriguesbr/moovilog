@@ -20,6 +20,7 @@ export const config = {
 		"/rotas",
 		"/motoristas",
 		"/veiculos",
+		"/ocorrencias",
 		"/meus-dados",
 		"/colaboradores",
 		"/dados-cadastrais",
