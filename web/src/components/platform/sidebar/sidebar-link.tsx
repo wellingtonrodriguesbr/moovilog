@@ -55,10 +55,10 @@ export function SidebarbarLink({
 			</TooltipTrigger>
 			<TooltipContent
 				data-invisible={sidebarIsOpen}
-				className="data-[invisible=true]:hidden"
+				className="hidden xl:block xl:data-[invisible=true]:hidden"
 				side="left"
 			>
-				<p className="hidden xl:block">{text}</p>
+				<p>{text}</p>
 			</TooltipContent>
 		</Tooltip>
 	);

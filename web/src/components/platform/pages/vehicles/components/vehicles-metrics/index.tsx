@@ -51,42 +51,42 @@ export function VehiclesMetrics() {
 				className="w-full"
 			>
 				<CarouselContent className="w-full flex xl:grid xl:grid-cols-6 items-center gap-2 px-0 ml-0">
-					<CarouselItem className="w-full h-full basis-[200px] md:basis-1/4 xl:basis-[264px] pl-0">
+					<CarouselItem className="w-full h-full basis-[200px] md:basis-1/3 pl-0">
 						<VehicleMetricsCard
 							description="Veículos cadastrados"
 							icon={Truck}
 							total={vehiclesFromCompany.length}
 						/>
 					</CarouselItem>
-					<CarouselItem className="w-full h-full basis-[200px] md:basis-1/4 xl:basis-[264px] pl-0">
+					<CarouselItem className="w-full h-full basis-[200px] md:basis-1/3 pl-0">
 						<VehicleMetricsCard
 							description="Ativos"
 							icon={ThumbsUp}
 							total={totalActiveVehicles.length}
 						/>
 					</CarouselItem>
-					<CarouselItem className="w-full h-full basis-[200px] md:basis-1/4 xl:basis-[264px] pl-0">
+					<CarouselItem className="w-full h-full basis-[200px] md:basis-1/3 pl-0">
 						<VehicleMetricsCard
 							description="Inativos"
 							icon={ThumbsDown}
 							total={totalInactiveVehicles.length}
 						/>
 					</CarouselItem>
-					<CarouselItem className="w-full h-full basis-[200px] md:basis-1/4 xl:basis-[264px] pl-0">
+					<CarouselItem className="w-full h-full basis-[200px] md:basis-1/3 pl-0">
 						<VehicleMetricsCard
 							description="Em manutenção"
 							icon={Wrench}
 							total={totalVehiclesInMaintenance.length}
 						/>
 					</CarouselItem>
-					<CarouselItem className="w-full h-full basis-[200px] md:basis-1/4 xl:basis-[264px] pl-0">
+					<CarouselItem className="w-full h-full basis-[200px] md:basis-1/3 pl-0">
 						<VehicleMetricsCard
 							description="Reservados"
 							icon={TriangleAlert}
 							total={totalVehiclesReserved.length}
 						/>
 					</CarouselItem>
-					<CarouselItem className="w-full h-full basis-[200px] md:basis-1/4 xl:basis-[264px] pl-0">
+					<CarouselItem className="w-full h-full basis-[200px] md:basis-1/3 pl-0">
 						<VehicleMetricsCard
 							description="Com defeito"
 							icon={Skull}

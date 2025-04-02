@@ -42,8 +42,8 @@ export function SidebarContent() {
 				>
 					{isGetCompanyInformationPending ? (
 						<>
-							<Skeleton className="h-5 md:h-4 w-24 md:w-[150px] rounded-lg" />
-							<Skeleton className="h-5 md:h-4 w-16 md:w-[130px] rounded-lg mt-1" />
+							<Skeleton className="h-5 md:h-3 w-24 md:w-[150px] rounded-lg" />
+							<Skeleton className="h-5 md:h-3 w-16 md:w-[130px] rounded-lg mt-1" />
 						</>
 					) : (
 						<>
