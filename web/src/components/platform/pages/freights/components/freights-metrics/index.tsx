@@ -30,7 +30,7 @@ export function FreightsMetrics() {
 	}
 
 	return (
-		<section className="w-full h-full flex flex-col gap-4 overflow-x-hidden">
+		<section className="w-full h-full flex flex-col gap-4">
 			<Carousel
 				opts={{
 					dragFree: true,
@@ -38,29 +38,29 @@ export function FreightsMetrics() {
 				}}
 				className="w-full"
 			>
-				<CarouselContent className="w-full ml-0.5 xl:ml-0 gap-2">
-					<CarouselItem className="w-fit basis-[200px] md:basis-1/4 xl:basis-[264px] pl-0">
+				<CarouselContent className="w-full flex xl:grid xl:grid-cols-6 items-center gap-2 px-0 ml-0">
+					<CarouselItem className="w-full h-full pl-0 basis-1/2 md:basis-1/3">
 						<TotalFreightsCard totalFreights={totalFreights} />
 					</CarouselItem>
-					<CarouselItem className="w-fit basis-[200px] md:basis-1/4 xl:basis-[264px] pl-0">
+					<CarouselItem className="w-full h-full pl-0 basis-1/2 md:basis-1/3">
 						<TotalDeliveriesCard
 							totalDeliveries={totalDeliveries}
 						/>
 					</CarouselItem>
-					<CarouselItem className="w-fit basis-[200px] md:basis-1/4 xl:basis-[264px] pl-0">
+					<CarouselItem className="w-full h-full pl-0 basis-1/2 md:basis-1/3">
 						<TotalWeightDeliveriesCard
 							totalWeightDeliveries={totalWeightOfDeliveries}
 						/>
 					</CarouselItem>
-					<CarouselItem className="w-fit basis-[200px] md:basis-1/4 xl:basis-[264px] pl-0">
+					<CarouselItem className="w-full h-full pl-0 basis-1/2 md:basis-1/3">
 						<TotalPickupsCard totalPickups={totalPickups} />
 					</CarouselItem>
-					<CarouselItem className="w-fit basis-[200px] md:basis-1/4 xl:basis-[264px] pl-0">
+					<CarouselItem className="w-full h-full pl-0 basis-1/2 md:basis-1/3">
 						<TotalWeightPickupsCard
 							totalWeightPickups={totalWeightOfPickups}
 						/>
 					</CarouselItem>
-					<CarouselItem className="w-fit basis-[200px] md:basis-1/4 xl:basis-[264px] pl-0">
+					<CarouselItem className="w-full h-full pl-0 basis-1/2 md:basis-1/3">
 						<TotalFreightsAmountCard
 							totalFreightsAmount={totalFreightsAmountInCents}
 						/>

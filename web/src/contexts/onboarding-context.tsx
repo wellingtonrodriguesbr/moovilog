@@ -73,10 +73,13 @@ export function OnboardingContextProvider({
 			router.push("/cadastro/empresa");
 		} else if (step === "register-company-address") {
 			router.push("/cadastro/empresa/endereco");
-		} else if (step === "complete") {
+		} else if (
+			step === "complete" &&
+			pathname.includes("/cadastro/empresa")
+		) {
 			router.push("/inicio");
 		}
-	}, [step, router]);
+	}, [step, router, pathname]);
 
 	return (
 		<OnboardingContext.Provider value={{ onBoardingStep: step }}>

@@ -32,7 +32,7 @@ export function QuickActions() {
 							className="w-full basis-4/6 md:basis-1/2 pl-0"
 						>
 							<Link href={action.url} className="group">
-								<Card className="bg-app-blue-600 border group-hover:border-zinc-300 overflow-hidden relative">
+								<Card className="bg-app-blue-600 hover:bg-app-blue-500 overflow-hidden relative">
 									<CardHeader>
 										<CardTitle className="text-xl text-zinc-50">
 											{action.title}

@@ -28,7 +28,7 @@ export function FinancialMetricsCards() {
 	}
 
 	return (
-		<section className="w-full h-full flex flex-col gap-4 overflow-x-hidden">
+		<section className="w-full h-full flex flex-col gap-4">
 			<Carousel
 				opts={{
 					dragFree: true,
@@ -36,28 +36,28 @@ export function FinancialMetricsCards() {
 				}}
 				className="w-full"
 			>
-				<CarouselContent className="w-full ml-0.5 xl:ml-0 gap-2">
-					<CarouselItem className="w-fit basis-[260px] md:basis-[318px] pl-0">
+				<CarouselContent className="w-full flex xl:grid xl:grid-cols-5 items-center gap-2 px-0 ml-0">
+					<CarouselItem className="w-full h-full pl-0 basis-4/6 md:basis-1/2">
 						<TotalTransactionsCard
 							totalTransactions={totalTransactions}
 						/>
 					</CarouselItem>
-					<CarouselItem className="w-fit basis-[260px] md:basis-[318px] pl-0">
+					<CarouselItem className="w-full h-full pl-0 basis-4/6 md:basis-1/2">
 						<PercentageTransactionsCard
 							percentageTransactions={percentage}
 						/>
 					</CarouselItem>
-					<CarouselItem className="w-fit basis-[260px] md:basis-[318px] pl-0">
+					<CarouselItem className="w-full h-full pl-0 basis-4/6 md:basis-1/2">
 						<IncomeTransactionsCard
 							incomeTransactions={totalIncomeInCents}
 						/>
 					</CarouselItem>
-					<CarouselItem className="w-fit basis-[260px] md:basis-[318px] pl-0">
+					<CarouselItem className="w-full h-full pl-0 basis-4/6 md:basis-1/2">
 						<ExpenseTransactionsCard
 							expenseTransactions={totalExpenseInCents}
 						/>
 					</CarouselItem>
-					<CarouselItem className="w-fit basis-[260px] md:basis-[318px] pl-0">
+					<CarouselItem className="w-full h-full pl-0 basis-4/6 md:basis-1/2">
 						<SummaryTransactionsAmountCard
 							summaryTransactionsAmount={totalBalanceInCents}
 						/>

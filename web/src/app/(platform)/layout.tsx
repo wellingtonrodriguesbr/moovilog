@@ -14,7 +14,7 @@ export default function PlattformLayout({
 
 				<div className="w-full col-span-full md:col-span-1">
 					<HeaderPlatform />
-					<main className="p-4 md:p-6">{children}</main>
+					<main className="w-full p-4 md:p-6">{children}</main>
 				</div>
 			</div>
 		</PlatformProvider>

@@ -58,7 +58,7 @@ export function SidebarbarLink({
 				className="data-[invisible=true]:hidden"
 				side="left"
 			>
-				<p>{text}</p>
+				<p className="hidden xl:block">{text}</p>
 			</TooltipContent>
 		</Tooltip>
 	);
