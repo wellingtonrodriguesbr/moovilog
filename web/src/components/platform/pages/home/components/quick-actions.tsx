@@ -29,7 +29,7 @@ export function QuickActions() {
 					{actions.map((action) => (
 						<CarouselItem
 							key={action.title}
-							className="w-full basis-4/6 md:basis-1/2 pl-0"
+							className="w-full basis-[250px] md:basis-1/2 pl-0"
 						>
 							<Link href={action.url} className="group">
 								<Card className="bg-app-blue-600 hover:bg-app-blue-500 overflow-hidden relative">

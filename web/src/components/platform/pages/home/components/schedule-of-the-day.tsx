@@ -17,6 +17,7 @@ import {
 } from "@/utils/format-brazilian-date";
 
 import {
+	ArrowUpRight,
 	ChevronRight,
 	Filter,
 	MapPin,
@@ -88,9 +89,18 @@ export function ScheduleOfTheDay() {
 							</CardHeader>
 							<CardContent className="flex items-center justify-between mt-6 md:mt-0">
 								<div>
-									<strong className="text-xl">
-										{schedule.driver}
-									</strong>
+									<div className="flex items-center justify-between gap-2">
+										<strong className="text-xl text-nowrap text-ellipsis max-w-[9rem] overflow-hidden">
+											{schedule.driver}
+										</strong>
+										<Link
+											href=""
+											className="w-fit flex items-center gap-2 px-3 py-1 bg-app-blue-50 text-sm rounded-full text-app-blue-600"
+										>
+											Ver detalhes
+											<ArrowUpRight className="size-3" />
+										</Link>
+									</div>
 									<ul className="flex flex-col gap-4 mt-6">
 										<li className="flex items-center gap-2 text-sm text-zinc-600">
 											<Truck className="size-4" />
@@ -111,7 +121,7 @@ export function ScheduleOfTheDay() {
 										</li>
 									</ul>
 								</div>
-								<ChevronRight className="text-zinc-400 size-6 group-hover:translate-x-0.5 transition-transform" />
+								<ChevronRight className="hidden md:block text-zinc-400 size-6 group-hover:translate-x-0.5 transition-transform" />
 							</CardContent>
 						</Card>
 					</Link>
