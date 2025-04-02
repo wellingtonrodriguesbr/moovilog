@@ -50,11 +50,11 @@ export function Notices() {
 							<CardContent className="space-x-2">
 								<Badge
 									data-type={notice.type}
-									className="data-[type=alert]:bg-rose-50 data-[type=alert]:text-rose-500 data-[type=attention]:bg-amber-50 data-[type=attention]:text-amber-500 data-[type=notice]:bg-zinc-100 data-[type=notice]:text-zinc-500 data-[type=update]:bg-emerald-50 data-[type=update]:text-emerald-500 data-[type=important]:bg-violet-50 data-[type=important]:text-violet-500"
+									className="data-[type=alert]:bg-rose-50 data-[type=alert]:text-rose-500 data-[type=attention]:bg-amber-50 data-[type=attention]:text-amber-500 data-[type=notice]:bg-zinc-100 data-[type=notice]:text-zinc-500 data-[type=update]:bg-emerald-50 data-[type=update]:text-emerald-500 data-[type=important]:bg-violet-50 data-[type=important]:text-violet-500 pointer-events-none"
 								>
 									{NOTICE_TYPES[notice.type]}
 								</Badge>
-								<Badge className="bg-app-blue-50 text-app-blue-500">
+								<Badge className="bg-app-blue-50 text-app-blue-500 pointer-events-none">
 									{notice.createdBy}
 								</Badge>
 							</CardContent>
