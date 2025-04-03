@@ -116,7 +116,7 @@ export class RegisterFreightUseCase {
 
 		// Here it is stuck on this name, because until now, to register a freight, this is the ideal category. This may change in the future.
 		const financeCategory =
-			await this.financeCategoriesRepository.findByName("gdgdgdfggfhsfg");
+			await this.financeCategoriesRepository.findByName("Coletas e Entregas");
 
 		if (!financeCategory) {
 			throw new ResourceNotFoundError("Finance category not found");
