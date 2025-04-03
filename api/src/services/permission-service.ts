@@ -1,29 +1,32 @@
-import { ICompanyMemberPermission } from "@/modules/company-member/interfaces/company-member-permission";
-import { CompanyMemberPermissionsRepository } from "@/modules/company-member/repositories/company-member-permissions-repository";
-
-type PermissionType = ICompanyMemberPermission;
+import { Permissions } from "@/modules/company-member/interfaces/company-member-permission";
+import { CompanyMembersRepository } from "@/modules/company-member/repositories/company-members-repository";
 
 export class PermissionService {
-	constructor(
-		private companyMemberPermissionsRepository: CompanyMemberPermissionsRepository
-	) {}
+	constructor(private companyMembersRepository: CompanyMembersRepository) {}
 
 	async hasPermission(
 		memberId: string,
-		requiredPermissions: PermissionType[]
+		requiredPermissions: Permissions[]
 	): Promise<boolean> {
-		const memberPermissions =
-			await this.companyMemberPermissionsRepository.findManyByMemberId(
-				memberId
-			);
+		const companyMember =
+			await this.companyMembersRepository.findById(memberId);
 
-		if (!memberPermissions || memberPermissions.length === 0) {
+		if (!companyMember) {
+			return false;
+		}
+
+		const permissions = (
+			companyMember.extraData as { permissions: Permissions[] }
+		)?.permissions;
+
+		if (permissions.length === 0) {
 			return false;
 		}
 
 		const userPermissionsSet = new Set(
-			memberPermissions.map((perm) => perm.permission)
+			permissions.map((permission) => permission)
 		);
+
 		return requiredPermissions.some((perm) => userPermissionsSet.has(perm));
 	}
 }

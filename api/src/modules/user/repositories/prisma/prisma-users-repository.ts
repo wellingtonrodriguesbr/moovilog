@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 import { UsersRepository } from "@/modules/user/repositories/users-repository";
+import { IExtraDataOnboardingStep } from "@/modules/user/interfaces/user";
 
 export class PrismaUsersRepository implements UsersRepository {
 	async create(data: Prisma.UserCreateInput) {
@@ -48,6 +49,19 @@ export class PrismaUsersRepository implements UsersRepository {
 			},
 			data: {
 				password,
+			},
+		});
+	}
+
+	async updateExtraData(id: string, onboardingStep: IExtraDataOnboardingStep) {
+		await prisma.user.update({
+			where: {
+				id,
+			},
+			data: {
+				extraData: {
+					onboardingStep,
+				},
 			},
 		});
 	}

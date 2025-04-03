@@ -13,6 +13,7 @@ model User {
   email     String   @unique
   password  String?
   phone     String?  @unique
+  extraData Json?    @map("extra_data")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -52,6 +53,7 @@ model CompanyMember {
   id        String        @id @default(uuid())
   sector    String
   status    AccountStatus @default(PENDING)
+  extraData Json?
   createdAt DateTime      @default(now()) @map("created_at")
   updatedAt DateTime      @updatedAt @map("updated_at")
 
@@ -61,29 +63,18 @@ model CompanyMember {
   companyId String  @map("company_id")
   company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
-  drivers                  Driver[]
-  freights                 Freight[]
-  vehicles                 Vehicle[]
-  routes                   Route[]
-  financeTransactions      FinanceTransaction[]
-  pickups                  Pickup[]
-  companyMemberPermissions CompanyMemberPermission[]
+  drivers             Driver[]
+  freights            Freight[]
+  vehicles            Vehicle[]
+  routes              Route[]
+  financeTransactions FinanceTransaction[]
+  pickups             Pickup[]
 
   @@unique([companyId, userId])
   @@index([status])
   @@index([sector])
   @@index([userId])
   @@map("company_members")
-}
-
-model CompanyMemberPermission {
-  id         String         @id @default(uuid())
-  permission UserPermission
-
-  companyMemberId String        @map("company_member_id")
-  companyMember   CompanyMember @relation(fields: [companyMemberId], references: [id], onDelete: Cascade)
-
-  @@map("company_member_permissions")
 }
 
 model Driver {
@@ -440,29 +431,6 @@ model FinanceCategory {
   financeTransactions FinanceTransaction[]
 
   @@map("finance_categories")
-}
-
-enum UserPermission {
-  SUPER_ADMIN
-  ADMIN
-  MANAGE_SHIPMENTS_AND_PICKUPS
-  VIEW_SHIPMENTS_AND_PICKUPS
-  MANAGE_VEHICLES_AND_DRIVERS
-  VIEW_VEHICLES_AND_DRIVERS
-  MANAGE_ROUTES
-  VIEW_ROUTES
-  MANAGE_RESOURCES_AND_SUPPLIES
-  VIEW_RESOURCES_AND_SUPPLIES
-  MANAGE_NOTICES
-  VIEW_NOTICES
-  MANAGE_DAILY_SCHEDULE
-  VIEW_DAILY_SCHEDULE
-  MANAGE_USERS
-  MANAGE_FINANCES
-  VIEW_FINANCES
-  MANAGE_REPORTS
-  VIEW_REPORTS
-  MANAGE_PERMISSIONS
 }
 
 enum CompanySize {

@@ -1,15 +1,14 @@
-import { useGetCompanyAddress } from "@/hooks/company/use-get-company-address";
-import { useGetCompanyInformation } from "@/hooks/company/use-get-company-information";
+import { useGetProfile } from "@/hooks/user/use-get-profile";
 import { usePathname, useRouter } from "next/navigation";
-import { createContext, ReactNode, useEffect } from "react";
-import { useLocalStorage } from "react-use";
+import { createContext, ReactNode, useEffect, useRef } from "react";
+import { toast } from "sonner";
 
 interface OnboardingContextType {
 	onBoardingStep:
 		| "register-company"
 		| "register-company-address"
-		| "complete"
-		| undefined;
+		| "onboarding_complete"
+		| null;
 }
 
 interface OnboardingContextProviderProps {
@@ -23,66 +22,40 @@ export function OnboardingContextProvider({
 }: OnboardingContextProviderProps) {
 	const router = useRouter();
 	const pathname = usePathname();
+	const hasShownToast = useRef(false);
 
-	const [step, setStep] =
-		useLocalStorage<OnboardingContextType["onBoardingStep"]>(
-			"onboarding-step"
-		);
-
-	const { companyInformation, isGetCompanyInformationPending } =
-		useGetCompanyInformation();
-	const { companyAddress, isGetCompanyAddressPending } =
-		useGetCompanyAddress();
+	const { profile, isGetProfilePending } = useGetProfile();
 
 	useEffect(() => {
-		if (
-			!isGetCompanyInformationPending &&
-			!companyInformation &&
-			!pathname.includes("/empresa")
-		) {
-			setStep("register-company");
-		} else if (
-			!isGetCompanyAddressPending &&
-			!companyAddress &&
-			pathname.includes("/empresa") &&
-			companyInformation
-		) {
-			setStep("register-company-address");
-		} else if (
-			companyInformation &&
-			companyAddress &&
-			!isGetCompanyInformationPending &&
-			!isGetCompanyAddressPending &&
-			step === undefined
-		) {
-			setStep("complete");
-		}
-	}, [
-		companyInformation,
-		companyAddress,
-		isGetCompanyInformationPending,
-		isGetCompanyAddressPending,
-		pathname,
-		router,
-		step,
-		setStep,
-	]);
+		if (hasShownToast.current) return;
 
-	useEffect(() => {
-		if (step === "register-company") {
-			router.push("/cadastro/empresa");
-		} else if (step === "register-company-address") {
-			router.push("/cadastro/empresa/endereco");
-		} else if (
-			step === "complete" &&
-			pathname.includes("/cadastro/empresa")
-		) {
-			router.push("/inicio");
+		const redirectPathsToHome = [
+			"/cadastro/empresa",
+			"/cadastro/empresa/endereco",
+		];
+
+		if (!isGetProfilePending && profile && profile.extraData) {
+			if (profile.extraData.onboardingStep === "register_company") {
+				router.push("/cadastro/empresa");
+				toast.warning("Cadastre sua empresa");
+				hasShownToast.current = true;
+			} else if (
+				profile.extraData.onboardingStep === "register_company_address"
+			) {
+				router.push("/cadastro/empresa/endereco");
+				toast.warning("Cadastre o endereço da empresa");
+				hasShownToast.current = true;
+			} else if (
+				profile.extraData.onboardingStep === "complete_onboarding" &&
+				redirectPathsToHome.includes(pathname)
+			) {
+				router.push("/inicio");
+			}
 		}
-	}, [step, router, pathname]);
+	}, [profile, isGetProfilePending, router, pathname]);
 
 	return (
-		<OnboardingContext.Provider value={{ onBoardingStep: step }}>
+		<OnboardingContext.Provider value={{ onBoardingStep: null }}>
 			{children}
 		</OnboardingContext.Provider>
 	);

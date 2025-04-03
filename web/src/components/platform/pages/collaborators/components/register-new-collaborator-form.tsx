@@ -30,7 +30,7 @@ import { Info, Loader2 } from "lucide-react";
 import { useSendInvitationToCompanyMember } from "@/hooks/company-member/use-send-invitation-to-company-member";
 import { MultiSelectUserPermissions } from "@/components/platform/multi-select-user-permissions";
 import { SECTORS } from "@/utils/mocks/sectors";
-import { USER_PERMISSIONS } from "@/utils/mocks/user-permissions";
+import { COMPANY_MEMBER_PERMISSIONS } from "@/utils/mocks/company-member-permissions";
 
 interface RegisterNewCollaboratorFormProps {
 	onCloseDialog: () => void;
@@ -63,8 +63,6 @@ export function RegisterNewCollaboratorForm({
 			permissions: [],
 		},
 	});
-
-	console.log(form.watch("permissions"));
 
 	async function onSubmit(registerData: z.infer<typeof formSchema>) {
 		try {
@@ -177,7 +175,7 @@ export function RegisterNewCollaboratorForm({
 							</FormLabel>
 							<MultiSelectUserPermissions
 								modalPopover
-								options={USER_PERMISSIONS}
+								options={COMPANY_MEMBER_PERMISSIONS}
 								onUserPermissionsChange={(permissions) =>
 									form.setValue("permissions", permissions)
 								}

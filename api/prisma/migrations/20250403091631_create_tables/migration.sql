@@ -1,7 +1,4 @@
 -- CreateEnum
-CREATE TYPE "UserPermission" AS ENUM ('SUPER_ADMIN', 'ADMIN', 'MANAGE_SHIPMENTS_AND_PICKUPS', 'VIEW_SHIPMENTS_AND_PICKUPS', 'MANAGE_VEHICLES_AND_DRIVERS', 'VIEW_VEHICLES_AND_DRIVERS', 'MANAGE_ROUTES', 'VIEW_ROUTES', 'MANAGE_RESOURCES_AND_SUPPLIES', 'VIEW_RESOURCES_AND_SUPPLIES', 'MANAGE_NOTICES', 'VIEW_NOTICES', 'MANAGE_DAILY_SCHEDULE', 'VIEW_DAILY_SCHEDULE', 'MANAGE_USERS', 'MANAGE_FINANCES', 'VIEW_FINANCES', 'MANAGE_REPORTS', 'VIEW_REPORTS', 'MANAGE_PERMISSIONS');
-
--- CreateEnum
 CREATE TYPE "CompanySize" AS ENUM ('MICRO', 'SMALL', 'MEDIUM', 'BIG');
 
 -- CreateEnum
@@ -56,6 +53,7 @@ CREATE TABLE "users" (
     "email" TEXT NOT NULL,
     "password" TEXT,
     "phone" TEXT,
+    "extra_data" JSONB,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -81,21 +79,13 @@ CREATE TABLE "company_members" (
     "id" TEXT NOT NULL,
     "sector" TEXT NOT NULL,
     "status" "AccountStatus" NOT NULL DEFAULT 'PENDING',
+    "extraData" JSONB,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "user_id" TEXT NOT NULL,
     "company_id" TEXT NOT NULL,
 
     CONSTRAINT "company_members_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "company_member_permissions" (
-    "id" TEXT NOT NULL,
-    "permission" "UserPermission" NOT NULL,
-    "company_member_id" TEXT NOT NULL,
-
-    CONSTRAINT "company_member_permissions_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -352,12 +342,6 @@ CREATE INDEX "company_members_user_id_idx" ON "company_members"("user_id");
 CREATE UNIQUE INDEX "company_members_company_id_user_id_key" ON "company_members"("company_id", "user_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "drivers_document_number_key" ON "drivers"("document_number");
-
--- CreateIndex
-CREATE UNIQUE INDEX "drivers_phone_key" ON "drivers"("phone");
-
--- CreateIndex
 CREATE INDEX "drivers_name_idx" ON "drivers"("name");
 
 -- CreateIndex
@@ -374,12 +358,6 @@ CREATE UNIQUE INDEX "drivers_document_number_company_id_key" ON "drivers"("docum
 
 -- CreateIndex
 CREATE UNIQUE INDEX "drivers_phone_company_id_key" ON "drivers"("phone", "company_id");
-
--- CreateIndex
-CREATE UNIQUE INDEX "vehicles_plate_key" ON "vehicles"("plate");
-
--- CreateIndex
-CREATE UNIQUE INDEX "vehicles_trailer_plate_key" ON "vehicles"("trailer_plate");
 
 -- CreateIndex
 CREATE INDEX "vehicles_year_idx" ON "vehicles"("year");
@@ -539,9 +517,6 @@ ALTER TABLE "company_members" ADD CONSTRAINT "company_members_user_id_fkey" FORE
 
 -- AddForeignKey
 ALTER TABLE "company_members" ADD CONSTRAINT "company_members_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "company_member_permissions" ADD CONSTRAINT "company_member_permissions_company_member_id_fkey" FOREIGN KEY ("company_member_id") REFERENCES "company_members"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "drivers" ADD CONSTRAINT "drivers_creator_id_fkey" FOREIGN KEY ("creator_id") REFERENCES "company_members"("id") ON DELETE CASCADE ON UPDATE CASCADE;

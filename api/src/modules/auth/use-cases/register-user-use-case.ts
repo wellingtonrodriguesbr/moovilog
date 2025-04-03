@@ -42,6 +42,9 @@ export class RegisterUserUseCase {
 			email,
 			password: passwordHash,
 			phone,
+			extraData: {
+				onboardingStep: "register_company",
+			},
 		});
 
 		return {

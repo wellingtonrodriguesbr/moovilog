@@ -1,4 +1,3 @@
-import { PrismaCompanyMemberPermissionsRepository } from "@/modules/company-member/repositories/prisma/prisma-company-member-permissions-repository";
 import { PrismaCompanyMembersRepository } from "@/modules/company-member/repositories/prisma/prisma-company-members-repository";
 import { PrismaCompaniesRepository } from "@/modules/company/repositories/prisma/prisma-companies-repository";
 import { PrismaFinanceTransactionsRepository } from "@/modules/financial/repositories/prisma/prisma-finance-transactions-repository";
@@ -11,12 +10,7 @@ export function makeFetchTransactionsFromCompanyUseCase() {
 	const financeTransactionsRepository =
 		new PrismaFinanceTransactionsRepository();
 
-	const companyMemberPermissionsRepository =
-		new PrismaCompanyMemberPermissionsRepository();
-
-	const permissionService = new PermissionService(
-		companyMemberPermissionsRepository
-	);
+	const permissionService = new PermissionService(companyMembersRepository);
 
 	const fetchTransactionsFromCompanyUseCase =
 		new FetchTransactionsFromCompanyUseCase(

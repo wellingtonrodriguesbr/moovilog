@@ -9,8 +9,6 @@ import { generateRamdonCode } from "@/utils/generate-random-code";
 import { env } from "@/env";
 import { EmailDetails, EmailQueue } from "@/utils/email-queue";
 import { CompaniesRepository } from "@/modules/company/repositories/companies-repository";
-import { CompanyMemberPermissionsRepository } from "@/modules/company-member/repositories/company-member-permissions-repository";
-import { ICompanyMemberPermission } from "@/modules/company-member/interfaces/company-member-permission";
 
 import SendInvitationToCompanyMemberTemplate from "@/mail/templates/send-invitation-to-company-member-template";
 import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
@@ -33,7 +31,6 @@ export class SendInvitationToCompanyMemberUseCase {
 	constructor(
 		private usersRepository: UsersRepository,
 		private companyMembersRepository: CompanyMembersRepository,
-		private companyMemberPermissionsRepository: CompanyMemberPermissionsRepository,
 		private companiesRepository: CompaniesRepository,
 		private tokensRepository: TokensRepository,
 		private permissionService: PermissionService
@@ -72,7 +69,7 @@ export class SendInvitationToCompanyMemberUseCase {
 
 		const hasPermission = await this.permissionService.hasPermission(
 			senderInCompany.id,
-			["ADMIN", "MANAGE_USERS", "MANAGE_PERMISSIONS"]
+			["SUPER_ADMIN", "ADMIN", "MANAGE_USERS", "MANAGE_PERMISSIONS"]
 		);
 
 		if (!hasPermission) {
@@ -108,14 +105,10 @@ export class SendInvitationToCompanyMemberUseCase {
 			companyId: senderInCompany.companyId,
 			userId: user.id,
 			sector,
+			extraData: {
+				permissions,
+			},
 		});
-
-		await this.companyMemberPermissionsRepository.createMany(
-			(permissions as ICompanyMemberPermission[]).map((permission) => ({
-				companyMemberId: companyMember.id,
-				permission,
-			}))
-		);
 
 		const code = generateRamdonCode();
 		const link = `${env.WEBSITE_DOMAIN_URL}/validacao-do-codigo?codigo=${code}`;

@@ -1,4 +1,3 @@
-import { PrismaCompanyMemberPermissionsRepository } from "@/modules/company-member/repositories/prisma/prisma-company-member-permissions-repository";
 import { PrismaCompanyMembersRepository } from "@/modules/company-member/repositories/prisma/prisma-company-members-repository";
 import { PrismaCompaniesRepository } from "@/modules/company/repositories/prisma/prisma-companies-repository";
 import { PrismaFreightsRepository } from "@/modules/freight/repositories/prisma/prisma-freights-repository";
@@ -10,12 +9,7 @@ export function makeFetchFreightsFromCompanyUseCase() {
 	const companiesRepository = new PrismaCompaniesRepository();
 	const freightsRepository = new PrismaFreightsRepository();
 
-	const companyMemberPermissionsRepository =
-		new PrismaCompanyMemberPermissionsRepository();
-
-	const permissionService = new PermissionService(
-		companyMemberPermissionsRepository
-	);
+	const permissionService = new PermissionService(companyMembersRepository);
 
 	const fetchFreightsFromCompanyUseCase = new FetchFreightsFromCompanyUseCase(
 		companyMembersRepository,

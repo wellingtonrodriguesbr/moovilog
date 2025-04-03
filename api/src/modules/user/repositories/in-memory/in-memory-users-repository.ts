@@ -1,6 +1,10 @@
 import { Prisma, User } from "@prisma/client";
 import { UsersRepository } from "@/modules/user/repositories/users-repository";
 import { randomUUID } from "node:crypto";
+import {
+	IExtraDataOnboardingStep,
+	IUserExtraData,
+} from "@/modules/user/interfaces/user";
 
 export class InMemoryUsersRepository implements UsersRepository {
 	public items: User[] = [];
@@ -12,6 +16,7 @@ export class InMemoryUsersRepository implements UsersRepository {
 			email: data.email,
 			password: data.password || null,
 			phone: data.phone || null,
+			extraData: JSON.stringify(data.extraData) || null,
 			createdAt: new Date(),
 			updatedAt: new Date(),
 		};
@@ -50,5 +55,13 @@ export class InMemoryUsersRepository implements UsersRepository {
 		if (!user) throw new Error("User not found");
 
 		user.password = password;
+	}
+
+	async updateExtraData(id: string, onboardingStep: IExtraDataOnboardingStep) {
+		const user = this.items.find((item) => item.id === id);
+
+		if (!user) throw new Error("User not found");
+
+		(user?.extraData as IUserExtraData).onboardingStep = onboardingStep;
 	}
 }

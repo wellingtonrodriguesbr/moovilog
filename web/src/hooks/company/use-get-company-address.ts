@@ -4,17 +4,23 @@ import { useCompanyStore } from "@/stores/company-store";
 import { useQuery } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
 import { toast } from "sonner";
+import { useGetProfile } from "../user/use-get-profile";
 
 interface CompanyAddressResponse {
 	companyAddress: CompanyAddress;
 }
 
 export function useGetCompanyAddress() {
-	const pathName = usePathname();
-	const enabledQuery =
-		!pathName.includes("/cadastro/empresa") && pathName !== "/";
-
+	const { profile, isGetProfilePending } = useGetProfile();
 	const { company } = useCompanyStore();
+
+	const pathName = usePathname();
+
+	const enabledQuery =
+		!pathName.includes("/cadastro/empresa") &&
+		pathName !== "/" &&
+		!isGetProfilePending &&
+		profile?.extraData?.onboardingStep === "complete_onboarding";
 
 	const { data: companyAddress, isPending: isGetCompanyAddressPending } =
 		useQuery({

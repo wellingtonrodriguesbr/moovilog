@@ -2,7 +2,6 @@ import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
 import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
 import { DriversRepository } from "@/modules/driver/repositories/drivers-repository";
 import { CompanyMembersRepository } from "@/modules/company-member/repositories/company-members-repository";
-import { CompaniesRepository } from "@/modules/company/repositories/companies-repository";
 import { PermissionService } from "@/services/permission-service";
 
 interface UpdateDriverStatusUseCaseRequest {
@@ -14,7 +13,6 @@ interface UpdateDriverStatusUseCaseRequest {
 export class UpdateDriverStatusUseCase {
 	constructor(
 		private companyMembersRepository: CompanyMembersRepository,
-		private companiesRepository: CompaniesRepository,
 		private driversRepository: DriversRepository,
 		private permissionService: PermissionService
 	) {}

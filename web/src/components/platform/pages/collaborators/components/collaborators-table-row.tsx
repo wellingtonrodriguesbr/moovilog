@@ -48,7 +48,7 @@ export function CollaboratorsTableRow({
 			<TableCell>{companyMember.sector}</TableCell>
 			<TableCell>
 				<CollaboratorPermissionsDropdown
-					permissions={companyMember.companyMemberPermissions}
+					permissions={companyMember.extraData.permissions}
 				/>
 			</TableCell>
 			<TableCell>

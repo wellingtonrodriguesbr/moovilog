@@ -8,11 +8,11 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { CompanyMember } from "@/interfaces";
-import { USER_PERMISSIONS } from "@/utils/mocks/user-permissions";
+import { COMPANY_MEMBER_PERMISSIONS } from "@/utils/mocks/company-member-permissions";
 import { Eye } from "lucide-react";
 
 interface CollaboratorPermissionsDropdownProps {
-	permissions: CompanyMember["companyMemberPermissions"];
+	permissions: CompanyMember["extraData"]["permissions"];
 }
 
 export function CollaboratorPermissionsDropdown({
@@ -33,13 +33,10 @@ export function CollaboratorPermissionsDropdown({
 				<DropdownMenuSeparator />
 				{permissions?.map((data) => {
 					const permissionLabel =
-						USER_PERMISSIONS.find(
-							(p) =>
-								p.key ===
-								(data.permission as keyof typeof USER_PERMISSIONS)
-						)?.label || data.permission;
+						COMPANY_MEMBER_PERMISSIONS.find((p) => p.key === data)
+							?.label || data;
 					return (
-						<DropdownMenuItem key={data.id}>
+						<DropdownMenuItem key={data}>
 							{permissionLabel}
 						</DropdownMenuItem>
 					);

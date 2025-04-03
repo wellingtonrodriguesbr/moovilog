@@ -5,6 +5,7 @@ import { AddressesRepository } from "@/modules/shared/repositories/addresses-rep
 import { StatesRepository } from "@/modules/shared/repositories/states-repository";
 import { IAddress } from "@/modules/shared/interfaces/address";
 import { STATES } from "@/utils/mocks/states";
+import { UsersRepository } from "@/modules/user/repositories/users-repository";
 
 interface RegisterCompanyAddressUseCaseRequest {
 	stateAcronym: string;
@@ -26,7 +27,8 @@ export class RegisterCompanyAddressUseCase {
 		private addressesRepository: AddressesRepository,
 		private citiesRepository: CitiesRepository,
 		private statesRepository: StatesRepository,
-		private companiesRepository: CompaniesRepository
+		private companiesRepository: CompaniesRepository,
+		private usersRepository: UsersRepository
 	) {}
 
 	async execute({
@@ -71,6 +73,7 @@ export class RegisterCompanyAddressUseCase {
 		});
 
 		this.companiesRepository.setCompanyAddress(company.id, address.id);
+		this.usersRepository.updateExtraData(userId, "complete_onboarding");
 
 		return { address };
 	}

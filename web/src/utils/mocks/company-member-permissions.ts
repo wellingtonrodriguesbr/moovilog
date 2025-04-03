@@ -1,4 +1,4 @@
-export const USER_PERMISSIONS = [
+export const COMPANY_MEMBER_PERMISSIONS = [
 	{
 		key: "SUPER_ADMIN",
 		label: "Super Admin",
