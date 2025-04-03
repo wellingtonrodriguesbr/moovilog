@@ -114,14 +114,6 @@ export class RegisterFreightUseCase {
 			throw new BadRequestError("Invalid payment date");
 		}
 
-		// Here it is stuck on this name, because until now, to register a freight, this is the ideal category. This may change in the future.
-		const financeCategory =
-			await this.financeCategoriesRepository.findByName("Coletas e Entregas");
-
-		if (!financeCategory) {
-			throw new ResourceNotFoundError("Finance category not found");
-		}
-
 		const freight = await this.transactionService.executeTransaction(
 			async (tx) => {
 				const createdFreight = await this.freightsRepository.create(
@@ -143,6 +135,16 @@ export class RegisterFreightUseCase {
 					},
 					tx
 				);
+
+				// Here it is stuck on this name, because until now, to register a freight, this is the ideal category. This may change in the future.
+				const financeCategory =
+					await this.financeCategoriesRepository.findByName(
+						"Coletas e Entregas"
+					);
+
+				if (!financeCategory) {
+					throw new ResourceNotFoundError("Finance category not found");
+				}
 
 				const financeTransaction =
 					await this.financeTransactionsRepository.create(
