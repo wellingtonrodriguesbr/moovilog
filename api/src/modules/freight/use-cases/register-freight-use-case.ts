@@ -148,7 +148,7 @@ export class RegisterFreightUseCase {
 					await this.financeTransactionsRepository.create(
 						{
 							amountInCents: freightAmountInCents,
-							description: `Referente ao frete com o id: ${freight.id}, porgramado para o dia ${date} na rota ${route.name}.`,
+							description: `Referente ao frete com o id: ${createdFreight.id}, porgramado para o dia ${date} na rota ${route.name}.`,
 							dueDate: paymentDate,
 							creatorId: member.id,
 							categoryId: financeCategory.id,
@@ -162,7 +162,7 @@ export class RegisterFreightUseCase {
 
 				await this.freightTransactionsRepository.create(
 					{
-						freightId: freight.id,
+						freightId: createdFreight.id,
 						financeTransactionId: financeTransaction.id,
 					},
 					tx
