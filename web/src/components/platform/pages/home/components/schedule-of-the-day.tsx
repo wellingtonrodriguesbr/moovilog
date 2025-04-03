@@ -22,6 +22,7 @@ import {
 	Filter,
 	MapPin,
 	Package,
+	Plus,
 	TriangleAlert,
 	Truck,
 } from "lucide-react";
@@ -46,10 +47,18 @@ export function ScheduleOfTheDay() {
 						dos veículos
 					</p>
 				</div>
-				<Button variant="secondary" className="w-full md:w-fit">
-					<Filter className="size-4" />
-					Adicionar filtro
-				</Button>
+				<div className="w-full md:w-fit flex flex-col md:flex-row items-center gap-2">
+					<Button variant="outline" className="w-full md:w-fit">
+						<Filter className="size-4" />
+						Adicionar filtro
+					</Button>
+					<Button className="w-full md:w-fit" asChild>
+						<Link href="/operacional/programacao-do-dia">
+							<Plus className="size-4" />
+							Cadastrar
+						</Link>
+					</Button>
+				</div>
 			</header>
 			<div className="flex flex-col gap-2">
 				{mockSchedule.map((schedule) => (

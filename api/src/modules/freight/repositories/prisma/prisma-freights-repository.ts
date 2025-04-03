@@ -3,8 +3,13 @@ import { prisma } from "@/lib/prisma";
 import { FreightsRepository } from "@/modules/freight/repositories/freights-repository";
 
 export class PrismaFreightsRepository implements FreightsRepository {
-	async create(data: Prisma.FreightUncheckedCreateInput) {
-		const freight = await prisma.freight.create({
+	async create(
+		data: Prisma.FreightUncheckedCreateInput,
+		tx?: Prisma.TransactionClient
+	) {
+		const prismaTransaction = tx ?? prisma;
+
+		const freight = await prismaTransaction.freight.create({
 			data,
 		});
 

@@ -12,7 +12,7 @@ export function RegisterFreight() {
 				</span>
 			</header>
 
-			<div className="mt-12">
+			<div className="mt-6">
 				<RegisterFreightForm />
 			</div>
 		</section>

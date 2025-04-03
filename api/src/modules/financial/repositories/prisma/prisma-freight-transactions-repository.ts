@@ -5,10 +5,16 @@ import { FreightTransactionsRepository } from "@/modules/financial/repositories/
 export class PrismaFreightTransactionsRepository
 	implements FreightTransactionsRepository
 {
-	async create(data: Prisma.FreightTransactionUncheckedCreateInput) {
-		const freightTransaction = await prisma.freightTransaction.create({
-			data,
-		});
+	async create(
+		data: Prisma.FreightTransactionUncheckedCreateInput,
+		tx?: Prisma.TransactionClient
+	) {
+		const prismaTransaction = tx ?? prisma;
+
+		const freightTransaction =
+			await prismaTransaction.freightTransaction.create({
+				data,
+			});
 
 		return freightTransaction;
 	}

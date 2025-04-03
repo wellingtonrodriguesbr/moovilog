@@ -2,6 +2,7 @@ import { FreightTransaction, Prisma } from "@prisma/client";
 
 export interface FreightTransactionsRepository {
 	create(
-		data: Prisma.FreightTransactionUncheckedCreateInput
+		data: Prisma.FreightTransactionUncheckedCreateInput,
+		tx?: Prisma.TransactionClient
 	): Promise<FreightTransaction>;
 }

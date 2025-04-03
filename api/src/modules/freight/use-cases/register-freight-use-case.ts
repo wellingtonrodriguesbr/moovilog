@@ -13,6 +13,7 @@ import { FinanceTransactionsRepository } from "@/modules/financial/repositories/
 import { FinanceCategoriesRepository } from "@/modules/financial/repositories/finance-categories-repository";
 import { DriverTransactionsRepository } from "@/modules/financial/repositories/driver-transactions-repository";
 import { PermissionService } from "@/services/permission-service";
+import { TransactionService } from "@/services/transaction-service";
 import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
 import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
 import { BadRequestError } from "@/modules/shared/errors/bad-request-error";
@@ -51,7 +52,8 @@ export class RegisterFreightUseCase {
 		private routesRepository: RoutesRepository,
 		private financeTransactionsRepository: FinanceTransactionsRepository,
 		private financeCategoriesRepository: FinanceCategoriesRepository,
-		private permissionService: PermissionService
+		private permissionService: PermissionService,
+		private transactionService: TransactionService
 	) {}
 
 	async execute({
@@ -112,52 +114,71 @@ export class RegisterFreightUseCase {
 			throw new BadRequestError("Invalid payment date");
 		}
 
-		const freight = await this.freightsRepository.create({
-			date,
-			modality,
-			type,
-			pickupsQuantity,
-			deliveriesQuantity,
-			totalWeightOfPickups,
-			totalWeightOfDeliveries,
-			freightAmountInCents,
-			observation,
-			driverId: driver.id,
-			creatorId: member.id,
-			companyId: member.companyId,
-			routeId: route.id,
-			vehicleId: vehicle.id,
-		});
-
 		// Here it is stuck on this name, because until now, to register a freight, this is the ideal category. This may change in the future.
 		const financeCategory =
-			await this.financeCategoriesRepository.findByName("Coletas e Entregas");
+			await this.financeCategoriesRepository.findByName("gdgdgdfggfhsfg");
 
 		if (!financeCategory) {
 			throw new ResourceNotFoundError("Finance category not found");
 		}
 
-		const financeTransaction = await this.financeTransactionsRepository.create({
-			amountInCents: freightAmountInCents,
-			description: `Referente ao frete com o id: ${freight.id}, porgramado para o dia ${date} na rota ${route.name}.`,
-			dueDate: paymentDate,
-			creatorId: member.id,
-			categoryId: financeCategory.id,
-			companyId: member.companyId,
-			status: "PENDING",
-			type: "EXPENSE",
-			paymentMethod: "PIX",
-		});
+		const freight = await this.transactionService.executeTransaction(
+			async (tx) => {
+				const createdFreight = await this.freightsRepository.create(
+					{
+						date,
+						modality,
+						type,
+						pickupsQuantity,
+						deliveriesQuantity,
+						totalWeightOfPickups,
+						totalWeightOfDeliveries,
+						freightAmountInCents,
+						observation,
+						driverId: driver.id,
+						creatorId: member.id,
+						companyId: member.companyId,
+						routeId: route.id,
+						vehicleId: vehicle.id,
+					},
+					tx
+				);
 
-		await this.freightTransactionsRepository.create({
-			freightId: freight.id,
-			financeTransactionId: financeTransaction.id,
-		});
+				const financeTransaction =
+					await this.financeTransactionsRepository.create(
+						{
+							amountInCents: freightAmountInCents,
+							description: `Referente ao frete com o id: ${freight.id}, porgramado para o dia ${date} na rota ${route.name}.`,
+							dueDate: paymentDate,
+							creatorId: member.id,
+							categoryId: financeCategory.id,
+							companyId: member.companyId,
+							status: "PENDING",
+							type: "EXPENSE",
+							paymentMethod: "PIX",
+						},
+						tx
+					);
 
-		await this.driverTransactionsRepository.create({
-			driverId: driver.id,
-			financeTransactionId: financeTransaction.id,
-		});
+				await this.freightTransactionsRepository.create(
+					{
+						freightId: freight.id,
+						financeTransactionId: financeTransaction.id,
+					},
+					tx
+				);
+
+				await this.driverTransactionsRepository.create(
+					{
+						driverId: driver.id,
+						financeTransactionId: financeTransaction.id,
+					},
+					tx
+				);
+
+				return createdFreight;
+			}
+		);
 
 		return { freight };
 	}

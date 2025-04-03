@@ -9,6 +9,7 @@ import { PrismaFinanceTransactionsRepository } from "@/modules/financial/reposit
 import { PrismaFreightTransactionsRepository } from "@/modules/financial/repositories/prisma/prisma-freight-transactions-repository";
 import { PrismaDriverTransactionsRepository } from "@/modules/financial/repositories/prisma/prisma-driver-transactions-repository";
 import { PermissionService } from "@/services/permission-service";
+import { TransactionService } from "@/services/transaction-service";
 
 export function makeRegisterfreightUseCase() {
 	const companyMembersRepository = new PrismaCompanyMembersRepository();
@@ -24,6 +25,7 @@ export function makeRegisterfreightUseCase() {
 	const financeCategoriesRepository = new PrismaFinanceCategoriesRepository();
 
 	const permissionService = new PermissionService(companyMembersRepository);
+	const transactionService = new TransactionService();
 
 	const registerFreightUseCase = new RegisterFreightUseCase(
 		companyMembersRepository,
@@ -35,7 +37,8 @@ export function makeRegisterfreightUseCase() {
 		routesRepository,
 		financeTransactionsRepository,
 		financeCategoriesRepository,
-		permissionService
+		permissionService,
+		transactionService
 	);
 
 	return registerFreightUseCase;

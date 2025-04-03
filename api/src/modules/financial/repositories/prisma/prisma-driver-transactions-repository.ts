@@ -5,8 +5,12 @@ import { DriverTransactionsRepository } from "@/modules/financial/repositories/d
 export class PrismaDriverTransactionsRepository
 	implements DriverTransactionsRepository
 {
-	async create(data: Prisma.DriverTransactionUncheckedCreateInput) {
-		const driverTransaction = await prisma.driverTransaction.create({
+	async create(
+		data: Prisma.DriverTransactionUncheckedCreateInput,
+		tx?: Prisma.TransactionClient
+	) {
+		const prismaTransaction = tx ?? prisma;
+		const driverTransaction = await prismaTransaction.driverTransaction.create({
 			data,
 		});
 

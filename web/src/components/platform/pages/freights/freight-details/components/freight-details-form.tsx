@@ -1,5 +1,6 @@
 "use client";
 
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -40,94 +41,102 @@ export function FreightDetailsForm() {
 	}
 
 	return (
-		<form className="space-y-6 bg-zinc-100 rounded-md p-6">
-			<fieldset className="grid grid-cols-1 md:grid-cols-4 gap-4">
+		<Card className="bg-white border p-6">
+			<form className="space-y-6">
+				<fieldset className="grid grid-cols-1 md:grid-cols-4 gap-4">
+					<Label className="flex flex-col gap-2 font-normal">
+						Data do frete:
+						<Input
+							value={formatBrazilianDate(freightDetails.date)}
+						/>
+					</Label>
+					<Label className="flex flex-col gap-2 font-normal">
+						Motorista:
+						<Input value={freightDetails.driver.name} />
+					</Label>
+					<Label className="flex flex-col gap-2 font-normal">
+						Veículo:
+						<Input value={freightDetails.vehicle.plate} />
+					</Label>
+					<Label className="flex flex-col gap-2 font-normal">
+						Valor do frete:
+						<Input
+							value={formatCurrencyBR(
+								freightDetails.freightAmountInCents
+							)}
+						/>
+					</Label>
+				</fieldset>
+				<fieldset className="grid grid-cols-1 md:grid-cols-4 gap-4">
+					<Label className="flex flex-col gap-2 font-normal">
+						Tipo:
+						<Input value={FREIGHT_TYPE[freightDetails.type]} />
+					</Label>
+					<Label className="flex flex-col gap-2 font-normal">
+						Modalidade de pagamento:
+						<Input
+							value={FREIGHT_MODALITY[freightDetails.modality]}
+						/>
+					</Label>
+					<Label className="flex flex-col gap-2 font-normal">
+						Rota:
+						<Input value={freightDetails.route.name} />
+					</Label>
+					<Label className="flex flex-col gap-2 font-normal">
+						Cadastro por:
+						<Input value={freightDetails.creator.user.name} />
+					</Label>
+				</fieldset>
+				<fieldset className="grid grid-cols-2 md:grid-cols-5 gap-4">
+					<Label className="flex flex-col gap-2 font-normal">
+						Quantidade de entregas:
+						<Input value={freightDetails.deliveriesQuantity} />
+					</Label>
+					<Label className="flex flex-col gap-2 font-normal">
+						Peso total de entregas:
+						<Input
+							value={`${formatWeight(freightDetails.totalWeightOfDeliveries)}kg`}
+						/>
+					</Label>
+					<Label className="flex flex-col gap-2 font-normal">
+						Quantidade de coletas:
+						<Input
+							value={
+								freightDetails.pickupsQuantity > 0
+									? freightDetails.pickupsQuantity
+									: "-"
+							}
+						/>
+					</Label>
+					<Label className="flex flex-col gap-2 font-normal">
+						Peso total de coletas:
+						<Input
+							value={
+								freightDetails.totalWeightOfPickups
+									? `${formatWeight(freightDetails.totalWeightOfPickups)}kg`
+									: "-"
+							}
+						/>
+					</Label>
+					<Label className="flex flex-col gap-2 font-normal col-span-2 md:col-span-1">
+						Cadastro em:
+						<Input
+							value={formatBrazilianDate(
+								freightDetails.createdAt
+							)}
+						/>
+					</Label>
+				</fieldset>
 				<Label className="flex flex-col gap-2 font-normal">
-					Data do frete:
-					<Input value={formatBrazilianDate(freightDetails.date)} />
-				</Label>
-				<Label className="flex flex-col gap-2 font-normal">
-					Motorista:
-					<Input value={freightDetails.driver.name} />
-				</Label>
-				<Label className="flex flex-col gap-2 font-normal">
-					Veículo:
-					<Input value={freightDetails.vehicle.plate} />
-				</Label>
-				<Label className="flex flex-col gap-2 font-normal">
-					Valor do frete:
-					<Input
-						value={formatCurrencyBR(
-							freightDetails.freightAmountInCents
-						)}
+					Observação:
+					<Textarea
+						className="resize-none placeholder:italic pointer-events-none select-none"
+						rows={4}
+						placeholder="Nenhuma observação cadastrada.."
+						value={freightDetails.observation ?? ""}
 					/>
 				</Label>
-			</fieldset>
-			<fieldset className="grid grid-cols-1 md:grid-cols-4 gap-4">
-				<Label className="flex flex-col gap-2 font-normal">
-					Tipo:
-					<Input value={FREIGHT_TYPE[freightDetails.type]} />
-				</Label>
-				<Label className="flex flex-col gap-2 font-normal">
-					Modalidade de pagamento:
-					<Input value={FREIGHT_MODALITY[freightDetails.modality]} />
-				</Label>
-				<Label className="flex flex-col gap-2 font-normal">
-					Rota:
-					<Input value={freightDetails.route.name} />
-				</Label>
-				<Label className="flex flex-col gap-2 font-normal">
-					Cadastro por:
-					<Input value={freightDetails.creator.user.name} />
-				</Label>
-			</fieldset>
-			<fieldset className="grid grid-cols-2 md:grid-cols-5 gap-4">
-				<Label className="flex flex-col gap-2 font-normal">
-					Quantidade de entregas:
-					<Input value={freightDetails.deliveriesQuantity} />
-				</Label>
-				<Label className="flex flex-col gap-2 font-normal">
-					Peso total de entregas:
-					<Input
-						value={`${formatWeight(freightDetails.totalWeightOfDeliveries)}kg`}
-					/>
-				</Label>
-				<Label className="flex flex-col gap-2 font-normal">
-					Quantidade de coletas:
-					<Input
-						value={
-							freightDetails.pickupsQuantity > 0
-								? freightDetails.pickupsQuantity
-								: "-"
-						}
-					/>
-				</Label>
-				<Label className="flex flex-col gap-2 font-normal">
-					Peso total de coletas:
-					<Input
-						value={
-							freightDetails.totalWeightOfPickups
-								? `${formatWeight(freightDetails.totalWeightOfPickups)}kg`
-								: "-"
-						}
-					/>
-				</Label>
-				<Label className="flex flex-col gap-2 font-normal col-span-2 md:col-span-1">
-					Cadastro em:
-					<Input
-						value={formatBrazilianDate(freightDetails.createdAt)}
-					/>
-				</Label>
-			</fieldset>
-			<Label className="flex flex-col gap-2 font-normal">
-				Observação:
-				<Textarea
-					className="resize-none placeholder:italic pointer-events-none select-none"
-					rows={4}
-					placeholder="Nenhuma observação cadastrada.."
-					value={freightDetails.observation ?? ""}
-				/>
-			</Label>
-		</form>
+			</form>
+		</Card>
 	);
 }

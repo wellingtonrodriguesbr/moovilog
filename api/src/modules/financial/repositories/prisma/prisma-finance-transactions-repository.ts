@@ -5,8 +5,12 @@ import { FinanceTransactionsRepository } from "@/modules/financial/repositories/
 export class PrismaFinanceTransactionsRepository
 	implements FinanceTransactionsRepository
 {
-	async create(data: Prisma.FinanceTransactionUncheckedCreateInput) {
-		const transaction = await prisma.financeTransaction.create({
+	async create(
+		data: Prisma.FinanceTransactionUncheckedCreateInput,
+		tx?: Prisma.TransactionClient
+	) {
+		const prismaTransaction = tx ?? prisma;
+		const transaction = await prismaTransaction.financeTransaction.create({
 			data,
 		});
 
