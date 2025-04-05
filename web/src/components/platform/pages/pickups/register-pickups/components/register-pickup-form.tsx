@@ -403,11 +403,12 @@ export function RegisterPickupForm() {
 							<Link href="/fretes">Cancelar</Link>
 						</Button>
 						<Button disabled={false} type="submit">
-							{false ? (
+							Cadastrar
+							{/* {false ? (
 								<Loader2 className="size-4 animate-spin" />
 							) : (
 								"Cadastrar"
-							)}
+							)} */}
 						</Button>
 					</fieldset>
 				</form>
