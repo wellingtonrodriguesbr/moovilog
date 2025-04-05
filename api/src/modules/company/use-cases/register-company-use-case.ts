@@ -53,10 +53,12 @@ export class RegisterCompanyUseCase {
 			throw new OwnerAlreadyHasACompanyError();
 		}
 
+		const formattedDocumentNumber = documentNumber.replace(/\D/g, "");
+
 		const company = await this.companiesRepository.create({
 			ownerId: user.id,
 			name,
-			documentNumber,
+			documentNumber: formattedDocumentNumber,
 			size,
 		});
 

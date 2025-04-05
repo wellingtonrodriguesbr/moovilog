@@ -1,49 +1,50 @@
-import {
-	IPickup,
-	INonPickupReason,
-	IPickupPriority,
-	IPickupStatus,
-} from "@/modules/pickup/interfaces/pickup";
+import { IPickup, IPickupPriority } from "@/modules/pickup/interfaces/pickup";
+import { IFreight } from "@/modules/freight/interfaces/freight";
 import { PickupsRepository } from "@/modules/pickup/repositories/pickups-repository";
+import { PickupHistoriesRepository } from "@/modules/pickup/repositories/pickup-histories-repository";
 import { DriversRepository } from "@/modules/driver/repositories/drivers-repository";
+import { VehiclesRepository } from "@/modules/vehicle/repositories/vehicles-repository";
 import { CompanyMembersRepository } from "@/modules/company-member/repositories/company-members-repository";
 import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
 import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
-import { BadRequestError } from "@/modules/shared/errors/bad-request-error";
 import { CompaniesRepository } from "@/modules/company/repositories/companies-repository";
 import { FreightsRepository } from "@/modules/freight/repositories/freights-repository";
 import { AddressesRepository } from "@/modules/shared/repositories/addresses-repository";
+import { CitiesRepository } from "@/modules/shared/repositories/cities-repository";
+import { StatesRepository } from "@/modules/shared/repositories/states-repository";
+import { TransactionService } from "@/services/transaction-service";
+import { PermissionService } from "@/services/permission-service";
+import dayjs from "dayjs";
+import { BadRequestError } from "@/modules/shared/errors/bad-request-error";
 
 interface RegisterPickupUseCaseRequest {
 	pickupNumber: string;
 	senderName: string;
 	recipientName: string;
-	status: IPickupStatus;
-	priority: IPickupPriority;
-	nonPickupReason?: INonPickupReason | null;
-	observation?: string | null;
-	volumeQuantity: number;
 	weight: number;
+	volumeQuantity: number;
 	cubage?: number | null;
-	collectedAt: Date;
-	scheduledDate: Date;
+	priority: IPickupPriority;
+	observation?: string | null;
 	requestedAt: Date;
-	addressZipCode: number;
+	scheduledDate: Date;
+	cityName: string;
+	stateAcronym: string;
+	addressZipCode: string;
 	addressStreet: string;
 	addressNeighborhood: string;
 	addressNumber: number;
 	addressComplement?: string | null;
 	userId: string;
 	companyId: string;
-	assignedDriverId: string;
-	freightId: string;
+	driverId: string;
+	vehicleId: string;
+	freightId?: string | null;
 }
 
 interface RegisterPickupUseCaseResponse {
 	pickup: IPickup;
 }
-
-const ROLE_PERMISSIONS = ["OPERATIONAL", "MANAGER", "ADMIN"];
 
 export class RegisterPickupUseCase {
 	constructor(
@@ -51,41 +52,57 @@ export class RegisterPickupUseCase {
 		private companiesRepository: CompaniesRepository,
 		private freightsRepository: FreightsRepository,
 		private addressesRepository: AddressesRepository,
+		private citiesRepository: CitiesRepository,
+		private statesRepository: StatesRepository,
 		private driversRepository: DriversRepository,
-		private pickupsRepository: PickupsRepository
+		private vehiclesRepository: VehiclesRepository,
+		private pickupsRepository: PickupsRepository,
+		private pickupHistoriesRepository: PickupHistoriesRepository,
+		private permissionService: PermissionService,
+		private transactionService: TransactionService
 	) {}
 
 	async execute({
 		pickupNumber,
 		senderName,
 		recipientName,
-		status,
 		priority,
-		nonPickupReason,
 		observation,
 		volumeQuantity,
 		weight,
 		cubage,
-		collectedAt,
 		scheduledDate,
 		requestedAt,
 		userId,
 		companyId,
-		assignedDriverId,
+		driverId,
+		vehicleId,
 		freightId,
+		cityName,
+		stateAcronym,
+		addressZipCode,
+		addressStreet,
+		addressNeighborhood,
+		addressNumber,
+		addressComplement,
 	}: RegisterPickupUseCaseRequest): Promise<RegisterPickupUseCaseResponse> {
-		const [memberInCompany, driver, company, freight] = await Promise.all([
+		const [memberInCompany, driver, vehicle, company] = await Promise.all([
 			this.companyMembersRepository.findMemberInCompany(userId, companyId),
-			this.driversRepository.findById(assignedDriverId),
+			this.driversRepository.findById(driverId),
+			this.vehiclesRepository.findById(vehicleId),
 			this.companiesRepository.findById(companyId),
-			this.freightsRepository.findById(freightId),
 		]);
 
 		if (!memberInCompany) {
 			throw new ResourceNotFoundError("Member not found");
 		}
 
-		if (!ROLE_PERMISSIONS.includes(memberInCompany.role)) {
+		const hasPermission = await this.permissionService.hasPermission(
+			memberInCompany.id,
+			["SUPER_ADMIN", "ADMIN", "MANAGE_SHIPMENTS_AND_PICKUPS"]
+		);
+
+		if (!hasPermission) {
 			throw new NotAllowedError(
 				"You do not have permission to perform this action"
 			);
@@ -95,50 +112,92 @@ export class RegisterPickupUseCase {
 			throw new ResourceNotFoundError("Driver not found");
 		}
 
+		if (!vehicle) {
+			throw new ResourceNotFoundError("Vehicle not found");
+		}
+
 		if (!company) {
 			throw new ResourceNotFoundError("Company not found");
 		}
 
-		if (freightId && !freight) {
-			throw new ResourceNotFoundError("Freight not found");
+		let freight: IFreight | null = null;
+
+		if (freightId) {
+			freight = await this.freightsRepository.findById(freightId);
+
+			if (!freight) {
+				throw new ResourceNotFoundError("Freight not found");
+			}
 		}
 
-		const pickup = await this.pickupsRepository.create({
-			date,
-			modality,
-			type,
-			pickupsQuantity,
-			deliveriesQuantity,
-			totalWeightOfPickups,
-			totalWeightOfDeliveries,
-			pickupAmountInCents,
-			observation,
-			driverId: driver.id,
-			creatorId: member.id,
-			companyId: member.companyId,
-			routeId: route.id,
-			vehicleId: vehicle.id,
-		});
+		const state = await this.statesRepository.findByAcronym(stateAcronym);
 
-		// Here it is stuck on this name, because until now, to register a pickup, this is the ideal category. This may change in the future.
-		const financeCategory =
-			await this.financeCategoriesRepository.findByName("Coletas e Entregas");
-
-		if (!financeCategory) {
-			throw new ResourceNotFoundError("Finance category not found");
+		if (!state) {
+			throw new ResourceNotFoundError("State not found");
 		}
 
-		await this.financeTransactionsRepository.create({
-			amountInCents: pickupAmountInCents,
-			description: `Referente ao frete com o id: ${pickup.id}`,
-			dueDate: paymentDate,
-			creatorId: member.id,
-			categoryId: financeCategory.id,
-			companyId: member.companyId,
-			status: "PENDING",
-			type: "EXPENSE",
-			paymentMethod: "PIX",
-		});
+		if (dayjs(scheduledDate).isBefore(dayjs())) {
+			throw new BadRequestError("Scheduled date cannot be in the past");
+		}
+
+		const pickup = await this.transactionService.executeTransaction(
+			async (tx) => {
+				const city = await this.citiesRepository.findOrCreateByNameAndStateId(
+					cityName,
+					state.id,
+					tx
+				);
+
+				const address = await this.addressesRepository.create(
+					{
+						zipCode: addressZipCode,
+						street: addressStreet,
+						neighborhood: addressNeighborhood,
+						number: addressNumber,
+						complement: addressComplement ?? null,
+						cityId: city.id,
+					},
+					tx
+				);
+
+				const createdPickup = await this.pickupsRepository.create(
+					{
+						pickupNumber,
+						senderName,
+						recipientName,
+						weight,
+						volumeQuantity,
+						cubage,
+						priority,
+						observation: observation ?? null,
+						requestedAt,
+						scheduledDate,
+						companyId,
+						driverId,
+						vehicleId,
+						creatorId: memberInCompany.id,
+						freightId: freight ? freight.id : null,
+						addressId: address.id,
+					},
+					tx
+				);
+
+				await this.pickupHistoriesRepository.create(
+					{
+						pickupId: createdPickup.id,
+						creatorId: memberInCompany.id,
+						status: createdPickup.status,
+						driverId,
+						vehicleId,
+						observation: observation ?? null,
+						attemptDate: createdPickup.scheduledDate,
+					},
+					tx
+				);
+
+				return createdPickup;
+			}
+		);
 
 		return { pickup };
 	}

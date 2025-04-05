@@ -81,11 +81,6 @@ const ITEMS = [
 		icon: <Landmark className="size-4" />,
 	},
 	{
-		name: "Rotas",
-		url: "/rotas",
-		icon: <Route className="size-4" />,
-	},
-	{
 		name: "Fretes",
 		url: "/fretes",
 		icon: <LayoutGrid className="size-4" />,
@@ -94,6 +89,11 @@ const ITEMS = [
 		name: "Coletas",
 		url: "/coletas",
 		icon: <Box className="size-4" />,
+	},
+	{
+		name: "Rotas",
+		url: "/rotas",
+		icon: <Route className="size-4" />,
 	},
 	{
 		name: "Motoristas",

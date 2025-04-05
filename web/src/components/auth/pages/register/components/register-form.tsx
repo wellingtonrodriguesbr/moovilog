@@ -24,11 +24,11 @@ import { AxiosError } from "axios";
 import { formatPhone } from "@/utils/format-phone";
 
 const formSchema = z.object({
-	name: z.string().min(3, { message: "Digite seu nome completo" }),
+	name: z.string().min(5, { message: "Digite seu nome completo" }),
 	phone: z
 		.string()
 		.min(11, { message: "Digite um telefone válido" })
-		.transform((phone) => phone.slice(0, 11)),
+		.transform((value) => value.replace(/\D/g, "")),
 	email: z.string().email({ message: "Digite um endereço de e-mail válido" }),
 	password: z
 		.string()
@@ -57,6 +57,9 @@ export function RegisterForm() {
 			acceptTerms: false,
 		},
 	});
+
+	console.log("FORM:", form.watch());
+	console.log("FORM:", form.watch("phone").length);
 
 	async function onSubmit(data: z.infer<typeof formSchema>) {
 		try {

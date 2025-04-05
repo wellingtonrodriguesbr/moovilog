@@ -73,10 +73,13 @@ export class RegisterDriverUseCase {
 			);
 		}
 
+		const formattedDocumentNumber = documentNumber.replace(/\D/g, "");
+		const formattedPhone = phone.replace(/\D/g, "");
+
 		const driver = await this.driversRepository.create({
 			name,
-			documentNumber,
-			phone,
+			documentNumber: formattedDocumentNumber,
+			phone: formattedPhone,
 			type,
 			companyId: member.companyId,
 			creatorId: member.id,

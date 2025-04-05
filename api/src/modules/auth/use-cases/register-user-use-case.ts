@@ -36,12 +36,13 @@ export class RegisterUserUseCase {
 		}
 
 		const passwordHash = await hash(password, 6);
+		const formattedPhone = phone.replace(/\D/g, "");
 
 		const user = await this.usersRepository.create({
 			name,
 			email,
 			password: passwordHash,
-			phone,
+			phone: formattedPhone,
 			extraData: {
 				onboardingStep: "register_company",
 			},

@@ -24,7 +24,7 @@ export function CardCompanyData() {
 	}
 
 	return (
-		<Card>
+		<Card className="bg-white border">
 			<CardHeader>
 				<CardTitle className="flex items-center gap-2">
 					<Building className="size-5" />

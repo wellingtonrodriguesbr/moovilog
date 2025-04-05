@@ -53,7 +53,7 @@ model CompanyMember {
   id        String        @id @default(uuid())
   sector    String
   status    AccountStatus @default(PENDING)
-  extraData Json?
+  extraData Json?         @map("extra_data")
   createdAt DateTime      @default(now()) @map("created_at")
   updatedAt DateTime      @updatedAt @map("updated_at")
 
@@ -69,6 +69,7 @@ model CompanyMember {
   routes              Route[]
   financeTransactions FinanceTransaction[]
   pickups             Pickup[]
+  pickupHistories     PickupHistory[]
 
   @@unique([companyId, userId])
   @@index([status])
@@ -131,7 +132,9 @@ model Vehicle {
   creatorId String        @map("creator_id")
   creator   CompanyMember @relation(fields: [creatorId], references: [id], onDelete: Cascade)
 
-  freights Freight[]
+  freights        Freight[]
+  pickups         Pickup[]
+  pickupHistories PickupHistory[]
 
   @@unique([plate, companyId])
   @@unique([trailerPlate, companyId])
@@ -190,22 +193,21 @@ model Freight {
 }
 
 model Pickup {
-  id              String           @id @default(uuid())
-  pickupNumber    String           @unique @map("pickup_number")
-  senderName      String           @map("sender_name")
-  recipientName   String           @map("recipient_name")
-  weight          Decimal          @db.Decimal(10, 2)
-  volumeQuantity  Int              @map("volume_quantity")
-  cubage          Decimal?         @db.Decimal(10, 2)
-  status          PickupStatus     @default(PENDING)
-  priority        PickupPriority   @default(NORMAL)
-  observation     String?
-  nonPickupReason NonPickupReason? @map("non_pickup_reason")
-  requestedAt     DateTime         @default(now()) @map("requested_at")
-  scheduledDate   DateTime         @map("scheduled_date")
-  collectedAt     DateTime?        @map("collected_at")
-  createdAt       DateTime         @default(now()) @map("created_at")
-  updatedAt       DateTime         @updatedAt @map("last_updated_at")
+  id             String         @id @default(uuid())
+  pickupNumber   String         @unique @map("pickup_number")
+  senderName     String         @map("sender_name")
+  recipientName  String         @map("recipient_name")
+  weight         Decimal        @db.Decimal(10, 2)
+  volumeQuantity Int            @map("volume_quantity")
+  cubage         Decimal?       @db.Decimal(10, 2)
+  status         PickupStatus   @default(PENDING)
+  priority       PickupPriority @default(NORMAL)
+  observation    String?
+  requestedAt    DateTime       @default(now()) @map("requested_at")
+  scheduledDate  DateTime       @map("scheduled_date")
+  collectedAt    DateTime?      @map("collected_at")
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
 
   freightId String?  @map("freight_id")
   freight   Freight? @relation(fields: [freightId], references: [id], onDelete: SetNull)
@@ -216,8 +218,11 @@ model Pickup {
   creatorId String?        @map("creator_id")
   creator   CompanyMember? @relation(fields: [creatorId], references: [id], onDelete: SetNull)
 
-  assignedDriverId String? @map("assigned_driver_id")
-  assignedDriver   Driver? @relation(fields: [assignedDriverId], references: [id], onDelete: SetNull)
+  driverId String? @map("driver_id")
+  driver   Driver? @relation(fields: [driverId], references: [id], onDelete: SetNull)
+
+  vehicleId String?  @map("vehicle_id")
+  vehicle   Vehicle? @relation(fields: [vehicleId], references: [id], onDelete: SetNull)
 
   addressId     String  @map("address_id")
   pickupAddress Address @relation(fields: [addressId], references: [id])
@@ -234,7 +239,7 @@ model Pickup {
   @@index([freightId])
   @@index([companyId])
   @@index([creatorId])
-  @@index([assignedDriverId])
+  @@index([driverId])
   @@index([requestedAt])
   @@index([priority])
   @@map("pickups")
@@ -246,12 +251,20 @@ model PickupHistory {
   nonPickupReason NonPickupReason? @map("non_pickup_reason")
   attemptDate     DateTime         @default(now()) @map("attempt_date")
   observation     String?          @map("observation")
+  createdAt       DateTime         @default(now()) @map("created_at")
+  updatedAt       DateTime         @updatedAt @map("updated_at")
 
   pickupId String @map("pickup_id")
   pickup   Pickup @relation(fields: [pickupId], references: [id], onDelete: Cascade)
 
+  creatorId String?        @map("creator_id")
+  creator   CompanyMember? @relation(fields: [creatorId], references: [id], onDelete: SetNull)
+
   driverId String? @map("driver_id")
   driver   Driver? @relation(fields: [driverId], references: [id], onDelete: SetNull)
+
+  vehicleId String?  @map("vehicle_id")
+  vehicle   Vehicle? @relation(fields: [vehicleId], references: [id], onDelete: SetNull)
 
   @@index([pickupId])
   @@index([driverId])

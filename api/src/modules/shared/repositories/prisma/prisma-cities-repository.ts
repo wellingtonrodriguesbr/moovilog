@@ -1,9 +1,15 @@
+import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { CitiesRepository } from "@/modules/shared/repositories/cities-repository";
 
 export class PrismaCitiesRepository implements CitiesRepository {
-	async findOrCreateByNameAndStateId(name: string, stateId: string) {
-		const city = await prisma.city.findUnique({
+	async findOrCreateByNameAndStateId(
+		name: string,
+		stateId: string,
+		tx?: Prisma.TransactionClient
+	) {
+		const prismaTransaction = tx ?? prisma;
+		const city = await prismaTransaction.city.findUnique({
 			where: {
 				name_stateId: {
 					name,

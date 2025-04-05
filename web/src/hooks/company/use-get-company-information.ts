@@ -1,26 +1,24 @@
+import { usePathname, useRouter } from "next/navigation";
+
 import { Company } from "@/interfaces";
 import { api } from "@/lib/axios";
 import { useCompanyStore } from "@/stores/company-store";
 import { useQuery } from "@tanstack/react-query";
-import { usePathname } from "next/navigation";
 import { toast } from "sonner";
-import { useGetProfile } from "../user/use-get-profile";
+import { AxiosError } from "axios";
 
 interface CompanyInformationResponse {
 	company: Company;
 }
 
 export function useGetCompanyInformation() {
-	const { profile, isGetProfilePending } = useGetProfile();
 	const { setCompany } = useCompanyStore();
 
+	const router = useRouter();
 	const pathName = usePathname();
 
 	const enabledQuery =
-		!pathName.includes("/cadastro/empresa") &&
-		pathName !== "/" &&
-		!isGetProfilePending &&
-		profile?.extraData?.onboardingStep === "complete_onboarding";
+		!pathName.includes("/cadastro/empresa") && pathName !== "/";
 
 	const {
 		data: companyInformation,
@@ -29,7 +27,6 @@ export function useGetCompanyInformation() {
 		queryKey: ["company-information"],
 		queryFn: handleGetCompanyInformation,
 		enabled: enabledQuery,
-		staleTime: 1000 * 60 * 5, // 5 minutes
 	});
 
 	async function handleGetCompanyInformation() {
@@ -40,6 +37,26 @@ export function useGetCompanyInformation() {
 			setCompany(data.company);
 			return data.company;
 		} catch (error) {
+			if (error instanceof AxiosError) {
+				if (
+					error.response?.status === 400 &&
+					error.response.data.message ===
+						"Complete the company registration first"
+				) {
+					router.push("/cadastro/empresa");
+					toast.warning("Cadastre sua empresa");
+					return;
+				}
+				if (
+					error.response?.status === 400 &&
+					error.response.data.message ===
+						"Complete the company address registration first"
+				) {
+					router.push("/cadastro/empresa/endereco");
+					toast.warning("Cadastre o endereço da empresa");
+					return;
+				}
+			}
 			toast.error("Falha ao encontrar informações da empresa");
 		}
 	}

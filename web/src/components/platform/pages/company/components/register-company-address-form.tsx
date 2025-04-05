@@ -22,6 +22,7 @@ import { useRegisterCompanyAddress } from "@/hooks/company/use-register-company-
 import { useGetCompanyAddressByZipCode } from "@/hooks/use-get-company-address-by-zip-code";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
+import { useGetProfile } from "@/hooks/user/use-get-profile";
 
 const formSchema = z.object({
 	zipCode: z.coerce
@@ -43,8 +44,10 @@ export function RegisterCompanyAddressForm() {
 	const router = useRouter();
 	const inputRef = useRef<HTMLInputElement | null>(null);
 
+	const { profile, isGetProfilePending } = useGetProfile();
 	const { registerCompanyAddress, isPendingRegisterCompanyAddress } =
 		useRegisterCompanyAddress();
+
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -101,6 +104,13 @@ export function RegisterCompanyAddressForm() {
 	}
 
 	useEffect(() => {
+		if (
+			!isGetProfilePending &&
+			profile?.extraData.onboardingStep === "complete_onboarding"
+		) {
+			router.push("/inicio");
+		}
+
 		form.setValue("street", data?.street ?? "");
 		form.setValue("neighborhood", data?.neighborhood ?? "");
 		form.setValue("city", data?.city ?? "");
@@ -113,7 +123,7 @@ export function RegisterCompanyAddressForm() {
 		if (status === "error") {
 			form.reset();
 		}
-	}, [data, form, status]);
+	}, [data, form, status, router, isGetProfilePending, profile]);
 
 	return (
 		<Form {...form}>

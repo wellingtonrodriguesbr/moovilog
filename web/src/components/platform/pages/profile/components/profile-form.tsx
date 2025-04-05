@@ -1,7 +1,5 @@
 "use client";
 
-import Link from "next/link";
-
 import {
 	Form,
 	FormControl,
@@ -12,13 +10,12 @@ import {
 } from "@/components/ui/form";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatPhone } from "@/utils/format-phone";
 import { useGetProfile } from "@/hooks/user/use-get-profile";
+import { useEffect } from "react";
 
 const profileFormSchema = z.object({
 	name: z.string().min(2, { message: "Digite seu nome completo" }),
@@ -41,6 +38,14 @@ export function ProfileForm() {
 			phone: profile?.phone ?? "",
 		},
 	});
+
+	useEffect(() => {
+		if (profile) {
+			form.setValue("name", profile.name);
+			form.setValue("email", profile.email);
+			form.setValue("phone", profile.phone);
+		}
+	}, [profile, form]);
 
 	return (
 		<Form {...form}>
@@ -122,19 +127,6 @@ export function ProfileForm() {
 							</FormItem>
 						)}
 					/>
-					<fieldset className="flex gap-2 mt-5">
-						<Button
-							type="button"
-							variant="outline"
-							className="w-fit hover:bg-zinc-100"
-							asChild
-						>
-							<Link href="/inicio">
-								<ArrowLeft className="size-4" />
-								Voltar
-							</Link>
-						</Button>
-					</fieldset>
 				</form>
 			)}
 		</Form>

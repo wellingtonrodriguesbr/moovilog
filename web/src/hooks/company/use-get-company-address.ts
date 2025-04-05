@@ -2,32 +2,27 @@ import { CompanyAddress } from "@/interfaces";
 import { api } from "@/lib/axios";
 import { useCompanyStore } from "@/stores/company-store";
 import { useQuery } from "@tanstack/react-query";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { useGetProfile } from "../user/use-get-profile";
 
 interface CompanyAddressResponse {
 	companyAddress: CompanyAddress;
 }
 
 export function useGetCompanyAddress() {
-	const { profile, isGetProfilePending } = useGetProfile();
 	const { company } = useCompanyStore();
 
+	const router = useRouter();
 	const pathName = usePathname();
 
 	const enabledQuery =
-		!pathName.includes("/cadastro/empresa") &&
-		pathName !== "/" &&
-		!isGetProfilePending &&
-		profile?.extraData?.onboardingStep === "complete_onboarding";
+		!pathName.includes("/cadastro/empresa") && pathName !== "/";
 
 	const { data: companyAddress, isPending: isGetCompanyAddressPending } =
 		useQuery({
 			queryKey: ["company-address"],
 			queryFn: handleGetCompanyAddress,
 			enabled: enabledQuery,
-			staleTime: 1000 * 60 * 5, // 5 minutes
 		});
 
 	async function handleGetCompanyAddress() {

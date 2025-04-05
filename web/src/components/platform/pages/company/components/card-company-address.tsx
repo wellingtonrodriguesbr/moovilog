@@ -15,7 +15,7 @@ export function CardCompanyAddress() {
 	}
 
 	return (
-		<Card>
+		<Card className="bg-white border">
 			<CardHeader>
 				<CardTitle className="flex items-center gap-2">
 					<MapPinned className="size-5" />

@@ -18,7 +18,6 @@ export function useFetchCitiesFromState({
 			queryKey: ["cities-from-state", stateAcronym],
 			queryFn: handleFetchCitiesFromState,
 			enabled: !!stateAcronym,
-			staleTime: 1000 * 60 * 5,
 		}
 	);
 

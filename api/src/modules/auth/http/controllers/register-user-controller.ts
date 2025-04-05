@@ -7,7 +7,7 @@ import z from "zod";
 export class RegisterUserController {
 	static async handle(req: FastifyRequest, reply: FastifyReply) {
 		const registerUserBodySchema = z.object({
-			name: z.string(),
+			name: z.string().min(5),
 			email: z.string().email(),
 			password: z.string().min(8),
 			phone: z.string().min(11),

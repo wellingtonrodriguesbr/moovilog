@@ -31,6 +31,8 @@ import { useRegisterCompany } from "@/hooks/company/use-register-company";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 import { SECTORS } from "@/utils/mocks/sectors";
+import { useGetProfile } from "@/hooks/user/use-get-profile";
+import { is } from "react-day-picker/locale";
 
 const formSchema = z.object({
 	documentNumber: z
@@ -47,6 +49,8 @@ const formSchema = z.object({
 export function RegisterCompanyForm() {
 	const router = useRouter();
 	const inputRef = useRef<HTMLInputElement | null>(null);
+
+	const { profile, isGetProfilePending } = useGetProfile();
 	const { registerCompany, isPendingRegisterCompany } = useRegisterCompany();
 
 	const form = useForm<z.infer<typeof formSchema>>({
@@ -100,6 +104,13 @@ export function RegisterCompanyForm() {
 	}
 
 	useEffect(() => {
+		if (
+			!isGetProfilePending &&
+			profile?.extraData.onboardingStep === "complete_onboarding"
+		) {
+			router.push("/inicio");
+		}
+
 		form.setValue("name", companyInformation?.razao_social ?? "");
 
 		if (form.watch("name").length > 0 && inputRef.current) {
@@ -109,7 +120,14 @@ export function RegisterCompanyForm() {
 		if (status === "error") {
 			form.reset();
 		}
-	}, [companyInformation, form, status]);
+	}, [
+		companyInformation,
+		form,
+		status,
+		isGetProfilePending,
+		router,
+		profile,
+	]);
 
 	return (
 		<Form {...form}>

@@ -1,7 +1,11 @@
-import { City } from "@prisma/client";
+import { City, Prisma } from "@prisma/client";
 
 export interface CitiesRepository {
-	findOrCreateByNameAndStateId(name: string, stateId: string): Promise<City>;
+	findOrCreateByNameAndStateId(
+		name: string,
+		stateId: string,
+		tx?: Prisma.TransactionClient
+	): Promise<City>;
 	findOrCreateManyByStateId(
 		names: string[],
 		stateAcronym: string
