@@ -25,14 +25,17 @@ export function QuickActions() {
 				}}
 				className="w-full"
 			>
-				<CarouselContent className="w-full flex xl:grid xl:grid-cols-4 items-center gap-2 px-0 ml-0">
+				<CarouselContent className="w-full flex xl:grid xl:grid-cols-4 items-stretch gap-2 px-0 ml-0">
 					{actions.map((action) => (
 						<CarouselItem
 							key={action.title}
-							className="w-full basis-[250px] md:basis-1/2 pl-0"
+							className="w-full basis-[280px] md:basis-[55%] pl-0 h-full"
 						>
-							<Link href={action.url} className="group">
-								<Card className="bg-app-blue-600 hover:bg-app-blue-500 overflow-hidden relative">
+							<Link
+								href={action.url}
+								className="group h-full block"
+							>
+								<Card className="h-full bg-app-blue-600 hover:bg-app-blue-500 overflow-hidden relative">
 									<CardHeader>
 										<CardTitle className="text-xl text-zinc-50">
 											{action.title}
@@ -64,13 +67,13 @@ const actions = [
 		url: "/coletas/novo",
 	},
 	{
-		title: "Cadastrar veículo",
-		description: "Cadastre um novo veículo para a frota.",
-		url: "/veiculos",
+		title: "Cadastrar programação",
+		description: "Comece o dia organizando a próxima programação.",
+		url: "/operacional/programacao-do-dia",
 	},
 	{
-		title: "Cadastrar motorista",
-		description: "Inclua um novo motorista na equipe.",
-		url: "/motoristas",
+		title: "Cadastrar aviso",
+		description: "Informe algo importante por meio de um aviso.",
+		url: "/operacional/avisos",
 	},
 ];

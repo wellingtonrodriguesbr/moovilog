@@ -18,6 +18,7 @@ import { useLogout } from "@/hooks/auth/use-logout";
 
 import {
 	Building,
+	Building2,
 	CircleHelp,
 	Loader2,
 	LogOut,
@@ -60,20 +61,30 @@ export function AccountMenu() {
 				</DropdownMenuTrigger>
 
 				<DropdownMenuContent align="end" className="w-56 z-[999999]">
-					<DropdownMenuLabel className="flex flex-col">
-						<span>{profile?.name}</span>
-						<span className="text-xs font-normal text-muted-foreground">
-							{profile?.email}
-						</span>
+					<DropdownMenuLabel className="flex items-center gap-2">
+						<User className="size-5" />
+						<div className="flex flex-col">
+							<span className="block text-nowrap text-ellipsis max-w-[170px] overflow-hidden">
+								{profile?.name}
+							</span>
+							<span className="text-xs font-normal text-muted-foreground block text-nowrap text-ellipsis max-w-[170px] overflow-hidden">
+								{profile?.email}
+							</span>
+						</div>
 					</DropdownMenuLabel>
 					<DropdownMenuSeparator className="md:hidden" />
-					<DropdownMenuLabel className="flex flex-col md:hidden">
-						<span>{companyInformation?.name}</span>
-						<span className="text-xs font-normal text-muted-foreground">
-							{formatCNPJ(
-								companyInformation?.documentNumber ?? ""
-							)}
-						</span>
+					<DropdownMenuLabel className="flex items-center gap-2 md:hidden">
+						<Building2 className="size-5" />
+						<div className="flex flex-col">
+							<span className="block text-nowrap text-ellipsis max-w-[170px] overflow-hidden">
+								{companyInformation?.name}
+							</span>
+							<span className="text-xs font-normal text-muted-foreground">
+								{formatCNPJ(
+									companyInformation?.documentNumber ?? ""
+								)}
+							</span>
+						</div>
 					</DropdownMenuLabel>
 					<DropdownMenuSeparator />
 					<DropdownMenuItem className="hover:bg-zinc-100" asChild>

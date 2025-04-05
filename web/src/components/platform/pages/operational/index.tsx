@@ -9,7 +9,7 @@ export function Operational() {
 				</h1>
 				<p className="text-sm">
 					Aqui você poderá consultar a programação do dia, gerenciar
-					os suprimentos e verificar avisos deixados pela gerência.
+					os suprimentos e verificar avisos importantes.
 				</p>
 			</header>
 			<div className="grid gap-4 grid-cols-1 xl:grid-cols-3">

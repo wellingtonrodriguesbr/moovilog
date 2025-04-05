@@ -10,17 +10,20 @@ interface CompanyAddressResponse {
 }
 
 export function useGetCompanyAddress() {
-	const { company } = useCompanyStore();
+	const { company, isLoading } = useCompanyStore();
 
-	const router = useRouter();
+	console.log(company);
+
 	const pathName = usePathname();
 
 	const enabledQuery =
-		!pathName.includes("/cadastro/empresa") && pathName !== "/";
+		!pathName.includes("/cadastro/empresa") &&
+		pathName !== "/" &&
+		!isLoading;
 
 	const { data: companyAddress, isPending: isGetCompanyAddressPending } =
 		useQuery({
-			queryKey: ["company-address"],
+			queryKey: ["company-address", company?.id],
 			queryFn: handleGetCompanyAddress,
 			enabled: enabledQuery,
 		});
@@ -28,7 +31,7 @@ export function useGetCompanyAddress() {
 	async function handleGetCompanyAddress() {
 		try {
 			const { data } = await api.get<CompanyAddressResponse>(
-				`/companies/${company.id}/address`
+				`/companies/${company?.id}/address`
 			);
 			return data.companyAddress;
 		} catch (error) {

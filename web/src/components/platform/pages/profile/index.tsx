@@ -3,7 +3,7 @@ import { BackPageButton } from "@/components/platform/back-page-button";
 
 export function Profile() {
 	return (
-		<section className="w-full max-w-lg mx-auto px-4 mt-8">
+		<section className="w-full max-w-lg mx-auto px-4">
 			<header className="space-y-4">
 				<BackPageButton />
 				<h1 className="font-semibold text-2xl md:text-3xl">

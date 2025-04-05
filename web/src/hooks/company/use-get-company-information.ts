@@ -12,7 +12,7 @@ interface CompanyInformationResponse {
 }
 
 export function useGetCompanyInformation() {
-	const { setCompany } = useCompanyStore();
+	const { setCompany, setLoading } = useCompanyStore();
 
 	const router = useRouter();
 	const pathName = usePathname();
@@ -30,6 +30,7 @@ export function useGetCompanyInformation() {
 	});
 
 	async function handleGetCompanyInformation() {
+		setLoading(true);
 		try {
 			const { data } = await api.get<CompanyInformationResponse>(
 				"/companies/information"
@@ -58,6 +59,8 @@ export function useGetCompanyInformation() {
 				}
 			}
 			toast.error("Falha ao encontrar informações da empresa");
+		} finally {
+			setLoading(false);
 		}
 	}
 
