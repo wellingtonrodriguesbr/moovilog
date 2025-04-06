@@ -8,19 +8,19 @@ interface VehicleResponse {
 }
 
 export function useFetchVehiclesFromCompany() {
-	const { company } = useCompanyStore();
+	const { company, isLoading } = useCompanyStore();
 	const {
 		data: vehiclesFromCompany,
 		isPending: isFetchVehiclesFromCompanyPending,
 	} = useQuery({
 		queryKey: ["vehicles"],
 		queryFn: handleFetchVehiclesFromCompany,
-		enabled: !!company,
+		enabled: !isLoading,
 	});
 
 	async function handleFetchVehiclesFromCompany() {
 		const { data } = await api.get<VehicleResponse>(
-			`/companies/${company.id}/vehicles`
+			`/companies/${company?.id}/vehicles`
 		);
 
 		return data.vehicles;

@@ -26,7 +26,7 @@ export function useSendInvitationToCompanyMember() {
 		sendinvitationtoData: SendInvitationToCompanyMemberData
 	) {
 		const { data } = await api.post<{ companyMemberId: string }>(
-			`/${company.id}/members/invite`,
+			`/${company?.id}/members/invite`,
 			{
 				...sendinvitationtoData,
 			}

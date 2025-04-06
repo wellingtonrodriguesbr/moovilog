@@ -8,19 +8,19 @@ interface DriverResponse {
 }
 
 export function useFetchDriversFromCompany() {
-	const { company } = useCompanyStore();
+	const { company, isLoading } = useCompanyStore();
 	const {
 		data: driversFromCompany,
 		isPending: isFetchDriversFromCompanyPending,
 	} = useQuery({
 		queryKey: ["drivers"],
 		queryFn: handleFetchDriversFromCompany,
-		enabled: !!company,
+		enabled: !isLoading,
 	});
 
 	async function handleFetchDriversFromCompany() {
 		const { data } = await api.get<DriverResponse>(
-			`/companies/${company.id}/drivers`
+			`/companies/${company?.id}/drivers`
 		);
 
 		return data.drivers;

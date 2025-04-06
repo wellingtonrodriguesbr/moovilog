@@ -41,7 +41,7 @@ export function useRegisterTransaction() {
 		registerData: RegisterTransactionData
 	) {
 		const { data } = await api.post<RegisterTransactionResponse>(
-			`/companies/${company.id}/transactions`,
+			`/companies/${company?.id}/transactions`,
 			{
 				...registerData,
 			}

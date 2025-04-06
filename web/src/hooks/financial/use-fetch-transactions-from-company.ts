@@ -17,20 +17,20 @@ interface TransactionResponse {
 
 export function useFetchTransactionsFromCompany() {
 	const router = useRouter();
-	const { company } = useCompanyStore();
+	const { company, isLoading } = useCompanyStore();
 	const {
 		data: transactionsFromCompany,
 		isPending: isFetchTransactionsFromCompanyPending,
 	} = useQuery({
 		queryKey: ["transactions"],
 		queryFn: handleFetchTransactionsFromCompany,
-		enabled: !!company,
+		enabled: !isLoading,
 	});
 
 	async function handleFetchTransactionsFromCompany() {
 		try {
 			const { data } = await api.get<TransactionResponse>(
-				`/companies/${company.id}/transactions`
+				`/companies/${company?.id}/transactions`
 			);
 
 			return data;

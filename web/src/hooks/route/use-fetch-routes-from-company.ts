@@ -21,17 +21,17 @@ interface FetchRoutesFromCompanyResponse {
 }
 
 export function useFetchRoutesFromCompany() {
-	const { company } = useCompanyStore();
+	const { company, isLoading } = useCompanyStore();
 	const { data: routes, isPending: isFetchRoutesFromCompanyPending } =
 		useQuery({
 			queryKey: ["routes"],
 			queryFn: handleFetchRoutesFromCompany,
-			enabled: !!company,
+			enabled: !isLoading,
 		});
 
 	async function handleFetchRoutesFromCompany() {
 		const { data } = await api.get<FetchRoutesFromCompanyResponse>(
-			`/companies/${company.id}/routes`
+			`/companies/${company?.id}/routes`
 		);
 
 		return data.routes;

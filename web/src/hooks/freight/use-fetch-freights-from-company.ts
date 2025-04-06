@@ -32,20 +32,20 @@ interface FreightResponse {
 
 export function useFetchFreightsFromCompany() {
 	const router = useRouter();
-	const { company } = useCompanyStore();
+	const { company, isLoading } = useCompanyStore();
 	const {
 		data: freightsFromCompany,
 		isPending: isFetchFreightsFromCompanyPending,
 	} = useQuery({
 		queryKey: ["freights"],
 		queryFn: handleFetchFreightsFromCompany,
-		enabled: !!company,
+		enabled: !isLoading,
 	});
 
 	async function handleFetchFreightsFromCompany() {
 		try {
 			const { data } = await api.get<FreightResponse>(
-				`/${company.id}/freights`
+				`/${company?.id}/freights`
 			);
 
 			return data;

@@ -60,19 +60,19 @@ interface FreightResponse {
 }
 
 export function useGetFreightdetailsFromCompany() {
-	const { company } = useCompanyStore();
+	const { company, isLoading } = useCompanyStore();
 	const params = useParams<{ id: string }>();
 
 	const { data: freightDetails, isPending: isGetFreightDetailsPending } =
 		useQuery({
 			queryKey: ["freights-details", params.id],
 			queryFn: handleGetFreightdetailsFromCompany,
-			enabled: !!company && !!params.id,
+			enabled: !isLoading && !!params.id,
 		});
 
 	async function handleGetFreightdetailsFromCompany() {
 		const { data } = await api.get<FreightResponse>(
-			`/${company.id}/freights/${params.id}/details`
+			`/${company?.id}/freights/${params.id}/details`
 		);
 
 		return data.freight;

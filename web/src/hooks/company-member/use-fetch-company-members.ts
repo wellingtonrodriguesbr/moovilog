@@ -8,18 +8,19 @@ interface FetchMembersFromCompanyResponse {
 }
 
 export function useFetchMembersFromCompany() {
-	const { company } = useCompanyStore();
+	const { company, isLoading } = useCompanyStore();
 	const {
 		data: companyMembers,
 		isPending: isFetchMembersFromCompanyPending,
 	} = useQuery({
 		queryKey: ["company-members"],
+		enabled: !isLoading,
 		queryFn: handleFetchMembersFromCompany,
 	});
 
 	async function handleFetchMembersFromCompany() {
 		const { data } = await api.get<FetchMembersFromCompanyResponse>(
-			`/companies/${company.id}/members`
+			`/companies/${company?.id}/members`
 		);
 
 		return data.companyMembers;
