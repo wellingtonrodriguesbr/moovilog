@@ -53,9 +53,9 @@ export class InMemoryPickupsRepository implements PickupsRepository {
 	// 	return pickups;
 	// }
 
-	// async findManyByCompanyId(companyId: string) {
-	// 	const pickups = this.items.filter((item) => item.companyId === companyId);
+	async findManyByCompanyId(companyId: string) {
+		const pickups = this.items.filter((item) => item.companyId === companyId);
 
-	// 	return pickups;
-	// }
+		return pickups;
+	}
 }

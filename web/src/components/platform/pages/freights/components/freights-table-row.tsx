@@ -3,7 +3,7 @@ import { TableCell, TableRow } from "@/components/ui/table";
 import { formatBrazilianDate } from "@/utils/format-brazilian-date";
 import { formatWeight } from "@/utils/format-weight";
 
-import { FreightDropdownOptions } from "./freight-dropdown-options";
+import { FreightDropdownOptions } from "@/components/platform/pages/freights/components/freight-dropdown-options";
 import { ExtendedFreight } from "@/hooks/freight/use-fetch-freights-from-company";
 
 const FREIGHT_MODALITY: Record<string, string> = {

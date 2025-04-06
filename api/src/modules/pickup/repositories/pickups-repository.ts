@@ -7,5 +7,5 @@ export interface PickupsRepository {
 	): Promise<Pickup>;
 	// findById(id: string): Promise<Pickup | null>;
 	// findManyByDriverId(driverId: string): Promise<Pickup[]>;
-	// findManyByCompanyId(companyId: string): Promise<Pickup[]>;
+	findManyByCompanyId(companyId: string): Promise<Pickup[]>;
 }

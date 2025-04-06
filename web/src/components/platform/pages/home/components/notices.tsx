@@ -7,7 +7,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { ArrowRight } from "lucide-react";
+import { Eye } from "lucide-react";
 
 const NOTICE_TYPES: Record<string, string> = {
 	notice: "Aviso",
@@ -31,8 +31,8 @@ export function Notices() {
 					</p>
 				</div>
 				<Button variant="secondary" className="w-full md:w-fit ">
+					<Eye className="size-4" />
 					Ver todos
-					<ArrowRight className="size-4" />
 				</Button>
 			</header>
 			<ul className="flex flex-col gap-2">

@@ -36,7 +36,7 @@ export function CopyButton({ children, data, title }: CopyButtonProps) {
 
 	return (
 		<TooltipProvider>
-			<Tooltip>
+			<Tooltip delayDuration={0}>
 				<TooltipTrigger asChild>
 					<Button
 						onClick={() => handleCopyData(data)}

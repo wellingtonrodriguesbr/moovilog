@@ -22,7 +22,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { DatePicker } from "@/components/ui/date-picker";
 
-import { Schema, z } from "zod";
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -132,20 +132,20 @@ export function RegisterPickupForm() {
 	}
 
 	return (
-		<Card className="p-6 bg-white border">
-			<Form {...form}>
-				<form
-					onSubmit={form.handleSubmit(onSubmit)}
-					className="flex flex-col gap-4 w-full"
-				>
-					<fieldset className="grid grid-cols-1 xl:grid-cols-4 gap-4">
+		<Form {...form}>
+			<form
+				onSubmit={form.handleSubmit(onSubmit)}
+				className="flex flex-col gap-2 w-full"
+			>
+				<Card className="flex flex-col gap-4 p-6 bg-white border">
+					<fieldset className="grid grid-cols-1 xl:grid-cols-[auto_1fr_100px] gap-4">
 						<FormField
 							control={form.control}
 							name="deliveriesQuantity"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>
-										Quantidade de entregas
+										CEP do local da coleta
 									</FormLabel>
 									<FormControl>
 										<Input type="number" {...field} />
@@ -160,28 +160,9 @@ export function RegisterPickupForm() {
 							name="totalWeightOfDeliveries"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>
-										Peso total de entregas
-									</FormLabel>
+									<FormLabel>Rua</FormLabel>
 									<FormControl>
-										<Input
-											type="text"
-											inputMode="numeric"
-											{...field}
-											value={formatWeight(field.value)}
-											onChange={(e) => {
-												const rawValue =
-													e.target.value.replace(
-														/\D/g,
-														""
-													);
-												field.onChange(
-													rawValue
-														? Number(rawValue)
-														: ""
-												);
-											}}
-										/>
+										<Input type="text" {...field} />
 									</FormControl>
 									<FormMessage />
 								</FormItem>
@@ -190,28 +171,113 @@ export function RegisterPickupForm() {
 
 						<FormField
 							control={form.control}
-							name="vehicleId"
+							name="totalWeightOfDeliveries"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Veículo</FormLabel>
-									<SelectVehicle
-										selectedVehicle={field.value}
-										onChangeSelectedVehicle={field.onChange}
-									/>
+									<FormLabel>Número</FormLabel>
+									<FormControl>
+										<Input type="number" {...field} />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+					</fieldset>
+
+					<fieldset className="grid grid-cols-1 xl:grid-cols-[auto_auto_auto_60px] gap-4">
+						<FormField
+							control={form.control}
+							name="totalWeightOfDeliveries"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Bairro</FormLabel>
+									<FormControl>
+										<Input type="text" {...field} />
+									</FormControl>
 									<FormMessage />
 								</FormItem>
 							)}
 						/>
 						<FormField
 							control={form.control}
-							name="driverId"
+							name="totalWeightOfDeliveries"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Motorista</FormLabel>
-									<SelectDriver
-										selectedDriver={field.value}
-										onChangeSelectedDriver={field.onChange}
-									/>
+									<FormLabel>Complemento</FormLabel>
+									<FormControl>
+										<Input type="text" {...field} />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="totalWeightOfDeliveries"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Cidade</FormLabel>
+									<FormControl>
+										<Input type="text" {...field} />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="totalWeightOfDeliveries"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>UF</FormLabel>
+									<FormControl>
+										<Input type="text" {...field} />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+					</fieldset>
+				</Card>
+				<Card className="flex flex-col gap-4 p-6 bg-white border">
+					<fieldset className="grid grid-cols-1 xl:grid-cols-[auto_1fr_1fr] gap-4">
+						<FormField
+							control={form.control}
+							name="deliveriesQuantity"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Número da coleta</FormLabel>
+									<FormControl>
+										<Input type="number" {...field} />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+
+						<FormField
+							control={form.control}
+							name="totalWeightOfDeliveries"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Nome do remetente</FormLabel>
+									<FormControl>
+										<Input type="text" {...field} />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+
+						<FormField
+							control={form.control}
+							name="totalWeightOfDeliveries"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Nome do destinatário</FormLabel>
+									<FormControl>
+										<Input type="text" {...field} />
+									</FormControl>
 									<FormMessage />
 								</FormItem>
 							)}
@@ -224,14 +290,37 @@ export function RegisterPickupForm() {
 							name="pickupAmountInCents"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Valor do frete</FormLabel>
+									<FormLabel>Quantidade volumes</FormLabel>
 									<FormControl>
-										<Input
-											{...field}
-											value={formatCurrencyBR(
-												field.value
-											)}
-										/>
+										<Input type="number" {...field} />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+
+						<FormField
+							control={form.control}
+							name="pickupAmountInCents"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Peso total</FormLabel>
+									<FormControl>
+										<Input type="number" {...field} />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+
+						<FormField
+							control={form.control}
+							name="pickupAmountInCents"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Cubagem</FormLabel>
+									<FormControl>
+										<Input type="number" {...field} />
 									</FormControl>
 									<FormMessage />
 								</FormItem>
@@ -243,7 +332,7 @@ export function RegisterPickupForm() {
 							name="date"
 							render={({ field }) => (
 								<FormItem className="flex flex-col my-[10px]">
-									<FormLabel>Data do frete</FormLabel>
+									<FormLabel>Solicitada em</FormLabel>
 									<DatePicker
 										selectedDate={field.value}
 										onChangeSelectedDate={field.onChange}
@@ -252,121 +341,16 @@ export function RegisterPickupForm() {
 								</FormItem>
 							)}
 						/>
+
 						<FormField
 							control={form.control}
 							name="paymentDate"
 							render={({ field }) => (
 								<FormItem className="flex flex-col my-0 md:my-[10px]">
-									<FormLabel>
-										Data de pagamento do frete
-									</FormLabel>
+									<FormLabel>Programada para</FormLabel>
 									<DatePicker
 										selectedDate={field.value}
 										onChangeSelectedDate={field.onChange}
-									/>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-					</fieldset>
-
-					<fieldset className="grid grid-cols-1 md:grid-cols-3 gap-4">
-						<FormField
-							control={form.control}
-							name="type"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Tipo</FormLabel>
-									<Select
-										onValueChange={field.onChange}
-										defaultValue={field.value}
-									>
-										<FormControl>
-											<SelectTrigger>
-												<SelectValue placeholder="Selecione uma opção" />
-											</SelectTrigger>
-										</FormControl>
-										<SelectContent>
-											<SelectItem value="FRACTIONAL">
-												Fracionado
-											</SelectItem>
-											<SelectItem value="DEDICATED">
-												Dedicado
-											</SelectItem>
-											<SelectItem value="EXPRESS">
-												Entrega rápida
-											</SelectItem>
-											<SelectItem value="TRANSFER">
-												Transferência
-											</SelectItem>
-										</SelectContent>
-									</Select>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-
-						<FormField
-							control={form.control}
-							name="modality"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>
-										Modalidade de pagamento
-									</FormLabel>
-									<Select
-										onValueChange={field.onChange}
-										defaultValue={field.value}
-									>
-										<FormControl>
-											<SelectTrigger>
-												<SelectValue placeholder="Selecione uma opção" />
-											</SelectTrigger>
-										</FormControl>
-										<SelectContent>
-											<SelectItem value="DAILY">
-												Diária
-											</SelectItem>
-											<SelectItem value="PERCENTAGE">
-												Porcentagem
-											</SelectItem>
-											<SelectItem value="PRODUCTIVITY">
-												Produtividade
-											</SelectItem>
-											<SelectItem value="FLAT_RATE">
-												Taxa Fixa
-											</SelectItem>
-											<SelectItem value="WEIGHT_BASED">
-												Por Peso
-											</SelectItem>
-											<SelectItem value="DISTANCE_BASED">
-												Por Distância
-											</SelectItem>
-											<SelectItem value="TIME_BASED">
-												Por Tempo
-											</SelectItem>
-											<SelectItem value="PER_STOP">
-												Por Parada
-											</SelectItem>
-											<SelectItem value="ZONE_BASED">
-												Por Zona
-											</SelectItem>
-										</SelectContent>
-									</Select>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-
-						<FormField
-							control={form.control}
-							name="routeId"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Rota</FormLabel>
-									<SelectRoute
-										selectedRoute={field.value}
-										onChangeSelectedRoute={field.onChange}
 									/>
 									<FormMessage />
 								</FormItem>
@@ -402,7 +386,7 @@ export function RegisterPickupForm() {
 						>
 							<Link href="/fretes">Cancelar</Link>
 						</Button>
-						<Button disabled={false} type="submit">
+						<Button disabled type="submit">
 							Cadastrar
 							{/* {false ? (
 								<Loader2 className="size-4 animate-spin" />
@@ -411,8 +395,8 @@ export function RegisterPickupForm() {
 							)} */}
 						</Button>
 					</fieldset>
-				</form>
-			</Form>
-		</Card>
+				</Card>
+			</form>
+		</Form>
 	);
 }

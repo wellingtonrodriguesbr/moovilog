@@ -1,7 +1,8 @@
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
-import { Empty } from "@/components/platform/empty";
+import { PickupsTable } from "@/components/platform/pages/pickups/components/pickups-table";
+
 import { Plus } from "lucide-react";
 
 export function Pickups() {
@@ -17,7 +18,7 @@ export function Pickups() {
 				</Button>
 			</header>
 			<div className="mt-12">
-				<Empty context="pickup" />
+				<PickupsTable />
 			</div>
 		</section>
 	);

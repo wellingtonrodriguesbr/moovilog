@@ -73,13 +73,13 @@ export class PrismaPickupsRepository implements PickupsRepository {
 	// 	return pickups;
 	// }
 
-	// async findManyByCompanyId(companyId: string) {
-	// 	const pickups = await prisma.freight.findMany({
-	// 		where: {
-	// 			companyId,
-	// 		},
-	// 	});
+	async findManyByCompanyId(companyId: string) {
+		const pickups = await prisma.pickup.findMany({
+			where: {
+				companyId,
+			},
+		});
 
-	// 	return pickups;
-	// }
+		return pickups;
+	}
 }
