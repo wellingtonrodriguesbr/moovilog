@@ -31,18 +31,18 @@ app.register(fastifyRateLimit, {
 	},
 });
 
-// app.addHook("onRequest", async (request, reply) => {
-// 	const referer = request.headers["referer"];
-// 	const origin = request.headers["origin"];
+app.addHook("onRequest", async (request, reply) => {
+	const referer = request.headers["referer"];
+	const origin = request.headers["origin"];
 
-// 	if (
-// 		(!referer && !origin) ||
-// 		(origin && !env.ALLOWED_ORIGIN_URL.includes(origin)) ||
-// 		(referer && !referer.startsWith(env.ALLOWED_ORIGIN_URL))
-// 	) {
-// 		reply.code(403).send({ error: "Forbidden" });
-// 	}
-// });
+	if (
+		(!referer && !origin) ||
+		(origin && !env.ALLOWED_ORIGIN_URL.includes(origin)) ||
+		(referer && !referer.startsWith(env.ALLOWED_ORIGIN_URL))
+	) {
+		reply.code(403).send({ error: "Forbidden" });
+	}
+});
 
 app.register(fastifyJwt, {
 	secret: env.JWT_SECRET,
