@@ -24,9 +24,9 @@ export class PermissionService {
 		}
 
 		const userPermissionsSet = new Set(
-			permissions.map((permission) => permission)
+			permissions?.map((permission) => permission)
 		);
 
-		return requiredPermissions.some((perm) => userPermissionsSet.has(perm));
+		return requiredPermissions.some((perm) => userPermissionsSet?.has(perm));
 	}
 }
