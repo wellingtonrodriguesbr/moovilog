@@ -58,6 +58,7 @@ export default function SendInvitationToCompanyMemberTemplate({
 						<Section className="text-center mt-[32px] mb-[32px]">
 							<Link
 								className="block w-full bg-[#2222FF] rounded text-white px-5 py-3 text-[16px] font-semibold no-underline text-center"
+								target="_blank"
 								href={authLink}
 							>
 								Concluir meu cadastro

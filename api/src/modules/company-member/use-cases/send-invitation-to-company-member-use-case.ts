@@ -99,6 +99,9 @@ export class SendInvitationToCompanyMemberUseCase {
 		const user = await this.usersRepository.create({
 			name,
 			email,
+			extraData: {
+				onboardingStep: "complete_onboarding",
+			},
 		});
 
 		const companyMember = await this.companyMembersRepository.create({
