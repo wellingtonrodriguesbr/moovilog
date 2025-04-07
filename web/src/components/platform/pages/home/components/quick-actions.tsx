@@ -44,7 +44,7 @@ export function QuickActions() {
 											{action.description}
 										</CardDescription>
 									</CardHeader>
-									<ArrowUpRight className="size-6 absolute top-4 right-4 text-zinc-50 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+									<ArrowUpRight className="size-6 absolute top-1 right-1 text-zinc-50 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
 								</Card>
 							</Link>
 						</CarouselItem>
