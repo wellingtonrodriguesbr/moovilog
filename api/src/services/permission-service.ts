@@ -19,7 +19,7 @@ export class PermissionService {
 			companyMember.extraData as { permissions: Permissions[] }
 		)?.permissions;
 
-		if (permissions.length === 0) {
+		if (permissions?.length === 0) {
 			return false;
 		}
 
