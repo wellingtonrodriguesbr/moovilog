@@ -12,20 +12,18 @@ import {
 	Text,
 } from "@react-email/components";
 
-interface SendInvitationToCompanyMemberTemplateProps {
-	senderName: string;
+interface SendEmailToResetPasswordTemplateProps {
 	userName: string;
 	userEmail: string;
-	authLink: string;
+	link: string;
 }
 
-export default function SendInvitationToCompanyMemberTemplate({
-	senderName,
+export default function SendEmailToResetPasswordTemplate({
 	userName,
 	userEmail,
-	authLink,
-}: SendInvitationToCompanyMemberTemplateProps) {
-	const previewText = `${userName}, seu convite acaba de chegar 🚚`;
+	link,
+}: SendEmailToResetPasswordTemplateProps) {
+	const previewText = `${userName}, seu link de redefinição de senha acaba de chegar 🚚`;
 
 	return (
 		<Html>
@@ -38,36 +36,29 @@ export default function SendInvitationToCompanyMemberTemplate({
 							Olá, {userName}.
 						</Heading>
 						<Text className="text-[20px]">
-							Você recebeu um convite para se juntar a {senderName} e companhia
-							dentro da plataforma do{" "}
+							Você recebeu um link para redefinir sua senha dentro da plataforma
+							da{" "}
 							<Link href="https://moovilog.com.br" className="text-[#2222FF]">
 								Moovilog
 							</Link>
 							. Seu e-mail cadastrado é {userEmail}.
 						</Text>
 						<Text className="text-black text-[14px] leading-[24px]">
-							Abaixo está o seu link de acesso, basta clicar no botão e concluir
-							seu cadastro. Vamos juntos simplificar a gestão logística no
-							Brasil?! 🎉
-						</Text>
-
-						<Text className="text-black text-[14px] leading-[24px]">
-							Ah, e se precisar de alguma coisa estaremos aqui para te auxiliar
-							😉
+							Se não solicitou sua redefinição, por favor, ignore esse e-mail.
 						</Text>
 						<Section className="text-center mt-[32px] mb-[32px]">
 							<Link
 								className="block w-full bg-[#2222FF] rounded text-white px-5 py-3 text-[16px] font-semibold no-underline text-center"
 								target="_blank"
-								href={authLink}
+								href={link}
 							>
-								Concluir meu cadastro
+								Resetar minha senha
 							</Link>
 						</Section>
 						<Hr className="border border-solid border-[#eaeaea] my-[26px] mx-0 w-full" />
 						<Text className="text-center text-[#666666] text-[12px] leading-[24px]">
 							Caso prefira, copie e cole esse código em seu navegador:
-							<Text className="text-[#2222FF] text-center">{authLink}</Text>
+							<Text className="text-[#2222FF] text-center">{link}</Text>
 						</Text>
 					</Container>
 				</Body>

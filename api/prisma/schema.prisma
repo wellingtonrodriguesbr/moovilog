@@ -194,7 +194,7 @@ model Freight {
 
 model Pickup {
   id             String         @id @default(uuid())
-  pickupNumber   String         @unique @map("pickup_number")
+  pickupNumber   String         @map("pickup_number")
   senderName     String         @map("sender_name")
   recipientName  String         @map("recipient_name")
   weight         Decimal        @db.Decimal(10, 2)
@@ -230,6 +230,7 @@ model Pickup {
   pickupHistories    PickupHistory[]
   pickupTransactions PickupTransaction[]
 
+  @@unique([pickupNumber, companyId])
   @@index([pickupNumber])
   @@index([status])
   @@index([senderName])
@@ -547,7 +548,7 @@ enum DriverType {
 }
 
 enum TokenType {
-  PASSWORD_RECOVER
+  RECOVER_PASSWORD
   AUTH_LINK
 }
 

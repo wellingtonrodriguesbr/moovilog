@@ -22,6 +22,10 @@ const publicRoutes = [
 		whenAuthenticated: "next",
 	},
 	{
+		path: "/redefinir-senha/sucesso",
+		whenAuthenticated: "next",
+	},
+	{
 		path: "/",
 		whenAuthenticated: "next",
 	},

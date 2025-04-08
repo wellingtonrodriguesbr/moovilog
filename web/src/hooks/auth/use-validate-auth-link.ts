@@ -36,8 +36,6 @@ export function useValidateAuthLink() {
 					? `${redirectLink}?id=${data.userId}`
 					: `/concluir-cadastro?id=${data.userId}`
 			);
-
-			return data.userId;
 		} catch (error) {
 			if (error instanceof AxiosError) {
 				if (error.response?.status === 400) {

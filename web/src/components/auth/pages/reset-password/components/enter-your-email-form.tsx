@@ -1,4 +1,6 @@
 "use client";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import {
 	Form,
@@ -14,12 +16,10 @@ import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
-import { useUpdateUserPassword } from "@/hooks/user/use-update-user-password";
-import Link from "next/link";
+import { useSendEmailToResetPassword } from "@/hooks/user/use-send-email-to-reset-password";
 
 const formSchema = z.object({
 	email: z.string().email({ message: "Digite um endereço de e-mail válido" }),
@@ -27,8 +27,8 @@ const formSchema = z.object({
 
 export function EnterYourEmailForm() {
 	const router = useRouter();
-	const { updateUserPassword, isPendingUpdateUserPassword } =
-		useUpdateUserPassword();
+	const { sendEmailToResetPassword, isPendingSendEmailToResetPassword } =
+		useSendEmailToResetPassword();
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -39,12 +39,12 @@ export function EnterYourEmailForm() {
 
 	async function onSubmit(data: z.infer<typeof formSchema>) {
 		try {
-			// await updateUserPassword({
-			// 	newPassword: data.newPassword,
-			// 	confirmNewPassword: data.confirmNewPassword,
-			// });
-			toast.success("Senha alterada com sucesso");
-			router.push("/entrar");
+			await sendEmailToResetPassword({
+				email: data.email,
+			});
+			form.reset();
+			router.push("/redefinir-senha/sucesso");
+			toast.success("Solicitação enviada com sucesso");
 		} catch (error) {
 			if (error instanceof AxiosError) {
 				if (error.response?.status === 409) {
@@ -81,11 +81,11 @@ export function EnterYourEmailForm() {
 					/>
 
 					<Button
-						disabled={isPendingUpdateUserPassword}
+						disabled={isPendingSendEmailToResetPassword}
 						type="submit"
 						className="w-full"
 					>
-						{isPendingUpdateUserPassword ? (
+						{isPendingSendEmailToResetPassword ? (
 							<Loader2 className="size-4 animate-spin" />
 						) : (
 							"Salvar"
@@ -94,7 +94,7 @@ export function EnterYourEmailForm() {
 				</form>
 			</Form>
 			<div className="flex justify-center items-center mt-4">
-				<Link href="/entrar" className="text-center">
+				<Link href="/entrar" className="w-fit text-center">
 					Lembrou da senha?{" "}
 					<span className="underline font-medium">Faça login</span>
 				</Link>

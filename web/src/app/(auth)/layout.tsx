@@ -14,7 +14,7 @@ export default function AuthLayout({
 				<header className="flex flex-col gap-8 mb-6">
 					<Link
 						href="/"
-						className="flex items-center gap-2 text-sm group"
+						className="w-fit flex items-center gap-2 text-sm group"
 					>
 						<ArrowLeft className="size-3 group-hover:-translate-x-0.5 transition-transform" />
 						Voltar ao início
