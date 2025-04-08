@@ -44,7 +44,8 @@ export default function SendEmailToResetPasswordTemplate({
 							. Seu e-mail cadastrado é {userEmail}.
 						</Text>
 						<Text className="text-black text-[14px] leading-[24px]">
-							Se não solicitou sua redefinição, por favor, ignore esse e-mail.
+							Se não solicitou essa redefinição de senha, por favor, ignore esse
+							e-mail.
 						</Text>
 						<Section className="text-center mt-[32px] mb-[32px]">
 							<Link
