@@ -15,11 +15,7 @@ export function useValidateAuthLink() {
 
 	const router = useRouter();
 
-	const {
-		data: userId,
-		isPending: isValidateAuthLinkPending,
-		status,
-	} = useQuery({
+	const { isPending: isValidateAuthLinkPending, status } = useQuery({
 		queryKey: ["validate-auth-link"],
 		queryFn: handleValidateAuthLink,
 		enabled: !!code,
@@ -51,7 +47,6 @@ export function useValidateAuthLink() {
 	}
 
 	return {
-		userId,
 		isValidateAuthLinkPending,
 		status,
 	};
