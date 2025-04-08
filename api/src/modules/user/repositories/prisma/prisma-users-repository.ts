@@ -42,6 +42,15 @@ export class PrismaUsersRepository implements UsersRepository {
 		return user;
 	}
 
+	async update(id: string, data: Prisma.UserUncheckedUpdateInput) {
+		await prisma.user.update({
+			where: {
+				id,
+			},
+			data,
+		});
+	}
+
 	async updatePassword(id: string, password: string) {
 		await prisma.user.update({
 			where: {

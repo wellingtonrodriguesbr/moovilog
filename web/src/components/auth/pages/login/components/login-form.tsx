@@ -19,6 +19,7 @@ import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
+import Link from "next/link";
 
 const formSchema = z.object({
 	email: z.string().email({ message: "Digite um endereço de e-mail válido" }),
@@ -94,6 +95,14 @@ export function LoginForm() {
 						</FormItem>
 					)}
 				/>
+				<fieldset className="flex justify-end">
+					<Link
+						href="/redefinir-senha"
+						className="text-sm font-medium text-zinc-600 hover:text-zinc-800 hover:underline transition-all"
+					>
+						Esqueci minha senha
+					</Link>
+				</fieldset>
 				<Button
 					disabled={isPendingLogin}
 					type="submit"

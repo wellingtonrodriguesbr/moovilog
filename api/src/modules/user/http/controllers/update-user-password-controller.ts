@@ -24,7 +24,7 @@ export class UpdateUserPasswordController {
 				confirmNewPassword,
 			});
 
-			reply.status(204).send({ success: true });
+			reply.status(204).send();
 		} catch (error) {
 			if (error instanceof ResourceNotFoundError) {
 				reply.status(404).send({ message: error.message });

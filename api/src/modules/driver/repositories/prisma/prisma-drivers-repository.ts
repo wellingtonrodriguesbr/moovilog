@@ -14,7 +14,7 @@ export class PrismaDriversRepository implements DriversRepository {
 	}
 
 	async findByDocumentNumber(documentNumber: string) {
-		const driver = await prisma.driver.findUnique({
+		const driver = await prisma.driver.findFirst({
 			where: {
 				documentNumber,
 			},

@@ -12,6 +12,7 @@ export interface UsersRepository {
 	findById(id: string): Promise<User | null>;
 	findByPhone(phone: string): Promise<User | null>;
 	findByEmail(email: string): Promise<User | null>;
+	update(id: string, data: Prisma.UserUncheckedUpdateInput): Promise<void>;
 	updatePassword(id: string, password: string): Promise<void>;
 	updateExtraData(
 		id: string,

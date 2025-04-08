@@ -49,6 +49,21 @@ export class InMemoryUsersRepository implements UsersRepository {
 		return user;
 	}
 
+	async update(id: string, data: Prisma.UserUncheckedUpdateInput) {
+		const userIndex = this.items.findIndex((item) => item.id === id);
+
+		if (userIndex === -1) {
+			return;
+		}
+
+		const updatedUser = {
+			...this.items[userIndex],
+			...data,
+		} as User;
+
+		this.items[userIndex] = updatedUser;
+	}
+
 	async updatePassword(id: string, password: string) {
 		const user = this.items.find((item) => item.id === id);
 

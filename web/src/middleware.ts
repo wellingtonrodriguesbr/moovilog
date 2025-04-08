@@ -10,6 +10,18 @@ const publicRoutes = [
 		whenAuthenticated: "redirect",
 	},
 	{
+		path: "/concluir-cadastro",
+		whenAuthenticated: "next",
+	},
+	{
+		path: "/validacao-do-codigo",
+		whenAuthenticated: "next",
+	},
+	{
+		path: "/redefinir-senha",
+		whenAuthenticated: "next",
+	},
+	{
 		path: "/",
 		whenAuthenticated: "next",
 	},

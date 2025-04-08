@@ -58,9 +58,6 @@ export function RegisterForm() {
 		},
 	});
 
-	console.log("FORM:", form.watch());
-	console.log("FORM:", form.watch("phone").length);
-
 	async function onSubmit(data: z.infer<typeof formSchema>) {
 		try {
 			await registerNewUser({
