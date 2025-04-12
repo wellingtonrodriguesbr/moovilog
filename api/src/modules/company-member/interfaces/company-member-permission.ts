@@ -1,4 +1,4 @@
-export type Permissions =
+export type CompanyMemberPermission =
 	| "SUPER_ADMIN"
 	| "ADMIN"
 	| "MANAGE_SHIPMENTS_AND_PICKUPS"

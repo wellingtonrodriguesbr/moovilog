@@ -35,7 +35,7 @@ CREATE TYPE "AccountStatus" AS ENUM ('PENDING', 'ACTIVE', 'INACTIVE');
 CREATE TYPE "DriverType" AS ENUM ('INTERNAL', 'FREELANCER', 'AGGREGATE');
 
 -- CreateEnum
-CREATE TYPE "TokenType" AS ENUM ('PASSWORD_RECOVER', 'AUTH_LINK');
+CREATE TYPE "TokenType" AS ENUM ('RECOVER_PASSWORD', 'AUTH_LINK');
 
 -- CreateEnum
 CREATE TYPE "FinanceTransactionType" AS ENUM ('INCOME', 'EXPENSE');
@@ -79,7 +79,7 @@ CREATE TABLE "company_members" (
     "id" TEXT NOT NULL,
     "sector" TEXT NOT NULL,
     "status" "AccountStatus" NOT NULL DEFAULT 'PENDING',
-    "extraData" JSONB,
+    "extra_data" JSONB,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "user_id" TEXT NOT NULL,
@@ -161,16 +161,16 @@ CREATE TABLE "pickups" (
     "status" "PickupStatus" NOT NULL DEFAULT 'PENDING',
     "priority" "PickupPriority" NOT NULL DEFAULT 'NORMAL',
     "observation" TEXT,
-    "non_pickup_reason" "NonPickupReason",
     "requested_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "scheduled_date" TIMESTAMP(3) NOT NULL,
     "collected_at" TIMESTAMP(3),
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "last_updated_at" TIMESTAMP(3) NOT NULL,
+    "updated_at" TIMESTAMP(3) NOT NULL,
     "freight_id" TEXT,
     "company_id" TEXT NOT NULL,
     "creator_id" TEXT,
-    "assigned_driver_id" TEXT,
+    "driver_id" TEXT,
+    "vehicle_id" TEXT,
     "address_id" TEXT NOT NULL,
 
     CONSTRAINT "pickups_pkey" PRIMARY KEY ("id")
@@ -183,8 +183,12 @@ CREATE TABLE "pickup_histories" (
     "non_pickup_reason" "NonPickupReason",
     "attempt_date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "observation" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
     "pickup_id" TEXT NOT NULL,
+    "creator_id" TEXT,
     "driver_id" TEXT,
+    "vehicle_id" TEXT,
 
     CONSTRAINT "pickup_histories_pkey" PRIMARY KEY ("id")
 );
@@ -414,9 +418,6 @@ CREATE INDEX "freights_company_id_idx" ON "freights"("company_id");
 CREATE INDEX "freights_route_id_idx" ON "freights"("route_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "pickups_pickup_number_key" ON "pickups"("pickup_number");
-
--- CreateIndex
 CREATE INDEX "pickups_pickup_number_idx" ON "pickups"("pickup_number");
 
 -- CreateIndex
@@ -444,13 +445,16 @@ CREATE INDEX "pickups_company_id_idx" ON "pickups"("company_id");
 CREATE INDEX "pickups_creator_id_idx" ON "pickups"("creator_id");
 
 -- CreateIndex
-CREATE INDEX "pickups_assigned_driver_id_idx" ON "pickups"("assigned_driver_id");
+CREATE INDEX "pickups_driver_id_idx" ON "pickups"("driver_id");
 
 -- CreateIndex
 CREATE INDEX "pickups_requested_at_idx" ON "pickups"("requested_at");
 
 -- CreateIndex
 CREATE INDEX "pickups_priority_idx" ON "pickups"("priority");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "pickups_pickup_number_company_id_key" ON "pickups"("pickup_number", "company_id");
 
 -- CreateIndex
 CREATE INDEX "pickup_histories_pickup_id_idx" ON "pickup_histories"("pickup_id");
@@ -558,7 +562,10 @@ ALTER TABLE "pickups" ADD CONSTRAINT "pickups_company_id_fkey" FOREIGN KEY ("com
 ALTER TABLE "pickups" ADD CONSTRAINT "pickups_creator_id_fkey" FOREIGN KEY ("creator_id") REFERENCES "company_members"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "pickups" ADD CONSTRAINT "pickups_assigned_driver_id_fkey" FOREIGN KEY ("assigned_driver_id") REFERENCES "drivers"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "pickups" ADD CONSTRAINT "pickups_driver_id_fkey" FOREIGN KEY ("driver_id") REFERENCES "drivers"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "pickups" ADD CONSTRAINT "pickups_vehicle_id_fkey" FOREIGN KEY ("vehicle_id") REFERENCES "vehicles"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "pickups" ADD CONSTRAINT "pickups_address_id_fkey" FOREIGN KEY ("address_id") REFERENCES "addresses"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -567,7 +574,13 @@ ALTER TABLE "pickups" ADD CONSTRAINT "pickups_address_id_fkey" FOREIGN KEY ("add
 ALTER TABLE "pickup_histories" ADD CONSTRAINT "pickup_histories_pickup_id_fkey" FOREIGN KEY ("pickup_id") REFERENCES "pickups"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "pickup_histories" ADD CONSTRAINT "pickup_histories_creator_id_fkey" FOREIGN KEY ("creator_id") REFERENCES "company_members"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "pickup_histories" ADD CONSTRAINT "pickup_histories_driver_id_fkey" FOREIGN KEY ("driver_id") REFERENCES "drivers"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "pickup_histories" ADD CONSTRAINT "pickup_histories_vehicle_id_fkey" FOREIGN KEY ("vehicle_id") REFERENCES "vehicles"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "routes" ADD CONSTRAINT "routes_creator_id_fkey" FOREIGN KEY ("creator_id") REFERENCES "company_members"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

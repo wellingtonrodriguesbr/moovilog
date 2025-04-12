@@ -7,13 +7,19 @@ import { InMemoryCompaniesRepository } from "@/modules/company/repositories/in-m
 import { BadRequestError } from "@/modules/shared/errors/bad-request-error";
 import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
 import { RegisterRouteUseCase } from "@/modules/route/use-cases/register-route-use-case";
+import { InMemoryStatesRepository } from "@/modules/shared/repositories/in-memory/in-memory-states-repository";
+import { InMemoryCitiesRepository } from "@/modules/shared/repositories/in-memory/in-memory-cities-repository";
+import { PermissionService } from "@/services/permission-service";
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
 
 let companyMembersRepository: InMemoryCompanyMembersRepository;
 let routesRepository: InMemoryRoutesRepository;
+let statesRepository: InMemoryStatesRepository;
+let citiesRepository: InMemoryCitiesRepository;
 let citiesInRouteRepository: InMemoryCitiesInRouteRepository;
+let permissionService: PermissionService;
 let sut: RegisterRouteUseCase;
 
 describe("[MODULE]: Register route use case", () => {
@@ -21,13 +27,19 @@ describe("[MODULE]: Register route use case", () => {
 		usersRepository = new InMemoryUsersRepository();
 		companiesRepository = new InMemoryCompaniesRepository();
 		companyMembersRepository = new InMemoryCompanyMembersRepository();
+		citiesRepository = new InMemoryCitiesRepository();
 		citiesInRouteRepository = new InMemoryCitiesInRouteRepository();
+		statesRepository = new InMemoryStatesRepository();
 		routesRepository = new InMemoryRoutesRepository();
+		permissionService = new PermissionService(companyMembersRepository);
 
 		sut = new RegisterRouteUseCase(
 			companyMembersRepository,
 			routesRepository,
-			citiesInRouteRepository
+			citiesRepository,
+			statesRepository,
+			citiesInRouteRepository,
+			permissionService
 		);
 
 		await usersRepository.create({
@@ -50,7 +62,15 @@ describe("[MODULE]: Register route use case", () => {
 			companyId: "company-id-01",
 			userId: "john-doe-id-01",
 			sector: "Diretoria",
-			role: "ADMIN",
+			extraData: {
+				permissions: ["SUPER_ADMIN"],
+			},
+		});
+
+		await statesRepository.create({
+			id: "state-id-01",
+			name: "São Paulo",
+			acronym: "SP",
 		});
 	});
 
@@ -58,7 +78,8 @@ describe("[MODULE]: Register route use case", () => {
 		const { route } = await sut.execute({
 			name: "Fake route name",
 			userId: "john-doe-id-01",
-			citiesIds: ["city-id-01", "city-id-02"],
+			cityNames: ["São Paulo", "São José dos Campos"],
+			stateAcronym: "SP",
 		});
 
 		expect(route.id).toEqual(expect.any(String));
@@ -72,7 +93,8 @@ describe("[MODULE]: Register route use case", () => {
 			sut.execute({
 				name: "Fake route name",
 				userId: "wrong-user-id",
-				citiesIds: ["city-id-3", "city-id-04"],
+				cityNames: ["city-id-01", "city-id-02"],
+				stateAcronym: "SP",
 			})
 		).rejects.toBeInstanceOf(ResourceNotFoundError);
 	});
@@ -81,14 +103,16 @@ describe("[MODULE]: Register route use case", () => {
 		await sut.execute({
 			name: "Fake route name",
 			userId: "john-doe-id-01",
-			citiesIds: ["city-id-01", "city-id-02"],
+			cityNames: ["city-id-01", "city-id-02"],
+			stateAcronym: "SP",
 		});
 
 		expect(() =>
 			sut.execute({
 				name: "Fake route name",
 				userId: "john-doe-id-01",
-				citiesIds: ["city-id-3", "city-id-04"],
+				cityNames: ["city-id-01", "city-id-02"],
+				stateAcronym: "SP",
 			})
 		).rejects.toBeInstanceOf(BadRequestError);
 	});
@@ -98,7 +122,8 @@ describe("[MODULE]: Register route use case", () => {
 			sut.execute({
 				name: "Fake route name",
 				userId: "john-doe-id-01",
-				citiesIds: [],
+				cityNames: [],
+				stateAcronym: "SP",
 			})
 		).rejects.toBeInstanceOf(BadRequestError);
 	});

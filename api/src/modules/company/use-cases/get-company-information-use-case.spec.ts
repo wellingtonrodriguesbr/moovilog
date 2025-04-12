@@ -4,7 +4,7 @@ import { InMemoryUsersRepository } from "@/modules/user/repositories/in-memory/i
 import { InMemoryCompanyMembersRepository } from "@/modules/company-member/repositories/in-memory/in-memory-company-members-repository";
 import { GetCompanyInformationUseCase } from "@/modules/company/use-cases/get-company-information-use-case";
 import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
-import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
+import { BadRequestError } from "@/modules/shared/errors/bad-request-error";
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
@@ -19,6 +19,7 @@ describe("[MODULE]: Get company information use case", () => {
 		companyMembersRepository = new InMemoryCompanyMembersRepository();
 
 		sut = new GetCompanyInformationUseCase(
+			usersRepository,
 			companyMembersRepository,
 			companiesRepository
 		);
@@ -28,6 +29,9 @@ describe("[MODULE]: Get company information use case", () => {
 			name: "John Doe",
 			email: "johndoe@example.com",
 			password: "12345678",
+			extraData: {
+				onboardingStep: "complete_onboarding",
+			},
 		});
 
 		await companiesRepository.create({
@@ -43,42 +47,62 @@ describe("[MODULE]: Get company information use case", () => {
 			companyId: "company-id-01",
 			userId: "john-doe-id-01",
 			sector: "Diretoria",
-			role: "ADMIN",
+			extraData: {
+				permissions: ["SUPER_ADMIN"],
+			},
 		});
 	});
 
 	it("should be able to get company information", async () => {
 		const { company } = await sut.execute({
 			userId: "john-doe-id-01",
-			companyId: "company-id-01",
 		});
 
 		expect(company.id).toEqual("company-id-01");
 		expect(company.size).toEqual("MEDIUM");
 	});
 
-	it("not should be able to get company information if the company is not found", async () => {
+	it("not should be able to get company information if the user is not found", async () => {
 		await expect(() =>
 			sut.execute({
-				userId: "john-doe-id-01",
-				companyId: "non-existent-company-id",
+				userId: "john-doe-id-02",
 			})
 		).rejects.toBeInstanceOf(ResourceNotFoundError);
 	});
 
-	it("not should be able to get company information if user is not member of the company", async () => {
+	it("not should be able to get company information if the onboarding is not complete", async () => {
 		await usersRepository.create({
-			id: "john-doe-id-03",
+			id: "john-doe-id-02",
 			name: "John Doe",
-			email: "johndoe3@example.com",
+			email: "johndoe@example.com",
 			password: "12345678",
+			extraData: {
+				onboardingStep: "register_company",
+			},
+		});
+
+		await companiesRepository.create({
+			id: "company-id-02",
+			name: "Company name",
+			documentNumber: "12312312389899",
+			size: "MEDIUM",
+			ownerId: "john-doe-02",
+		});
+
+		await companyMembersRepository.create({
+			id: "company-member-id-01",
+			companyId: "company-id-01",
+			userId: "john-doe-id-01",
+			sector: "Diretoria",
+			extraData: {
+				permissions: ["SUPER_ADMIN"],
+			},
 		});
 
 		await expect(() =>
 			sut.execute({
-				userId: "john-doe-id-03",
-				companyId: "company-id-01",
+				userId: "john-doe-id-02",
 			})
-		).rejects.toBeInstanceOf(NotAllowedError);
+		).rejects.toBeInstanceOf(BadRequestError);
 	});
 });

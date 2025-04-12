@@ -96,7 +96,6 @@ describe("[MODULE]: Fetch cities from route use case", () => {
 				id: "city-01",
 				name: "City A",
 				stateId: "fake-state-id",
-				areaId: "fake-area-id",
 			})
 		);
 	});

@@ -26,7 +26,6 @@ export class InMemoryFreightsRepository implements FreightsRepository {
 			driverId: data.driverId,
 			companyId: data.companyId,
 			routeId: data.routeId || null,
-			cityId: data.cityId || null,
 			vehicleId: data.vehicleId,
 			createdAt: new Date(),
 			updatedAt: new Date(),

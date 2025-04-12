@@ -4,6 +4,7 @@ import { InMemoryCompaniesRepository } from "@/modules/company/repositories/in-m
 import { InMemoryUsersRepository } from "@/modules/user/repositories/in-memory/in-memory-users-repository";
 import { FetchMembersFromCompanyUseCase } from "@/modules/company-member/use-cases/fetch-members-from-company-use-case";
 import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
+import { ICompanyMemberExtraData } from "@/modules/company-member/interfaces/company-member";
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
@@ -25,6 +26,9 @@ describe("[MODULE]: Fetch members from company use case", () => {
 			name: "John Doe",
 			email: "johndoe@example.com",
 			password: "12345678",
+			extraData: {
+				onboardingStep: "onboarding_complete",
+			},
 		});
 
 		await companiesRepository.create({
@@ -39,7 +43,9 @@ describe("[MODULE]: Fetch members from company use case", () => {
 			companyId: "company-id-01",
 			userId: "john-doe-01",
 			sector: "Gerência",
-			role: "ADMIN",
+			extraData: {
+				permissions: ["ADMIN"],
+			},
 		});
 	});
 
@@ -50,7 +56,9 @@ describe("[MODULE]: Fetch members from company use case", () => {
 		});
 
 		expect(companyMembersRepository.items).toHaveLength(1);
-		expect(companyMembers[0].role).toEqual("ADMIN");
+		expect(
+			(companyMembers[0].extraData as ICompanyMemberExtraData).permissions
+		).includes("ADMIN");
 	});
 
 	it("should not be able to fetch company members if user is not a company member", async () => {

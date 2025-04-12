@@ -71,6 +71,10 @@ export class RegisterRouteUseCase {
 			throw new ResourceNotFoundError("State not found");
 		}
 
+		if (cityNames.length === 0) {
+			throw new BadRequestError("You must select at least one city");
+		}
+
 		const cities = await this.citiesRepository.findOrCreateManyByStateId(
 			cityNames,
 			state.id

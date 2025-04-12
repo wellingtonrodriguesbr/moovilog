@@ -6,12 +6,14 @@ import { InMemoryCompanyMembersRepository } from "@/modules/company-member/repos
 import { VehicleAlreadyExistsInCompanyError } from "@/modules/vehicle/use-cases/errors/vehicle-already-exists-in-company-error";
 import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
 import { RegisterVehicleUseCase } from "@/modules/vehicle/use-cases/register-vehicle-use-case";
+import { PermissionService } from "@/services/permission-service";
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
 
 let companyMembersRepository: InMemoryCompanyMembersRepository;
 let vehiclesRepository: InMemoryVehiclesRepository;
+let permissionService: PermissionService;
 let sut: RegisterVehicleUseCase;
 
 describe("[MODULE]: Register vehicle use case", () => {
@@ -20,10 +22,12 @@ describe("[MODULE]: Register vehicle use case", () => {
 		companiesRepository = new InMemoryCompaniesRepository();
 		companyMembersRepository = new InMemoryCompanyMembersRepository();
 		vehiclesRepository = new InMemoryVehiclesRepository();
+		permissionService = new PermissionService(companyMembersRepository);
 
 		sut = new RegisterVehicleUseCase(
 			companyMembersRepository,
-			vehiclesRepository
+			vehiclesRepository,
+			permissionService
 		);
 
 		await usersRepository.create({
@@ -46,7 +50,9 @@ describe("[MODULE]: Register vehicle use case", () => {
 			companyId: "company-id-01",
 			userId: "john-doe-id-01",
 			sector: "Diretoria",
-			role: "ADMIN",
+			extraData: {
+				permissions: ["MANAGE_VEHICLES_AND_DRIVERS"],
+			},
 		});
 	});
 
@@ -128,7 +134,7 @@ describe("[MODULE]: Register vehicle use case", () => {
 		).rejects.toBeInstanceOf(VehicleAlreadyExistsInCompanyError);
 	});
 
-	it("not should be able to register a vehicle with the a creator role that is different between manager or admin", async () => {
+	it("should not be possible to register a vehicle if the creator does not have the necessary permissions", async () => {
 		const user = await usersRepository.create({
 			name: "John Doe",
 			email: "johndoe@example.com",
@@ -138,7 +144,9 @@ describe("[MODULE]: Register vehicle use case", () => {
 		await companyMembersRepository.create({
 			userId: user.id,
 			companyId: "company-id-01",
-			role: "FINANCIAL",
+			extraData: JSON.stringify({
+				permissions: ["VIEW_VEHICLES_AND_DRIVERS"],
+			}),
 			sector: "Financeiro",
 		});
 

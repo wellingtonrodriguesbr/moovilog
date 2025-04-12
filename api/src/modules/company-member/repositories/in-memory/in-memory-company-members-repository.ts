@@ -1,6 +1,7 @@
 import { CompanyMember, Prisma } from "@prisma/client";
 import { CompanyMembersRepository } from "@/modules/company-member/repositories/company-members-repository";
 import { randomUUID } from "node:crypto";
+import { ICompanyMemberExtraData } from "@/modules/company-member/interfaces/company-member";
 
 export class InMemoryCompanyMembersRepository
 	implements CompanyMembersRepository
@@ -12,7 +13,12 @@ export class InMemoryCompanyMembersRepository
 			id: data.id ?? randomUUID(),
 			companyId: data.companyId,
 			userId: data.userId,
-			role: data.role,
+			extraData: data.extraData
+				? {
+						permissions:
+							(data.extraData as ICompanyMemberExtraData).permissions ?? [],
+					}
+				: null,
 			status: data.status ?? "PENDING",
 			sector: data.sector,
 			createdAt: new Date(),

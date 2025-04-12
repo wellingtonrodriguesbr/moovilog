@@ -28,6 +28,9 @@ describe("[MODULE]: Register company use case", () => {
 			email: "johndoe@example.com",
 			password: "12345678",
 			phone: "15999999999",
+			extraData: {
+				onboardingStep: "register_company",
+			},
 		});
 	});
 

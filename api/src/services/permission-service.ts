@@ -1,4 +1,4 @@
-import { Permissions } from "@/modules/company-member/interfaces/company-member-permission";
+import { CompanyMemberPermission } from "@/modules/company-member/interfaces/company-member-permission";
 import { CompanyMembersRepository } from "@/modules/company-member/repositories/company-members-repository";
 
 export class PermissionService {
@@ -6,7 +6,7 @@ export class PermissionService {
 
 	async hasPermission(
 		memberId: string,
-		requiredPermissions: Permissions[]
+		requiredPermissions: CompanyMemberPermission[]
 	): Promise<boolean> {
 		const companyMember =
 			await this.companyMembersRepository.findById(memberId);
@@ -16,7 +16,7 @@ export class PermissionService {
 		}
 
 		const permissions = (
-			companyMember.extraData as { permissions: Permissions[] }
+			companyMember.extraData as { permissions: CompanyMemberPermission[] }
 		)?.permissions;
 
 		if (permissions?.length === 0) {

@@ -1,5 +1,4 @@
 import { TokensRepository } from "@/modules/shared/repositories/tokens-repository";
-import { CompanyMembersRepository } from "@/modules/company-member/repositories/company-members-repository";
 import { UsersRepository } from "@/modules/user/repositories/users-repository";
 import { BadRequestError } from "@/modules/shared/errors/bad-request-error";
 import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
@@ -15,7 +14,6 @@ interface UpdateUserPasswordUseCaseRequest {
 export class UpdateUserPasswordUseCase {
 	constructor(
 		private usersRepository: UsersRepository,
-		private companyMembersRepository: CompanyMembersRepository,
 		private tokensRepository: TokensRepository
 	) {}
 	async execute({
@@ -37,18 +35,5 @@ export class UpdateUserPasswordUseCase {
 
 		await this.usersRepository.updatePassword(userId, passwordHash);
 		await this.tokensRepository.deleteByUserId(userId);
-
-		const member = await this.companyMembersRepository.findByUserId(userId);
-
-		if (!member) {
-			throw new ResourceNotFoundError("Member not found");
-		}
-
-		if (member.status === "PENDING") {
-			await this.companyMembersRepository.updateAccountStatus(
-				member.id,
-				"ACTIVE"
-			);
-		}
 	}
 }

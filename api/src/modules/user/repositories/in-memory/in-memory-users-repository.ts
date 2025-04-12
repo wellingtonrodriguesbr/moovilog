@@ -16,7 +16,7 @@ export class InMemoryUsersRepository implements UsersRepository {
 			email: data.email,
 			password: data.password || null,
 			phone: data.phone || null,
-			extraData: JSON.stringify(data.extraData) || null,
+			extraData: data.extraData ? (data.extraData as IUserExtraData) : null,
 			createdAt: new Date(),
 			updatedAt: new Date(),
 		};

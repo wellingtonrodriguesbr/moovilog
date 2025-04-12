@@ -55,7 +55,9 @@ describe("[MODULE]: Get company address use case", () => {
 			companyId: "company-id-01",
 			userId: "john-doe-id-01",
 			sector: "Diretoria",
-			role: "ADMIN",
+			extraData: {
+				permissions: ["MANAGE_VEHICLES_AND_DRIVERS"],
+			},
 		});
 
 		await statesRepository.create({
@@ -68,7 +70,6 @@ describe("[MODULE]: Get company address use case", () => {
 			id: "fake-city-id",
 			name: "São Paulo",
 			stateId: "fake-state-id",
-			areaId: "fake-area-id",
 		});
 
 		await addressesRepository.create({

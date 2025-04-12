@@ -7,12 +7,18 @@ import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
 import { RegisterTransactionUseCase } from "@/modules/financial/use-cases/register-transaction-use-case";
 import { InMemoryFinanceTransactionsRepository } from "@/modules/financial/repositories/in-memory/in-memory-finance-transactions-repository";
 import { InMemoryFinanceCategoriesRepository } from "@/modules/financial/repositories/in-memory/in-memory-finance-categories-repository";
+import { InMemoryDriversRepository } from "@/modules/driver/repositories/in-memory/in-memory-drivers-repository";
+import { InMemoryDriverTransactionsRepository } from "@/modules/financial/repositories/in-memory/in-memory-driver-transactions-repository";
+import { PermissionService } from "@/services/permission-service";
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
 let companyMembersRepository: InMemoryCompanyMembersRepository;
+let driversRepository: InMemoryDriversRepository;
+let driverTransactionsRepository: InMemoryDriverTransactionsRepository;
 let financeTransactionsRepository: InMemoryFinanceTransactionsRepository;
 let financeCategoriesRepository: InMemoryFinanceCategoriesRepository;
+let permissionService: PermissionService;
 let sut: RegisterTransactionUseCase;
 
 describe("[MODULE]: Register transaction use case", () => {
@@ -20,13 +26,19 @@ describe("[MODULE]: Register transaction use case", () => {
 		usersRepository = new InMemoryUsersRepository();
 		companiesRepository = new InMemoryCompaniesRepository();
 		companyMembersRepository = new InMemoryCompanyMembersRepository();
+		driversRepository = new InMemoryDriversRepository();
+		driverTransactionsRepository = new InMemoryDriverTransactionsRepository();
 		financeTransactionsRepository = new InMemoryFinanceTransactionsRepository();
 		financeCategoriesRepository = new InMemoryFinanceCategoriesRepository();
+		permissionService = new PermissionService(companyMembersRepository);
 		sut = new RegisterTransactionUseCase(
 			companyMembersRepository,
 			companiesRepository,
+			driversRepository,
+			driverTransactionsRepository,
 			financeTransactionsRepository,
-			financeCategoriesRepository
+			financeCategoriesRepository,
+			permissionService
 		);
 
 		await usersRepository.create({
@@ -49,7 +61,9 @@ describe("[MODULE]: Register transaction use case", () => {
 			companyId: "company-id-01",
 			userId: "john-doe-id-01",
 			sector: "Diretoria",
-			role: "ADMIN",
+			extraData: {
+				permissions: ["MANAGE_FINANCES"],
+			},
 		});
 
 		await financeCategoriesRepository.create({
@@ -106,7 +120,7 @@ describe("[MODULE]: Register transaction use case", () => {
 		).rejects.toBeInstanceOf(ResourceNotFoundError);
 	});
 
-	it("should not be able to fetch transactions if company member role is not admin or manager or financial", async () => {
+	it("should not be possible to register a new transaction if the company member does not have the necessary permissions", async () => {
 		await usersRepository.create({
 			id: "john-doe-id-02",
 			name: "John Doe",
@@ -119,7 +133,9 @@ describe("[MODULE]: Register transaction use case", () => {
 			companyId: "company-id-01",
 			userId: "john-doe-id-02",
 			sector: "Ajudante de carga e descarga",
-			role: "OPERATIONAL",
+			extraData: {
+				permissions: ["VIEW_ROUTES"],
+			},
 		});
 
 		await expect(() =>

@@ -6,12 +6,14 @@ import { InMemoryCompanyMembersRepository } from "@/modules/company-member/repos
 import { DriverAlreadyExistsError } from "@/modules/driver/use-cases/errors/driver-already-exists-error";
 import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
 import { RegisterDriverUseCase } from "@/modules/driver/use-cases/register-driver-use-case";
+import { PermissionService } from "@/services/permission-service";
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
 
 let companyMembersRepository: InMemoryCompanyMembersRepository;
 let driversRepository: InMemoryDriversRepository;
+let permissionService: PermissionService;
 let sut: RegisterDriverUseCase;
 
 describe("[MODULE]: Register driver use case", () => {
@@ -20,10 +22,12 @@ describe("[MODULE]: Register driver use case", () => {
 		companiesRepository = new InMemoryCompaniesRepository();
 		companyMembersRepository = new InMemoryCompanyMembersRepository();
 		driversRepository = new InMemoryDriversRepository();
+		permissionService = new PermissionService(companyMembersRepository);
 
 		sut = new RegisterDriverUseCase(
 			companyMembersRepository,
-			driversRepository
+			driversRepository,
+			permissionService
 		);
 
 		await usersRepository.create({
@@ -46,7 +50,9 @@ describe("[MODULE]: Register driver use case", () => {
 			companyId: "company-id-01",
 			userId: "john-doe-id-01",
 			sector: "Diretoria",
-			role: "ADMIN",
+			extraData: {
+				permissions: ["SUPER_ADMIN"],
+			},
 		});
 	});
 
@@ -86,7 +92,7 @@ describe("[MODULE]: Register driver use case", () => {
 		).rejects.toBeInstanceOf(DriverAlreadyExistsError);
 	});
 
-	it("should not be able to register the driver with the a creator role that is different between manager or admin", async () => {
+	it("should not be possible to register a driver if the creator does not have the necessary permissions", async () => {
 		const user = await usersRepository.create({
 			name: "John Doe",
 			email: "johndoe@example.com",
@@ -96,8 +102,10 @@ describe("[MODULE]: Register driver use case", () => {
 		const member = await companyMembersRepository.create({
 			userId: user.id,
 			companyId: "company-id-01",
-			role: "FINANCIAL",
-			sector: "Financeiro",
+			extraData: {
+				permissions: ["VIEW_ROUTES"],
+			},
+			sector: "Logística",
 		});
 
 		expect(() =>

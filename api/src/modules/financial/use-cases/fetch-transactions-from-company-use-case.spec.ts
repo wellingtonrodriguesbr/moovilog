@@ -7,12 +7,14 @@ import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
 import { FetchTransactionsFromCompanyUseCase } from "@/modules/financial/use-cases/fetch-transactions-from-company-use-case";
 import { InMemoryFinanceTransactionsRepository } from "@/modules/financial/repositories/in-memory/in-memory-finance-transactions-repository";
 import { InMemoryFinanceCategoriesRepository } from "@/modules/financial/repositories/in-memory/in-memory-finance-categories-repository";
+import { PermissionService } from "@/services/permission-service";
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
 let companyMembersRepository: InMemoryCompanyMembersRepository;
 let financeTransactionsRepository: InMemoryFinanceTransactionsRepository;
 let financeCategoriesRepository: InMemoryFinanceCategoriesRepository;
+let permissionService: PermissionService;
 let sut: FetchTransactionsFromCompanyUseCase;
 
 describe("[MODULE]: Fetch transactions from company use case", () => {
@@ -22,10 +24,12 @@ describe("[MODULE]: Fetch transactions from company use case", () => {
 		companyMembersRepository = new InMemoryCompanyMembersRepository();
 		financeTransactionsRepository = new InMemoryFinanceTransactionsRepository();
 		financeCategoriesRepository = new InMemoryFinanceCategoriesRepository();
+		permissionService = new PermissionService(companyMembersRepository);
 		sut = new FetchTransactionsFromCompanyUseCase(
 			companyMembersRepository,
 			companiesRepository,
-			financeTransactionsRepository
+			financeTransactionsRepository,
+			permissionService
 		);
 
 		await usersRepository.create({
@@ -48,7 +52,9 @@ describe("[MODULE]: Fetch transactions from company use case", () => {
 			companyId: "company-id-01",
 			userId: "john-doe-id-01",
 			sector: "Diretoria",
-			role: "ADMIN",
+			extraData: {
+				permissions: ["SUPER_ADMIN", "ADMIN", "VIEW_FINANCES"],
+			},
 		});
 
 		await financeCategoriesRepository.create({
@@ -96,7 +102,7 @@ describe("[MODULE]: Fetch transactions from company use case", () => {
 		).rejects.toBeInstanceOf(ResourceNotFoundError);
 	});
 
-	it("should not be able to fetch transactions if company member role is not admin or manager or financial", async () => {
+	it("should not be possible to fetch company transactions if the company member does not have the necessary permissions", async () => {
 		await usersRepository.create({
 			id: "john-doe-id-02",
 			name: "John Doe",
@@ -109,7 +115,9 @@ describe("[MODULE]: Fetch transactions from company use case", () => {
 			companyId: "company-id-01",
 			userId: "john-doe-id-02",
 			sector: "Ajudante de carga e descarga",
-			role: "OPERATIONAL",
+			extraData: {
+				permissions: ["MANAGE_SHIPMENTS_AND_PICKUPS"],
+			},
 		});
 
 		await expect(() =>

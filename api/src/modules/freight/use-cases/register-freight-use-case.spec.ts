@@ -12,6 +12,9 @@ import { RegisterFreightUseCase } from "@/modules/freight/use-cases/register-fre
 import { InMemoryFinanceTransactionsRepository } from "@/modules/financial/repositories/in-memory/in-memory-finance-transactions-repository";
 import { InMemoryFinanceCategoriesRepository } from "@/modules/financial/repositories/in-memory/in-memory-finance-categories-repository";
 import { InMemoryFreightTransactionsRepository } from "@/modules/financial/repositories/in-memory/in-memory-freight-transactions-repository";
+import { InMemoryDriverTransactionsRepository } from "@/modules/financial/repositories/in-memory/in-memory-driver-transactions-repository";
+import { PermissionService } from "@/services/permission-service";
+import { TransactionService } from "@/services/transaction-service";
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
@@ -20,9 +23,12 @@ let driversRepository: InMemoryDriversRepository;
 let vehiclesRepository: InMemoryVehiclesRepository;
 let freightsRepository: InMemoryFreightsRepository;
 let freightTransactionsRepository: InMemoryFreightTransactionsRepository;
+let driverTransactionsRepository: InMemoryDriverTransactionsRepository;
 let routesRepository: InMemoryRoutesRepository;
 let financeTransactionsRepository: InMemoryFinanceTransactionsRepository;
 let financeCategoriesRepository: InMemoryFinanceCategoriesRepository;
+let permissionService: PermissionService;
+let transactionService: TransactionService;
 let sut: RegisterFreightUseCase;
 
 describe("[MODULE]: Register freight use case", () => {
@@ -34,9 +40,12 @@ describe("[MODULE]: Register freight use case", () => {
 		driversRepository = new InMemoryDriversRepository();
 		freightsRepository = new InMemoryFreightsRepository();
 		freightTransactionsRepository = new InMemoryFreightTransactionsRepository();
+		driverTransactionsRepository = new InMemoryDriverTransactionsRepository();
 		routesRepository = new InMemoryRoutesRepository();
 		financeTransactionsRepository = new InMemoryFinanceTransactionsRepository();
 		financeCategoriesRepository = new InMemoryFinanceCategoriesRepository();
+		permissionService = new PermissionService(companyMembersRepository);
+		transactionService = new TransactionService();
 
 		sut = new RegisterFreightUseCase(
 			companyMembersRepository,
@@ -44,9 +53,12 @@ describe("[MODULE]: Register freight use case", () => {
 			vehiclesRepository,
 			freightsRepository,
 			freightTransactionsRepository,
+			driverTransactionsRepository,
 			routesRepository,
 			financeTransactionsRepository,
-			financeCategoriesRepository
+			financeCategoriesRepository,
+			permissionService,
+			transactionService
 		);
 
 		await usersRepository.create({
@@ -69,7 +81,9 @@ describe("[MODULE]: Register freight use case", () => {
 			companyId: "company-id-01",
 			userId: "john-doe-id-01",
 			sector: "Diretoria",
-			role: "ADMIN",
+			extraData: {
+				permissions: ["SUPER_ADMIN"],
+			},
 		});
 
 		await driversRepository.create({
@@ -136,7 +150,7 @@ describe("[MODULE]: Register freight use case", () => {
 		expect(freightTransactionsRepository.items).toHaveLength(1);
 	});
 
-	it("not should be able to register a freight with the a creator role that is different between operational, manager or admin", async () => {
+	it("should not be possible to register a freight if the creator does not have the necessary permissions", async () => {
 		const user = await usersRepository.create({
 			name: "John Doe",
 			email: "johndoe@example.com",
@@ -147,7 +161,9 @@ describe("[MODULE]: Register freight use case", () => {
 			companyId: "company-id-01",
 			userId: user.id,
 			sector: "Diretoria",
-			role: "COMERCIAL",
+			extraData: {
+				permissions: ["VIEW_SHIPMENTS_AND_PICKUPS"],
+			},
 		});
 
 		expect(() =>

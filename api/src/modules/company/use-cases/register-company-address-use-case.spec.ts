@@ -25,7 +25,8 @@ describe("[MODULE]: Register company address use case", () => {
 			addressesRepository,
 			citiesRepository,
 			statesRepository,
-			companiesRepository
+			companiesRepository,
+			usersRepository
 		);
 
 		await usersRepository.create({
@@ -33,6 +34,9 @@ describe("[MODULE]: Register company address use case", () => {
 			name: "John Doe",
 			email: "johndoe@example.com",
 			password: "12345678",
+			extraData: {
+				onboardingStep: "register_company_address",
+			},
 		});
 
 		await statesRepository.create({
@@ -52,7 +56,6 @@ describe("[MODULE]: Register company address use case", () => {
 			id: "fake-city-id",
 			name: "São Paulo",
 			stateId: "fake-state-id",
-			areaId: "fake-area-id",
 		});
 	});
 

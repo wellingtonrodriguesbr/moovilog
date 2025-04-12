@@ -6,11 +6,13 @@ import { InMemoryTokensRepository } from "@/modules/shared/repositories/in-memor
 import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
 import { MemberAlreadyExistsInCompanyError } from "@/modules/company-member/use-cases/errors/member-already-exists-in-company";
 import { SendInvitationToCompanyMemberUseCase } from "@/modules/company-member/use-cases/send-invitation-to-company-member-use-case";
+import { PermissionService } from "@/services/permission-service";
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
 let companyMembersRepository: InMemoryCompanyMembersRepository;
 let tokensRepository: InMemoryTokensRepository;
+let permissionService: PermissionService;
 let sut: SendInvitationToCompanyMemberUseCase;
 
 describe("[MODULE]: Send invitation to company member use case", () => {
@@ -19,11 +21,13 @@ describe("[MODULE]: Send invitation to company member use case", () => {
 		companiesRepository = new InMemoryCompaniesRepository();
 		companyMembersRepository = new InMemoryCompanyMembersRepository();
 		tokensRepository = new InMemoryTokensRepository();
+		permissionService = new PermissionService(companyMembersRepository);
 		sut = new SendInvitationToCompanyMemberUseCase(
 			usersRepository,
 			companyMembersRepository,
 			companiesRepository,
-			tokensRepository
+			tokensRepository,
+			permissionService
 		);
 
 		await usersRepository.create({
@@ -46,7 +50,9 @@ describe("[MODULE]: Send invitation to company member use case", () => {
 			companyId: "company-id-01",
 			userId: "john-doe-id-01",
 			sector: "Diretoria",
-			role: "ADMIN",
+			extraData: {
+				permissions: ["ADMIN"],
+			},
 		});
 	});
 
@@ -56,7 +62,7 @@ describe("[MODULE]: Send invitation to company member use case", () => {
 			email: "johndoe-member@example.com",
 			senderId: "john-doe-id-01",
 			companyId: "company-id-01",
-			role: "MANAGER",
+			permissions: ["ADMIN"],
 			sector: "Gerência",
 		});
 
@@ -71,7 +77,7 @@ describe("[MODULE]: Send invitation to company member use case", () => {
 			email: "johndoe-member@example.com",
 			senderId: "john-doe-id-01",
 			companyId: "company-id-01",
-			role: "MANAGER",
+			permissions: ["ADMIN"],
 			sector: "Gerência",
 		});
 
@@ -81,13 +87,13 @@ describe("[MODULE]: Send invitation to company member use case", () => {
 				email: "johndoe-member@example.com",
 				senderId: "john-doe-id-01",
 				companyId: "company-id-01",
-				role: "COMERCIAL",
+				permissions: ["ADMIN"],
 				sector: "Vendas",
 			})
 		).rejects.toBeInstanceOf(MemberAlreadyExistsInCompanyError);
 	});
 
-	it("should not be able to send invitations to members with a creator role other than admin", async () => {
+	it("should not be possible to send invitations if the creator does not have the necessary permissions", async () => {
 		const user = await usersRepository.create({
 			name: "John Doe",
 			email: "johndoe@example.com",
@@ -97,7 +103,9 @@ describe("[MODULE]: Send invitation to company member use case", () => {
 		await companyMembersRepository.create({
 			userId: user.id,
 			companyId: "company-id-01",
-			role: "FINANCIAL",
+			extraData: {
+				permissions: ["MANAGE_SHIPMENTS_AND_PICKUPS"],
+			},
 			sector: "Financeiro",
 		});
 
@@ -107,7 +115,7 @@ describe("[MODULE]: Send invitation to company member use case", () => {
 				email: "johndoe-member@example.com",
 				senderId: user.id,
 				companyId: "company-id-01",
-				role: "OPERATIONAL",
+				permissions: ["VIEW_RESOURCES_AND_SUPPLIES"],
 				sector: "Ajudante geral",
 			})
 		).rejects.toBeInstanceOf(NotAllowedError);

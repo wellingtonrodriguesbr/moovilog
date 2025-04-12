@@ -5,11 +5,14 @@ import { InMemoryUsersRepository } from "@/modules/user/repositories/in-memory/i
 import { InMemoryFreightsRepository } from "@/modules/freight/repositories/in-memory/in-memory-freights-repository";
 import { FetchFreightsFromCompanyUseCase } from "@/modules/freight/use-cases/fetch-freights-from-company-use-case";
 import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
+import { PermissionService } from "@/services/permission-service";
+import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
 
 let usersRepository: InMemoryUsersRepository;
 let companiesRepository: InMemoryCompaniesRepository;
 let companyMembersRepository: InMemoryCompanyMembersRepository;
 let freightsRepository: InMemoryFreightsRepository;
+let permissionService: PermissionService;
 let sut: FetchFreightsFromCompanyUseCase;
 
 describe("[MODULE]: Fetch freights from company use case", () => {
@@ -18,10 +21,12 @@ describe("[MODULE]: Fetch freights from company use case", () => {
 		companiesRepository = new InMemoryCompaniesRepository();
 		companyMembersRepository = new InMemoryCompanyMembersRepository();
 		freightsRepository = new InMemoryFreightsRepository();
+		permissionService = new PermissionService(companyMembersRepository);
 		sut = new FetchFreightsFromCompanyUseCase(
 			companyMembersRepository,
 			companiesRepository,
-			freightsRepository
+			freightsRepository,
+			permissionService
 		);
 
 		await usersRepository.create({
@@ -44,7 +49,9 @@ describe("[MODULE]: Fetch freights from company use case", () => {
 			companyId: "company-id-01",
 			userId: "john-doe-id-01",
 			sector: "Diretoria",
-			role: "ADMIN",
+			extraData: {
+				permissions: ["SUPER_ADMIN"],
+			},
 		});
 
 		await freightsRepository.create({
@@ -90,5 +97,29 @@ describe("[MODULE]: Fetch freights from company use case", () => {
 				companyId: "non-existent-company-id",
 			})
 		).rejects.toBeInstanceOf(ResourceNotFoundError);
+	});
+
+	it("should not be possible to fetch company freights if the company member does not have the necessary permissions", async () => {
+		const user = await usersRepository.create({
+			name: "John Doe",
+			email: "johndoe@example.com",
+			password: "12345678",
+		});
+
+		await companyMembersRepository.create({
+			companyId: "company-id-01",
+			userId: user.id,
+			sector: "Operacional",
+			extraData: {
+				permissions: ["VIEW_ROUTES"],
+			},
+		});
+
+		expect(() =>
+			sut.execute({
+				userId: user.id,
+				companyId: "company-id-01",
+			})
+		).rejects.toBeInstanceOf(NotAllowedError);
 	});
 });

@@ -3,25 +3,28 @@ import { InMemoryCompanyMembersRepository } from "@/modules/company-member/repos
 import { InMemoryCompaniesRepository } from "@/modules/company/repositories/in-memory/in-memory-companies-repository";
 import { InMemoryUsersRepository } from "@/modules/user/repositories/in-memory/in-memory-users-repository";
 import { InMemoryDriversRepository } from "@/modules/driver/repositories/in-memory/in-memory-drivers-repository";
-import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
-import { FetchDriversFromCompanyUseCase } from "@/modules/driver/use-cases/fetch-drivers-from-company-use-case";
+import { UpdateDriverStatusUseCase } from "@/modules/driver/use-cases/update-driver-status-use-case";
+import { PermissionService } from "@/services/permission-service";
+import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
 
 let usersRepository: InMemoryUsersRepository;
 let driversRepository: InMemoryDriversRepository;
 let companiesRepository: InMemoryCompaniesRepository;
 let companyMembersRepository: InMemoryCompanyMembersRepository;
-let sut: FetchDriversFromCompanyUseCase;
+let permissionService: PermissionService;
+let sut: UpdateDriverStatusUseCase;
 
-describe("[MODULE]: Fetch drivers from company use case", () => {
+describe("[MODULE]: Update driver status use case", () => {
 	beforeEach(async () => {
 		usersRepository = new InMemoryUsersRepository();
 		driversRepository = new InMemoryDriversRepository();
 		companiesRepository = new InMemoryCompaniesRepository();
 		companyMembersRepository = new InMemoryCompanyMembersRepository();
-		sut = new FetchDriversFromCompanyUseCase(
+		permissionService = new PermissionService(companyMembersRepository);
+		sut = new UpdateDriverStatusUseCase(
+			companyMembersRepository,
 			driversRepository,
-			companiesRepository,
-			companyMembersRepository
+			permissionService
 		);
 
 		await usersRepository.create({
@@ -49,6 +52,7 @@ describe("[MODULE]: Fetch drivers from company use case", () => {
 		});
 
 		await driversRepository.create({
+			id: "driver-id-01",
 			name: "John Doe Driver",
 			documentNumber: "12312312312",
 			phone: "11999999999",
@@ -58,24 +62,41 @@ describe("[MODULE]: Fetch drivers from company use case", () => {
 		});
 	});
 
-	it("should be able to fetch drivers in company", async () => {
-		const { drivers } = await sut.execute({
-			companyId: "company-id-01",
+	it("should be able to update driver status", async () => {
+		await sut.execute({
+			driverId: "driver-id-01",
 			userId: "john-doe-01",
+			status: "INACTIVE",
 		});
 
 		expect(driversRepository.items).toHaveLength(1);
-		expect(drivers[0].id).toEqual(expect.any(String));
-		expect(drivers[0].companyId).toStrictEqual("company-id-01");
+		expect(driversRepository.items[0].status).toStrictEqual("INACTIVE");
 	});
 
-	it("should not be able to fetch drivers by company if user is not a company member", async () => {
+	it("should not be able to update driver status if user does not have the necessary permission", async () => {
+		const user = await usersRepository.create({
+			id: "john-doe-02",
+			name: "John Doe",
+			email: "johndoe@example.com",
+			password: "12345678",
+		});
+
+		await companyMembersRepository.create({
+			companyId: "company-id-01",
+			userId: user.id,
+			sector: "Gerência",
+			extraData: {
+				permissions: ["VIEW_VEHICLES_AND_DRIVERS"],
+			},
+		});
+
 		expect(
 			async () =>
 				await sut.execute({
-					companyId: "company-id-01",
-					userId: "wrong-user-id",
+					driverId: "driver-id-01",
+					userId: user.id,
+					status: "INACTIVE",
 				})
-		).rejects.toBeInstanceOf(ResourceNotFoundError);
+		).rejects.toBeInstanceOf(NotAllowedError);
 	});
 });

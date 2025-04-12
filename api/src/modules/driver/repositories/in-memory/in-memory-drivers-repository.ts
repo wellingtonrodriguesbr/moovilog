@@ -78,9 +78,18 @@ export class InMemoryDriversRepository implements DriversRepository {
 	}
 
 	async updateStatus(id: string, status: AccountStatus) {
-		const driverIndex = this.items.findIndex((item) => item.id !== id);
+		const driverIndex = this.items.findIndex((item) => item.id === id);
 
-		this.items[driverIndex].status = status;
+		if (driverIndex === -1) {
+			return;
+		}
+
+		const updatedDriver = {
+			...this.items[driverIndex],
+			status,
+		} as Driver;
+
+		this.items[driverIndex] = updatedDriver;
 	}
 
 	async update(

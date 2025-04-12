@@ -5,7 +5,6 @@ import { DriverAlreadyExistsError } from "@/modules/driver/use-cases/errors/driv
 import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
 import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
 import { PermissionService } from "@/services/permission-service";
-// import { BadRequestError } from "@/modules/shared/errors/bad-request-error";
 
 interface UpdateDriverUseCaseRequest {
 	name?: string;
@@ -56,15 +55,6 @@ export class UpdateDriverUseCase {
 			throw new ResourceNotFoundError("Driver not found");
 		}
 
-		// if (
-		// 	driver.name === name ||
-		// 	driver.documentNumber === documentNumber ||
-		// 	driver.phone === phone ||
-		// 	driver.type === type
-		// ) {
-		// 	throw new BadRequestError("Driver data is the same as before");
-		// }
-
 		if (
 			documentNumber &&
 			driver.documentNumber !== documentNumber &&
@@ -92,10 +82,10 @@ export class UpdateDriverUseCase {
 		}
 
 		await this.driversRepository.update(driverId, {
-			name,
-			documentNumber,
-			phone,
-			type,
+			name: name ?? driver.name,
+			documentNumber: documentNumber ?? driver.documentNumber,
+			phone: phone ?? driver.phone,
+			type: type ?? driver.type,
 		});
 	}
 }
