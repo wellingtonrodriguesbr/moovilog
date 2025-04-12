@@ -7,9 +7,9 @@ export function RegisterFreight() {
 			<header className="space-y-2">
 				<BackPageButton />
 				<h1 className="font-medium text-2xl">Novo frete</h1>
-				<span className="block text-sm text-zinc-600">
+				<p className="text-sm text-zinc-600">
 					Preencha as informações abaixo para cadastrar um novo frete.
-				</span>
+				</p>
 			</header>
 
 			<RegisterFreightForm />
