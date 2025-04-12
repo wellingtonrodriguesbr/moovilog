@@ -20,6 +20,7 @@ import {
 	Building,
 	Building2,
 	CircleHelp,
+	Globe,
 	Loader2,
 	LogOut,
 	MessageSquareMore,
@@ -60,9 +61,18 @@ export function AccountMenu() {
 					</Avatar>
 				</DropdownMenuTrigger>
 
-				<DropdownMenuContent align="end" className="w-56 z-[999999]">
+				<DropdownMenuContent
+					align="end"
+					className="min-w-56 z-[999999]"
+				>
 					<DropdownMenuLabel className="flex items-center gap-2">
-						<User className="size-5" />
+						<Avatar>
+							<AvatarImage src="" alt="" />
+							<AvatarFallback className="text-xs font-semibold">
+								{firstName?.at(0)}
+								{lastName?.at(0)}
+							</AvatarFallback>
+						</Avatar>
 						<div className="flex flex-col">
 							<span className="block text-nowrap text-ellipsis max-w-[170px] overflow-hidden">
 								{profile?.name}
@@ -103,6 +113,16 @@ export function AccountMenu() {
 						>
 							<Building className="size-4" />
 							Dados da empresa
+						</Link>
+					</DropdownMenuItem>
+					<DropdownMenuItem className="hover:bg-zinc-100" asChild>
+						<Link
+							className="gap-2 cursor-pointer"
+							href="/"
+							target="_blank"
+						>
+							<Globe className="size-4" />
+							Ver página inicial do site
 						</Link>
 					</DropdownMenuItem>
 					<DropdownMenuItem
