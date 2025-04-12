@@ -38,10 +38,6 @@ export class FetchDriversFromCompanyUseCase {
 
 		const drivers = await this.driversRepository.findManyByCompanyId(companyId);
 
-		if (!drivers.length) {
-			throw new ResourceNotFoundError("Drivers not found");
-		}
-
 		return { drivers };
 	}
 }
