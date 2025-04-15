@@ -14,8 +14,9 @@ import { CitiesRepository } from "@/modules/shared/repositories/cities-repositor
 import { StatesRepository } from "@/modules/shared/repositories/states-repository";
 import { TransactionService } from "@/services/transaction-service";
 import { PermissionService } from "@/services/permission-service";
-import dayjs from "dayjs";
 import { BadRequestError } from "@/modules/shared/errors/bad-request-error";
+
+import dayjs from "dayjs";
 
 interface RegisterPickupUseCaseRequest {
 	pickupNumber: string;

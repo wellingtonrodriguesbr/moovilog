@@ -4,7 +4,7 @@ import { PickupsRepository } from "@/modules/pickup/repositories/pickups-reposit
 import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
 import { PermissionService } from "@/services/permission-service";
 import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
-import { IPickup } from "../interfaces/pickup";
+import { IPickup } from "@/modules/pickup/interfaces/pickup";
 
 interface FetchPickupsFromCompanyUseCaseRequest {
 	userId: string;
