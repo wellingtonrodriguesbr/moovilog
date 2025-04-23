@@ -326,7 +326,9 @@ export function RegisterPickupForm() {
 								</FormItem>
 							)}
 						/>
+					</fieldset>
 
+					<fieldset className="grid grid-cols-1 xl:grid-cols-2 gap-4">
 						<FormField
 							control={form.control}
 							name="date"
@@ -351,6 +353,38 @@ export function RegisterPickupForm() {
 									<DatePicker
 										selectedDate={field.value}
 										onChangeSelectedDate={field.onChange}
+									/>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+					</fieldset>
+
+					<fieldset className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+						<FormField
+							control={form.control}
+							name="vehicleId"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Veículo</FormLabel>
+									<SelectVehicle
+										selectedVehicle={field.value}
+										onChangeSelectedVehicle={field.onChange}
+									/>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+
+						<FormField
+							control={form.control}
+							name="driverId"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Motorista</FormLabel>
+									<SelectDriver
+										selectedDriver={field.value}
+										onChangeSelectedDriver={field.onChange}
 									/>
 									<FormMessage />
 								</FormItem>

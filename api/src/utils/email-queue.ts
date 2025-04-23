@@ -1,4 +1,5 @@
-import { resend } from "@/mail/mail-client";
+import { JSX } from "react";
+import { resend } from "@/lib/mail-client";
 
 export interface EmailDetails {
 	from: string;

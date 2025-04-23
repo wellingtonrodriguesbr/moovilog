@@ -202,6 +202,7 @@ export function RegisterFreightForm() {
 								</FormItem>
 							)}
 						/>
+
 						<FormField
 							control={form.control}
 							name="driverId"
