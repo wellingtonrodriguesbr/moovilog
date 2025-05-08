@@ -14,6 +14,7 @@ const SidebarProvider = dynamic(() => import("@/providers/sidebar-provider"), {
 });
 
 import "./globals.css";
+import Script from "next/script";
 
 const sans = Fira_Sans({
 	subsets: ["latin"],
@@ -54,6 +55,19 @@ export default function RootLayout({
 				</SidebarProvider>
 				<SpeedInsights />
 				<Analytics />
+				<Script
+					id="letalk-whatsapp-tracker"
+					strategy="afterInteractive"
+					dangerouslySetInnerHTML={{
+						__html: `(function(w,d,s){
+											var el = d.createElement('script');
+											el.async = true;
+											el.src = 'https://cp.letalk.com.br/scripts/letalkUTMTrackerScript.js';
+											var head = d.getElementsByTagName('head')[0];
+											head.appendChild(el);
+										})(window, document);`,
+					}}
+				/>
 			</body>
 		</html>
 	);
