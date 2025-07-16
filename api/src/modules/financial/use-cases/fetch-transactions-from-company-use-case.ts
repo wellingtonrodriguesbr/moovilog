@@ -89,7 +89,7 @@ export class FetchTransactionsFromCompanyUseCase {
 			totalIncomeInCents,
 			totalExpenseInCents,
 			totalBalanceInCents,
-			percentage,
+			percentage: Number(percentage.toFixed(2)),
 		};
 	}
 }
