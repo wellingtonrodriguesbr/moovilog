@@ -29,7 +29,7 @@ export function UpdateDriverDialog({ driver }: UpdateDriverDialogProps) {
 	return (
 		<Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
 			<DialogTrigger asChild>
-				<button className="relative flex cursor-pointer hover:bg-zinc-100 select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors data-[disabled]:pointer-events-none data-[disabled]:opacity-50 dark:focus:bg-zinc-800 dark:focus:text-zinc-50 gap-2">
+				<button className="w-full relative flex cursor-pointer hover:bg-zinc-100 select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors data-[disabled]:pointer-events-none data-[disabled]:opacity-50 dark:focus:bg-zinc-800 dark:focus:text-zinc-50 gap-2">
 					<Pencil className="size-4" />
 					Editar motorista
 				</button>

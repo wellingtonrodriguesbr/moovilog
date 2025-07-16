@@ -71,8 +71,8 @@ export function DriverDropdownOptions({ driver }: DriverDropdownOptionsProps) {
 							<X className="size-4" />
 						)}
 						{driver.status === "ACTIVE"
-							? "Desativar conta"
-							: "Ativar conta"}
+							? "Desativar motorista"
+							: "Ativar motorista"}
 					</button>
 				</DropdownMenuItem>
 			</DropdownMenuContent>

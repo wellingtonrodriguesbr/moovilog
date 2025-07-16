@@ -17,6 +17,7 @@ import {
 	Siren,
 	Truck,
 	Users,
+	Percent,
 } from "lucide-react";
 
 export function SidebarContent() {
@@ -79,6 +80,11 @@ const ITEMS = [
 		name: "Financeiro",
 		url: "/financeiro",
 		icon: <Landmark className="size-4" />,
+	},
+	{
+		name: "Comercial",
+		url: "/comercial",
+		icon: <Percent className="size-4" />,
 	},
 	{
 		name: "Fretes",

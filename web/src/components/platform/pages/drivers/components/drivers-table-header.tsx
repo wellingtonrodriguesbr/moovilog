@@ -17,7 +17,7 @@ export function DriversTableHeader() {
 					Tipo
 				</TableHead>
 				<TableHead className="text-app-blue-900 font-medium text-nowrap">
-					Status da conta
+					Status da conta do motorista
 				</TableHead>
 				<TableHead className="text-app-blue-900 font-medium text-nowrap">
 					Cadastrado em

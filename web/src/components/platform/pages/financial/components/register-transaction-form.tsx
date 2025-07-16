@@ -122,7 +122,12 @@ export function RegisterTransactionForm({
 								<FormControl>
 									<Input
 										{...field}
-										value={formatCurrencyBR(field.value)}
+										placeholder="Digite o valor da transação"
+										value={
+											field.value
+												? formatCurrencyBR(field.value)
+												: ""
+										}
 									/>
 								</FormControl>
 								<FormMessage />

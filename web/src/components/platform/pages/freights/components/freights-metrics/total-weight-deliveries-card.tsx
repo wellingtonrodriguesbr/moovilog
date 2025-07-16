@@ -19,7 +19,7 @@ export function TotalWeightDeliveriesCard({
 		<Card className="min-h-[140px] h-full bg-app-blue-100 relative">
 			<CardHeader>
 				<CardTitle className="flex items-center gap-2 text-2xl text-app-blue-600">
-					{formatWeight(totalWeightDeliveries)}
+					{formatWeight(totalWeightDeliveries) ?? 0}
 					kg
 				</CardTitle>
 				<CardDescription className="text-app-blue-600">

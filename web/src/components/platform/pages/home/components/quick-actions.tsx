@@ -67,9 +67,9 @@ const actions = [
 		url: "/coletas/novo",
 	},
 	{
-		title: "Cadastrar programação",
-		description: "Comece o dia organizando a próxima programação.",
-		url: "/operacional/programacao-do-dia",
+		title: "Cadastrar ocorrência",
+		description: "Deu ruim? Cadastre a ocorrência no sistema.",
+		url: "/ocorrencias",
 	},
 	{
 		title: "Cadastrar aviso",
