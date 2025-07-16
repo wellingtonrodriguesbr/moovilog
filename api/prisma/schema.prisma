@@ -74,7 +74,6 @@ model CompanyMember {
   @@unique([companyId, userId])
   @@index([status])
   @@index([sector])
-  @@index([userId])
   @@map("company_members")
 }
 
@@ -107,7 +106,6 @@ model Driver {
   @@index([name])
   @@index([type])
   @@index([status])
-  @@index([createdAt])
   @@map("drivers")
 }
 
@@ -138,14 +136,9 @@ model Vehicle {
 
   @@unique([plate, companyId])
   @@unique([trailerPlate, companyId])
-  @@index([year])
-  @@index([brand])
-  @@index([model])
+  @@index([brand, model])
   @@index([status])
   @@index([category])
-  @@index([type])
-  @@index([body])
-  @@index([createdAt])
   @@map("vehicles")
 }
 
@@ -183,12 +176,8 @@ model Freight {
 
   @@index([date])
   @@index([type])
-  @@index([modality])
-  @@index([driverId])
-  @@index([vehicleId])
-  @@index([creatorId])
+  @@index([driverId, vehicleId])
   @@index([companyId])
-  @@index([routeId])
   @@map("freights")
 }
 
@@ -203,7 +192,7 @@ model Pickup {
   status         PickupStatus   @default(PENDING)
   priority       PickupPriority @default(NORMAL)
   observation    String?
-  requestedAt    DateTime       @default(now()) @map("requested_at")
+  requestedAt    DateTime?      @map("requested_at")
   scheduledDate  DateTime       @map("scheduled_date")
   collectedAt    DateTime?      @map("collected_at")
   createdAt      DateTime       @default(now()) @map("created_at")
@@ -231,18 +220,11 @@ model Pickup {
   pickupTransactions PickupTransaction[]
 
   @@unique([pickupNumber, companyId])
-  @@index([pickupNumber])
   @@index([status])
-  @@index([senderName])
-  @@index([recipientName])
   @@index([scheduledDate])
-  @@index([collectedAt])
-  @@index([freightId])
-  @@index([companyId])
-  @@index([creatorId])
-  @@index([driverId])
-  @@index([requestedAt])
   @@index([priority])
+  @@index([senderName, recipientName])
+  @@index([companyId])
   @@map("pickups")
 }
 
@@ -268,7 +250,6 @@ model PickupHistory {
   vehicle   Vehicle? @relation(fields: [vehicleId], references: [id], onDelete: SetNull)
 
   @@index([pickupId])
-  @@index([driverId])
   @@index([attemptDate])
   @@map("pickup_histories")
 }
@@ -302,6 +283,7 @@ model CityInRoute {
   cityId String @map("city_id")
   city   City   @relation(fields: [cityId], references: [id], onDelete: Cascade)
 
+  @@unique([routeId, cityId])
   @@map("cities_in_route")
 }
 
@@ -327,7 +309,6 @@ model City {
 
   @@unique([name, stateId])
   @@index([name])
-  @@index([stateId])
   @@map("cities")
 }
 
@@ -347,6 +328,7 @@ model Address {
   drivers   Driver[]
   pickups   Pickup[]
 
+  @@index([zipCode])
   @@map("addresses")
 }
 
@@ -354,12 +336,14 @@ model Token {
   id        String    @id @default(uuid())
   code      String    @unique
   type      TokenType
+  expiresAt DateTime? @map("expires_at")
   createdAt DateTime  @default(now()) @map("created_at")
 
   userId String @map("user_id")
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@map("token")
+  @@index([type])
+  @@map("tokens")
 }
 
 model FinanceTransaction {
@@ -367,6 +351,7 @@ model FinanceTransaction {
   description   String?
   amountInCents Int                      @map("amount_in_cents")
   dueDate       DateTime?                @map("due_date")
+  paidAt        DateTime?                @map("paid_at")
   type          FinanceTransactionType
   status        FinanceTransactionStatus
   paymentMethod PaymentMethod?           @map("payment_method")
@@ -387,17 +372,12 @@ model FinanceTransaction {
   @@index([dueDate])
   @@index([type])
   @@index([status])
-  @@index([categoryId])
   @@index([companyId])
-  @@index([creatorId])
-  @@index([paymentMethod])
   @@map("finance_transactions")
 }
 
 model DriverTransaction {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id String @id @default(uuid())
 
   driverId String @map("driver_id")
   driver   Driver @relation(fields: [driverId], references: [id], onDelete: Cascade)
@@ -405,13 +385,12 @@ model DriverTransaction {
   financeTransactionId String             @map("finance_transaction_id")
   financeTransaction   FinanceTransaction @relation(fields: [financeTransactionId], references: [id], onDelete: Cascade)
 
+  @@unique([driverId, financeTransactionId])
   @@map("driver_transactions")
 }
 
 model FreightTransaction {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id String @id @default(uuid())
 
   freightId String  @map("freight_id")
   freight   Freight @relation(fields: [freightId], references: [id], onDelete: Cascade)
@@ -419,13 +398,12 @@ model FreightTransaction {
   financeTransactionId String             @map("finance_transaction_id")
   financeTransaction   FinanceTransaction @relation(fields: [financeTransactionId], references: [id], onDelete: Cascade)
 
+  @@unique([freightId, financeTransactionId])
   @@map("freight_transactions")
 }
 
 model PickupTransaction {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id String @id @default(uuid())
 
   pickupId String @map("pickup_id")
   pickup   Pickup @relation(fields: [pickupId], references: [id], onDelete: Cascade)
@@ -433,6 +411,7 @@ model PickupTransaction {
   financeTransactionId String             @map("finance_transaction_id")
   financeTransaction   FinanceTransaction @relation(fields: [financeTransactionId], references: [id], onDelete: Cascade)
 
+  @@unique([pickupId, financeTransactionId])
   @@map("pickup_transactions")
 }
 
