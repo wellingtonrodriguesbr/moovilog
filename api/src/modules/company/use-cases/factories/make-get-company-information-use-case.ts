@@ -4,15 +4,15 @@ import { GetCompanyInformationUseCase } from "@/modules/company/use-cases/get-co
 import { PrismaUsersRepository } from "@/modules/user/repositories/prisma/prisma-users-repository";
 
 export function makeGetCompanyInformationUseCase() {
-	const usersRepository = new PrismaUsersRepository();
-	const companyMembersRepository = new PrismaCompanyMembersRepository();
-	const companiesRepository = new PrismaCompaniesRepository();
+  const usersRepository = new PrismaUsersRepository();
+  const companyMembersRepository = new PrismaCompanyMembersRepository();
+  const companiesRepository = new PrismaCompaniesRepository();
 
-	const getCompanyInformationUseCase = new GetCompanyInformationUseCase(
-		usersRepository,
-		companyMembersRepository,
-		companiesRepository
-	);
+  const getCompanyInformationUseCase = new GetCompanyInformationUseCase(
+    usersRepository,
+    companyMembersRepository,
+    companiesRepository
+  );
 
-	return getCompanyInformationUseCase;
+  return getCompanyInformationUseCase;
 }

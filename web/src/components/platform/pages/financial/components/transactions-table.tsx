@@ -8,28 +8,24 @@ import { TransactionsTableHeader } from "@/components/platform/pages/financial/c
 import { Empty } from "@/components/platform/empty";
 
 export function TransactionsTable() {
-	const { transactionsFromCompany, isFetchTransactionsFromCompanyPending } =
-		useFetchTransactionsFromCompany();
+  const { transactionsFromCompany, isFetchTransactionsFromCompanyPending } = useFetchTransactionsFromCompany();
 
-	if (isFetchTransactionsFromCompanyPending) {
-		return <SkeletonTransactionsTable />;
-	}
+  if (isFetchTransactionsFromCompanyPending) {
+    return <SkeletonTransactionsTable />;
+  }
 
-	if (transactionsFromCompany.length > 0) {
-		return (
-			<Table>
-				<TransactionsTableHeader />
-				<TableBody>
-					{transactionsFromCompany.map((transaction) => (
-						<TransactionsTableRow
-							key={transaction.id}
-							transaction={transaction}
-						/>
-					))}
-				</TableBody>
-			</Table>
-		);
-	}
+  if (transactionsFromCompany.length > 0) {
+    return (
+      <Table>
+        <TransactionsTableHeader />
+        <TableBody>
+          {transactionsFromCompany.map((transaction) => (
+            <TransactionsTableRow key={transaction.id} transaction={transaction} />
+          ))}
+        </TableBody>
+      </Table>
+    );
+  }
 
-	return <Empty context="financial" />;
+  return <Empty context="financial" />;
 }

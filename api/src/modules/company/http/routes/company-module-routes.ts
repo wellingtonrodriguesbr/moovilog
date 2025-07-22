@@ -7,11 +7,11 @@ import { GetCompanyInformationController } from "@/modules/company/http/controll
 import { GetCompanyAddressController } from "@/modules/company/http/controllers/get-company-address-controller";
 
 export async function companyModuleRoutes(app: FastifyInstance) {
-	app.addHook("onRequest", verifyJWT);
+  app.addHook("onRequest", verifyJWT);
 
-	app.post("/companies", RegisterCompanyController.handle);
-	app.post("/companies/address", RegisterCompanyAddressController.handle);
+  app.post("/companies", RegisterCompanyController.handle);
+  app.post("/companies/address", RegisterCompanyAddressController.handle);
 
-	app.get("/companies/information", GetCompanyInformationController.handle);
-	app.get("/companies/:companyId/address", GetCompanyAddressController.handle);
+  app.get("/companies/information", GetCompanyInformationController.handle);
+  app.get("/companies/:companyId/address", GetCompanyAddressController.handle);
 }

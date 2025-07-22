@@ -7,13 +7,10 @@ import { UpdateDriverStatusController } from "@/modules/driver/http/controllers/
 import { UpdateDriverController } from "@/modules/driver/http/controllers/update-driver-controller";
 
 export async function driverModuleRoutes(app: FastifyInstance) {
-	app.addHook("onRequest", verifyJWT);
+  app.addHook("onRequest", verifyJWT);
 
-	app.post("/drivers", RegisterDriverController.handle);
-	app.get(
-		"/companies/:companyId/drivers",
-		FetchDriversFromCompanyController.handle
-	);
-	app.patch("/drivers/:driverId/status", UpdateDriverStatusController.handle);
-	app.put("/drivers/:driverId", UpdateDriverController.handle);
+  app.post("/drivers", RegisterDriverController.handle);
+  app.get("/companies/:companyId/drivers", FetchDriversFromCompanyController.handle);
+  app.patch("/drivers/:driverId/status", UpdateDriverStatusController.handle);
+  app.put("/drivers/:driverId", UpdateDriverController.handle);
 }

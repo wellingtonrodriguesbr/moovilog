@@ -3,70 +3,65 @@ import { CompanyMembersRepository } from "@/modules/company-member/repositories/
 import { randomUUID } from "node:crypto";
 import { ICompanyMemberExtraData } from "@/modules/company-member/interfaces/company-member";
 
-export class InMemoryCompanyMembersRepository
-	implements CompanyMembersRepository
-{
-	public items: CompanyMember[] = [];
+export class InMemoryCompanyMembersRepository implements CompanyMembersRepository {
+  public items: CompanyMember[] = [];
 
-	async create(data: Prisma.CompanyMemberUncheckedCreateInput) {
-		const companyMember = {
-			id: data.id ?? randomUUID(),
-			companyId: data.companyId,
-			userId: data.userId,
-			extraData: data.extraData
-				? {
-						permissions:
-							(data.extraData as ICompanyMemberExtraData).permissions ?? [],
-					}
-				: null,
-			status: data.status ?? "PENDING",
-			sector: data.sector,
-			createdAt: new Date(),
-			updatedAt: new Date(),
-		};
+  async create(data: Prisma.CompanyMemberUncheckedCreateInput) {
+    const companyMember = {
+      id: data.id ?? randomUUID(),
+      companyId: data.companyId,
+      userId: data.userId,
+      extraData: data.extraData
+        ? {
+            permissions: (data.extraData as ICompanyMemberExtraData).permissions ?? [],
+          }
+        : null,
+      status: data.status ?? "PENDING",
+      sector: data.sector,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
 
-		this.items.push(companyMember);
+    this.items.push(companyMember);
 
-		return companyMember;
-	}
+    return companyMember;
+  }
 
-	async findById(id: string) {
-		const member = this.items.find((item) => item.id === id);
+  async findById(id: string) {
+    const member = this.items.find((item) => item.id === id);
 
-		if (!member) return null;
+    if (!member) return null;
 
-		return member;
-	}
+    return member;
+  }
 
-	async findByUserId(userId: string) {
-		const member = this.items.find((item) => item.userId === userId);
+  async findByUserId(userId: string) {
+    const member = this.items.find((item) => item.userId === userId);
 
-		if (!member) return null;
+    if (!member) return null;
 
-		return member;
-	}
+    return member;
+  }
 
-	async findMemberInCompany(userId: string, companyId: string) {
-		const member = this.items.find(
-			(item) => item.userId === userId && item.companyId === companyId
-		);
+  async findMemberInCompany(userId: string, companyId: string) {
+    const member = this.items.find((item) => item.userId === userId && item.companyId === companyId);
 
-		if (!member) return null;
+    if (!member) return null;
 
-		return member;
-	}
+    return member;
+  }
 
-	async findManyByCompanyId(companyId: string) {
-		const members = this.items.filter((item) => item.companyId === companyId);
+  async findManyByCompanyId(companyId: string) {
+    const members = this.items.filter((item) => item.companyId === companyId);
 
-		return members;
-	}
+    return members;
+  }
 
-	async updateAccountStatus(id: string, status: "ACTIVE" | "INACTIVE") {
-		const member = this.items.find((item) => item.id === id);
+  async updateAccountStatus(id: string, status: "ACTIVE" | "INACTIVE") {
+    const member = this.items.find((item) => item.id === id);
 
-		if (!member) throw new Error("Member not found");
+    if (!member) throw new Error("Member not found");
 
-		member.status = status;
-	}
+    member.status = status;
+  }
 }

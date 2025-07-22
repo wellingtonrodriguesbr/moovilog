@@ -1,22 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import {
-	Form,
-	FormControl,
-	FormDescription,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from "@/components/ui/form";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -35,297 +21,219 @@ import { useGetProfile } from "@/hooks/user/use-get-profile";
 import { is } from "react-day-picker/locale";
 
 const formSchema = z.object({
-	documentNumber: z
-		.string()
-		.min(14, { message: "Digite um CNPJ válido" })
-		.max(14, { message: "Digite um CNPJ válido" })
-		.transform((value) => value.replace(/\D/g, "")),
-	name: z.string().min(3, { message: "Digite seu nome completo" }),
-	size: z.enum(["MICRO", "SMALL", "MEDIUM", "BIG"]),
-	ownerSector: z.string().min(2, { message: "Selecione um setor" }),
-	acceptTerms: z.boolean({ message: "Aceite os termos para prosseguir" }),
+  documentNumber: z
+    .string()
+    .min(14, { message: "Digite um CNPJ válido" })
+    .max(14, { message: "Digite um CNPJ válido" })
+    .transform((value) => value.replace(/\D/g, "")),
+  name: z.string().min(3, { message: "Digite seu nome completo" }),
+  size: z.enum(["MICRO", "SMALL", "MEDIUM", "BIG"]),
+  ownerSector: z.string().min(2, { message: "Selecione um setor" }),
+  acceptTerms: z.boolean({ message: "Aceite os termos para prosseguir" }),
 });
 
 export function RegisterCompanyForm() {
-	const router = useRouter();
-	const inputRef = useRef<HTMLInputElement | null>(null);
+  const router = useRouter();
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
-	const { profile, isGetProfilePending } = useGetProfile();
-	const { registerCompany, isPendingRegisterCompany } = useRegisterCompany();
+  const { profile, isGetProfilePending } = useGetProfile();
+  const { registerCompany, isPendingRegisterCompany } = useRegisterCompany();
 
-	const form = useForm<z.infer<typeof formSchema>>({
-		resolver: zodResolver(formSchema),
-		defaultValues: {
-			documentNumber: "",
-			name: "",
-			size: undefined,
-			ownerSector: undefined,
-			acceptTerms: false,
-		},
-	});
-	const documentNumber = form.watch("documentNumber");
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      documentNumber: "",
+      name: "",
+      size: undefined,
+      ownerSector: undefined,
+      acceptTerms: false,
+    },
+  });
+  const documentNumber = form.watch("documentNumber");
 
-	const {
-		companyInformation,
-		isValidateCompanyDocumentNumberPending,
-		status,
-	} = useValidateCompanyDocumentNumber({
-		documentNumber,
-	});
+  const { companyInformation, isValidateCompanyDocumentNumberPending, status } = useValidateCompanyDocumentNumber({
+    documentNumber,
+  });
 
-	async function onSubmit(registerData: z.infer<typeof formSchema>) {
-		try {
-			await registerCompany({ ...registerData });
-			toast.success("Empresa cadastrada com sucesso");
-			router.push("/cadastro/empresa/endereco");
-		} catch (error) {
-			if (error instanceof AxiosError) {
-				if (error.response?.status === 401) {
-					toast.error("Você não tem permissão para esta ação");
-				} else if (
-					error.response?.status === 409 &&
-					error.response.data.message ===
-						"A company already exists with this document number"
-				) {
-					toast.error(
-						"Já existe uma empresa cadastrada com este CNPJ"
-					);
-				} else if (
-					error.response?.status === 409 &&
-					error.response.data.message ===
-						"User already owns a company. Conflict with existing resource."
-				) {
-					toast.error(
-						"Você já tem uma empresa cadastrada na plataforma."
-					);
-				}
-			}
-		}
-	}
+  async function onSubmit(registerData: z.infer<typeof formSchema>) {
+    try {
+      await registerCompany({ ...registerData });
+      toast.success("Empresa cadastrada com sucesso");
+      router.push("/cadastro/empresa/endereco");
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 401) {
+          toast.error("Você não tem permissão para esta ação");
+        } else if (
+          error.response?.status === 409 &&
+          error.response.data.message === "A company already exists with this document number"
+        ) {
+          toast.error("Já existe uma empresa cadastrada com este CNPJ");
+        } else if (
+          error.response?.status === 409 &&
+          error.response.data.message === "User already owns a company. Conflict with existing resource."
+        ) {
+          toast.error("Você já tem uma empresa cadastrada na plataforma.");
+        }
+      }
+    }
+  }
 
-	useEffect(() => {
-		if (
-			!isGetProfilePending &&
-			profile?.extraData.onboardingStep === "complete_onboarding"
-		) {
-			router.push("/inicio");
-		}
+  useEffect(() => {
+    if (!isGetProfilePending && profile?.extraData.onboardingStep === "complete_onboarding") {
+      router.push("/inicio");
+    }
 
-		form.setValue("name", companyInformation?.razao_social ?? "");
+    form.setValue("name", companyInformation?.razao_social ?? "");
 
-		if (form.watch("name").length > 0 && inputRef.current) {
-			inputRef.current.blur();
-		}
+    if (form.watch("name").length > 0 && inputRef.current) {
+      inputRef.current.blur();
+    }
 
-		if (status === "error") {
-			form.reset();
-		}
-	}, [
-		companyInformation,
-		form,
-		status,
-		isGetProfilePending,
-		router,
-		profile,
-	]);
+    if (status === "error") {
+      form.reset();
+    }
+  }, [companyInformation, form, status, isGetProfilePending, router, profile]);
 
-	return (
-		<Form {...form}>
-			<form
-				onSubmit={form.handleSubmit(onSubmit)}
-				className="flex flex-col gap-4 w-full"
-			>
-				<FormField
-					control={form.control}
-					name="documentNumber"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>CNPJ</FormLabel>
-							<FormControl>
-								<div className="flex items-center rounded-md overflow-hidden border pr-4 bg-white">
-									<Input
-										className="border-0 rounded-none outline-none focus-visible:ring-0"
-										placeholder="00.000.000/0000-00"
-										maxLength={14}
-										autoComplete="off"
-										inputMode="numeric"
-										pattern="\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}"
-										{...field}
-										onChange={({ currentTarget }) =>
-											form.setValue(
-												"documentNumber",
-												currentTarget.value
-											)
-										}
-										ref={inputRef}
-										value={formatCNPJ(field.value)}
-									/>
-									{documentNumber.length === 14 &&
-									isValidateCompanyDocumentNumberPending ? (
-										<Loader2 className="size-4 text-app-blue-500 animate-spin" />
-									) : null}
-									{!isValidateCompanyDocumentNumberPending &&
-									status === "error" ? (
-										<X className="size-4 text-red-500" />
-									) : null}
-									{!isValidateCompanyDocumentNumberPending &&
-									status === "success" ? (
-										<Check className="size-4 text-emerald-500" />
-									) : null}
-								</div>
-							</FormControl>
-							<FormDescription>
-								Digite apenas os números, sem traços ou pontos
-							</FormDescription>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-				<FormField
-					control={form.control}
-					name="name"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Razão social</FormLabel>
-							<FormControl>
-								<Input
-									disabled={
-										isValidateCompanyDocumentNumberPending ||
-										status === "pending"
-									}
-									{...field}
-								/>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4 w-full">
+        <FormField
+          control={form.control}
+          name="documentNumber"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>CNPJ</FormLabel>
+              <FormControl>
+                <div className="flex items-center rounded-md overflow-hidden border pr-4 bg-white">
+                  <Input
+                    className="border-0 rounded-none outline-none focus-visible:ring-0"
+                    placeholder="00.000.000/0000-00"
+                    maxLength={14}
+                    autoComplete="off"
+                    inputMode="numeric"
+                    pattern="\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}"
+                    {...field}
+                    onChange={({ currentTarget }) => form.setValue("documentNumber", currentTarget.value)}
+                    ref={inputRef}
+                    value={formatCNPJ(field.value)}
+                  />
+                  {documentNumber.length === 14 && isValidateCompanyDocumentNumberPending ? (
+                    <Loader2 className="size-4 text-app-blue-500 animate-spin" />
+                  ) : null}
+                  {!isValidateCompanyDocumentNumberPending && status === "error" ? (
+                    <X className="size-4 text-red-500" />
+                  ) : null}
+                  {!isValidateCompanyDocumentNumberPending && status === "success" ? (
+                    <Check className="size-4 text-emerald-500" />
+                  ) : null}
+                </div>
+              </FormControl>
+              <FormDescription>Digite apenas os números, sem traços ou pontos</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Razão social</FormLabel>
+              <FormControl>
+                <Input disabled={isValidateCompanyDocumentNumberPending || status === "pending"} {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-				<FormField
-					control={form.control}
-					name="size"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Tamanho</FormLabel>
-							<Select
-								onValueChange={field.onChange}
-								defaultValue={field.value}
-								disabled={
-									isValidateCompanyDocumentNumberPending ||
-									status === "pending"
-								}
-							>
-								<FormControl>
-									<SelectTrigger>
-										<SelectValue placeholder="Selecione o tamanho da sua empresa" />
-									</SelectTrigger>
-								</FormControl>
-								<SelectContent
-									className="max-w-[350px] md:max-w-full"
-									align="center"
-								>
-									<SelectItem value="MICRO">
-										Microempresa (Faturamento anual de até
-										R$ 360mil)
-									</SelectItem>
-									<SelectItem value="SMALL">
-										Pequena empresa (Faturamento anual de
-										até R$ 4.8 milhões)
-									</SelectItem>
-									<SelectItem value="MEDIUM">
-										Média empresa (Faturamento anual de até
-										R$ 300 milhões)
-									</SelectItem>
-									<SelectItem value="BIG">
-										Grande empresa (Faturamento anual
-										ultrapassa R$ 300 milhões)
-									</SelectItem>
-								</SelectContent>
-							</Select>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
+        <FormField
+          control={form.control}
+          name="size"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Tamanho</FormLabel>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={field.value}
+                disabled={isValidateCompanyDocumentNumberPending || status === "pending"}
+              >
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione o tamanho da sua empresa" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent className="max-w-[350px] md:max-w-full" align="center">
+                  <SelectItem value="MICRO">Microempresa (Faturamento anual de até R$ 360mil)</SelectItem>
+                  <SelectItem value="SMALL">Pequena empresa (Faturamento anual de até R$ 4.8 milhões)</SelectItem>
+                  <SelectItem value="MEDIUM">Média empresa (Faturamento anual de até R$ 300 milhões)</SelectItem>
+                  <SelectItem value="BIG">Grande empresa (Faturamento anual ultrapassa R$ 300 milhões)</SelectItem>
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-				<FormField
-					control={form.control}
-					name="ownerSector"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>
-								Qual é o seu setor na empresa?
-							</FormLabel>
-							<FormControl>
-								<Select
-									onValueChange={field.onChange}
-									defaultValue={field.value}
-								>
-									<FormControl>
-										<SelectTrigger>
-											<SelectValue placeholder="Selecione seu setor" />
-										</SelectTrigger>
-									</FormControl>
-									<SelectContent>
-										{SECTORS.map((sector) => (
-											<SelectItem
-												key={sector}
-												value={sector}
-											>
-												{sector}
-											</SelectItem>
-										))}
-									</SelectContent>
-								</Select>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
+        <FormField
+          control={form.control}
+          name="ownerSector"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Qual é o seu setor na empresa?</FormLabel>
+              <FormControl>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione seu setor" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {SECTORS.map((sector) => (
+                      <SelectItem key={sector} value={sector}>
+                        {sector}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-				<FormField
-					control={form.control}
-					name="acceptTerms"
-					render={({ field }) => (
-						<FormItem>
-							<FormControl>
-								<FormLabel
-									htmlFor={field.name}
-									className="flex items-center gap-2 text-sm font-medium"
-								>
-									<Checkbox
-										id={field.name}
-										checked={field.value}
-										onCheckedChange={field.onChange}
-									/>
-									Ao cadastrar sua empresa, você concorda com
-									os termos e a política de privacidade da
-									plataforma.
-								</FormLabel>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
+        <FormField
+          control={form.control}
+          name="acceptTerms"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <FormLabel htmlFor={field.name} className="flex items-center gap-2 text-sm font-medium">
+                  <Checkbox id={field.name} checked={field.value} onCheckedChange={field.onChange} />
+                  Ao cadastrar sua empresa, você concorda com os termos e a política de privacidade da plataforma.
+                </FormLabel>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-				<Button
-					disabled={
-						!form.watch("acceptTerms") ||
-						isValidateCompanyDocumentNumberPending ||
-						isPendingRegisterCompany
-					}
-					type="submit"
-					className="w-full mt-6 gap-2"
-				>
-					{isPendingRegisterCompany ? (
-						<Loader2 className="size-4 animate-spin" />
-					) : (
-						<>
-							Avançar
-							<ArrowRight className="size-4" />
-						</>
-					)}
-				</Button>
-			</form>
-		</Form>
-	);
+        <Button
+          disabled={!form.watch("acceptTerms") || isValidateCompanyDocumentNumberPending || isPendingRegisterCompany}
+          type="submit"
+          className="w-full mt-6 gap-2"
+        >
+          {isPendingRegisterCompany ? (
+            <Loader2 className="size-4 animate-spin" />
+          ) : (
+            <>
+              Avançar
+              <ArrowRight className="size-4" />
+            </>
+          )}
+        </Button>
+      </form>
+    </Form>
+  );
 }

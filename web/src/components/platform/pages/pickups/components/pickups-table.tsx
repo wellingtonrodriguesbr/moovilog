@@ -8,25 +8,24 @@ import { Table, TableBody } from "@/components/ui/table";
 import { Empty } from "@/components/platform/empty";
 
 export function PickupsTable() {
-	const { pickupsFromCompany, isFetchPickupsFromCompanyPending } =
-		useFetchPickupsFromCompany();
+  const { pickupsFromCompany, isFetchPickupsFromCompanyPending } = useFetchPickupsFromCompany();
 
-	if (isFetchPickupsFromCompanyPending) {
-		return <SkeletonPickupsTable />;
-	}
+  if (isFetchPickupsFromCompanyPending) {
+    return <SkeletonPickupsTable />;
+  }
 
-	if (pickupsFromCompany.length > 0) {
-		return (
-			<Table>
-				<PickupsTableHeader />
-				<TableBody>
-					{pickupsFromCompany.map((pickup) => (
-						<PickupsTableRow key={pickup.id} pickup={pickup} />
-					))}
-				</TableBody>
-			</Table>
-		);
-	}
+  if (pickupsFromCompany.length > 0) {
+    return (
+      <Table>
+        <PickupsTableHeader />
+        <TableBody>
+          {pickupsFromCompany.map((pickup) => (
+            <PickupsTableRow key={pickup.id} pickup={pickup} />
+          ))}
+        </TableBody>
+      </Table>
+    );
+  }
 
-	return <Empty context="pickup" />;
+  return <Empty context="pickup" />;
 }

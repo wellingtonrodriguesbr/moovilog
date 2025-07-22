@@ -5,13 +5,13 @@ import { Benefits } from "@/components/lp/sections/benefits";
 import { Faq } from "@/components/lp/sections/faq";
 
 export function Home() {
-	return (
-		<div>
-			<Hero />
-			<AboutPlatform />
-			<Benefits />
-			<Faq />
-			<Footer />
-		</div>
-	);
+  return (
+    <div>
+      <Hero />
+      <AboutPlatform />
+      <Benefits />
+      <Faq />
+      <Footer />
+    </div>
+  );
 }

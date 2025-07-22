@@ -6,21 +6,20 @@ import { PrismaCompaniesRepository } from "@/modules/company/repositories/prisma
 import { PermissionService } from "@/services/permission-service";
 
 export function makeSendInvitationToCompanyMemberUseCase() {
-	const usersRepository = new PrismaUsersRepository();
-	const companyMembersRepository = new PrismaCompanyMembersRepository();
-	const companiesRepository = new PrismaCompaniesRepository();
-	const tokensRepository = new PrismaTokensRepository();
+  const usersRepository = new PrismaUsersRepository();
+  const companyMembersRepository = new PrismaCompanyMembersRepository();
+  const companiesRepository = new PrismaCompaniesRepository();
+  const tokensRepository = new PrismaTokensRepository();
 
-	const permissionService = new PermissionService(companyMembersRepository);
+  const permissionService = new PermissionService(companyMembersRepository);
 
-	const sendInvitationToCompanyMemberUseCase =
-		new SendInvitationToCompanyMemberUseCase(
-			usersRepository,
-			companyMembersRepository,
-			companiesRepository,
-			tokensRepository,
-			permissionService
-		);
+  const sendInvitationToCompanyMemberUseCase = new SendInvitationToCompanyMemberUseCase(
+    usersRepository,
+    companyMembersRepository,
+    companiesRepository,
+    tokensRepository,
+    permissionService
+  );
 
-	return sendInvitationToCompanyMemberUseCase;
+  return sendInvitationToCompanyMemberUseCase;
 }

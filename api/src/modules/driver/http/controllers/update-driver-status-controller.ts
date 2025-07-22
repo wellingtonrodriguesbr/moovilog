@@ -6,37 +6,37 @@ import { makeUpdateDriverStatusUseCase } from "@/modules/driver/use-cases/factor
 import z from "zod";
 
 export class UpdateDriverStatusController {
-	static async handle(req: FastifyRequest, reply: FastifyReply) {
-		const updateDriverStatusBodySchema = z.object({
-			status: z.enum(["ACTIVE", "INACTIVE"]),
-		});
+  static async handle(req: FastifyRequest, reply: FastifyReply) {
+    const updateDriverStatusBodySchema = z.object({
+      status: z.enum(["ACTIVE", "INACTIVE"]),
+    });
 
-		const updateDriverStatusParamsSchema = z.object({
-			driverId: z.string().uuid(),
-		});
+    const updateDriverStatusParamsSchema = z.object({
+      driverId: z.string().uuid(),
+    });
 
-		const { driverId } = updateDriverStatusParamsSchema.parse(req.params);
-		const { status } = updateDriverStatusBodySchema.parse(req.body);
+    const { driverId } = updateDriverStatusParamsSchema.parse(req.params);
+    const { status } = updateDriverStatusBodySchema.parse(req.body);
 
-		const userId = req.user.sub;
+    const userId = req.user.sub;
 
-		try {
-			const updateDriverStatusUseCase = makeUpdateDriverStatusUseCase();
-			await updateDriverStatusUseCase.execute({
-				driverId,
-				userId,
-				status,
-			});
+    try {
+      const updateDriverStatusUseCase = makeUpdateDriverStatusUseCase();
+      await updateDriverStatusUseCase.execute({
+        driverId,
+        userId,
+        status,
+      });
 
-			reply.status(204).send();
-		} catch (error) {
-			if (error instanceof ResourceNotFoundError) {
-				reply.status(404).send({ message: error.message });
-			}
-			if (error instanceof NotAllowedError) {
-				reply.status(403).send({ message: error.message });
-			}
-			throw error;
-		}
-	}
+      reply.status(204).send();
+    } catch (error) {
+      if (error instanceof ResourceNotFoundError) {
+        reply.status(404).send({ message: error.message });
+      }
+      if (error instanceof NotAllowedError) {
+        reply.status(403).send({ message: error.message });
+      }
+      throw error;
+    }
+  }
 }

@@ -8,44 +8,37 @@ import { toast } from "sonner";
 import { Pickup } from "@/interfaces/pickup";
 
 interface PickupResponse {
-	pickups: Pickup[];
+  pickups: Pickup[];
 }
 
 export function useFetchPickupsFromCompany() {
-	const router = useRouter();
-	const { company, isLoading } = useCompanyStore();
-	const {
-		data: pickupsFromCompany,
-		isPending: isFetchPickupsFromCompanyPending,
-	} = useQuery({
-		queryKey: ["pickups"],
-		queryFn: handleFetchPickupsFromCompany,
-		enabled: !isLoading,
-	});
+  const router = useRouter();
+  const { company, isLoading } = useCompanyStore();
+  const { data: pickupsFromCompany, isPending: isFetchPickupsFromCompanyPending } = useQuery({
+    queryKey: ["pickups"],
+    queryFn: handleFetchPickupsFromCompany,
+    enabled: !isLoading,
+  });
 
-	async function handleFetchPickupsFromCompany() {
-		try {
-			const { data } = await api.get<PickupResponse>(
-				`/${company?.id}/pickups`
-			);
+  async function handleFetchPickupsFromCompany() {
+    try {
+      const { data } = await api.get<PickupResponse>(`/${company?.id}/pickups`);
 
-			return data;
-		} catch (error) {
-			if (error instanceof AxiosError) {
-				if (error.response?.status === 403) {
-					toast.error(
-						"Você não tem permissão para acessar essa página"
-					);
-					router.push("/inicio");
-				}
+      return data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 403) {
+          toast.error("Você não tem permissão para acessar essa página");
+          router.push("/inicio");
+        }
 
-				throw error;
-			}
-		}
-	}
+        throw error;
+      }
+    }
+  }
 
-	return {
-		pickupsFromCompany: pickupsFromCompany?.pickups ?? [],
-		isFetchPickupsFromCompanyPending,
-	};
+  return {
+    pickupsFromCompany: pickupsFromCompany?.pickups ?? [],
+    isFetchPickupsFromCompanyPending,
+  };
 }

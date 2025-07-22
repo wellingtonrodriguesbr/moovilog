@@ -2,29 +2,27 @@ import { api } from "@/lib/axios";
 import { useMutation } from "@tanstack/react-query";
 
 interface SendEmailToResetPasswordData {
-	email: string;
+  email: string;
 }
 
 export function useSendEmailToResetPassword() {
-	const {
-		mutateAsync: sendEmailToResetPassword,
-		isPending: isPendingSendEmailToResetPassword,
-		status,
-	} = useMutation({
-		mutationFn: handleSendEmailToResetPassword,
-	});
+  const {
+    mutateAsync: sendEmailToResetPassword,
+    isPending: isPendingSendEmailToResetPassword,
+    status,
+  } = useMutation({
+    mutationFn: handleSendEmailToResetPassword,
+  });
 
-	async function handleSendEmailToResetPassword(
-		data: SendEmailToResetPasswordData
-	) {
-		await api.post("/user/send-email-to-reset-password", {
-			...data,
-		});
-	}
+  async function handleSendEmailToResetPassword(data: SendEmailToResetPasswordData) {
+    await api.post("/user/send-email-to-reset-password", {
+      ...data,
+    });
+  }
 
-	return {
-		sendEmailToResetPassword,
-		isPendingSendEmailToResetPassword,
-		status,
-	};
+  return {
+    sendEmailToResetPassword,
+    isPendingSendEmailToResetPassword,
+    status,
+  };
 }

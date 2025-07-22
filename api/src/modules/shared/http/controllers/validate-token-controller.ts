@@ -6,29 +6,29 @@ import { makeValidateTokenUseCase } from "@/modules/shared/use-cases/factories/m
 import z from "zod";
 
 export class ValidateTokenController {
-	static async handle(req: FastifyRequest, reply: FastifyReply) {
-		const validateTokenBodySchema = z.object({
-			code: z.string(),
-		});
+  static async handle(req: FastifyRequest, reply: FastifyReply) {
+    const validateTokenBodySchema = z.object({
+      code: z.string(),
+    });
 
-		const { code } = validateTokenBodySchema.parse(req.params);
+    const { code } = validateTokenBodySchema.parse(req.params);
 
-		try {
-			const validateTokenUseCase = makeValidateTokenUseCase();
-			const { userId } = await validateTokenUseCase.execute({
-				code,
-			});
+    try {
+      const validateTokenUseCase = makeValidateTokenUseCase();
+      const { userId } = await validateTokenUseCase.execute({
+        code,
+      });
 
-			reply.status(200).send({ userId });
-		} catch (error) {
-			if (error instanceof ResourceNotFoundError) {
-				reply.status(404).send({ message: error.message });
-			}
-			if (error instanceof BadRequestError) {
-				reply.status(400).send({ message: error.message });
-			}
+      reply.status(200).send({ userId });
+    } catch (error) {
+      if (error instanceof ResourceNotFoundError) {
+        reply.status(404).send({ message: error.message });
+      }
+      if (error instanceof BadRequestError) {
+        reply.status(400).send({ message: error.message });
+      }
 
-			throw error;
-		}
-	}
+      throw error;
+    }
+  }
 }

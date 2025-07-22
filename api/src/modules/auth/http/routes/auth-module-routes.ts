@@ -5,9 +5,9 @@ import { RefreshToken } from "@/modules/auth/http/controllers/refresh-token-cont
 import { RegisterUserController } from "@/modules/auth/http/controllers/register-user-controller";
 
 export async function authModuleRoutes(app: FastifyInstance) {
-	app.post("/sessions", AuthenticateController.handle);
-	app.post("/sessions/logout", LogoutController.handle);
-	app.patch("/token/refresh", RefreshToken.handle);
+  app.post("/sessions", AuthenticateController.handle);
+  app.post("/sessions/logout", LogoutController.handle);
+  app.patch("/token/refresh", RefreshToken.handle);
 
-	app.post("/users", RegisterUserController.handle);
+  app.post("/users", RegisterUserController.handle);
 }

@@ -4,8 +4,8 @@ import { RegisterPickupController } from "@/modules/pickup/http/controllers/regi
 import { FetchPickupsFromCompanyController } from "@/modules/pickup/http/controllers/fetch-pickups-from-company-controller";
 
 export async function pickupModuleRoutes(app: FastifyInstance) {
-	app.addHook("onRequest", verifyJWT);
+  app.addHook("onRequest", verifyJWT);
 
-	app.post("/pickups", RegisterPickupController.handle);
-	app.get("/:companyId/pickups", FetchPickupsFromCompanyController.handle);
+  app.post("/pickups", RegisterPickupController.handle);
+  app.get("/:companyId/pickups", FetchPickupsFromCompanyController.handle);
 }

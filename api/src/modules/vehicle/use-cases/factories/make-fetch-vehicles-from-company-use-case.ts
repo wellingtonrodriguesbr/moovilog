@@ -4,14 +4,14 @@ import { PrismaCompaniesRepository } from "@/modules/company/repositories/prisma
 import { FetchVehiclesFromCompanyUseCase } from "@/modules/vehicle/use-cases/fetch-vehicles-from-company-use-case";
 
 export function makeFetchVehiclesFromCompanyUseCase() {
-	const vehiclesRepository = new PrismaVehiclesRepository();
-	const companiesRepository = new PrismaCompaniesRepository();
-	const companyMembersRepository = new PrismaCompanyMembersRepository();
-	const fetchVehiclesFromCompanyUseCase = new FetchVehiclesFromCompanyUseCase(
-		vehiclesRepository,
-		companiesRepository,
-		companyMembersRepository
-	);
+  const vehiclesRepository = new PrismaVehiclesRepository();
+  const companiesRepository = new PrismaCompaniesRepository();
+  const companyMembersRepository = new PrismaCompanyMembersRepository();
+  const fetchVehiclesFromCompanyUseCase = new FetchVehiclesFromCompanyUseCase(
+    vehiclesRepository,
+    companiesRepository,
+    companyMembersRepository
+  );
 
-	return fetchVehiclesFromCompanyUseCase;
+  return fetchVehiclesFromCompanyUseCase;
 }

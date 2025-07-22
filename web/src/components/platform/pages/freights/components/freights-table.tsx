@@ -8,25 +8,24 @@ import { Table, TableBody } from "@/components/ui/table";
 import { Empty } from "@/components/platform/empty";
 
 export function FreightsTable() {
-	const { freightsFromCompany, isFetchFreightsFromCompanyPending } =
-		useFetchFreightsFromCompany();
+  const { freightsFromCompany, isFetchFreightsFromCompanyPending } = useFetchFreightsFromCompany();
 
-	if (isFetchFreightsFromCompanyPending) {
-		return <SkeletonFreightsTable />;
-	}
+  if (isFetchFreightsFromCompanyPending) {
+    return <SkeletonFreightsTable />;
+  }
 
-	if (freightsFromCompany.length > 0) {
-		return (
-			<Table>
-				<FreightsTableHeader />
-				<TableBody>
-					{freightsFromCompany.map((freight) => (
-						<FreightsTableRow key={freight.id} freight={freight} />
-					))}
-				</TableBody>
-			</Table>
-		);
-	}
+  if (freightsFromCompany.length > 0) {
+    return (
+      <Table>
+        <FreightsTableHeader />
+        <TableBody>
+          {freightsFromCompany.map((freight) => (
+            <FreightsTableRow key={freight.id} freight={freight} />
+          ))}
+        </TableBody>
+      </Table>
+    );
+  }
 
-	return <Empty context="freight" />;
+  return <Empty context="freight" />;
 }

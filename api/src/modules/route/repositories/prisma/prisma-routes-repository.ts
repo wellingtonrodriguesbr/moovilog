@@ -3,59 +3,59 @@ import { prisma } from "@/lib/prisma";
 import { RoutesRepository } from "@/modules/route/repositories/routes-repository";
 
 export class PrismaRoutesRepository implements RoutesRepository {
-	async create(data: Prisma.RouteUncheckedCreateInput) {
-		const route = await prisma.route.create({
-			data,
-		});
+  async create(data: Prisma.RouteUncheckedCreateInput) {
+    const route = await prisma.route.create({
+      data,
+    });
 
-		return route;
-	}
+    return route;
+  }
 
-	async findById(id: string) {
-		const route = await prisma.route.findUnique({
-			where: {
-				id,
-			},
-		});
+  async findById(id: string) {
+    const route = await prisma.route.findUnique({
+      where: {
+        id,
+      },
+    });
 
-		if (!route) {
-			return null;
-		}
+    if (!route) {
+      return null;
+    }
 
-		return route;
-	}
+    return route;
+  }
 
-	async findRouteInCompanyWithSameName(name: string, companyId: string) {
-		const route = await prisma.route.findFirst({
-			where: {
-				name,
-				companyId,
-			},
-		});
+  async findRouteInCompanyWithSameName(name: string, companyId: string) {
+    const route = await prisma.route.findFirst({
+      where: {
+        name,
+        companyId,
+      },
+    });
 
-		return route;
-	}
+    return route;
+  }
 
-	async findManyByCompanyId(companyId: string) {
-		const routes = await prisma.route.findMany({
-			where: {
-				companyId,
-			},
-			include: {
-				creator: {
-					include: {
-						user: {
-							select: {
-								id: true,
-								name: true,
-								email: true,
-							},
-						},
-					},
-				},
-			},
-		});
+  async findManyByCompanyId(companyId: string) {
+    const routes = await prisma.route.findMany({
+      where: {
+        companyId,
+      },
+      include: {
+        creator: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+              },
+            },
+          },
+        },
+      },
+    });
 
-		return routes;
-	}
+    return routes;
+  }
 }

@@ -19,106 +19,103 @@ let statesRepository: InMemoryStatesRepository;
 let sut: GetCompanyAddressUseCase;
 
 describe("[MODULE]: Get company address use case", () => {
-	beforeEach(async () => {
-		usersRepository = new InMemoryUsersRepository();
-		companiesRepository = new InMemoryCompaniesRepository();
-		companyMembersRepository = new InMemoryCompanyMembersRepository();
-		addressesRepository = new InMemoryAddressesRepository();
-		citiesRepository = new InMemoryCitiesRepository();
-		statesRepository = new InMemoryStatesRepository();
+  beforeEach(async () => {
+    usersRepository = new InMemoryUsersRepository();
+    companiesRepository = new InMemoryCompaniesRepository();
+    companyMembersRepository = new InMemoryCompanyMembersRepository();
+    addressesRepository = new InMemoryAddressesRepository();
+    citiesRepository = new InMemoryCitiesRepository();
+    statesRepository = new InMemoryStatesRepository();
 
-		sut = new GetCompanyAddressUseCase(
-			companyMembersRepository,
-			companiesRepository,
-			addressesRepository,
-			citiesRepository,
-			statesRepository
-		);
+    sut = new GetCompanyAddressUseCase(
+      companyMembersRepository,
+      companiesRepository,
+      addressesRepository,
+      citiesRepository,
+      statesRepository
+    );
 
-		await usersRepository.create({
-			id: "john-doe-id-01",
-			name: "John Doe",
-			email: "johndoe@example.com",
-			password: "12345678",
-		});
+    await usersRepository.create({
+      id: "john-doe-id-01",
+      name: "John Doe",
+      email: "johndoe@example.com",
+      password: "12345678",
+    });
 
-		await companiesRepository.create({
-			id: "company-id-01",
-			name: "Company name",
-			documentNumber: "12312312389899",
-			size: "MEDIUM",
-			ownerId: "john-doe-01",
-		});
+    await companiesRepository.create({
+      id: "company-id-01",
+      name: "Company name",
+      documentNumber: "12312312389899",
+      size: "MEDIUM",
+      ownerId: "john-doe-01",
+    });
 
-		await companyMembersRepository.create({
-			id: "company-member-id-01",
-			companyId: "company-id-01",
-			userId: "john-doe-id-01",
-			sector: "Diretoria",
-			extraData: {
-				permissions: ["MANAGE_VEHICLES_AND_DRIVERS"],
-			},
-		});
+    await companyMembersRepository.create({
+      id: "company-member-id-01",
+      companyId: "company-id-01",
+      userId: "john-doe-id-01",
+      sector: "Diretoria",
+      extraData: {
+        permissions: ["MANAGE_VEHICLES_AND_DRIVERS"],
+      },
+    });
 
-		await statesRepository.create({
-			id: "fake-state-id",
-			name: "São Paulo",
-			acronym: "SP",
-		});
+    await statesRepository.create({
+      id: "fake-state-id",
+      name: "São Paulo",
+      acronym: "SP",
+    });
 
-		await citiesRepository.create({
-			id: "fake-city-id",
-			name: "São Paulo",
-			stateId: "fake-state-id",
-		});
+    await citiesRepository.create({
+      id: "fake-city-id",
+      name: "São Paulo",
+      stateId: "fake-state-id",
+    });
 
-		await addressesRepository.create({
-			id: "fake-address-id",
-			cityId: "fake-city-id",
-			street: "fake street name",
-			neighborhood: "fake neighborhood",
-			number: 200,
-			zipCode: "00000-000",
-		});
+    await addressesRepository.create({
+      id: "fake-address-id",
+      cityId: "fake-city-id",
+      street: "fake street name",
+      neighborhood: "fake neighborhood",
+      number: 200,
+      zipCode: "00000-000",
+    });
 
-		await companiesRepository.setCompanyAddress(
-			"company-id-01",
-			"fake-address-id"
-		);
-	});
+    await companiesRepository.setCompanyAddress("company-id-01", "fake-address-id");
+  });
 
-	it("should be able to get company information", async () => {
-		const { companyAddress } = await sut.execute({
-			userId: "john-doe-id-01",
-			companyId: "company-id-01",
-		});
+  it("should be able to get company information", async () => {
+    const { companyAddress } = await sut.execute({
+      userId: "john-doe-id-01",
+      companyId: "company-id-01",
+    });
 
-		expect(companyAddress.address.id).toEqual("fake-address-id");
-		expect(companyAddress.state.id).toEqual("fake-state-id");
-	});
+    expect(companyAddress.address.id).toEqual("fake-address-id");
+    expect(companyAddress.state.id).toEqual("fake-state-id");
+  });
 
-	it("not should be able to get company information if the company is not found", async () => {
-		await expect(() =>
-			sut.execute({
-				userId: "john-doe-id-01",
-				companyId: "non-existent-company-id",
-			})
-		).rejects.toBeInstanceOf(ResourceNotFoundError);
-	});
+  it("not should be able to get company information if the company is not found", async () => {
+    await expect(() =>
+      sut.execute({
+        userId: "john-doe-id-01",
+        companyId: "non-existent-company-id",
+      })
+    ).rejects.toBeInstanceOf(ResourceNotFoundError);
+  });
 
-	it("not should be able to get company information if user is not member of the company", async () => {
-		await usersRepository.create({
-			id: "john-doe-id-03",
-			name: "John Doe",
-			email: "johndoe3@example.com",
-			password: "12345678",
-		});
+  it("not should be able to get company information if user is not member of the company", async () => {
+    await usersRepository.create({
+      id: "john-doe-id-03",
+      name: "John Doe",
+      email: "johndoe3@example.com",
+      password: "12345678",
+    });
 
-		await expect(() =>
-			sut.execute({
-				userId: "john-doe-id-03",
-				companyId: "company-id-01",
-			})
-		).rejects.toBeInstanceOf(NotAllowedError);
-	});
+    await expect(() =>
+      sut.execute({
+        userId: "john-doe-id-03",
+        companyId: "company-id-01",
+      })
+    ).rejects.toBeInstanceOf(NotAllowedError);
+  });
 });

@@ -4,14 +4,8 @@ import { FetchMembersFromCompanyController } from "@/modules/company-member/http
 import { SendInvitationToCompanyMemberController } from "@/modules/company-member/http/controllers/send-invitation-to-company-member-controller";
 
 export async function companyMemberModuleRoutes(app: FastifyInstance) {
-	app.addHook("onRequest", verifyJWT);
+  app.addHook("onRequest", verifyJWT);
 
-	app.get(
-		"/companies/:companyId/members",
-		FetchMembersFromCompanyController.handle
-	);
-	app.post(
-		"/:companyId/members/invite",
-		SendInvitationToCompanyMemberController.handle
-	);
+  app.get("/companies/:companyId/members", FetchMembersFromCompanyController.handle);
+  app.post("/:companyId/members/invite", SendInvitationToCompanyMemberController.handle);
 }

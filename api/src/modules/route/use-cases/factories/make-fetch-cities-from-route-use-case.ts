@@ -5,17 +5,17 @@ import { PrismaCitiesInRouteRepository } from "@/modules/route/repositories/pris
 import { FetchCitiesFromRouteUseCase } from "@/modules/route/use-cases/fetch-cities-from-route-use-case";
 
 export function makeFetchCitiesFromRouteUseCase() {
-	const companyMembersRepository = new PrismaCompanyMembersRepository();
-	const citiesRepository = new PrismaCitiesRepository();
-	const citiesInRouteRepository = new PrismaCitiesInRouteRepository();
-	const routesRepository = new PrismaRoutesRepository();
+  const companyMembersRepository = new PrismaCompanyMembersRepository();
+  const citiesRepository = new PrismaCitiesRepository();
+  const citiesInRouteRepository = new PrismaCitiesInRouteRepository();
+  const routesRepository = new PrismaRoutesRepository();
 
-	const fetchCitiesFromRouteUseCase = new FetchCitiesFromRouteUseCase(
-		companyMembersRepository,
-		routesRepository,
-		citiesInRouteRepository,
-		citiesRepository
-	);
+  const fetchCitiesFromRouteUseCase = new FetchCitiesFromRouteUseCase(
+    companyMembersRepository,
+    routesRepository,
+    citiesInRouteRepository,
+    citiesRepository
+  );
 
-	return fetchCitiesFromRouteUseCase;
+  return fetchCitiesFromRouteUseCase;
 }

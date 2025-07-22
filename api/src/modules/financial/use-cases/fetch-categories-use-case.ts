@@ -2,16 +2,14 @@ import { IFinanceCategory } from "@/modules/financial/interfaces/finance-categor
 import { FinanceCategoriesRepository } from "@/modules/financial/repositories/finance-categories-repository";
 
 interface FetchCategoriesUseCaseResponse {
-	categories: IFinanceCategory[];
+  categories: IFinanceCategory[];
 }
 
 export class FetchCategoriesUseCase {
-	constructor(
-		private financeCategoriesRepository: FinanceCategoriesRepository
-	) {}
-	async execute(): Promise<FetchCategoriesUseCaseResponse> {
-		const categories = await this.financeCategoriesRepository.findMany();
+  constructor(private financeCategoriesRepository: FinanceCategoriesRepository) {}
+  async execute(): Promise<FetchCategoriesUseCaseResponse> {
+    const categories = await this.financeCategoriesRepository.findMany();
 
-		return { categories };
-	}
+    return { categories };
+  }
 }

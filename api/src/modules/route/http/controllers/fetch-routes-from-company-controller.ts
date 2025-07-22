@@ -4,28 +4,28 @@ import { makeFetchRoutesFromCompanyUseCase } from "@/modules/route/use-cases/fac
 import z from "zod";
 
 export class FetchRoutesFromCompanyController {
-	static async handle(req: FastifyRequest, reply: FastifyReply) {
-		const fetchRoutesFromCompanyParamsSchema = z.object({
-			companyId: z.string().uuid(),
-		});
+  static async handle(req: FastifyRequest, reply: FastifyReply) {
+    const fetchRoutesFromCompanyParamsSchema = z.object({
+      companyId: z.string().uuid(),
+    });
 
-		const { companyId } = fetchRoutesFromCompanyParamsSchema.parse(req.params);
+    const { companyId } = fetchRoutesFromCompanyParamsSchema.parse(req.params);
 
-		const userId = req.user.sub;
+    const userId = req.user.sub;
 
-		try {
-			const fetchRoutesFromCompanyUseCase = makeFetchRoutesFromCompanyUseCase();
-			const { routes } = await fetchRoutesFromCompanyUseCase.execute({
-				userId,
-				companyId,
-			});
+    try {
+      const fetchRoutesFromCompanyUseCase = makeFetchRoutesFromCompanyUseCase();
+      const { routes } = await fetchRoutesFromCompanyUseCase.execute({
+        userId,
+        companyId,
+      });
 
-			reply.status(200).send({ routes });
-		} catch (error) {
-			if (error instanceof ResourceNotFoundError) {
-				reply.status(404).send({ message: error.message });
-			}
-			throw error;
-		}
-	}
+      reply.status(200).send({ routes });
+    } catch (error) {
+      if (error instanceof ResourceNotFoundError) {
+        reply.status(404).send({ message: error.message });
+      }
+      throw error;
+    }
+  }
 }

@@ -2,9 +2,9 @@ import { ValidateTokenUseCase } from "@/modules/shared/use-cases/validate-token-
 import { PrismaTokensRepository } from "@/modules/shared/repositories/prisma/prisma-tokens-repository";
 
 export function makeValidateTokenUseCase() {
-	const tokensRepository = new PrismaTokensRepository();
+  const tokensRepository = new PrismaTokensRepository();
 
-	const validateTokenUseCase = new ValidateTokenUseCase(tokensRepository);
+  const validateTokenUseCase = new ValidateTokenUseCase(tokensRepository);
 
-	return validateTokenUseCase;
+  return validateTokenUseCase;
 }

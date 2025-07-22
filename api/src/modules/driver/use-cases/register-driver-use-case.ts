@@ -7,86 +7,74 @@ import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
 import { PermissionService } from "@/services/permission-service";
 
 interface RegisterDriverUseCaseRequest {
-	name: string;
-	documentNumber: string;
-	phone: string;
-	type: IDriverType;
-	creatorId: string;
+  name: string;
+  documentNumber: string;
+  phone: string;
+  type: IDriverType;
+  creatorId: string;
 }
 
 interface RegisterDriverUseCaseResponse {
-	driver: IDriver;
+  driver: IDriver;
 }
 
 export class RegisterDriverUseCase {
-	constructor(
-		private companyMembersRepository: CompanyMembersRepository,
-		private driversRepository: DriversRepository,
-		private permissionService: PermissionService
-	) {}
+  constructor(
+    private companyMembersRepository: CompanyMembersRepository,
+    private driversRepository: DriversRepository,
+    private permissionService: PermissionService
+  ) {}
 
-	async execute({
-		name,
-		documentNumber,
-		phone,
-		type,
-		creatorId,
-	}: RegisterDriverUseCaseRequest): Promise<RegisterDriverUseCaseResponse> {
-		const member = await this.companyMembersRepository.findByUserId(creatorId);
+  async execute({
+    name,
+    documentNumber,
+    phone,
+    type,
+    creatorId,
+  }: RegisterDriverUseCaseRequest): Promise<RegisterDriverUseCaseResponse> {
+    const member = await this.companyMembersRepository.findByUserId(creatorId);
 
-		if (!member) {
-			throw new ResourceNotFoundError("Member not found");
-		}
+    if (!member) {
+      throw new ResourceNotFoundError("Member not found");
+    }
 
-		const hasPermission = await this.permissionService.hasPermission(
-			member.id,
-			["SUPER_ADMIN", "ADMIN", "MANAGE_VEHICLES_AND_DRIVERS"]
-		);
+    const hasPermission = await this.permissionService.hasPermission(member.id, [
+      "SUPER_ADMIN",
+      "ADMIN",
+      "MANAGE_VEHICLES_AND_DRIVERS",
+    ]);
 
-		if (!hasPermission) {
-			throw new NotAllowedError(
-				"You do not have permission to perform this action"
-			);
-		}
+    if (!hasPermission) {
+      throw new NotAllowedError("You do not have permission to perform this action");
+    }
 
-		const [driverAlreadyExistsInCompany, driverAlreadyExistsWithSamePhone] =
-			await Promise.all([
-				await this.driversRepository.findDriverInCompany(
-					documentNumber,
-					member.companyId
-				),
-				await this.driversRepository.findByPhoneNumberInCompany(
-					phone,
-					member.companyId
-				),
-			]);
+    const [driverAlreadyExistsInCompany, driverAlreadyExistsWithSamePhone] = await Promise.all([
+      await this.driversRepository.findDriverInCompany(documentNumber, member.companyId),
+      await this.driversRepository.findByPhoneNumberInCompany(phone, member.companyId),
+    ]);
 
-		if (driverAlreadyExistsWithSamePhone) {
-			throw new DriverAlreadyExistsError(
-				"Driver already exists with same phone"
-			);
-		}
+    if (driverAlreadyExistsWithSamePhone) {
+      throw new DriverAlreadyExistsError("Driver already exists with same phone");
+    }
 
-		if (driverAlreadyExistsInCompany) {
-			throw new DriverAlreadyExistsError(
-				"Driver already exists in company with same document number"
-			);
-		}
+    if (driverAlreadyExistsInCompany) {
+      throw new DriverAlreadyExistsError("Driver already exists in company with same document number");
+    }
 
-		const formattedDocumentNumber = documentNumber.replace(/\D/g, "");
-		const formattedPhone = phone.replace(/\D/g, "");
+    const formattedDocumentNumber = documentNumber.replace(/\D/g, "");
+    const formattedPhone = phone.replace(/\D/g, "");
 
-		const driver = await this.driversRepository.create({
-			name,
-			documentNumber: formattedDocumentNumber,
-			phone: formattedPhone,
-			type,
-			companyId: member.companyId,
-			creatorId: member.id,
-		});
+    const driver = await this.driversRepository.create({
+      name,
+      documentNumber: formattedDocumentNumber,
+      phone: formattedPhone,
+      type,
+      companyId: member.companyId,
+      creatorId: member.id,
+    });
 
-		return {
-			driver,
-		};
-	}
+    return {
+      driver,
+    };
+  }
 }

@@ -6,19 +6,19 @@ import { PrismaStatesRepository } from "@/modules/shared/repositories/prisma/pri
 import { GetCompanyAddressUseCase } from "@/modules/company/use-cases/get-company-address-use-case";
 
 export function makeGetCompanyAddressUseCase() {
-	const companyMembersRepository = new PrismaCompanyMembersRepository();
-	const addressesRepository = new PrismaAddressesRepository();
-	const companiesRepository = new PrismaCompaniesRepository();
-	const citiesRepository = new PrismaCitiesRepository();
-	const statesRepository = new PrismaStatesRepository();
+  const companyMembersRepository = new PrismaCompanyMembersRepository();
+  const addressesRepository = new PrismaAddressesRepository();
+  const companiesRepository = new PrismaCompaniesRepository();
+  const citiesRepository = new PrismaCitiesRepository();
+  const statesRepository = new PrismaStatesRepository();
 
-	const getCompanyAddressUseCase = new GetCompanyAddressUseCase(
-		companyMembersRepository,
-		companiesRepository,
-		addressesRepository,
-		citiesRepository,
-		statesRepository
-	);
+  const getCompanyAddressUseCase = new GetCompanyAddressUseCase(
+    companyMembersRepository,
+    companiesRepository,
+    addressesRepository,
+    citiesRepository,
+    statesRepository
+  );
 
-	return getCompanyAddressUseCase;
+  return getCompanyAddressUseCase;
 }

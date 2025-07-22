@@ -3,115 +3,105 @@ import { VehiclesRepository } from "@/modules/vehicle/repositories/vehicles-repo
 import { randomUUID } from "node:crypto";
 
 export class InMemoryVehiclesRepository implements VehiclesRepository {
-	public items: Vehicle[] = [];
+  public items: Vehicle[] = [];
 
-	async create(data: Prisma.VehicleUncheckedCreateInput) {
-		const vehicle = {
-			id: data.id ?? randomUUID(),
-			plate: data.plate,
-			trailerPlate: data.trailerPlate ?? null,
-			year: data.year,
-			category: data.category,
-			status: data.status ?? "ACTIVE",
-			type: data.type,
-			body: data.body,
-			fullLoadCapacity: data.fullLoadCapacity,
-			brand: data.brand,
-			model: data.model,
-			creatorId: data.creatorId,
-			companyId: data.companyId,
-			createdAt: new Date(),
-			updatedAt: new Date(),
-		};
+  async create(data: Prisma.VehicleUncheckedCreateInput) {
+    const vehicle = {
+      id: data.id ?? randomUUID(),
+      plate: data.plate,
+      trailerPlate: data.trailerPlate ?? null,
+      year: data.year,
+      category: data.category,
+      status: data.status ?? "ACTIVE",
+      type: data.type,
+      body: data.body,
+      fullLoadCapacity: data.fullLoadCapacity,
+      brand: data.brand,
+      model: data.model,
+      creatorId: data.creatorId,
+      companyId: data.companyId,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
 
-		this.items.push(vehicle);
-		return vehicle;
-	}
+    this.items.push(vehicle);
+    return vehicle;
+  }
 
-	async findVehicleInCompanyByPlate(plate: string, companyId: string) {
-		const vehicle = this.items.find(
-			(item) => item.plate === plate && item.companyId === companyId
-		);
+  async findVehicleInCompanyByPlate(plate: string, companyId: string) {
+    const vehicle = this.items.find((item) => item.plate === plate && item.companyId === companyId);
 
-		if (!vehicle) {
-			return null;
-		}
+    if (!vehicle) {
+      return null;
+    }
 
-		return vehicle;
-	}
+    return vehicle;
+  }
 
-	async findVehicleInCompanyByTrailerPlate(
-		trailerPlate: string,
-		companyId: string
-	) {
-		const vehicle = this.items.find(
-			(item) =>
-				item.trailerPlate === trailerPlate && item.companyId === companyId
-		);
+  async findVehicleInCompanyByTrailerPlate(trailerPlate: string, companyId: string) {
+    const vehicle = this.items.find((item) => item.trailerPlate === trailerPlate && item.companyId === companyId);
 
-		if (!vehicle) {
-			return null;
-		}
+    if (!vehicle) {
+      return null;
+    }
 
-		return vehicle;
-	}
+    return vehicle;
+  }
 
-	async findByPlate(plate: string) {
-		const vehicle = this.items.find((item) => item.plate === plate);
+  async findByPlate(plate: string) {
+    const vehicle = this.items.find((item) => item.plate === plate);
 
-		if (!vehicle) {
-			return null;
-		}
+    if (!vehicle) {
+      return null;
+    }
 
-		return vehicle;
-	}
+    return vehicle;
+  }
 
-	async findById(id: string) {
-		const vehicle = this.items.find((item) => item.id === id);
+  async findById(id: string) {
+    const vehicle = this.items.find((item) => item.id === id);
 
-		if (!vehicle) {
-			return null;
-		}
+    if (!vehicle) {
+      return null;
+    }
 
-		return vehicle;
-	}
+    return vehicle;
+  }
 
-	async findVehicleInCompany(id: string, companyId: string) {
-		const vehicle = this.items.find(
-			(item) => item.id === id && item.companyId === companyId
-		);
+  async findVehicleInCompany(id: string, companyId: string) {
+    const vehicle = this.items.find((item) => item.id === id && item.companyId === companyId);
 
-		if (!vehicle) {
-			return null;
-		}
+    if (!vehicle) {
+      return null;
+    }
 
-		return vehicle;
-	}
+    return vehicle;
+  }
 
-	async findManyByCompanyId(companyId: string) {
-		const vehicles = this.items.filter((item) => item.companyId === companyId);
+  async findManyByCompanyId(companyId: string) {
+    const vehicles = this.items.filter((item) => item.companyId === companyId);
 
-		return vehicles;
-	}
+    return vehicles;
+  }
 
-	async updateStatus(id: string, status: VehicleStatus) {
-		const vehicleIndex = this.items.findIndex((item) => item.id === id);
+  async updateStatus(id: string, status: VehicleStatus) {
+    const vehicleIndex = this.items.findIndex((item) => item.id === id);
 
-		this.items[vehicleIndex].status = status;
-	}
+    this.items[vehicleIndex].status = status;
+  }
 
-	async update(id: string, data: Prisma.VehicleUncheckedUpdateInput) {
-		const vehicleIndex = this.items.findIndex((item) => item.id === id);
+  async update(id: string, data: Prisma.VehicleUncheckedUpdateInput) {
+    const vehicleIndex = this.items.findIndex((item) => item.id === id);
 
-		if (vehicleIndex === -1) {
-			return;
-		}
+    if (vehicleIndex === -1) {
+      return;
+    }
 
-		const updatedVehicle = {
-			...this.items[vehicleIndex],
-			...data,
-		} as Vehicle;
+    const updatedVehicle = {
+      ...this.items[vehicleIndex],
+      ...data,
+    } as Vehicle;
 
-		this.items[vehicleIndex] = updatedVehicle;
-	}
+    this.items[vehicleIndex] = updatedVehicle;
+  }
 }

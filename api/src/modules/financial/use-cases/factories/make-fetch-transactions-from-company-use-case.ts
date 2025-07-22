@@ -5,20 +5,18 @@ import { FetchTransactionsFromCompanyUseCase } from "@/modules/financial/use-cas
 import { PermissionService } from "@/services/permission-service";
 
 export function makeFetchTransactionsFromCompanyUseCase() {
-	const companyMembersRepository = new PrismaCompanyMembersRepository();
-	const companiesRepository = new PrismaCompaniesRepository();
-	const financeTransactionsRepository =
-		new PrismaFinanceTransactionsRepository();
+  const companyMembersRepository = new PrismaCompanyMembersRepository();
+  const companiesRepository = new PrismaCompaniesRepository();
+  const financeTransactionsRepository = new PrismaFinanceTransactionsRepository();
 
-	const permissionService = new PermissionService(companyMembersRepository);
+  const permissionService = new PermissionService(companyMembersRepository);
 
-	const fetchTransactionsFromCompanyUseCase =
-		new FetchTransactionsFromCompanyUseCase(
-			companyMembersRepository,
-			companiesRepository,
-			financeTransactionsRepository,
-			permissionService
-		);
+  const fetchTransactionsFromCompanyUseCase = new FetchTransactionsFromCompanyUseCase(
+    companyMembersRepository,
+    companiesRepository,
+    financeTransactionsRepository,
+    permissionService
+  );
 
-	return fetchTransactionsFromCompanyUseCase;
+  return fetchTransactionsFromCompanyUseCase;
 }

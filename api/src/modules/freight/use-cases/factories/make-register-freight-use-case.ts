@@ -12,34 +12,32 @@ import { PermissionService } from "@/services/permission-service";
 import { TransactionService } from "@/services/transaction-service";
 
 export function makeRegisterfreightUseCase() {
-	const companyMembersRepository = new PrismaCompanyMembersRepository();
-	const driversRepository = new PrismaDriversRepository();
-	const freightsRepository = new PrismaFreightsRepository();
-	const freightTransactionsRepository =
-		new PrismaFreightTransactionsRepository();
-	const driverTransactionsRepository = new PrismaDriverTransactionsRepository();
-	const vehiclesRepository = new PrismaVehiclesRepository();
-	const routesRepository = new PrismaRoutesRepository();
-	const financeTransactionsRepository =
-		new PrismaFinanceTransactionsRepository();
-	const financeCategoriesRepository = new PrismaFinanceCategoriesRepository();
+  const companyMembersRepository = new PrismaCompanyMembersRepository();
+  const driversRepository = new PrismaDriversRepository();
+  const freightsRepository = new PrismaFreightsRepository();
+  const freightTransactionsRepository = new PrismaFreightTransactionsRepository();
+  const driverTransactionsRepository = new PrismaDriverTransactionsRepository();
+  const vehiclesRepository = new PrismaVehiclesRepository();
+  const routesRepository = new PrismaRoutesRepository();
+  const financeTransactionsRepository = new PrismaFinanceTransactionsRepository();
+  const financeCategoriesRepository = new PrismaFinanceCategoriesRepository();
 
-	const permissionService = new PermissionService(companyMembersRepository);
-	const transactionService = new TransactionService();
+  const permissionService = new PermissionService(companyMembersRepository);
+  const transactionService = new TransactionService();
 
-	const registerFreightUseCase = new RegisterFreightUseCase(
-		companyMembersRepository,
-		driversRepository,
-		vehiclesRepository,
-		freightsRepository,
-		freightTransactionsRepository,
-		driverTransactionsRepository,
-		routesRepository,
-		financeTransactionsRepository,
-		financeCategoriesRepository,
-		permissionService,
-		transactionService
-	);
+  const registerFreightUseCase = new RegisterFreightUseCase(
+    companyMembersRepository,
+    driversRepository,
+    vehiclesRepository,
+    freightsRepository,
+    freightTransactionsRepository,
+    driverTransactionsRepository,
+    routesRepository,
+    financeTransactionsRepository,
+    financeCategoriesRepository,
+    permissionService,
+    transactionService
+  );
 
-	return registerFreightUseCase;
+  return registerFreightUseCase;
 }

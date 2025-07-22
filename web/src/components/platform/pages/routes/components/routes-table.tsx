@@ -8,25 +8,24 @@ import { useFetchRoutesFromCompany } from "@/hooks/route/use-fetch-routes-from-c
 import { Empty } from "@/components/platform/empty";
 
 export function RoutesTable() {
-	const { routes, isFetchRoutesFromCompanyPending } =
-		useFetchRoutesFromCompany();
+  const { routes, isFetchRoutesFromCompanyPending } = useFetchRoutesFromCompany();
 
-	if (isFetchRoutesFromCompanyPending) {
-		return <SkeletonDriversTable />;
-	}
+  if (isFetchRoutesFromCompanyPending) {
+    return <SkeletonDriversTable />;
+  }
 
-	if (routes?.length > 0) {
-		return (
-			<Table>
-				<RoutesTableHeader />
-				<TableBody>
-					{routes.map((item) => (
-						<RoutesTableRow key={item.id} route={item} />
-					))}
-				</TableBody>
-			</Table>
-		);
-	}
+  if (routes?.length > 0) {
+    return (
+      <Table>
+        <RoutesTableHeader />
+        <TableBody>
+          {routes.map((item) => (
+            <RoutesTableRow key={item.id} route={item} />
+          ))}
+        </TableBody>
+      </Table>
+    );
+  }
 
-	return <Empty context="route" />;
+  return <Empty context="route" />;
 }

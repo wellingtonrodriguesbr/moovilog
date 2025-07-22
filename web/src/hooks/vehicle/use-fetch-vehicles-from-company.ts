@@ -4,30 +4,25 @@ import { Vehicle } from "@/interfaces/vehicle";
 import { useCompanyStore } from "@/stores/company-store";
 
 interface VehicleResponse {
-	vehicles: Vehicle[];
+  vehicles: Vehicle[];
 }
 
 export function useFetchVehiclesFromCompany() {
-	const { company, isLoading } = useCompanyStore();
-	const {
-		data: vehiclesFromCompany,
-		isPending: isFetchVehiclesFromCompanyPending,
-	} = useQuery({
-		queryKey: ["vehicles"],
-		queryFn: handleFetchVehiclesFromCompany,
-		enabled: !isLoading,
-	});
+  const { company, isLoading } = useCompanyStore();
+  const { data: vehiclesFromCompany, isPending: isFetchVehiclesFromCompanyPending } = useQuery({
+    queryKey: ["vehicles"],
+    queryFn: handleFetchVehiclesFromCompany,
+    enabled: !isLoading,
+  });
 
-	async function handleFetchVehiclesFromCompany() {
-		const { data } = await api.get<VehicleResponse>(
-			`/companies/${company?.id}/vehicles`
-		);
+  async function handleFetchVehiclesFromCompany() {
+    const { data } = await api.get<VehicleResponse>(`/companies/${company?.id}/vehicles`);
 
-		return data.vehicles;
-	}
+    return data.vehicles;
+  }
 
-	return {
-		vehiclesFromCompany: vehiclesFromCompany ?? [],
-		isFetchVehiclesFromCompanyPending,
-	};
+  return {
+    vehiclesFromCompany: vehiclesFromCompany ?? [],
+    isFetchVehiclesFromCompanyPending,
+  };
 }

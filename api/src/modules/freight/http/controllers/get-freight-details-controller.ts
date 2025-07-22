@@ -5,32 +5,30 @@ import { makeGetFreightDetailsUseCase } from "@/modules/freight/use-cases/factor
 import z from "zod";
 
 export class GetFreightDetailsController {
-	static async handle(req: FastifyRequest, reply: FastifyReply) {
-		const getFreightDetailsParamsSchema = z.object({
-			companyId: z.string().uuid(),
-			freightId: z.string().uuid(),
-		});
+  static async handle(req: FastifyRequest, reply: FastifyReply) {
+    const getFreightDetailsParamsSchema = z.object({
+      companyId: z.string().uuid(),
+      freightId: z.string().uuid(),
+    });
 
-		const { companyId, freightId } = getFreightDetailsParamsSchema.parse(
-			req.params
-		);
+    const { companyId, freightId } = getFreightDetailsParamsSchema.parse(req.params);
 
-		const userId = req.user.sub;
+    const userId = req.user.sub;
 
-		try {
-			const getFreightDetailsUseCase = makeGetFreightDetailsUseCase();
-			const { freight } = await getFreightDetailsUseCase.execute({
-				companyId,
-				userId,
-				freightId,
-			});
+    try {
+      const getFreightDetailsUseCase = makeGetFreightDetailsUseCase();
+      const { freight } = await getFreightDetailsUseCase.execute({
+        companyId,
+        userId,
+        freightId,
+      });
 
-			reply.status(200).send({ freight });
-		} catch (error) {
-			if (error instanceof ResourceNotFoundError) {
-				reply.status(404).send({ message: error.message });
-			}
-			throw error;
-		}
-	}
+      reply.status(200).send({ freight });
+    } catch (error) {
+      if (error instanceof ResourceNotFoundError) {
+        reply.status(404).send({ message: error.message });
+      }
+      throw error;
+    }
+  }
 }

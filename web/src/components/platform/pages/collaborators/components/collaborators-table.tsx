@@ -8,26 +8,22 @@ import { CollaboratorsTableRow } from "@/components/platform/pages/collaborators
 import { SkeletonCollaboratorsTable } from "@/components/platform/pages/collaborators/components/skeleton-collaborators-table";
 
 export function CollaboratorsTable() {
-	const { companyMembers, isFetchMembersFromCompanyPending } =
-		useFetchMembersFromCompany();
+  const { companyMembers, isFetchMembersFromCompanyPending } = useFetchMembersFromCompany();
 
-	return (
-		<>
-			{isFetchMembersFromCompanyPending ? (
-				<SkeletonCollaboratorsTable />
-			) : (
-				<Table>
-					<CollaboratorsTableHeader />
-					<TableBody>
-						{companyMembers?.map((companyMember) => (
-							<CollaboratorsTableRow
-								key={companyMember.id}
-								companyMember={companyMember}
-							/>
-						))}
-					</TableBody>
-				</Table>
-			)}
-		</>
-	);
+  return (
+    <>
+      {isFetchMembersFromCompanyPending ? (
+        <SkeletonCollaboratorsTable />
+      ) : (
+        <Table>
+          <CollaboratorsTableHeader />
+          <TableBody>
+            {companyMembers?.map((companyMember) => (
+              <CollaboratorsTableRow key={companyMember.id} companyMember={companyMember} />
+            ))}
+          </TableBody>
+        </Table>
+      )}
+    </>
+  );
 }

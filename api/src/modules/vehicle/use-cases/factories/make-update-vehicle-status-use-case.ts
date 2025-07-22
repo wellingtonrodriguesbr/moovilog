@@ -4,16 +4,16 @@ import { UpdateVehicleStatusUseCase } from "@/modules/vehicle/use-cases/update-v
 import { PermissionService } from "@/services/permission-service";
 
 export function makeUpdateVehicleStatusUseCase() {
-	const vehiclesRepository = new PrismaVehiclesRepository();
-	const companyMembersRepository = new PrismaCompanyMembersRepository();
+  const vehiclesRepository = new PrismaVehiclesRepository();
+  const companyMembersRepository = new PrismaCompanyMembersRepository();
 
-	const permissionService = new PermissionService(companyMembersRepository);
+  const permissionService = new PermissionService(companyMembersRepository);
 
-	const updateVehicleStatusUseCase = new UpdateVehicleStatusUseCase(
-		companyMembersRepository,
-		vehiclesRepository,
-		permissionService
-	);
+  const updateVehicleStatusUseCase = new UpdateVehicleStatusUseCase(
+    companyMembersRepository,
+    vehiclesRepository,
+    permissionService
+  );
 
-	return updateVehicleStatusUseCase;
+  return updateVehicleStatusUseCase;
 }

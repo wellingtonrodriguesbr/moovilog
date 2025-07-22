@@ -5,18 +5,18 @@ import { FetchFreightsFromCompanyUseCase } from "@/modules/freight/use-cases/fet
 import { PermissionService } from "@/services/permission-service";
 
 export function makeFetchFreightsFromCompanyUseCase() {
-	const companyMembersRepository = new PrismaCompanyMembersRepository();
-	const companiesRepository = new PrismaCompaniesRepository();
-	const freightsRepository = new PrismaFreightsRepository();
+  const companyMembersRepository = new PrismaCompanyMembersRepository();
+  const companiesRepository = new PrismaCompaniesRepository();
+  const freightsRepository = new PrismaFreightsRepository();
 
-	const permissionService = new PermissionService(companyMembersRepository);
+  const permissionService = new PermissionService(companyMembersRepository);
 
-	const fetchFreightsFromCompanyUseCase = new FetchFreightsFromCompanyUseCase(
-		companyMembersRepository,
-		companiesRepository,
-		freightsRepository,
-		permissionService
-	);
+  const fetchFreightsFromCompanyUseCase = new FetchFreightsFromCompanyUseCase(
+    companyMembersRepository,
+    companiesRepository,
+    freightsRepository,
+    permissionService
+  );
 
-	return fetchFreightsFromCompanyUseCase;
+  return fetchFreightsFromCompanyUseCase;
 }

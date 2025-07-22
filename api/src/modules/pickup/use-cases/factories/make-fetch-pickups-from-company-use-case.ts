@@ -5,18 +5,18 @@ import { FetchPickupsFromCompanyUseCase } from "@/modules/pickup/use-cases/fetch
 import { PermissionService } from "@/services/permission-service";
 
 export function makeFetchPickupsFromCompanyUseCase() {
-	const companyMembersRepository = new PrismaCompanyMembersRepository();
-	const companiesRepository = new PrismaCompaniesRepository();
-	const pickupsRepository = new PrismaPickupsRepository();
+  const companyMembersRepository = new PrismaCompanyMembersRepository();
+  const companiesRepository = new PrismaCompaniesRepository();
+  const pickupsRepository = new PrismaPickupsRepository();
 
-	const permissionService = new PermissionService(companyMembersRepository);
+  const permissionService = new PermissionService(companyMembersRepository);
 
-	const fetchPickupsFromCompanyUseCase = new FetchPickupsFromCompanyUseCase(
-		companyMembersRepository,
-		companiesRepository,
-		pickupsRepository,
-		permissionService
-	);
+  const fetchPickupsFromCompanyUseCase = new FetchPickupsFromCompanyUseCase(
+    companyMembersRepository,
+    companiesRepository,
+    pickupsRepository,
+    permissionService
+  );
 
-	return fetchPickupsFromCompanyUseCase;
+  return fetchPickupsFromCompanyUseCase;
 }

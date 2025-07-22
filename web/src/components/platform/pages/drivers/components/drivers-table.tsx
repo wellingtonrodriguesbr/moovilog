@@ -8,25 +8,24 @@ import { DriversTableHeader } from "@/components/platform/pages/drivers/componen
 import { Empty } from "@/components/platform/empty";
 
 export function DriversTable() {
-	const { driversFromCompany, isFetchDriversFromCompanyPending } =
-		useFetchDriversFromCompany();
+  const { driversFromCompany, isFetchDriversFromCompanyPending } = useFetchDriversFromCompany();
 
-	if (isFetchDriversFromCompanyPending) {
-		return <SkeletonDriversTable />;
-	}
+  if (isFetchDriversFromCompanyPending) {
+    return <SkeletonDriversTable />;
+  }
 
-	if (driversFromCompany.length > 0) {
-		return (
-			<Table>
-				<DriversTableHeader />
-				<TableBody>
-					{driversFromCompany.map((driver) => (
-						<DriversTableRow key={driver.id} driver={driver} />
-					))}
-				</TableBody>
-			</Table>
-		);
-	}
+  if (driversFromCompany.length > 0) {
+    return (
+      <Table>
+        <DriversTableHeader />
+        <TableBody>
+          {driversFromCompany.map((driver) => (
+            <DriversTableRow key={driver.id} driver={driver} />
+          ))}
+        </TableBody>
+      </Table>
+    );
+  }
 
-	return <Empty context="driver" />;
+  return <Empty context="driver" />;
 }

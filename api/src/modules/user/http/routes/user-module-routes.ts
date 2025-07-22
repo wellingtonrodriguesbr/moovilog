@@ -6,12 +6,9 @@ import { CompleteRegistrationController } from "@/modules/user/http/controllers/
 import { SendEmailToResetPasswordController } from "@/modules/user/http/controllers/send-email-to-reset-password-controller";
 
 export async function userModuleRoutes(app: FastifyInstance) {
-	app.patch("/user/update-password", UpdateUserPasswordController.handle);
-	app.put("/user/complete-registration", CompleteRegistrationController.handle);
-	app.post(
-		"/user/send-email-to-reset-password",
-		SendEmailToResetPasswordController.handle
-	);
+  app.patch("/user/update-password", UpdateUserPasswordController.handle);
+  app.put("/user/complete-registration", CompleteRegistrationController.handle);
+  app.post("/user/send-email-to-reset-password", SendEmailToResetPasswordController.handle);
 
-	app.get("/me", { onRequest: [verifyJWT] }, GetUserProfileController.handle);
+  app.get("/me", { onRequest: [verifyJWT] }, GetUserProfileController.handle);
 }

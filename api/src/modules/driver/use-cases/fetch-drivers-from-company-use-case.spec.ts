@@ -13,69 +13,65 @@ let companyMembersRepository: InMemoryCompanyMembersRepository;
 let sut: FetchDriversFromCompanyUseCase;
 
 describe("[MODULE]: Fetch drivers from company use case", () => {
-	beforeEach(async () => {
-		usersRepository = new InMemoryUsersRepository();
-		driversRepository = new InMemoryDriversRepository();
-		companiesRepository = new InMemoryCompaniesRepository();
-		companyMembersRepository = new InMemoryCompanyMembersRepository();
-		sut = new FetchDriversFromCompanyUseCase(
-			driversRepository,
-			companiesRepository,
-			companyMembersRepository
-		);
+  beforeEach(async () => {
+    usersRepository = new InMemoryUsersRepository();
+    driversRepository = new InMemoryDriversRepository();
+    companiesRepository = new InMemoryCompaniesRepository();
+    companyMembersRepository = new InMemoryCompanyMembersRepository();
+    sut = new FetchDriversFromCompanyUseCase(driversRepository, companiesRepository, companyMembersRepository);
 
-		await usersRepository.create({
-			id: "john-doe-01",
-			name: "John Doe",
-			email: "johndoe@example.com",
-			password: "12345678",
-		});
+    await usersRepository.create({
+      id: "john-doe-01",
+      name: "John Doe",
+      email: "johndoe@example.com",
+      password: "12345678",
+    });
 
-		await companiesRepository.create({
-			id: "company-id-01",
-			name: "Company name",
-			documentNumber: "12312312389899",
-			size: "MEDIUM",
-			ownerId: "john-doe-01",
-		});
+    await companiesRepository.create({
+      id: "company-id-01",
+      name: "Company name",
+      documentNumber: "12312312389899",
+      size: "MEDIUM",
+      ownerId: "john-doe-01",
+    });
 
-		await companyMembersRepository.create({
-			companyId: "company-id-01",
-			userId: "john-doe-01",
-			sector: "Gerência",
-			extraData: {
-				permissions: ["ADMIN"],
-			},
-		});
+    await companyMembersRepository.create({
+      companyId: "company-id-01",
+      userId: "john-doe-01",
+      sector: "Gerência",
+      extraData: {
+        permissions: ["ADMIN"],
+      },
+    });
 
-		await driversRepository.create({
-			name: "John Doe Driver",
-			documentNumber: "12312312312",
-			phone: "11999999999",
-			type: "AGGREGATE",
-			companyId: "company-id-01",
-			creatorId: "john-doe-id-01",
-		});
-	});
+    await driversRepository.create({
+      name: "John Doe Driver",
+      documentNumber: "12312312312",
+      phone: "11999999999",
+      type: "AGGREGATE",
+      companyId: "company-id-01",
+      creatorId: "john-doe-id-01",
+    });
+  });
 
-	it("should be able to fetch drivers in company", async () => {
-		const { drivers } = await sut.execute({
-			companyId: "company-id-01",
-			userId: "john-doe-01",
-		});
+  it("should be able to fetch drivers in company", async () => {
+    const { drivers } = await sut.execute({
+      companyId: "company-id-01",
+      userId: "john-doe-01",
+    });
 
-		expect(driversRepository.items).toHaveLength(1);
-		expect(drivers[0].id).toEqual(expect.any(String));
-		expect(drivers[0].companyId).toStrictEqual("company-id-01");
-	});
+    expect(driversRepository.items).toHaveLength(1);
+    expect(drivers[0].id).toEqual(expect.any(String));
+    expect(drivers[0].companyId).toStrictEqual("company-id-01");
+  });
 
-	it("should not be able to fetch drivers by company if user is not a company member", async () => {
-		expect(
-			async () =>
-				await sut.execute({
-					companyId: "company-id-01",
-					userId: "wrong-user-id",
-				})
-		).rejects.toBeInstanceOf(ResourceNotFoundError);
-	});
+  it("should not be able to fetch drivers by company if user is not a company member", async () => {
+    expect(
+      async () =>
+        await sut.execute({
+          companyId: "company-id-01",
+          userId: "wrong-user-id",
+        })
+    ).rejects.toBeInstanceOf(ResourceNotFoundError);
+  });
 });

@@ -8,56 +8,51 @@ import { makeSendInvitationToCompanyMemberUseCase } from "@/modules/company-memb
 import z from "zod";
 
 export class SendInvitationToCompanyMemberController {
-	static async handle(req: FastifyRequest, reply: FastifyReply) {
-		const sendInvitationtoCompanyMemberBodySchema = z.object({
-			name: z.string(),
-			email: z.string().email(),
-			sector: z.string(),
-			permissions: z.string().array(),
-		});
+  static async handle(req: FastifyRequest, reply: FastifyReply) {
+    const sendInvitationtoCompanyMemberBodySchema = z.object({
+      name: z.string(),
+      email: z.string().email(),
+      sector: z.string(),
+      permissions: z.string().array(),
+    });
 
-		const sendInvitationtoCompanyMemberParamsSchema = z.object({
-			companyId: z.string().uuid(),
-		});
+    const sendInvitationtoCompanyMemberParamsSchema = z.object({
+      companyId: z.string().uuid(),
+    });
 
-		const { companyId } = sendInvitationtoCompanyMemberParamsSchema.parse(
-			req.params
-		);
+    const { companyId } = sendInvitationtoCompanyMemberParamsSchema.parse(req.params);
 
-		const { name, email, sector, permissions } =
-			sendInvitationtoCompanyMemberBodySchema.parse(req.body);
+    const { name, email, sector, permissions } = sendInvitationtoCompanyMemberBodySchema.parse(req.body);
 
-		const senderId = req.user.sub;
+    const senderId = req.user.sub;
 
-		try {
-			const sendInvitationtoCompanyMemberUseCase =
-				makeSendInvitationToCompanyMemberUseCase();
-			const { companyMember } =
-				await sendInvitationtoCompanyMemberUseCase.execute({
-					name,
-					email,
-					sector,
-					permissions,
-					senderId,
-					companyId,
-				});
+    try {
+      const sendInvitationtoCompanyMemberUseCase = makeSendInvitationToCompanyMemberUseCase();
+      const { companyMember } = await sendInvitationtoCompanyMemberUseCase.execute({
+        name,
+        email,
+        sector,
+        permissions,
+        senderId,
+        companyId,
+      });
 
-			reply.status(201).send({ companyMember });
-		} catch (error) {
-			if (error instanceof UserAlreadyExistsError) {
-				reply.status(409).send({ message: error.message });
-			}
-			if (error instanceof MemberAlreadyExistsInCompanyError) {
-				reply.status(409).send({ message: error.message });
-			}
-			if (error instanceof NotAllowedError) {
-				reply.status(403).send({ message: error.message });
-			}
-			if (error instanceof ResourceNotFoundError) {
-				reply.status(404).send({ message: error.message });
-			}
+      reply.status(201).send({ companyMember });
+    } catch (error) {
+      if (error instanceof UserAlreadyExistsError) {
+        reply.status(409).send({ message: error.message });
+      }
+      if (error instanceof MemberAlreadyExistsInCompanyError) {
+        reply.status(409).send({ message: error.message });
+      }
+      if (error instanceof NotAllowedError) {
+        reply.status(403).send({ message: error.message });
+      }
+      if (error instanceof ResourceNotFoundError) {
+        reply.status(404).send({ message: error.message });
+      }
 
-			throw error;
-		}
-	}
+      throw error;
+    }
+  }
 }

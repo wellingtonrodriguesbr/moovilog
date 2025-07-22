@@ -4,16 +4,16 @@ import { RegisterVehicleUseCase } from "@/modules/vehicle/use-cases/register-veh
 import { PermissionService } from "@/services/permission-service";
 
 export function makeRegisterVehicleUseCase() {
-	const companyMembersRepository = new PrismaCompanyMembersRepository();
-	const vehiclesRepository = new PrismaVehiclesRepository();
+  const companyMembersRepository = new PrismaCompanyMembersRepository();
+  const vehiclesRepository = new PrismaVehiclesRepository();
 
-	const permissionService = new PermissionService(companyMembersRepository);
+  const permissionService = new PermissionService(companyMembersRepository);
 
-	const registerVehicleUseCase = new RegisterVehicleUseCase(
-		companyMembersRepository,
-		vehiclesRepository,
-		permissionService
-	);
+  const registerVehicleUseCase = new RegisterVehicleUseCase(
+    companyMembersRepository,
+    vehiclesRepository,
+    permissionService
+  );
 
-	return registerVehicleUseCase;
+  return registerVehicleUseCase;
 }

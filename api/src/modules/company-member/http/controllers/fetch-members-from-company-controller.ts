@@ -5,28 +5,28 @@ import { makeFetchMembersFromCompanyUseCase } from "@/modules/company-member/use
 import z from "zod";
 
 export class FetchMembersFromCompanyController {
-	static async handle(req: FastifyRequest, reply: FastifyReply) {
-		const fetchMembersInCompanyParamsSchema = z.object({
-			companyId: z.string().uuid(),
-		});
+  static async handle(req: FastifyRequest, reply: FastifyReply) {
+    const fetchMembersInCompanyParamsSchema = z.object({
+      companyId: z.string().uuid(),
+    });
 
-		const { companyId } = fetchMembersInCompanyParamsSchema.parse(req.params);
+    const { companyId } = fetchMembersInCompanyParamsSchema.parse(req.params);
 
-		const userId = req.user.sub;
+    const userId = req.user.sub;
 
-		try {
-			const fetchMembersInCompanyUseCase = makeFetchMembersFromCompanyUseCase();
-			const { companyMembers } = await fetchMembersInCompanyUseCase.execute({
-				companyId,
-				userId,
-			});
+    try {
+      const fetchMembersInCompanyUseCase = makeFetchMembersFromCompanyUseCase();
+      const { companyMembers } = await fetchMembersInCompanyUseCase.execute({
+        companyId,
+        userId,
+      });
 
-			reply.status(200).send({ companyMembers });
-		} catch (error) {
-			if (error instanceof ResourceNotFoundError) {
-				reply.status(404).send({ message: error.message });
-			}
-			throw error;
-		}
-	}
+      reply.status(200).send({ companyMembers });
+    } catch (error) {
+      if (error instanceof ResourceNotFoundError) {
+        reply.status(404).send({ message: error.message });
+      }
+      throw error;
+    }
+  }
 }

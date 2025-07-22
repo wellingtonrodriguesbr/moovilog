@@ -13,34 +13,34 @@ import { TransactionService } from "@/services/transaction-service";
 import { PermissionService } from "@/services/permission-service";
 
 export function makeRegisterPickupUseCase() {
-	const companyMembersRepository = new PrismaCompanyMembersRepository();
-	const companiesRepository = new PrismaCompaniesRepository();
-	const freightsRepository = new PrismaFreightsRepository();
-	const addressesRepository = new PrismaAddressesRepository();
-	const citiesRepository = new PrismaCitiesRepository();
-	const statesRepository = new PrismaStatesRepository();
-	const driversRepository = new PrismaDriversRepository();
-	const vehiclesRepository = new PrismaVehiclesRepository();
-	const pickupsRepository = new PrismaPickupsRepository();
-	const pickupHistoriesRepository = new PrismaPickupHistoriesRepository();
-	const transactionService = new TransactionService();
+  const companyMembersRepository = new PrismaCompanyMembersRepository();
+  const companiesRepository = new PrismaCompaniesRepository();
+  const freightsRepository = new PrismaFreightsRepository();
+  const addressesRepository = new PrismaAddressesRepository();
+  const citiesRepository = new PrismaCitiesRepository();
+  const statesRepository = new PrismaStatesRepository();
+  const driversRepository = new PrismaDriversRepository();
+  const vehiclesRepository = new PrismaVehiclesRepository();
+  const pickupsRepository = new PrismaPickupsRepository();
+  const pickupHistoriesRepository = new PrismaPickupHistoriesRepository();
+  const transactionService = new TransactionService();
 
-	const permissionService = new PermissionService(companyMembersRepository);
+  const permissionService = new PermissionService(companyMembersRepository);
 
-	const registerPickupUseCase = new RegisterPickupUseCase(
-		companyMembersRepository,
-		companiesRepository,
-		freightsRepository,
-		addressesRepository,
-		citiesRepository,
-		statesRepository,
-		driversRepository,
-		vehiclesRepository,
-		pickupsRepository,
-		pickupHistoriesRepository,
-		permissionService,
-		transactionService
-	);
+  const registerPickupUseCase = new RegisterPickupUseCase(
+    companyMembersRepository,
+    companiesRepository,
+    freightsRepository,
+    addressesRepository,
+    citiesRepository,
+    statesRepository,
+    driversRepository,
+    vehiclesRepository,
+    pickupsRepository,
+    pickupHistoriesRepository,
+    permissionService,
+    transactionService
+  );
 
-	return registerPickupUseCase;
+  return registerPickupUseCase;
 }

@@ -8,25 +8,24 @@ import { PrismaDriverTransactionsRepository } from "@/modules/financial/reposito
 import { PermissionService } from "@/services/permission-service";
 
 export function makeRegisterTransactionUseCase() {
-	const companyMembersRepository = new PrismaCompanyMembersRepository();
-	const companiesRepository = new PrismaCompaniesRepository();
-	const driversRepository = new PrismaDriversRepository();
-	const driverTransactionsRepository = new PrismaDriverTransactionsRepository();
-	const financeTransactionsRepository =
-		new PrismaFinanceTransactionsRepository();
-	const financeCategoriesRepository = new PrismaFinanceCategoriesRepository();
+  const companyMembersRepository = new PrismaCompanyMembersRepository();
+  const companiesRepository = new PrismaCompaniesRepository();
+  const driversRepository = new PrismaDriversRepository();
+  const driverTransactionsRepository = new PrismaDriverTransactionsRepository();
+  const financeTransactionsRepository = new PrismaFinanceTransactionsRepository();
+  const financeCategoriesRepository = new PrismaFinanceCategoriesRepository();
 
-	const permissionService = new PermissionService(companyMembersRepository);
+  const permissionService = new PermissionService(companyMembersRepository);
 
-	const registerTransactionUseCase = new RegisterTransactionUseCase(
-		companyMembersRepository,
-		companiesRepository,
-		driversRepository,
-		driverTransactionsRepository,
-		financeTransactionsRepository,
-		financeCategoriesRepository,
-		permissionService
-	);
+  const registerTransactionUseCase = new RegisterTransactionUseCase(
+    companyMembersRepository,
+    companiesRepository,
+    driversRepository,
+    driverTransactionsRepository,
+    financeTransactionsRepository,
+    financeCategoriesRepository,
+    permissionService
+  );
 
-	return registerTransactionUseCase;
+  return registerTransactionUseCase;
 }

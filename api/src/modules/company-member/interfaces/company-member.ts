@@ -4,5 +4,5 @@ import { CompanyMemberPermission } from "./company-member-permission";
 export type ICompanyMember = CompanyMember;
 
 export type ICompanyMemberExtraData = {
-	permissions: CompanyMemberPermission[];
+  permissions: CompanyMemberPermission[];
 };

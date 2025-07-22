@@ -5,38 +5,38 @@ import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-foun
 import { IVehicle } from "@/modules/vehicle/interfaces/vehicle";
 
 interface FetchVehiclesFromCompanyUseCaseRequest {
-	companyId: string;
-	userId: string;
+  companyId: string;
+  userId: string;
 }
 
 interface FetchVehiclesFromCompanyUseCaseResponse {
-	vehicles: IVehicle[];
+  vehicles: IVehicle[];
 }
 
 export class FetchVehiclesFromCompanyUseCase {
-	constructor(
-		private vehiclesRepository: VehiclesRepository,
-		private companyRepository: CompaniesRepository,
-		private companyMemberRepository: CompanyMembersRepository
-	) {}
-	async execute({
-		companyId,
-		userId,
-	}: FetchVehiclesFromCompanyUseCaseRequest): Promise<FetchVehiclesFromCompanyUseCaseResponse> {
-		const [company, memberInCompany, vehicles] = await Promise.all([
-			this.companyRepository.findById(companyId),
-			this.companyMemberRepository.findMemberInCompany(userId, companyId),
-			this.vehiclesRepository.findManyByCompanyId(companyId),
-		]);
+  constructor(
+    private vehiclesRepository: VehiclesRepository,
+    private companyRepository: CompaniesRepository,
+    private companyMemberRepository: CompanyMembersRepository
+  ) {}
+  async execute({
+    companyId,
+    userId,
+  }: FetchVehiclesFromCompanyUseCaseRequest): Promise<FetchVehiclesFromCompanyUseCaseResponse> {
+    const [company, memberInCompany, vehicles] = await Promise.all([
+      this.companyRepository.findById(companyId),
+      this.companyMemberRepository.findMemberInCompany(userId, companyId),
+      this.vehiclesRepository.findManyByCompanyId(companyId),
+    ]);
 
-		if (!company) {
-			throw new ResourceNotFoundError("Company not found");
-		}
+    if (!company) {
+      throw new ResourceNotFoundError("Company not found");
+    }
 
-		if (!memberInCompany) {
-			throw new ResourceNotFoundError("Member not found in company");
-		}
+    if (!memberInCompany) {
+      throw new ResourceNotFoundError("Member not found in company");
+    }
 
-		return { vehicles };
-	}
+    return { vehicles };
+  }
 }

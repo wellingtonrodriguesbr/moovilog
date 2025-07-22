@@ -3,47 +3,45 @@ import { RoutesRepository } from "@/modules/route/repositories/routes-repository
 import { randomUUID } from "node:crypto";
 
 export class InMemoryRoutesRepository implements RoutesRepository {
-	public items: Route[] = [];
+  public items: Route[] = [];
 
-	async create(data: Prisma.RouteUncheckedCreateInput) {
-		const route = {
-			id: data.id ?? randomUUID(),
-			name: data.name,
-			companyId: data.companyId,
-			creatorId: data.creatorId,
-			createdAt: new Date(),
-			updatedAt: new Date(),
-		};
+  async create(data: Prisma.RouteUncheckedCreateInput) {
+    const route = {
+      id: data.id ?? randomUUID(),
+      name: data.name,
+      companyId: data.companyId,
+      creatorId: data.creatorId,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
 
-		this.items.push(route);
-		return route;
-	}
+    this.items.push(route);
+    return route;
+  }
 
-	async findById(id: string) {
-		const state = this.items.find((item) => item.id === id);
+  async findById(id: string) {
+    const state = this.items.find((item) => item.id === id);
 
-		if (!state) {
-			return null;
-		}
+    if (!state) {
+      return null;
+    }
 
-		return state;
-	}
+    return state;
+  }
 
-	async findRouteInCompanyWithSameName(name: string, companyId: string) {
-		const route = this.items.find(
-			(item) => item.name === name && item.companyId === companyId
-		);
+  async findRouteInCompanyWithSameName(name: string, companyId: string) {
+    const route = this.items.find((item) => item.name === name && item.companyId === companyId);
 
-		if (!route) {
-			return null;
-		}
+    if (!route) {
+      return null;
+    }
 
-		return route;
-	}
+    return route;
+  }
 
-	async findManyByCompanyId(companyId: string) {
-		const routes = this.items.filter((item) => item.companyId === companyId);
+  async findManyByCompanyId(companyId: string) {
+    const routes = this.items.filter((item) => item.companyId === companyId);
 
-		return routes;
-	}
+    return routes;
+  }
 }

@@ -5,46 +5,46 @@ import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-foun
 import { IFreight } from "@/modules/freight/interfaces/freight";
 
 interface GetFreightDetailsUseCaseRequest {
-	userId: string;
-	companyId: string;
-	freightId: string;
+  userId: string;
+  companyId: string;
+  freightId: string;
 }
 
 interface GetFreightDetailsUseCaseResponse {
-	freight: IFreight;
+  freight: IFreight;
 }
 
 export class GetFreightDetailsUseCase {
-	constructor(
-		private companyMembersRepository: CompanyMembersRepository,
-		private companiesRepository: CompaniesRepository,
-		private freightsRepository: FreightsRepository
-	) {}
+  constructor(
+    private companyMembersRepository: CompanyMembersRepository,
+    private companiesRepository: CompaniesRepository,
+    private freightsRepository: FreightsRepository
+  ) {}
 
-	async execute({
-		userId,
-		companyId,
-		freightId,
-	}: GetFreightDetailsUseCaseRequest): Promise<GetFreightDetailsUseCaseResponse> {
-		const [company, memberInCompany] = await Promise.all([
-			this.companiesRepository.findById(companyId),
-			this.companyMembersRepository.findMemberInCompany(userId, companyId),
-		]);
+  async execute({
+    userId,
+    companyId,
+    freightId,
+  }: GetFreightDetailsUseCaseRequest): Promise<GetFreightDetailsUseCaseResponse> {
+    const [company, memberInCompany] = await Promise.all([
+      this.companiesRepository.findById(companyId),
+      this.companyMembersRepository.findMemberInCompany(userId, companyId),
+    ]);
 
-		if (!company) {
-			throw new ResourceNotFoundError("Company not found");
-		}
+    if (!company) {
+      throw new ResourceNotFoundError("Company not found");
+    }
 
-		if (!memberInCompany) {
-			throw new ResourceNotFoundError("Member not found in company");
-		}
+    if (!memberInCompany) {
+      throw new ResourceNotFoundError("Member not found in company");
+    }
 
-		const freight = await this.freightsRepository.findById(freightId);
+    const freight = await this.freightsRepository.findById(freightId);
 
-		if (!freight) {
-			throw new ResourceNotFoundError("Freight not found");
-		}
+    if (!freight) {
+      throw new ResourceNotFoundError("Freight not found");
+    }
 
-		return { freight };
-	}
+    return { freight };
+  }
 }

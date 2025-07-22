@@ -4,16 +4,16 @@ import { UpdateDriverStatusUseCase } from "@/modules/driver/use-cases/update-dri
 import { PermissionService } from "@/services/permission-service";
 
 export function makeUpdateDriverStatusUseCase() {
-	const driversRepository = new PrismaDriversRepository();
-	const companyMembersRepository = new PrismaCompanyMembersRepository();
+  const driversRepository = new PrismaDriversRepository();
+  const companyMembersRepository = new PrismaCompanyMembersRepository();
 
-	const permissionService = new PermissionService(companyMembersRepository);
+  const permissionService = new PermissionService(companyMembersRepository);
 
-	const updateDriverStatusUseCase = new UpdateDriverStatusUseCase(
-		companyMembersRepository,
-		driversRepository,
-		permissionService
-	);
+  const updateDriverStatusUseCase = new UpdateDriverStatusUseCase(
+    companyMembersRepository,
+    driversRepository,
+    permissionService
+  );
 
-	return updateDriverStatusUseCase;
+  return updateDriverStatusUseCase;
 }

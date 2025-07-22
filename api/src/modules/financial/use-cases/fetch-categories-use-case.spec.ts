@@ -6,24 +6,24 @@ let financeCategoriesRepository: InMemoryFinanceCategoriesRepository;
 let sut: FetchCategoriesUseCase;
 
 describe("[MODULE]: Fetch categories use case", () => {
-	beforeEach(async () => {
-		financeCategoriesRepository = new InMemoryFinanceCategoriesRepository();
-		sut = new FetchCategoriesUseCase(financeCategoriesRepository);
+  beforeEach(async () => {
+    financeCategoriesRepository = new InMemoryFinanceCategoriesRepository();
+    sut = new FetchCategoriesUseCase(financeCategoriesRepository);
 
-		await financeCategoriesRepository.create({
-			id: "category-id-01",
-			name: "Frete",
-		});
+    await financeCategoriesRepository.create({
+      id: "category-id-01",
+      name: "Frete",
+    });
 
-		await financeCategoriesRepository.create({
-			id: "category-id-02",
-			name: "Coleta",
-		});
-	});
+    await financeCategoriesRepository.create({
+      id: "category-id-02",
+      name: "Coleta",
+    });
+  });
 
-	it("should be able to fetch categories", async () => {
-		const { categories } = await sut.execute();
+  it("should be able to fetch categories", async () => {
+    const { categories } = await sut.execute();
 
-		expect(categories).toHaveLength(2);
-	});
+    expect(categories).toHaveLength(2);
+  });
 });

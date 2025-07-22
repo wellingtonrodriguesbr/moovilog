@@ -1,13 +1,6 @@
 "use client";
 
-import {
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
@@ -24,186 +17,155 @@ import { AxiosError } from "axios";
 import { formatPhone } from "@/utils/format-phone";
 
 const formSchema = z.object({
-	name: z.string().min(5, { message: "Digite seu nome completo" }),
-	phone: z
-		.string()
-		.min(11, { message: "Digite um telefone válido" })
-		.transform((value) => value.replace(/\D/g, "")),
-	email: z.string().email({ message: "Digite um endereço de e-mail válido" }),
-	password: z
-		.string()
-		.min(8, {
-			message: "A senha precisa ter no mínimo 8 caracteres válidos",
-		})
-		.refine((value) => value.replace(/\s+/g, ""), {
-			message: "A senha precisa ter no mínimo 8 caracteres válidos",
-		}),
+  name: z.string().min(5, { message: "Digite seu nome completo" }),
+  phone: z
+    .string()
+    .min(11, { message: "Digite um telefone válido" })
+    .transform((value) => value.replace(/\D/g, "")),
+  email: z.string().email({ message: "Digite um endereço de e-mail válido" }),
+  password: z
+    .string()
+    .min(8, {
+      message: "A senha precisa ter no mínimo 8 caracteres válidos",
+    })
+    .refine((value) => value.replace(/\s+/g, ""), {
+      message: "A senha precisa ter no mínimo 8 caracteres válidos",
+    }),
 
-	acceptTerms: z.boolean({ message: "Aceite os termos para prosseguir" }),
+  acceptTerms: z.boolean({ message: "Aceite os termos para prosseguir" }),
 });
 
 export function RegisterForm() {
-	const router = useRouter();
-	const { registerNewUser, isPendingRegisterNewUser } = useRegisterNewUser();
-	const { login, isPendingLogin } = useLogin();
+  const router = useRouter();
+  const { registerNewUser, isPendingRegisterNewUser } = useRegisterNewUser();
+  const { login, isPendingLogin } = useLogin();
 
-	const form = useForm<z.infer<typeof formSchema>>({
-		resolver: zodResolver(formSchema),
-		defaultValues: {
-			name: "",
-			phone: "",
-			email: "",
-			password: "",
-			acceptTerms: false,
-		},
-	});
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      phone: "",
+      email: "",
+      password: "",
+      acceptTerms: false,
+    },
+  });
 
-	async function onSubmit(data: z.infer<typeof formSchema>) {
-		try {
-			await registerNewUser({
-				...data,
-			});
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    try {
+      await registerNewUser({
+        ...data,
+      });
 
-			await login({ email: data.email, password: data.password });
-			toast.success("Conta cadastrada com sucesso");
-			router.push("/cadastro/empresa");
-		} catch (error) {
-			if (error instanceof AxiosError) {
-				if (error.response?.status === 409) {
-					toast.error(
-						"Já existe uma conta com este e-mail ou número de celular"
-					);
-				} else {
-					toast.error(
-						"Falha ao cadastrar conta, entre em contato com o suporte."
-					);
-				}
-			}
-		}
-	}
+      await login({ email: data.email, password: data.password });
+      toast.success("Conta cadastrada com sucesso");
+      router.push("/cadastro/empresa");
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 409) {
+          toast.error("Já existe uma conta com este e-mail ou número de celular");
+        } else {
+          toast.error("Falha ao cadastrar conta, entre em contato com o suporte.");
+        }
+      }
+    }
+  }
 
-	return (
-		<Form {...form}>
-			<form
-				onSubmit={form.handleSubmit(onSubmit)}
-				className="flex flex-col gap-4 w-full"
-			>
-				<FormField
-					control={form.control}
-					name="name"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Nome completo</FormLabel>
-							<FormControl>
-								<Input
-									{...field}
-									value={field.value.trimStart()}
-									onBlur={(e) =>
-										field.onChange(e.target.value.trim())
-									}
-								/>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-				<FormField
-					control={form.control}
-					name="phone"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Celular</FormLabel>
-							<FormControl>
-								<Input
-									{...field}
-									inputMode="numeric"
-									pattern="\(\d{2}\) \d{5}-\d{4}"
-									placeholder="(00) 00000-0000"
-									value={formatPhone(field.value)}
-								/>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-				<FormField
-					control={form.control}
-					name="email"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>E-mail</FormLabel>
-							<FormControl>
-								<Input
-									type="email"
-									placeholder="seuemail@email.com"
-									{...field}
-								/>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-				<FormField
-					control={form.control}
-					name="password"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Senha</FormLabel>
-							<FormControl>
-								<Input
-									type="password"
-									placeholder="*********"
-									{...field}
-									value={field.value.trimStart()}
-									onBlur={(e) =>
-										field.onChange(e.target.value.trim())
-									}
-								/>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-				<FormField
-					control={form.control}
-					name="acceptTerms"
-					render={({ field }) => (
-						<FormItem>
-							<FormControl>
-								<FormLabel
-									htmlFor={field.name}
-									className="flex items-center gap-2 text-sm font-medium"
-								>
-									<Checkbox
-										id={field.name}
-										checked={field.value}
-										onCheckedChange={field.onChange}
-									/>
-									Ao se cadastrar, você concorda com os termos
-									e a política de privacidade da plataforma.
-								</FormLabel>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4 w-full">
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Nome completo</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  value={field.value.trimStart()}
+                  onBlur={(e) => field.onChange(e.target.value.trim())}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="phone"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Celular</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  inputMode="numeric"
+                  pattern="\(\d{2}\) \d{5}-\d{4}"
+                  placeholder="(00) 00000-0000"
+                  value={formatPhone(field.value)}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>E-mail</FormLabel>
+              <FormControl>
+                <Input type="email" placeholder="seuemail@email.com" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Senha</FormLabel>
+              <FormControl>
+                <Input
+                  type="password"
+                  placeholder="*********"
+                  {...field}
+                  value={field.value.trimStart()}
+                  onBlur={(e) => field.onChange(e.target.value.trim())}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="acceptTerms"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <FormLabel htmlFor={field.name} className="flex items-center gap-2 text-sm font-medium">
+                  <Checkbox id={field.name} checked={field.value} onCheckedChange={field.onChange} />
+                  Ao se cadastrar, você concorda com os termos e a política de privacidade da plataforma.
+                </FormLabel>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-				<Button
-					disabled={
-						!form.watch("acceptTerms") ||
-						isPendingRegisterNewUser ||
-						isPendingLogin
-					}
-					type="submit"
-					className="w-full mt-6"
-				>
-					{isPendingRegisterNewUser || isPendingLogin ? (
-						<Loader2 className="size-4 animate-spin" />
-					) : (
-						"Avançar"
-					)}
-				</Button>
-			</form>
-		</Form>
-	);
+        <Button
+          disabled={!form.watch("acceptTerms") || isPendingRegisterNewUser || isPendingLogin}
+          type="submit"
+          className="w-full mt-6"
+        >
+          {isPendingRegisterNewUser || isPendingLogin ? <Loader2 className="size-4 animate-spin" /> : "Avançar"}
+        </Button>
+      </form>
+    </Form>
+  );
 }

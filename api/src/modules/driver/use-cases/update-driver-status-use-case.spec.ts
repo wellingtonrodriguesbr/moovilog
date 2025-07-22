@@ -15,88 +15,84 @@ let permissionService: PermissionService;
 let sut: UpdateDriverStatusUseCase;
 
 describe("[MODULE]: Update driver status use case", () => {
-	beforeEach(async () => {
-		usersRepository = new InMemoryUsersRepository();
-		driversRepository = new InMemoryDriversRepository();
-		companiesRepository = new InMemoryCompaniesRepository();
-		companyMembersRepository = new InMemoryCompanyMembersRepository();
-		permissionService = new PermissionService(companyMembersRepository);
-		sut = new UpdateDriverStatusUseCase(
-			companyMembersRepository,
-			driversRepository,
-			permissionService
-		);
+  beforeEach(async () => {
+    usersRepository = new InMemoryUsersRepository();
+    driversRepository = new InMemoryDriversRepository();
+    companiesRepository = new InMemoryCompaniesRepository();
+    companyMembersRepository = new InMemoryCompanyMembersRepository();
+    permissionService = new PermissionService(companyMembersRepository);
+    sut = new UpdateDriverStatusUseCase(companyMembersRepository, driversRepository, permissionService);
 
-		await usersRepository.create({
-			id: "john-doe-01",
-			name: "John Doe",
-			email: "johndoe@example.com",
-			password: "12345678",
-		});
+    await usersRepository.create({
+      id: "john-doe-01",
+      name: "John Doe",
+      email: "johndoe@example.com",
+      password: "12345678",
+    });
 
-		await companiesRepository.create({
-			id: "company-id-01",
-			name: "Company name",
-			documentNumber: "12312312389899",
-			size: "MEDIUM",
-			ownerId: "john-doe-01",
-		});
+    await companiesRepository.create({
+      id: "company-id-01",
+      name: "Company name",
+      documentNumber: "12312312389899",
+      size: "MEDIUM",
+      ownerId: "john-doe-01",
+    });
 
-		await companyMembersRepository.create({
-			companyId: "company-id-01",
-			userId: "john-doe-01",
-			sector: "Gerência",
-			extraData: {
-				permissions: ["ADMIN"],
-			},
-		});
+    await companyMembersRepository.create({
+      companyId: "company-id-01",
+      userId: "john-doe-01",
+      sector: "Gerência",
+      extraData: {
+        permissions: ["ADMIN"],
+      },
+    });
 
-		await driversRepository.create({
-			id: "driver-id-01",
-			name: "John Doe Driver",
-			documentNumber: "12312312312",
-			phone: "11999999999",
-			type: "AGGREGATE",
-			companyId: "company-id-01",
-			creatorId: "john-doe-id-01",
-		});
-	});
+    await driversRepository.create({
+      id: "driver-id-01",
+      name: "John Doe Driver",
+      documentNumber: "12312312312",
+      phone: "11999999999",
+      type: "AGGREGATE",
+      companyId: "company-id-01",
+      creatorId: "john-doe-id-01",
+    });
+  });
 
-	it("should be able to update driver status", async () => {
-		await sut.execute({
-			driverId: "driver-id-01",
-			userId: "john-doe-01",
-			status: "INACTIVE",
-		});
+  it("should be able to update driver status", async () => {
+    await sut.execute({
+      driverId: "driver-id-01",
+      userId: "john-doe-01",
+      status: "INACTIVE",
+    });
 
-		expect(driversRepository.items).toHaveLength(1);
-		expect(driversRepository.items[0].status).toStrictEqual("INACTIVE");
-	});
+    expect(driversRepository.items).toHaveLength(1);
+    expect(driversRepository.items[0].status).toStrictEqual("INACTIVE");
+  });
 
-	it("should not be able to update driver status if user does not have the necessary permission", async () => {
-		const user = await usersRepository.create({
-			id: "john-doe-02",
-			name: "John Doe",
-			email: "johndoe@example.com",
-			password: "12345678",
-		});
+  it("should not be able to update driver status if user does not have the necessary permission", async () => {
+    const user = await usersRepository.create({
+      id: "john-doe-02",
+      name: "John Doe",
+      email: "johndoe@example.com",
+      password: "12345678",
+    });
 
-		await companyMembersRepository.create({
-			companyId: "company-id-01",
-			userId: user.id,
-			sector: "Gerência",
-			extraData: {
-				permissions: ["VIEW_VEHICLES_AND_DRIVERS"],
-			},
-		});
+    await companyMembersRepository.create({
+      companyId: "company-id-01",
+      userId: user.id,
+      sector: "Gerência",
+      extraData: {
+        permissions: ["VIEW_VEHICLES_AND_DRIVERS"],
+      },
+    });
 
-		expect(
-			async () =>
-				await sut.execute({
-					driverId: "driver-id-01",
-					userId: user.id,
-					status: "INACTIVE",
-				})
-		).rejects.toBeInstanceOf(NotAllowedError);
-	});
+    expect(
+      async () =>
+        await sut.execute({
+          driverId: "driver-id-01",
+          userId: user.id,
+          status: "INACTIVE",
+        })
+    ).rejects.toBeInstanceOf(NotAllowedError);
+  });
 });

@@ -18,113 +18,113 @@ let permissionService: PermissionService;
 let sut: FetchTransactionsFromCompanyUseCase;
 
 describe("[MODULE]: Fetch transactions from company use case", () => {
-	beforeEach(async () => {
-		usersRepository = new InMemoryUsersRepository();
-		companiesRepository = new InMemoryCompaniesRepository();
-		companyMembersRepository = new InMemoryCompanyMembersRepository();
-		financeTransactionsRepository = new InMemoryFinanceTransactionsRepository();
-		financeCategoriesRepository = new InMemoryFinanceCategoriesRepository();
-		permissionService = new PermissionService(companyMembersRepository);
-		sut = new FetchTransactionsFromCompanyUseCase(
-			companyMembersRepository,
-			companiesRepository,
-			financeTransactionsRepository,
-			permissionService
-		);
+  beforeEach(async () => {
+    usersRepository = new InMemoryUsersRepository();
+    companiesRepository = new InMemoryCompaniesRepository();
+    companyMembersRepository = new InMemoryCompanyMembersRepository();
+    financeTransactionsRepository = new InMemoryFinanceTransactionsRepository();
+    financeCategoriesRepository = new InMemoryFinanceCategoriesRepository();
+    permissionService = new PermissionService(companyMembersRepository);
+    sut = new FetchTransactionsFromCompanyUseCase(
+      companyMembersRepository,
+      companiesRepository,
+      financeTransactionsRepository,
+      permissionService
+    );
 
-		await usersRepository.create({
-			id: "john-doe-id-01",
-			name: "John Doe",
-			email: "johndoe@example.com",
-			password: "12345678",
-		});
+    await usersRepository.create({
+      id: "john-doe-id-01",
+      name: "John Doe",
+      email: "johndoe@example.com",
+      password: "12345678",
+    });
 
-		await companiesRepository.create({
-			id: "company-id-01",
-			name: "Company name",
-			documentNumber: "12312312389899",
-			size: "MEDIUM",
-			ownerId: "john-doe-01",
-		});
+    await companiesRepository.create({
+      id: "company-id-01",
+      name: "Company name",
+      documentNumber: "12312312389899",
+      size: "MEDIUM",
+      ownerId: "john-doe-01",
+    });
 
-		await companyMembersRepository.create({
-			id: "company-member-id-01",
-			companyId: "company-id-01",
-			userId: "john-doe-id-01",
-			sector: "Diretoria",
-			extraData: {
-				permissions: ["SUPER_ADMIN", "ADMIN", "VIEW_FINANCES"],
-			},
-		});
+    await companyMembersRepository.create({
+      id: "company-member-id-01",
+      companyId: "company-id-01",
+      userId: "john-doe-id-01",
+      sector: "Diretoria",
+      extraData: {
+        permissions: ["SUPER_ADMIN", "ADMIN", "VIEW_FINANCES"],
+      },
+    });
 
-		await financeCategoriesRepository.create({
-			id: "category-id-01",
-			name: "Frete",
-		});
+    await financeCategoriesRepository.create({
+      id: "category-id-01",
+      name: "Frete",
+    });
 
-		await financeTransactionsRepository.create({
-			id: "transaction-id-01",
-			amountInCents: 1000,
-			status: "PAID",
-			type: "EXPENSE",
-			categoryId: "category-id-01",
-			creatorId: "company-member-id-01",
-			companyId: "company-id-01",
-		});
-	});
+    await financeTransactionsRepository.create({
+      id: "transaction-id-01",
+      amountInCents: 1000,
+      status: "PAID",
+      type: "EXPENSE",
+      categoryId: "category-id-01",
+      creatorId: "company-member-id-01",
+      companyId: "company-id-01",
+    });
+  });
 
-	it("should be able to fetch transactions", async () => {
-		const { transactions } = await sut.execute({
-			userId: "john-doe-id-01",
-			companyId: "company-id-01",
-		});
+  it("should be able to fetch transactions", async () => {
+    const { transactions } = await sut.execute({
+      userId: "john-doe-id-01",
+      companyId: "company-id-01",
+    });
 
-		expect(transactions).toHaveLength(1);
-		expect(transactions[0].id).toEqual(expect.any(String));
-		expect(transactions[0].type).toStrictEqual("EXPENSE");
-	});
+    expect(transactions).toHaveLength(1);
+    expect(transactions[0].id).toEqual(expect.any(String));
+    expect(transactions[0].type).toStrictEqual("EXPENSE");
+  });
 
-	it("should not be able to fetch transactions if the company member is not found", async () => {
-		await expect(() =>
-			sut.execute({
-				userId: "non-existent-user-id",
-				companyId: "company-id-01",
-			})
-		).rejects.toBeInstanceOf(ResourceNotFoundError);
-	});
+  it("should not be able to fetch transactions if the company member is not found", async () => {
+    await expect(() =>
+      sut.execute({
+        userId: "non-existent-user-id",
+        companyId: "company-id-01",
+      })
+    ).rejects.toBeInstanceOf(ResourceNotFoundError);
+  });
 
-	it("should not be able to fetch transactions if the company is not found", async () => {
-		await expect(() =>
-			sut.execute({
-				userId: "john-doe-id-01",
-				companyId: "non-existent-company-id",
-			})
-		).rejects.toBeInstanceOf(ResourceNotFoundError);
-	});
+  it("should not be able to fetch transactions if the company is not found", async () => {
+    await expect(() =>
+      sut.execute({
+        userId: "john-doe-id-01",
+        companyId: "non-existent-company-id",
+      })
+    ).rejects.toBeInstanceOf(ResourceNotFoundError);
+  });
 
-	it("should not be possible to fetch company transactions if the company member does not have the necessary permissions", async () => {
-		await usersRepository.create({
-			id: "john-doe-id-02",
-			name: "John Doe",
-			email: "johndoe@example.com",
-			password: "12345678",
-		});
+  it("should not be possible to fetch company transactions if the company member does not have the necessary permissions", async () => {
+    await usersRepository.create({
+      id: "john-doe-id-02",
+      name: "John Doe",
+      email: "johndoe@example.com",
+      password: "12345678",
+    });
 
-		await companyMembersRepository.create({
-			id: "company-member-id-02",
-			companyId: "company-id-01",
-			userId: "john-doe-id-02",
-			sector: "Ajudante de carga e descarga",
-			extraData: {
-				permissions: ["MANAGE_SHIPMENTS_AND_PICKUPS"],
-			},
-		});
+    await companyMembersRepository.create({
+      id: "company-member-id-02",
+      companyId: "company-id-01",
+      userId: "john-doe-id-02",
+      sector: "Ajudante de carga e descarga",
+      extraData: {
+        permissions: ["MANAGE_SHIPMENTS_AND_PICKUPS"],
+      },
+    });
 
-		await expect(() =>
-			sut.execute({
-				userId: "john-doe-id-02",
-				companyId: "company-id-01",
-			})
-		).rejects.toBeInstanceOf(NotAllowedError);
-	});
+    await expect(() =>
+      sut.execute({
+        userId: "john-doe-id-02",
+        companyId: "company-id-01",
+      })
+    ).rejects.toBeInstanceOf(NotAllowedError);
+  });
 });

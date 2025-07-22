@@ -6,48 +6,45 @@ import { makeFetchTransactionsFromCompanyUseCase } from "@/modules/financial/use
 import z from "zod";
 
 export class FetchTransactionsFromCompanyController {
-	static async handle(req: FastifyRequest, reply: FastifyReply) {
-		const fetchTransactionsFromCompanyParamsSchema = z.object({
-			companyId: z.string().uuid(),
-		});
+  static async handle(req: FastifyRequest, reply: FastifyReply) {
+    const fetchTransactionsFromCompanyParamsSchema = z.object({
+      companyId: z.string().uuid(),
+    });
 
-		const { companyId } = fetchTransactionsFromCompanyParamsSchema.parse(
-			req.params
-		);
+    const { companyId } = fetchTransactionsFromCompanyParamsSchema.parse(req.params);
 
-		const userId = req.user.sub;
+    const userId = req.user.sub;
 
-		try {
-			const fetchTransactionsFromCompanyUseCase =
-				makeFetchTransactionsFromCompanyUseCase();
-			const {
-				transactions,
-				totalTransactions,
-				totalIncomeInCents,
-				totalExpenseInCents,
-				totalBalanceInCents,
-				percentage,
-			} = await fetchTransactionsFromCompanyUseCase.execute({
-				companyId,
-				userId,
-			});
+    try {
+      const fetchTransactionsFromCompanyUseCase = makeFetchTransactionsFromCompanyUseCase();
+      const {
+        transactions,
+        totalTransactions,
+        totalIncomeInCents,
+        totalExpenseInCents,
+        totalBalanceInCents,
+        percentage,
+      } = await fetchTransactionsFromCompanyUseCase.execute({
+        companyId,
+        userId,
+      });
 
-			reply.status(200).send({
-				transactions,
-				totalTransactions,
-				totalIncomeInCents,
-				totalExpenseInCents,
-				totalBalanceInCents,
-				percentage,
-			});
-		} catch (error) {
-			if (error instanceof ResourceNotFoundError) {
-				reply.status(404).send({ message: error.message });
-			}
-			if (error instanceof NotAllowedError) {
-				reply.status(403).send({ message: error.message });
-			}
-			throw error;
-		}
-	}
+      reply.status(200).send({
+        transactions,
+        totalTransactions,
+        totalIncomeInCents,
+        totalExpenseInCents,
+        totalBalanceInCents,
+        percentage,
+      });
+    } catch (error) {
+      if (error instanceof ResourceNotFoundError) {
+        reply.status(404).send({ message: error.message });
+      }
+      if (error instanceof NotAllowedError) {
+        reply.status(403).send({ message: error.message });
+      }
+      throw error;
+    }
+  }
 }

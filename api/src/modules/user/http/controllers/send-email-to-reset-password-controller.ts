@@ -5,27 +5,26 @@ import { makeSendEmailToResetPasswordUseCase } from "@/modules/user/use-cases/fa
 import z from "zod";
 
 export class SendEmailToResetPasswordController {
-	static async handle(req: FastifyRequest, reply: FastifyReply) {
-		const sendEmailToResetPasswordBodySchema = z.object({
-			email: z.string().email(),
-		});
+  static async handle(req: FastifyRequest, reply: FastifyReply) {
+    const sendEmailToResetPasswordBodySchema = z.object({
+      email: z.string().email(),
+    });
 
-		const { email } = sendEmailToResetPasswordBodySchema.parse(req.body);
+    const { email } = sendEmailToResetPasswordBodySchema.parse(req.body);
 
-		try {
-			const sendEmailToResetPasswordUseCase =
-				makeSendEmailToResetPasswordUseCase();
-			await sendEmailToResetPasswordUseCase.execute({
-				email,
-			});
+    try {
+      const sendEmailToResetPasswordUseCase = makeSendEmailToResetPasswordUseCase();
+      await sendEmailToResetPasswordUseCase.execute({
+        email,
+      });
 
-			reply.status(201).send();
-		} catch (error) {
-			if (error instanceof ResourceNotFoundError) {
-				reply.status(404).send({ message: error.message });
-			}
+      reply.status(201).send();
+    } catch (error) {
+      if (error instanceof ResourceNotFoundError) {
+        reply.status(404).send({ message: error.message });
+      }
 
-			throw error;
-		}
-	}
+      throw error;
+    }
+  }
 }

@@ -5,12 +5,9 @@ import { FetchFreightsFromCompanyController } from "@/modules/freight/http/contr
 import { GetFreightDetailsController } from "@/modules/freight/http/controllers/get-freight-details-controller";
 
 export async function freightModuleRoutes(app: FastifyInstance) {
-	app.addHook("onRequest", verifyJWT);
+  app.addHook("onRequest", verifyJWT);
 
-	app.post("/freights", RegisterFreightController.handle);
-	app.get("/:companyId/freights", FetchFreightsFromCompanyController.handle);
-	app.get(
-		"/:companyId/freights/:freightId/details",
-		GetFreightDetailsController.handle
-	);
+  app.post("/freights", RegisterFreightController.handle);
+  app.get("/:companyId/freights", FetchFreightsFromCompanyController.handle);
+  app.get("/:companyId/freights/:freightId/details", GetFreightDetailsController.handle);
 }

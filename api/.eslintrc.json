@@ -16,12 +16,12 @@
       "error",
       {
         "tabWidth": 2,
-        "useTabs": true,
+        "useTabs": false,
         "singleQuote": false,
         "semi": true,
         "bracketSpacing": true,
         "trailingComma": "es5",
-        "printWidth": 80
+        "printWidth": 120
       }
     ]
   },

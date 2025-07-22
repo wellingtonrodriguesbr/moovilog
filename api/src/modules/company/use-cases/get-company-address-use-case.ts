@@ -10,73 +10,64 @@ import { IAddress } from "@/modules/shared/interfaces/address";
 import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
 
 interface GetCompanyAddressUseCaseRequest {
-	userId: string;
-	companyId: string;
+  userId: string;
+  companyId: string;
 }
 
 interface GetCompanyAddressUseCaseResponse {
-	companyAddress: {
-		address: IAddress;
-		city: ICity;
-		state: IState;
-	};
+  companyAddress: {
+    address: IAddress;
+    city: ICity;
+    state: IState;
+  };
 }
 
 export class GetCompanyAddressUseCase {
-	constructor(
-		private companyMembersRepository: CompanyMembersRepository,
-		private companiesRepository: CompaniesRepository,
-		private addressesRepository: AddressesRepository,
-		private citiesRepository: CitiesRepository,
-		private statesRepository: StatesRepository
-	) {}
+  constructor(
+    private companyMembersRepository: CompanyMembersRepository,
+    private companiesRepository: CompaniesRepository,
+    private addressesRepository: AddressesRepository,
+    private citiesRepository: CitiesRepository,
+    private statesRepository: StatesRepository
+  ) {}
 
-	async execute({
-		userId,
-		companyId,
-	}: GetCompanyAddressUseCaseRequest): Promise<GetCompanyAddressUseCaseResponse> {
-		const company = await this.companiesRepository.findById(companyId);
+  async execute({ userId, companyId }: GetCompanyAddressUseCaseRequest): Promise<GetCompanyAddressUseCaseResponse> {
+    const company = await this.companiesRepository.findById(companyId);
 
-		if (!company) {
-			throw new ResourceNotFoundError("Company not found");
-		}
+    if (!company) {
+      throw new ResourceNotFoundError("Company not found");
+    }
 
-		const memberInCompany =
-			await this.companyMembersRepository.findMemberInCompany(
-				userId,
-				companyId
-			);
+    const memberInCompany = await this.companyMembersRepository.findMemberInCompany(userId, companyId);
 
-		if (!memberInCompany) {
-			throw new NotAllowedError(
-				"You do not have permission to perform this action"
-			);
-		}
+    if (!memberInCompany) {
+      throw new NotAllowedError("You do not have permission to perform this action");
+    }
 
-		const address = await this.addressesRepository.findById(company.addressId!);
+    const address = await this.addressesRepository.findById(company.addressId!);
 
-		if (!address) {
-			throw new ResourceNotFoundError("Address not found");
-		}
+    if (!address) {
+      throw new ResourceNotFoundError("Address not found");
+    }
 
-		const city = await this.citiesRepository.findById(address.cityId);
+    const city = await this.citiesRepository.findById(address.cityId);
 
-		if (!city) {
-			throw new ResourceNotFoundError("City not found");
-		}
+    if (!city) {
+      throw new ResourceNotFoundError("City not found");
+    }
 
-		const state = await this.statesRepository.findById(city.stateId);
+    const state = await this.statesRepository.findById(city.stateId);
 
-		if (!state) {
-			throw new ResourceNotFoundError("State not found");
-		}
+    if (!state) {
+      throw new ResourceNotFoundError("State not found");
+    }
 
-		const companyAddress = {
-			address,
-			city,
-			state,
-		};
+    const companyAddress = {
+      address,
+      city,
+      state,
+    };
 
-		return { companyAddress };
-	}
+    return { companyAddress };
+  }
 }

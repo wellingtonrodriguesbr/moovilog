@@ -3,62 +3,58 @@ import { CitiesRepository } from "@/modules/shared/repositories/cities-repositor
 import { randomUUID } from "node:crypto";
 
 export class InMemoryCitiesRepository implements CitiesRepository {
-	public items: City[] = [];
+  public items: City[] = [];
 
-	async create(data: Prisma.CityUncheckedCreateInput) {
-		const city = {
-			id: data.id ?? randomUUID(),
-			name: data.name,
-			stateId: data.stateId,
-		};
+  async create(data: Prisma.CityUncheckedCreateInput) {
+    const city = {
+      id: data.id ?? randomUUID(),
+      name: data.name,
+      stateId: data.stateId,
+    };
 
-		this.items.push(city);
+    this.items.push(city);
 
-		return city;
-	}
+    return city;
+  }
 
-	async findOrCreateByNameAndStateId(name: string, stateId: string) {
-		const city = this.items.find(
-			(item) => item.name === name && item.stateId === stateId
-		);
+  async findOrCreateByNameAndStateId(name: string, stateId: string) {
+    const city = this.items.find((item) => item.name === name && item.stateId === stateId);
 
-		if (!city) {
-			const newCity = await this.create({
-				name,
-				stateId,
-			});
+    if (!city) {
+      const newCity = await this.create({
+        name,
+        stateId,
+      });
 
-			return newCity;
-		}
+      return newCity;
+    }
 
-		return city;
-	}
+    return city;
+  }
 
-	async findOrCreateManyByStateId(names: string[], stateId: string) {
-		const cities = await Promise.all(
-			names.map((name) => this.findOrCreateByNameAndStateId(name, stateId))
-		);
+  async findOrCreateManyByStateId(names: string[], stateId: string) {
+    const cities = await Promise.all(names.map((name) => this.findOrCreateByNameAndStateId(name, stateId)));
 
-		return cities;
-	}
+    return cities;
+  }
 
-	async findManyByIds(ids: string[]) {
-		const cities = this.items.filter((item) => ids.includes(item.id));
+  async findManyByIds(ids: string[]) {
+    const cities = this.items.filter((item) => ids.includes(item.id));
 
-		if (!cities) {
-			return null;
-		}
+    if (!cities) {
+      return null;
+    }
 
-		return cities;
-	}
+    return cities;
+  }
 
-	async findById(id: string) {
-		const city = this.items.find((item) => item.id === id);
+  async findById(id: string) {
+    const city = this.items.find((item) => item.id === id);
 
-		if (!city) {
-			return null;
-		}
+    if (!city) {
+      return null;
+    }
 
-		return city;
-	}
+    return city;
+  }
 }

@@ -6,44 +6,38 @@ import { makeUpdateVehicleStatusUseCase } from "@/modules/vehicle/use-cases/fact
 import z from "zod";
 
 export class UpdateVehicleStatusController {
-	static async handle(req: FastifyRequest, reply: FastifyReply) {
-		const updateVehicleStatusBodySchema = z.object({
-			status: z.enum([
-				"ACTIVE",
-				"INACTIVE",
-				"MAINTENANCE",
-				"RESERVED",
-				"BROKEN",
-			]),
-		});
+  static async handle(req: FastifyRequest, reply: FastifyReply) {
+    const updateVehicleStatusBodySchema = z.object({
+      status: z.enum(["ACTIVE", "INACTIVE", "MAINTENANCE", "RESERVED", "BROKEN"]),
+    });
 
-		const updateVehicleStatusParamsSchema = z.object({
-			vehicleId: z.string().uuid(),
-		});
+    const updateVehicleStatusParamsSchema = z.object({
+      vehicleId: z.string().uuid(),
+    });
 
-		const { status } = updateVehicleStatusBodySchema.parse(req.body);
+    const { status } = updateVehicleStatusBodySchema.parse(req.body);
 
-		const { vehicleId } = updateVehicleStatusParamsSchema.parse(req.params);
+    const { vehicleId } = updateVehicleStatusParamsSchema.parse(req.params);
 
-		const userId = req.user.sub;
+    const userId = req.user.sub;
 
-		try {
-			const updateVehicleStatusUseCase = makeUpdateVehicleStatusUseCase();
-			await updateVehicleStatusUseCase.execute({
-				vehicleId,
-				userId,
-				status,
-			});
+    try {
+      const updateVehicleStatusUseCase = makeUpdateVehicleStatusUseCase();
+      await updateVehicleStatusUseCase.execute({
+        vehicleId,
+        userId,
+        status,
+      });
 
-			reply.status(204).send();
-		} catch (error) {
-			if (error instanceof ResourceNotFoundError) {
-				reply.status(404).send({ message: error.message });
-			}
-			if (error instanceof NotAllowedError) {
-				reply.status(403).send({ message: error.message });
-			}
-			throw error;
-		}
-	}
+      reply.status(204).send();
+    } catch (error) {
+      if (error instanceof ResourceNotFoundError) {
+        reply.status(404).send({ message: error.message });
+      }
+      if (error instanceof NotAllowedError) {
+        reply.status(403).send({ message: error.message });
+      }
+      throw error;
+    }
+  }
 }

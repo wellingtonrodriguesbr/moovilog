@@ -2,11 +2,9 @@ import { FetchCategoriesUseCase } from "@/modules/financial/use-cases/fetch-cate
 import { PrismaFinanceCategoriesRepository } from "@/modules/financial/repositories/prisma/prisma-finance-categories-repository";
 
 export function makeFetchCategoriesUseCase() {
-	const financeCategoriesRepository = new PrismaFinanceCategoriesRepository();
+  const financeCategoriesRepository = new PrismaFinanceCategoriesRepository();
 
-	const fetchCategoriesUseCase = new FetchCategoriesUseCase(
-		financeCategoriesRepository
-	);
+  const fetchCategoriesUseCase = new FetchCategoriesUseCase(financeCategoriesRepository);
 
-	return fetchCategoriesUseCase;
+  return fetchCategoriesUseCase;
 }

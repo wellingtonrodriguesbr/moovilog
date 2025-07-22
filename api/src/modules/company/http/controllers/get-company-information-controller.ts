@@ -4,25 +4,25 @@ import { makeGetCompanyInformationUseCase } from "@/modules/company/use-cases/fa
 import { BadRequestError } from "@/modules/shared/errors/bad-request-error";
 
 export class GetCompanyInformationController {
-	static async handle(req: FastifyRequest, reply: FastifyReply) {
-		const userId = req.user.sub;
+  static async handle(req: FastifyRequest, reply: FastifyReply) {
+    const userId = req.user.sub;
 
-		try {
-			const getCompanyInformationUseCase = makeGetCompanyInformationUseCase();
-			const { company } = await getCompanyInformationUseCase.execute({
-				userId,
-			});
+    try {
+      const getCompanyInformationUseCase = makeGetCompanyInformationUseCase();
+      const { company } = await getCompanyInformationUseCase.execute({
+        userId,
+      });
 
-			reply.status(200).send({ company });
-		} catch (error) {
-			if (error instanceof ResourceNotFoundError) {
-				reply.status(404).send({ message: error.message });
-			}
-			if (error instanceof BadRequestError) {
-				reply.status(400).send({ message: error.message });
-			}
+      reply.status(200).send({ company });
+    } catch (error) {
+      if (error instanceof ResourceNotFoundError) {
+        reply.status(404).send({ message: error.message });
+      }
+      if (error instanceof BadRequestError) {
+        reply.status(400).send({ message: error.message });
+      }
 
-			throw error;
-		}
-	}
+      throw error;
+    }
+  }
 }

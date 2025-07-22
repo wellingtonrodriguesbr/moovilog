@@ -5,12 +5,9 @@ import { FetchRoutesFromCompanyController } from "@/modules/route/http/controlle
 import { FetchCitiesFromRouteController } from "@/modules/route/http/controllers/fetch-cities-from-route-controller";
 
 export async function routeModuleRoutes(app: FastifyInstance) {
-	app.addHook("onRequest", verifyJWT);
+  app.addHook("onRequest", verifyJWT);
 
-	app.post("/routes", RegisterRouteController.handle);
-	app.get(
-		"/companies/:companyId/routes",
-		FetchRoutesFromCompanyController.handle
-	);
-	app.get("/routes/:routeId/cities", FetchCitiesFromRouteController.handle);
+  app.post("/routes", RegisterRouteController.handle);
+  app.get("/companies/:companyId/routes", FetchRoutesFromCompanyController.handle);
+  app.get("/routes/:routeId/cities", FetchCitiesFromRouteController.handle);
 }

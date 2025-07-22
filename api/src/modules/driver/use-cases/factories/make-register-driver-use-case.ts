@@ -4,16 +4,16 @@ import { RegisterDriverUseCase } from "@/modules/driver/use-cases/register-drive
 import { PermissionService } from "@/services/permission-service";
 
 export function makeRegisterDriverUseCase() {
-	const companyMembersRepository = new PrismaCompanyMembersRepository();
-	const driversRepository = new PrismaDriversRepository();
+  const companyMembersRepository = new PrismaCompanyMembersRepository();
+  const driversRepository = new PrismaDriversRepository();
 
-	const permissionService = new PermissionService(companyMembersRepository);
+  const permissionService = new PermissionService(companyMembersRepository);
 
-	const registerDriverUseCase = new RegisterDriverUseCase(
-		companyMembersRepository,
-		driversRepository,
-		permissionService
-	);
+  const registerDriverUseCase = new RegisterDriverUseCase(
+    companyMembersRepository,
+    driversRepository,
+    permissionService
+  );
 
-	return registerDriverUseCase;
+  return registerDriverUseCase;
 }

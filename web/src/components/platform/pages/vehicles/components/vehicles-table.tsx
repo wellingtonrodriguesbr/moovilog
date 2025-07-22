@@ -8,25 +8,24 @@ import { SkeletonVehiclesTable } from "@/components/platform/pages/vehicles/comp
 import { Empty } from "@/components/platform/empty";
 
 export function VehiclesTable() {
-	const { vehiclesFromCompany, isFetchVehiclesFromCompanyPending } =
-		useFetchVehiclesFromCompany();
+  const { vehiclesFromCompany, isFetchVehiclesFromCompanyPending } = useFetchVehiclesFromCompany();
 
-	if (isFetchVehiclesFromCompanyPending) {
-		return <SkeletonVehiclesTable />;
-	}
+  if (isFetchVehiclesFromCompanyPending) {
+    return <SkeletonVehiclesTable />;
+  }
 
-	if (vehiclesFromCompany.length > 0) {
-		return (
-			<Table>
-				<VehiclesTableHeader />
-				<TableBody>
-					{vehiclesFromCompany.map((vehicle) => (
-						<VehiclesTableRow key={vehicle.id} vehicle={vehicle} />
-					))}
-				</TableBody>
-			</Table>
-		);
-	}
+  if (vehiclesFromCompany.length > 0) {
+    return (
+      <Table>
+        <VehiclesTableHeader />
+        <TableBody>
+          {vehiclesFromCompany.map((vehicle) => (
+            <VehiclesTableRow key={vehicle.id} vehicle={vehicle} />
+          ))}
+        </TableBody>
+      </Table>
+    );
+  }
 
-	return <Empty context="vehicle" />;
+  return <Empty context="vehicle" />;
 }

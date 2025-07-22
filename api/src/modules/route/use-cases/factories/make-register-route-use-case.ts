@@ -7,22 +7,22 @@ import { PrismaStatesRepository } from "@/modules/shared/repositories/prisma/pri
 import { PermissionService } from "@/services/permission-service";
 
 export function makeRegisterRouteUseCase() {
-	const companyMembersRepository = new PrismaCompanyMembersRepository();
-	const routesRepository = new PrismaRoutesRepository();
-	const citiesInRouteRepository = new PrismaCitiesInRouteRepository();
-	const citiesRepository = new PrismaCitiesRepository();
-	const statesRepository = new PrismaStatesRepository();
+  const companyMembersRepository = new PrismaCompanyMembersRepository();
+  const routesRepository = new PrismaRoutesRepository();
+  const citiesInRouteRepository = new PrismaCitiesInRouteRepository();
+  const citiesRepository = new PrismaCitiesRepository();
+  const statesRepository = new PrismaStatesRepository();
 
-	const permissionService = new PermissionService(companyMembersRepository);
+  const permissionService = new PermissionService(companyMembersRepository);
 
-	const registerRouteUseCase = new RegisterRouteUseCase(
-		companyMembersRepository,
-		routesRepository,
-		citiesRepository,
-		statesRepository,
-		citiesInRouteRepository,
-		permissionService
-	);
+  const registerRouteUseCase = new RegisterRouteUseCase(
+    companyMembersRepository,
+    routesRepository,
+    citiesRepository,
+    statesRepository,
+    citiesInRouteRepository,
+    permissionService
+  );
 
-	return registerRouteUseCase;
+  return registerRouteUseCase;
 }

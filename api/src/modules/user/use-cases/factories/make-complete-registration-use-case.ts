@@ -4,15 +4,15 @@ import { PrismaCompanyMembersRepository } from "@/modules/company-member/reposit
 import { PrismaTokensRepository } from "@/modules/shared/repositories/prisma/prisma-tokens-repository";
 
 export function makeCompleteRegistrationUseCase() {
-	const usersRepository = new PrismaUsersRepository();
-	const companyMembersRepository = new PrismaCompanyMembersRepository();
-	const tokensRepository = new PrismaTokensRepository();
+  const usersRepository = new PrismaUsersRepository();
+  const companyMembersRepository = new PrismaCompanyMembersRepository();
+  const tokensRepository = new PrismaTokensRepository();
 
-	const completeRegistrationUseCase = new CompleteRegistrationUseCase(
-		usersRepository,
-		companyMembersRepository,
-		tokensRepository
-	);
+  const completeRegistrationUseCase = new CompleteRegistrationUseCase(
+    usersRepository,
+    companyMembersRepository,
+    tokensRepository
+  );
 
-	return completeRegistrationUseCase;
+  return completeRegistrationUseCase;
 }

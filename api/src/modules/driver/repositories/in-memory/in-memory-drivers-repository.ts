@@ -3,110 +3,100 @@ import { DriversRepository } from "@/modules/driver/repositories/drivers-reposit
 import { randomUUID } from "node:crypto";
 
 export class InMemoryDriversRepository implements DriversRepository {
-	public items: Driver[] = [];
+  public items: Driver[] = [];
 
-	async create(data: Prisma.DriverUncheckedCreateInput) {
-		const driver = {
-			companyId: data.companyId,
-			creatorId: data.creatorId,
-			id: data.id ?? randomUUID(),
-			name: data.name,
-			documentNumber: data.documentNumber,
-			phone: data.phone,
-			type: data.type,
-			status: data.status ?? "ACTIVE",
-			addressId: data.addressId ?? null,
-			createdAt: new Date(),
-			updatedAt: new Date(),
-		};
+  async create(data: Prisma.DriverUncheckedCreateInput) {
+    const driver = {
+      companyId: data.companyId,
+      creatorId: data.creatorId,
+      id: data.id ?? randomUUID(),
+      name: data.name,
+      documentNumber: data.documentNumber,
+      phone: data.phone,
+      type: data.type,
+      status: data.status ?? "ACTIVE",
+      addressId: data.addressId ?? null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
 
-		this.items.push(driver);
-		return driver;
-	}
+    this.items.push(driver);
+    return driver;
+  }
 
-	async findDriverInCompany(documentNumber: string, companyId: string) {
-		const driver = this.items.find(
-			(item) =>
-				item.documentNumber === documentNumber && item.companyId === companyId
-		);
+  async findDriverInCompany(documentNumber: string, companyId: string) {
+    const driver = this.items.find((item) => item.documentNumber === documentNumber && item.companyId === companyId);
 
-		if (!driver) {
-			return null;
-		}
+    if (!driver) {
+      return null;
+    }
 
-		return driver;
-	}
+    return driver;
+  }
 
-	async findByDocumentNumber(documentNumber: string) {
-		const driver = this.items.find(
-			(item) => item.documentNumber === documentNumber
-		);
+  async findByDocumentNumber(documentNumber: string) {
+    const driver = this.items.find((item) => item.documentNumber === documentNumber);
 
-		if (!driver) {
-			return null;
-		}
+    if (!driver) {
+      return null;
+    }
 
-		return driver;
-	}
+    return driver;
+  }
 
-	async findByPhoneNumberInCompany(phone: string, companyId: string) {
-		const driver = this.items.find(
-			(item) => item.phone === phone && item.companyId === companyId
-		);
+  async findByPhoneNumberInCompany(phone: string, companyId: string) {
+    const driver = this.items.find((item) => item.phone === phone && item.companyId === companyId);
 
-		if (!driver) {
-			return null;
-		}
+    if (!driver) {
+      return null;
+    }
 
-		return driver;
-	}
+    return driver;
+  }
 
-	async findById(id: string) {
-		const driver = this.items.find((item) => item.id === id);
+  async findById(id: string) {
+    const driver = this.items.find((item) => item.id === id);
 
-		if (!driver) {
-			return null;
-		}
+    if (!driver) {
+      return null;
+    }
 
-		return driver;
-	}
+    return driver;
+  }
 
-	async findManyByCompanyId(companyId: string) {
-		const drivers = this.items.filter((item) => item.companyId === companyId);
+  async findManyByCompanyId(companyId: string) {
+    const drivers = this.items.filter((item) => item.companyId === companyId);
 
-		return drivers;
-	}
+    return drivers;
+  }
 
-	async updateStatus(id: string, status: AccountStatus) {
-		const driverIndex = this.items.findIndex((item) => item.id === id);
+  async updateStatus(id: string, status: AccountStatus) {
+    const driverIndex = this.items.findIndex((item) => item.id === id);
 
-		if (driverIndex === -1) {
-			return;
-		}
+    if (driverIndex === -1) {
+      return;
+    }
 
-		const updatedDriver = {
-			...this.items[driverIndex],
-			status,
-		} as Driver;
+    const updatedDriver = {
+      ...this.items[driverIndex],
+      status,
+    } as Driver;
 
-		this.items[driverIndex] = updatedDriver;
-	}
+    this.items[driverIndex] = updatedDriver;
+  }
 
-	async update(
-		driverId: string,
-		data: Prisma.DriverUncheckedUpdateInput
-	): Promise<void> {
-		const driverIndex = this.items.findIndex((item) => item.id === driverId);
+  async update(driverId: string, data: Prisma.DriverUncheckedUpdateInput): Promise<void> {
+    const driverIndex = this.items.findIndex((item) => item.id === driverId);
 
-		if (driverIndex === -1) {
-			return;
-		}
+    if (driverIndex === -1) {
+      return;
+    }
 
-		const updatedDriver = {
-			...this.items[driverIndex],
-			...data,
-		} as Driver;
+    const updatedDriver = {
+      ...this.items[driverIndex],
+      ...data,
+    } as Driver;
 
-		this.items[driverIndex] = updatedDriver;
-	}
+    this.items[driverIndex] = updatedDriver;
+  }
 }

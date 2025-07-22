@@ -4,14 +4,14 @@ import { PrismaCompaniesRepository } from "@/modules/company/repositories/prisma
 import { FetchDriversFromCompanyUseCase } from "@/modules/driver/use-cases/fetch-drivers-from-company-use-case";
 
 export function makeFetchDriversFromCompanyUseCase() {
-	const driversRepository = new PrismaDriversRepository();
-	const companiesRepository = new PrismaCompaniesRepository();
-	const companyMembersRepository = new PrismaCompanyMembersRepository();
-	const fetchDriversFromCompanyUseCase = new FetchDriversFromCompanyUseCase(
-		driversRepository,
-		companiesRepository,
-		companyMembersRepository
-	);
+  const driversRepository = new PrismaDriversRepository();
+  const companiesRepository = new PrismaCompaniesRepository();
+  const companyMembersRepository = new PrismaCompanyMembersRepository();
+  const fetchDriversFromCompanyUseCase = new FetchDriversFromCompanyUseCase(
+    driversRepository,
+    companiesRepository,
+    companyMembersRepository
+  );
 
-	return fetchDriversFromCompanyUseCase;
+  return fetchDriversFromCompanyUseCase;
 }

@@ -12,78 +12,74 @@ let companyMembersRepository: InMemoryCompanyMembersRepository;
 let sut: RegisterCompanyUseCase;
 
 describe("[MODULE]: Register company use case", () => {
-	beforeEach(async () => {
-		usersRepository = new InMemoryUsersRepository();
-		companiesRepository = new InMemoryCompaniesRepository();
-		companyMembersRepository = new InMemoryCompanyMembersRepository();
-		sut = new RegisterCompanyUseCase(
-			companiesRepository,
-			companyMembersRepository,
-			usersRepository
-		);
+  beforeEach(async () => {
+    usersRepository = new InMemoryUsersRepository();
+    companiesRepository = new InMemoryCompaniesRepository();
+    companyMembersRepository = new InMemoryCompanyMembersRepository();
+    sut = new RegisterCompanyUseCase(companiesRepository, companyMembersRepository, usersRepository);
 
-		await usersRepository.create({
-			id: "john-doe-01",
-			name: "John Doe",
-			email: "johndoe@example.com",
-			password: "12345678",
-			phone: "15999999999",
-			extraData: {
-				onboardingStep: "register_company",
-			},
-		});
-	});
+    await usersRepository.create({
+      id: "john-doe-01",
+      name: "John Doe",
+      email: "johndoe@example.com",
+      password: "12345678",
+      phone: "15999999999",
+      extraData: {
+        onboardingStep: "register_company",
+      },
+    });
+  });
 
-	it("should be able to register company", async () => {
-		const { company } = await sut.execute({
-			name: "Company name",
-			documentNumber: "12312312389899",
-			size: "MEDIUM",
-			ownerId: "john-doe-01",
-			ownerSector: "Diretoria",
-		});
+  it("should be able to register company", async () => {
+    const { company } = await sut.execute({
+      name: "Company name",
+      documentNumber: "12312312389899",
+      size: "MEDIUM",
+      ownerId: "john-doe-01",
+      ownerSector: "Diretoria",
+    });
 
-		expect(company.id).toEqual(expect.any(String));
-		expect(company.size).toEqual("MEDIUM");
-	});
+    expect(company.id).toEqual(expect.any(String));
+    expect(company.size).toEqual("MEDIUM");
+  });
 
-	it("should not be able to register company with an existing document number", async () => {
-		await sut.execute({
-			name: "Company name",
-			documentNumber: "12312312389899",
-			size: "MEDIUM",
-			ownerId: "john-doe-01",
-			ownerSector: "Diretoria",
-		});
+  it("should not be able to register company with an existing document number", async () => {
+    await sut.execute({
+      name: "Company name",
+      documentNumber: "12312312389899",
+      size: "MEDIUM",
+      ownerId: "john-doe-01",
+      ownerSector: "Diretoria",
+    });
 
-		await expect(() =>
-			sut.execute({
-				name: "Company name",
-				documentNumber: "12312312389899",
-				size: "MEDIUM",
-				ownerId: "john-doe-01",
-				ownerSector: "Diretoria",
-			})
-		).rejects.toBeInstanceOf(CompanyAlreadyExistsError);
-	});
+    await expect(() =>
+      sut.execute({
+        name: "Company name",
+        documentNumber: "12312312389899",
+        size: "MEDIUM",
+        ownerId: "john-doe-01",
+        ownerSector: "Diretoria",
+      })
+    ).rejects.toBeInstanceOf(CompanyAlreadyExistsError);
+  });
 
-	it("should not be able to register company if user already owns another company", async () => {
-		await sut.execute({
-			name: "Company name",
-			documentNumber: "12312312389899",
-			size: "MEDIUM",
-			ownerId: "john-doe-01",
-			ownerSector: "Diretoria",
-		});
+  it("should not be able to register company if user already owns another company", async () => {
+    await sut.execute({
+      name: "Company name",
+      documentNumber: "12312312389899",
+      size: "MEDIUM",
+      ownerId: "john-doe-01",
+      ownerSector: "Diretoria",
+    });
 
-		await expect(() =>
-			sut.execute({
-				name: "Company name",
-				documentNumber: "12312312389891",
-				size: "MEDIUM",
-				ownerId: "john-doe-01",
-				ownerSector: "Diretoria",
-			})
-		).rejects.toBeInstanceOf(OwnerAlreadyHasACompanyError);
-	});
+    await expect(() =>
+      sut.execute({
+        name: "Company name",
+        documentNumber: "12312312389891",
+        size: "MEDIUM",
+        ownerId: "john-doe-01",
+        ownerSector: "Diretoria",
+      })
+    ).rejects.toBeInstanceOf(OwnerAlreadyHasACompanyError);
+  });
 });

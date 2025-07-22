@@ -16,108 +16,108 @@ let permissionService: PermissionService;
 let sut: SendInvitationToCompanyMemberUseCase;
 
 describe("[MODULE]: Send invitation to company member use case", () => {
-	beforeEach(async () => {
-		usersRepository = new InMemoryUsersRepository();
-		companiesRepository = new InMemoryCompaniesRepository();
-		companyMembersRepository = new InMemoryCompanyMembersRepository();
-		tokensRepository = new InMemoryTokensRepository();
-		permissionService = new PermissionService(companyMembersRepository);
-		sut = new SendInvitationToCompanyMemberUseCase(
-			usersRepository,
-			companyMembersRepository,
-			companiesRepository,
-			tokensRepository,
-			permissionService
-		);
+  beforeEach(async () => {
+    usersRepository = new InMemoryUsersRepository();
+    companiesRepository = new InMemoryCompaniesRepository();
+    companyMembersRepository = new InMemoryCompanyMembersRepository();
+    tokensRepository = new InMemoryTokensRepository();
+    permissionService = new PermissionService(companyMembersRepository);
+    sut = new SendInvitationToCompanyMemberUseCase(
+      usersRepository,
+      companyMembersRepository,
+      companiesRepository,
+      tokensRepository,
+      permissionService
+    );
 
-		await usersRepository.create({
-			id: "john-doe-id-01",
-			name: "John Doe",
-			email: "johndoe@example.com",
-			password: "12345678",
-		});
+    await usersRepository.create({
+      id: "john-doe-id-01",
+      name: "John Doe",
+      email: "johndoe@example.com",
+      password: "12345678",
+    });
 
-		await companiesRepository.create({
-			id: "company-id-01",
-			name: "Company name",
-			documentNumber: "12312312389899",
-			size: "MEDIUM",
-			ownerId: "john-doe-01",
-		});
+    await companiesRepository.create({
+      id: "company-id-01",
+      name: "Company name",
+      documentNumber: "12312312389899",
+      size: "MEDIUM",
+      ownerId: "john-doe-01",
+    });
 
-		await companyMembersRepository.create({
-			id: "company-member-id-01",
-			companyId: "company-id-01",
-			userId: "john-doe-id-01",
-			sector: "Diretoria",
-			extraData: {
-				permissions: ["ADMIN"],
-			},
-		});
-	});
+    await companyMembersRepository.create({
+      id: "company-member-id-01",
+      companyId: "company-id-01",
+      userId: "john-doe-id-01",
+      sector: "Diretoria",
+      extraData: {
+        permissions: ["ADMIN"],
+      },
+    });
+  });
 
-	it("should be able to send invitation to a member", async () => {
-		const { companyMember } = await sut.execute({
-			name: "John Doe",
-			email: "johndoe-member@example.com",
-			senderId: "john-doe-id-01",
-			companyId: "company-id-01",
-			permissions: ["ADMIN"],
-			sector: "Gerência",
-		});
+  it("should be able to send invitation to a member", async () => {
+    const { companyMember } = await sut.execute({
+      name: "John Doe",
+      email: "johndoe-member@example.com",
+      senderId: "john-doe-id-01",
+      companyId: "company-id-01",
+      permissions: ["ADMIN"],
+      sector: "Gerência",
+    });
 
-		expect(companyMember.id).toEqual(expect.any(String));
-		expect(companyMember.status).toEqual("PENDING");
-		expect(tokensRepository.items.length).toEqual(1);
-	});
+    expect(companyMember.id).toEqual(expect.any(String));
+    expect(companyMember.status).toEqual("PENDING");
+    expect(tokensRepository.items.length).toEqual(1);
+  });
 
-	it("should not be able to send invitation to member if already exists with same email", async () => {
-		await sut.execute({
-			name: "John Doe",
-			email: "johndoe-member@example.com",
-			senderId: "john-doe-id-01",
-			companyId: "company-id-01",
-			permissions: ["ADMIN"],
-			sector: "Gerência",
-		});
+  it("should not be able to send invitation to member if already exists with same email", async () => {
+    await sut.execute({
+      name: "John Doe",
+      email: "johndoe-member@example.com",
+      senderId: "john-doe-id-01",
+      companyId: "company-id-01",
+      permissions: ["ADMIN"],
+      sector: "Gerência",
+    });
 
-		await expect(() =>
-			sut.execute({
-				name: "John Doe",
-				email: "johndoe-member@example.com",
-				senderId: "john-doe-id-01",
-				companyId: "company-id-01",
-				permissions: ["ADMIN"],
-				sector: "Vendas",
-			})
-		).rejects.toBeInstanceOf(MemberAlreadyExistsInCompanyError);
-	});
+    await expect(() =>
+      sut.execute({
+        name: "John Doe",
+        email: "johndoe-member@example.com",
+        senderId: "john-doe-id-01",
+        companyId: "company-id-01",
+        permissions: ["ADMIN"],
+        sector: "Vendas",
+      })
+    ).rejects.toBeInstanceOf(MemberAlreadyExistsInCompanyError);
+  });
 
-	it("should not be possible to send invitations if the creator does not have the necessary permissions", async () => {
-		const user = await usersRepository.create({
-			name: "John Doe",
-			email: "johndoe@example.com",
-			password: "12345678",
-		});
+  it("should not be possible to send invitations if the creator does not have the necessary permissions", async () => {
+    const user = await usersRepository.create({
+      name: "John Doe",
+      email: "johndoe@example.com",
+      password: "12345678",
+    });
 
-		await companyMembersRepository.create({
-			userId: user.id,
-			companyId: "company-id-01",
-			extraData: {
-				permissions: ["MANAGE_SHIPMENTS_AND_PICKUPS"],
-			},
-			sector: "Financeiro",
-		});
+    await companyMembersRepository.create({
+      userId: user.id,
+      companyId: "company-id-01",
+      extraData: {
+        permissions: ["MANAGE_SHIPMENTS_AND_PICKUPS"],
+      },
+      sector: "Financeiro",
+    });
 
-		expect(() =>
-			sut.execute({
-				name: "John Doe",
-				email: "johndoe-member@example.com",
-				senderId: user.id,
-				companyId: "company-id-01",
-				permissions: ["VIEW_RESOURCES_AND_SUPPLIES"],
-				sector: "Ajudante geral",
-			})
-		).rejects.toBeInstanceOf(NotAllowedError);
-	});
+    expect(() =>
+      sut.execute({
+        name: "John Doe",
+        email: "johndoe-member@example.com",
+        senderId: user.id,
+        companyId: "company-id-01",
+        permissions: ["VIEW_RESOURCES_AND_SUPPLIES"],
+        sector: "Ajudante geral",
+      })
+    ).rejects.toBeInstanceOf(NotAllowedError);
+  });
 });

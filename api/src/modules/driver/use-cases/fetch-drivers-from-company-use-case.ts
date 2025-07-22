@@ -5,39 +5,39 @@ import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-foun
 import { IDriver } from "@/modules/driver/interfaces/driver";
 
 interface FetchDriversFromCompanyUseCaseRequest {
-	companyId: string;
-	userId: string;
+  companyId: string;
+  userId: string;
 }
 
 interface FetchDriversFromCompanyUseCaseResponse {
-	drivers: IDriver[];
+  drivers: IDriver[];
 }
 
 export class FetchDriversFromCompanyUseCase {
-	constructor(
-		private driversRepository: DriversRepository,
-		private companiesRepository: CompaniesRepository,
-		private companyMembersRepository: CompanyMembersRepository
-	) {}
-	async execute({
-		companyId,
-		userId,
-	}: FetchDriversFromCompanyUseCaseRequest): Promise<FetchDriversFromCompanyUseCaseResponse> {
-		const [company, memberInCompany] = await Promise.all([
-			this.companiesRepository.findById(companyId),
-			this.companyMembersRepository.findMemberInCompany(userId, companyId),
-		]);
+  constructor(
+    private driversRepository: DriversRepository,
+    private companiesRepository: CompaniesRepository,
+    private companyMembersRepository: CompanyMembersRepository
+  ) {}
+  async execute({
+    companyId,
+    userId,
+  }: FetchDriversFromCompanyUseCaseRequest): Promise<FetchDriversFromCompanyUseCaseResponse> {
+    const [company, memberInCompany] = await Promise.all([
+      this.companiesRepository.findById(companyId),
+      this.companyMembersRepository.findMemberInCompany(userId, companyId),
+    ]);
 
-		if (!company) {
-			throw new ResourceNotFoundError("Company not found");
-		}
+    if (!company) {
+      throw new ResourceNotFoundError("Company not found");
+    }
 
-		if (!memberInCompany) {
-			throw new ResourceNotFoundError("Member not found in company");
-		}
+    if (!memberInCompany) {
+      throw new ResourceNotFoundError("Member not found in company");
+    }
 
-		const drivers = await this.driversRepository.findManyByCompanyId(companyId);
+    const drivers = await this.driversRepository.findManyByCompanyId(companyId);
 
-		return { drivers };
-	}
+    return { drivers };
+  }
 }

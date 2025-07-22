@@ -5,33 +5,31 @@ import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-foun
 import dayjs from "dayjs";
 
 interface ValidateTokenUseCaseRequest {
-	code: string;
+  code: string;
 }
 
 interface ValidateTokenUseCaseResponse {
-	userId: string;
+  userId: string;
 }
 
 const EXPIRATION_DAYS = 7;
 
 export class ValidateTokenUseCase {
-	constructor(private tokensRepository: TokensRepository) {}
+  constructor(private tokensRepository: TokensRepository) {}
 
-	async execute({
-		code,
-	}: ValidateTokenUseCaseRequest): Promise<ValidateTokenUseCaseResponse> {
-		const token = await this.tokensRepository.findByCode(code);
+  async execute({ code }: ValidateTokenUseCaseRequest): Promise<ValidateTokenUseCaseResponse> {
+    const token = await this.tokensRepository.findByCode(code);
 
-		if (!token) {
-			throw new ResourceNotFoundError(`Token with code "${code}" not found`);
-		}
+    if (!token) {
+      throw new ResourceNotFoundError(`Token with code "${code}" not found`);
+    }
 
-		if (dayjs().diff(token.createdAt, "days") > EXPIRATION_DAYS) {
-			throw new BadRequestError(`Token with code "${code}" is expired`);
-		}
+    if (dayjs().diff(token.createdAt, "days") > EXPIRATION_DAYS) {
+      throw new BadRequestError(`Token with code "${code}" is expired`);
+    }
 
-		return {
-			userId: token.userId,
-		};
-	}
+    return {
+      userId: token.userId,
+    };
+  }
 }

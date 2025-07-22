@@ -16,80 +16,76 @@ let routesRepository: InMemoryRoutesRepository;
 let sut: FetchRoutesFromCompanyUseCase;
 
 describe("Fetch routes from company use case", () => {
-	beforeEach(async () => {
-		usersRepository = new InMemoryUsersRepository();
-		companiesRepository = new InMemoryCompaniesRepository();
-		statesRepository = new InMemoryStatesRepository();
+  beforeEach(async () => {
+    usersRepository = new InMemoryUsersRepository();
+    companiesRepository = new InMemoryCompaniesRepository();
+    statesRepository = new InMemoryStatesRepository();
 
-		companyMembersRepository = new InMemoryCompanyMembersRepository();
-		routesRepository = new InMemoryRoutesRepository();
-		sut = new FetchRoutesFromCompanyUseCase(
-			companyMembersRepository,
-			companiesRepository,
-			routesRepository
-		);
+    companyMembersRepository = new InMemoryCompanyMembersRepository();
+    routesRepository = new InMemoryRoutesRepository();
+    sut = new FetchRoutesFromCompanyUseCase(companyMembersRepository, companiesRepository, routesRepository);
 
-		await usersRepository.create({
-			id: "john-doe-01",
-			name: "John Doe",
-			email: "johndoe@example.com",
-			password: "12345678",
-		});
+    await usersRepository.create({
+      id: "john-doe-01",
+      name: "John Doe",
+      email: "johndoe@example.com",
+      password: "12345678",
+    });
 
-		await companiesRepository.create({
-			id: "company-id-01",
-			name: "Company name",
-			documentNumber: "12312312389899",
-			size: "MEDIUM",
-			ownerId: "john-doe-01",
-		});
+    await companiesRepository.create({
+      id: "company-id-01",
+      name: "Company name",
+      documentNumber: "12312312389899",
+      size: "MEDIUM",
+      ownerId: "john-doe-01",
+    });
 
-		await companyMembersRepository.create({
-			companyId: "company-id-01",
-			userId: "john-doe-01",
-			sector: "Gerência",
-		});
+    await companyMembersRepository.create({
+      companyId: "company-id-01",
+      userId: "john-doe-01",
+      sector: "Gerência",
+    });
 
-		await routesRepository.create({
-			id: "route-01",
-			name: "Route A",
-			companyId: "company-id-01",
-			creatorId: "company-member-01",
-			createdAt: new Date(),
-			updatedAt: new Date(),
-		});
+    await routesRepository.create({
+      id: "route-01",
+      name: "Route A",
+      companyId: "company-id-01",
+      creatorId: "company-member-01",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
 
-		await statesRepository.create({
-			id: "fake-state-id",
-			name: "São Paulo",
-			acronym: "SP",
-		});
-	});
+    await statesRepository.create({
+      id: "fake-state-id",
+      name: "São Paulo",
+      acronym: "SP",
+    });
+  });
 
-	it("should be able to fetch routes from company", async () => {
-		const { routes } = await sut.execute({
-			userId: "john-doe-01",
-			companyId: "company-id-01",
-		});
+  it("should be able to fetch routes from company", async () => {
+    const { routes } = await sut.execute({
+      userId: "john-doe-01",
+      companyId: "company-id-01",
+    });
 
-		expect(routes).toHaveLength(1);
-		expect(routes[0]).toEqual(
-			expect.objectContaining({
-				id: "route-01",
-				name: "Route A",
-			})
-		);
-	});
+    expect(routes).toHaveLength(1);
+    expect(routes[0]).toEqual(
+      expect.objectContaining({
+        id: "route-01",
+        name: "Route A",
+      })
+    );
+  });
 
-	it("should not be able to fetch routes from company if company member is not found", async () => {
-		await expect(() =>
-			sut.execute({ userId: "non-existent-user", companyId: "company-id-01" })
-		).rejects.toBeInstanceOf(ResourceNotFoundError);
-	});
+  it("should not be able to fetch routes from company if company member is not found", async () => {
+    await expect(() => sut.execute({ userId: "non-existent-user", companyId: "company-id-01" })).rejects.toBeInstanceOf(
+      ResourceNotFoundError
+    );
+  });
 
-	it("should not be able to fetch routes from company if company is not found", async () => {
-		await expect(() =>
-			sut.execute({ userId: "john-doe-01", companyId: "non-existent-company" })
-		).rejects.toBeInstanceOf(ResourceNotFoundError);
-	});
+  it("should not be able to fetch routes from company if company is not found", async () => {
+    await expect(() =>
+      sut.execute({ userId: "john-doe-01", companyId: "non-existent-company" })
+    ).rejects.toBeInstanceOf(ResourceNotFoundError);
+  });
 });

@@ -10,68 +10,68 @@ let usersRepository: InMemoryUsersRepository;
 let sut: RegisterUserUseCase;
 
 describe("[MODULE]: Register user use case", () => {
-	beforeEach(() => {
-		usersRepository = new InMemoryUsersRepository();
-		sut = new RegisterUserUseCase(usersRepository);
-	});
+  beforeEach(() => {
+    usersRepository = new InMemoryUsersRepository();
+    sut = new RegisterUserUseCase(usersRepository);
+  });
 
-	it("should be able to register", async () => {
-		const { userId } = await sut.execute({
-			name: "John Doe",
-			email: "johndoe@example.com",
-			password: "12345678",
-			phone: "15999999999",
-		});
+  it("should be able to register", async () => {
+    const { userId } = await sut.execute({
+      name: "John Doe",
+      email: "johndoe@example.com",
+      password: "12345678",
+      phone: "15999999999",
+    });
 
-		expect(userId).toEqual(expect.any(String));
-	});
+    expect(userId).toEqual(expect.any(String));
+  });
 
-	it("should not be able to register with an existing phone number", async () => {
-		await sut.execute({
-			name: "John Doe",
-			email: "johndoe@example.com",
-			password: "12345678",
-			phone: "15999999999",
-		});
+  it("should not be able to register with an existing phone number", async () => {
+    await sut.execute({
+      name: "John Doe",
+      email: "johndoe@example.com",
+      password: "12345678",
+      phone: "15999999999",
+    });
 
-		await expect(() =>
-			sut.execute({
-				name: "John Doe",
-				email: "johndoe1@example.com",
-				password: "12345678",
-				phone: "15999999999",
-			})
-		).rejects.toBeInstanceOf(UserAlreadyExistsError);
-	});
+    await expect(() =>
+      sut.execute({
+        name: "John Doe",
+        email: "johndoe1@example.com",
+        password: "12345678",
+        phone: "15999999999",
+      })
+    ).rejects.toBeInstanceOf(UserAlreadyExistsError);
+  });
 
-	it("should not be able to register with an existing email", async () => {
-		await sut.execute({
-			name: "John Doe",
-			email: "johndoe@example.com",
-			password: "12345678",
-			phone: "15999999999",
-		});
+  it("should not be able to register with an existing email", async () => {
+    await sut.execute({
+      name: "John Doe",
+      email: "johndoe@example.com",
+      password: "12345678",
+      phone: "15999999999",
+    });
 
-		await expect(() =>
-			sut.execute({
-				name: "John Doe",
-				email: "johndoe@example.com",
-				password: "12345678",
-				phone: "15999999999",
-			})
-		).rejects.toBeInstanceOf(UserAlreadyExistsError);
-	});
+    await expect(() =>
+      sut.execute({
+        name: "John Doe",
+        email: "johndoe@example.com",
+        password: "12345678",
+        phone: "15999999999",
+      })
+    ).rejects.toBeInstanceOf(UserAlreadyExistsError);
+  });
 
-	it("should be able to generate a hash of the user password in the registry", async () => {
-		await sut.execute({
-			name: "John Doe",
-			email: "johndoe@example.com",
-			password: "12345678",
-			phone: "15999999999",
-		});
+  it("should be able to generate a hash of the user password in the registry", async () => {
+    await sut.execute({
+      name: "John Doe",
+      email: "johndoe@example.com",
+      password: "12345678",
+      phone: "15999999999",
+    });
 
-		const isPasswordCorrectlyHashed = await hash("12345678", 6);
+    const isPasswordCorrectlyHashed = await hash("12345678", 6);
 
-		expect(isPasswordCorrectlyHashed).toEqual(expect.any(String));
-	});
+    expect(isPasswordCorrectlyHashed).toEqual(expect.any(String));
+  });
 });

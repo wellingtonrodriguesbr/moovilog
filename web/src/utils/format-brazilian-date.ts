@@ -1,15 +1,15 @@
 import dayjs from "dayjs";
 
 export function formatBrazilianDate(date: string | Date) {
-	const dateObject = new Date(date);
-	const formattedDate = dayjs(dateObject).format("DD/MM/YYYY");
+  const dateObject = new Date(date);
+  const formattedDate = dayjs(dateObject).format("DD/MM/YYYY");
 
-	return formattedDate;
+  return formattedDate;
 }
 
 export function formatShortcutBrazilianDate(date: string | Date) {
-	const dateObject = new Date(date);
-	const formattedDate = dayjs(dateObject).format("DD/MM");
+  const dateObject = new Date(date);
+  const formattedDate = dayjs(dateObject).format("DD/MM");
 
-	return formattedDate;
+  return formattedDate;
 }

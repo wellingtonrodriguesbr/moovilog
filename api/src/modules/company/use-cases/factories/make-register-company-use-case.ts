@@ -4,15 +4,15 @@ import { PrismaCompanyMembersRepository } from "@/modules/company-member/reposit
 import { RegisterCompanyUseCase } from "@/modules/company/use-cases/register-company-use-case";
 
 export function makeRegisterCompanyUseCase() {
-	const usersRepository = new PrismaUsersRepository();
-	const companiesRepository = new PrismaCompaniesRepository();
-	const companyMembersRepository = new PrismaCompanyMembersRepository();
+  const usersRepository = new PrismaUsersRepository();
+  const companiesRepository = new PrismaCompaniesRepository();
+  const companyMembersRepository = new PrismaCompanyMembersRepository();
 
-	const registerCompanyUseCase = new RegisterCompanyUseCase(
-		companiesRepository,
-		companyMembersRepository,
-		usersRepository
-	);
+  const registerCompanyUseCase = new RegisterCompanyUseCase(
+    companiesRepository,
+    companyMembersRepository,
+    usersRepository
+  );
 
-	return registerCompanyUseCase;
+  return registerCompanyUseCase;
 }

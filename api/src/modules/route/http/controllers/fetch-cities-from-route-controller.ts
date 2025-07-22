@@ -5,28 +5,28 @@ import { makeFetchCitiesFromRouteUseCase } from "@/modules/route/use-cases/facto
 import z from "zod";
 
 export class FetchCitiesFromRouteController {
-	static async handle(req: FastifyRequest, reply: FastifyReply) {
-		const fetchCitiesFromRouteParamsSchema = z.object({
-			routeId: z.string().uuid(),
-		});
+  static async handle(req: FastifyRequest, reply: FastifyReply) {
+    const fetchCitiesFromRouteParamsSchema = z.object({
+      routeId: z.string().uuid(),
+    });
 
-		const { routeId } = fetchCitiesFromRouteParamsSchema.parse(req.params);
+    const { routeId } = fetchCitiesFromRouteParamsSchema.parse(req.params);
 
-		const userId = req.user.sub;
+    const userId = req.user.sub;
 
-		try {
-			const fetchCitiesFromRouteUseCase = makeFetchCitiesFromRouteUseCase();
-			const { cities } = await fetchCitiesFromRouteUseCase.execute({
-				userId,
-				routeId,
-			});
+    try {
+      const fetchCitiesFromRouteUseCase = makeFetchCitiesFromRouteUseCase();
+      const { cities } = await fetchCitiesFromRouteUseCase.execute({
+        userId,
+        routeId,
+      });
 
-			reply.status(200).send({ cities });
-		} catch (error) {
-			if (error instanceof ResourceNotFoundError) {
-				reply.status(404).send({ message: error.message });
-			}
-			throw error;
-		}
-	}
+      reply.status(200).send({ cities });
+    } catch (error) {
+      if (error instanceof ResourceNotFoundError) {
+        reply.status(404).send({ message: error.message });
+      }
+      throw error;
+    }
+  }
 }

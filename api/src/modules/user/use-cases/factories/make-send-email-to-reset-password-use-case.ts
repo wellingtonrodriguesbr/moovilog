@@ -3,13 +3,10 @@ import { PrismaTokensRepository } from "@/modules/shared/repositories/prisma/pri
 import { SendEmailToResetPasswordUseCase } from "@/modules/user/use-cases/send-email-to-reset-password-use-case";
 
 export function makeSendEmailToResetPasswordUseCase() {
-	const usersRepository = new PrismaUsersRepository();
-	const tokensRepository = new PrismaTokensRepository();
+  const usersRepository = new PrismaUsersRepository();
+  const tokensRepository = new PrismaTokensRepository();
 
-	const sendEmailToResetPasswordUseCase = new SendEmailToResetPasswordUseCase(
-		usersRepository,
-		tokensRepository
-	);
+  const sendEmailToResetPasswordUseCase = new SendEmailToResetPasswordUseCase(usersRepository, tokensRepository);
 
-	return sendEmailToResetPasswordUseCase;
+  return sendEmailToResetPasswordUseCase;
 }

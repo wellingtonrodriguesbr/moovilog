@@ -2,10 +2,10 @@ import { FinanceTransactionsRepository } from "@/modules/financial/repositories/
 import { FinanceCategoriesRepository } from "@/modules/financial/repositories/finance-categories-repository";
 import { CompanyMembersRepository } from "@/modules/company-member/repositories/company-members-repository";
 import {
-	IFinanceTransaction,
-	IFinanceTransactionStatus,
-	IFinanceTransactionTypes,
-	IFinanceTransactionPaymentMethod,
+  IFinanceTransaction,
+  IFinanceTransactionStatus,
+  IFinanceTransactionTypes,
+  IFinanceTransactionPaymentMethod,
 } from "@/modules/financial/interfaces/finance-transaction";
 import { ResourceNotFoundError } from "@/modules/shared/errors/resource-not-found-error";
 import { NotAllowedError } from "@/modules/shared/errors/not-allowed-error";
@@ -15,117 +15,107 @@ import { DriverTransactionsRepository } from "../repositories/driver-transaction
 import { PermissionService } from "@/services/permission-service";
 
 interface RegisterTransactionUseCaseRequest {
-	description?: string | null;
-	amountInCents: number;
-	dueDate: Date;
-	status: IFinanceTransactionStatus;
-	type: IFinanceTransactionTypes;
-	paymentMethod: IFinanceTransactionPaymentMethod;
-	creatorId: string;
-	companyId: string;
-	driverId?: string | null;
-	categoryName: string;
+  description?: string | null;
+  amountInCents: number;
+  dueDate: Date;
+  status: IFinanceTransactionStatus;
+  type: IFinanceTransactionTypes;
+  paymentMethod: IFinanceTransactionPaymentMethod;
+  creatorId: string;
+  companyId: string;
+  driverId?: string | null;
+  categoryName: string;
 }
 
 interface RegisterTransactionUseCaseResponse {
-	transaction: IFinanceTransaction;
+  transaction: IFinanceTransaction;
 }
 
 export class RegisterTransactionUseCase {
-	constructor(
-		private companyMembersRepository: CompanyMembersRepository,
-		private companiesRepository: CompaniesRepository,
-		private driversRepository: DriversRepository,
-		private driverTransactionsRepository: DriverTransactionsRepository,
-		private financeTransactionsRepository: FinanceTransactionsRepository,
-		private financeCategoriesRepository: FinanceCategoriesRepository,
-		private permissionService: PermissionService
-	) {}
+  constructor(
+    private companyMembersRepository: CompanyMembersRepository,
+    private companiesRepository: CompaniesRepository,
+    private driversRepository: DriversRepository,
+    private driverTransactionsRepository: DriverTransactionsRepository,
+    private financeTransactionsRepository: FinanceTransactionsRepository,
+    private financeCategoriesRepository: FinanceCategoriesRepository,
+    private permissionService: PermissionService
+  ) {}
 
-	async execute({
-		description,
-		amountInCents,
-		dueDate,
-		status,
-		type,
-		paymentMethod,
-		categoryName,
-		creatorId,
-		driverId,
-		companyId,
-	}: RegisterTransactionUseCaseRequest): Promise<RegisterTransactionUseCaseResponse> {
-		const [memberInCompany, company] = await Promise.all([
-			this.companyMembersRepository.findMemberInCompany(creatorId, companyId),
-			this.companiesRepository.findById(companyId),
-		]);
+  async execute({
+    description,
+    amountInCents,
+    dueDate,
+    status,
+    type,
+    paymentMethod,
+    categoryName,
+    creatorId,
+    driverId,
+    companyId,
+  }: RegisterTransactionUseCaseRequest): Promise<RegisterTransactionUseCaseResponse> {
+    const [memberInCompany, company] = await Promise.all([
+      this.companyMembersRepository.findMemberInCompany(creatorId, companyId),
+      this.companiesRepository.findById(companyId),
+    ]);
 
-		if (!memberInCompany) {
-			throw new ResourceNotFoundError("Member not found in company");
-		}
+    if (!memberInCompany) {
+      throw new ResourceNotFoundError("Member not found in company");
+    }
 
-		if (!company) {
-			throw new ResourceNotFoundError("Company not found");
-		}
+    if (!company) {
+      throw new ResourceNotFoundError("Company not found");
+    }
 
-		const hasPermission = await this.permissionService.hasPermission(
-			memberInCompany.id,
-			["SUPER_ADMIN", "ADMIN", "MANAGE_FINANCES"]
-		);
+    const hasPermission = await this.permissionService.hasPermission(memberInCompany.id, [
+      "SUPER_ADMIN",
+      "ADMIN",
+      "MANAGE_FINANCES",
+    ]);
 
-		if (!hasPermission) {
-			throw new NotAllowedError(
-				"You do not have permission to perform this action"
-			);
-		}
+    if (!hasPermission) {
+      throw new NotAllowedError("You do not have permission to perform this action");
+    }
 
-		const transactionCategory =
-			await this.financeCategoriesRepository.findByName(categoryName);
+    const transactionCategory = await this.financeCategoriesRepository.findByName(categoryName);
 
-		if (!transactionCategory) {
-			throw new ResourceNotFoundError("Category not found");
-		}
+    if (!transactionCategory) {
+      throw new ResourceNotFoundError("Category not found");
+    }
 
-		const transaction = await this.financeTransactionsRepository.create({
-			description,
-			amountInCents,
-			dueDate,
-			status,
-			paymentMethod,
-			type,
-			companyId,
-			creatorId: memberInCompany.id,
-			categoryId: transactionCategory.id,
-		});
+    const transaction = await this.financeTransactionsRepository.create({
+      description,
+      amountInCents,
+      dueDate,
+      status,
+      paymentMethod,
+      type,
+      companyId,
+      creatorId: memberInCompany.id,
+      categoryId: transactionCategory.id,
+    });
 
-		if (
-			["Coletas e Entregas", "Combustível", "Pedágios"].includes(
-				transactionCategory.name
-			) &&
-			driverId
-		) {
-			const driver = await this.driversRepository.findById(driverId);
+    if (["Coletas e Entregas", "Combustível", "Pedágios"].includes(transactionCategory.name) && driverId) {
+      const driver = await this.driversRepository.findById(driverId);
 
-			if (!driver) {
-				throw new ResourceNotFoundError("Driver not found");
-			}
+      if (!driver) {
+        throw new ResourceNotFoundError("Driver not found");
+      }
 
-			const driverinCompany = await this.driversRepository.findDriverInCompany(
-				driver.documentNumber,
-				companyId
-			);
+      const driverinCompany = await this.driversRepository.findDriverInCompany(driver.documentNumber, companyId);
 
-			if (!driverinCompany) {
-				throw new ResourceNotFoundError("Driver not found in company");
-			}
+      if (!driverinCompany) {
+        throw new ResourceNotFoundError("Driver not found in company");
+      }
 
-			await this.driverTransactionsRepository.create({
-				financeTransactionId: transaction.id,
-				driverId: driver.id,
-			});
-		}
+      await this.driverTransactionsRepository.create({
+        financeTransactionId: transaction.id,
+        driverId: driver.id,
+      });
+    }
 
-		return {
-			transaction,
-		};
-	}
+    return {
+      transaction,
+    };
+  }
 }
